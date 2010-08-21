@@ -16,14 +16,17 @@ LocationHandler *ISingleton<LocationHandler>::mySelf = NULL;
 void LocationHandler::newLocation(MALocation *location) {
 	// Check if we have a correct location statement
 //	if( location->state == MA_LOC_QUALIFIED ) {
-		this->currLocation = location;
+	location->lat = this->latLongToRad( location->lat );
+	location->lon = this->latLongToRad( location->lon );
 
-		this->currLocationRad->alt = this->currLocation->alt;
+		//this->currLocation = location;
+
+		/*this->currLocationRad->alt = this->currLocation->alt;
 		this->currLocationRad->horzAcc = this->currLocation->horzAcc;
 		this->currLocationRad->lat = this->latLongToRad( this->currLocation->lat );
 		this->currLocationRad->lon = this->latLongToRad( this->currLocation->lon );
 		this->currLocationRad->state = this->currLocation->state;
-		this->currLocationRad->vertAcc = this->currLocation->vertAcc;
+		this->currLocationRad->vertAcc = this->currLocation->vertAcc;*/
 
 		Vector_each(ILocationListener*, i, this->listeners) {
 			(*i)->locationReceived(this->currLocationRad);
@@ -81,6 +84,10 @@ LocationHandler::LocationHandler() {
 	this->bEnabled = false;
 
 	this->currLocationRad = new MALocation();
+
+	this->speed = 0.0;
+	this->distance = 0.0;
+	this->totalDistance = 0.0;
 }
 
 double LocationHandler::latLongToRad( double latLong ) {
@@ -91,31 +98,26 @@ double LocationHandler::latLongToRad( double latLong ) {
 	return rad;
 }
 
+// TODO: Continue here!!
+double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) {
+	double latitudeDiff = start->lat - end->lat;
+	double longitudeDiff = start->lon - end->lon;
+
+	double h = 0.0;
+	double distance = 0.0;
+
+	return distance;
+}
+
 /*
-        private double LatLongToRad(double latLong, char direction)
-        {
-            int degree = Convert.ToInt32( latLong / 100.0 );
-            double minutes = latLong - degree * 100.0;
-            double rad = (degree + minutes / 60.0) / 180.0 * Math.PI;
+                    double latitudeDiff = 0;
+                    double longitudeDiff = 0;
+                    double h = 0;
+                    double distance = 0;
 
-            if (direction.CompareTo('W') == 0 || direction.CompareTo('S') == 0) rad *= (-1.0);
+                    latitudeDiff = lastLatitude - latitudeRad;
+                    longitudeDiff = lastLongitude - longitudeRad;
 
-            return rad;
-
-            /*try
-            {
-                String minutes = latLong.Substring(latLong.IndexOf('.') - 2);
-                String degree = latLong.Substring(0, latLong.IndexOf('.') - 2);
-
-                if (degree.Length == 0) degree = "0";
-
-                return (Convert.ToDouble(degree) + Convert.ToDouble(minutes) / 60.0);
-            }
-            catch(System.Exception e )
-            {
-                LogHandler.Self().writeLog(e.Message, latLong + "\n" + e.StackTrace);
-            }
-
-            return -1.0;
-        }
+                    h = Math.Pow(Math.Sin(latitudeDiff / 2), 2) + Math.Cos(lastLatitude) * Math.Cos(latitudeRad) * Math.Pow(Math.Sin(longitudeDiff / 2), 2);
+                    distance = 2 * 6371.009 * Math.Asin(Math.Sqrt(h));
 */

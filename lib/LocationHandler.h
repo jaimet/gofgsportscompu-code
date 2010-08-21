@@ -44,9 +44,14 @@ protected:
 
 private:
 	double latLongToRad( double latLong );
+	double haversineDistance( MALocation *start, MALocation *end );
 
-	MALocation *currLocation, *currLocationRad;
+	MALocation *currLocationRad;
 	Vector<ILocationListener*> listeners;
+
+	float speed;
+	float distance;
+	float totalDistance;
 
 	bool bEnabled;
 };
