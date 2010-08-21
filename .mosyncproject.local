@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+<active.build.cfg active="Debug"/>
+<target-profile device="SGH-I900" vendor="Samsung"/>
+<properties>
+<property key="last.build.config" value="Release"/>
+</properties>
+</project>

@@ -1,0 +1,48 @@
+.res IMAGE_HR24
+.image "images/fav24.png"
+
+.res IMAGE_SPEED24
+.image "images/gowebsite24.png"
+
+.res IMAGE_DISTANCE24
+.image "images/web24.png"
+
+.res IMAGE_TIME24
+.image "images/Classic-Timer-icon_24x24.png"
+
+.res IMAGE_ALTITUDE24
+.image "images/Mountain-24x24.png"
+
+.res IMAGE_STATUS24
+.image "images/Satellite.png"
+
+.res IMAGE_CLOCK24
+.image "images/clock24.png"
+
+.res IMAGE_PLAY48
+.image "images/play.png"
+
+.res IMAGE_DELETE48
+.image "images/delete.png"
+
+
+.res FONT_VERA14
+.bin
+.include "fonts/bitstreamVera14.mof"
+
+.res FONT_VERA16
+.bin
+.include "fonts/bitstreamVera16.mof"
+
+.res FONT_VERA16B
+.bin
+.include "fonts/bitstreamVera16Bold.mof"
+
+.res FONT_VERA18
+.bin
+.include "fonts/bitstreamVera18.mof"
+
+.res FONT_VERA36B
+.bin
+.include "fonts/bitstreamVera36Bold.mof"
+
