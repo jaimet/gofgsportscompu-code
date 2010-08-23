@@ -48,5 +48,8 @@ GOFGSCMoblet::GOFGSCMoblet() {
 void GOFGSCMoblet::initGOFGSC() {
 	// initialize
 	screen = new MainScreen();
-	screen->show();
+	//screen->show();
+
+	this->bluetoothScreen = new BluetoothScreen();
+	this->bluetoothScreen->show();
 }

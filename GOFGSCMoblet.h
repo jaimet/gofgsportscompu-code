@@ -10,7 +10,8 @@
 
 #include <MAUtil/Moblet.h>
 
-#include "mainScreen/MainScreen.h"
+#include "screens/MainScreen.h"
+#include "screens/BluetoothScreen.h"
 #include "lib/LocationHandler.h"
 
 using namespace MAUtil;
@@ -33,6 +34,7 @@ private:
 	static GOFGSCMoblet *mySelf;
 
 	MainScreen *screen;
+	BluetoothScreen *bluetoothScreen;
 	int screenWidth;
 	int screenHeight;
 };

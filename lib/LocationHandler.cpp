@@ -19,6 +19,11 @@ void LocationHandler::newLocation(MALocation *location) {
 	location->lat = this->latLongToRad( location->lat );
 	location->lon = this->latLongToRad( location->lon );
 
+	this->distance = this->haversineDistance( this->currLocationRad, location );
+	this->totalDistance += this->distance;
+
+	this->currLocationRad = location;
+
 		//this->currLocation = location;
 
 		/*this->currLocationRad->alt = this->currLocation->alt;
@@ -103,8 +108,8 @@ double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) 
 	double latitudeDiff = start->lat - end->lat;
 	double longitudeDiff = start->lon - end->lon;
 
-	double h = 0.0;
-	double distance = 0.0;
+	double h = pow( sin( latitudeDiff / 2.0 ), 2 ) + cos( start->lat ) * cos( end->lat ) * pow( sin( longitudeDiff / 2.0 ), 2 );
+	double distance = 2.0 * 6371.009 * asin(sqrt(h));
 
 	return distance;
 }

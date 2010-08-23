@@ -9,6 +9,7 @@
 #define LOCATIONHANDLER_H_
 
 #include <maapi.h>
+#include <madmath.h>
 
 #include <MAUI/Widget.h>
 
