@@ -9,56 +9,60 @@
 
 #include "../GOFGSCMoblet.h"
 
+template<>
+MainScreen *ISingleton<MainScreen>::mySelf = NULL;
+
 MainScreen::MainScreen() {
 	this->startTime = 0;
 
-	mainLayout = new Layout( 0, 0, GOFGSCMoblet::Self()->getScreenWidth(), GOFGSCMoblet::Self()->getScreenHeight(), NULL, 1, 3 );
+	mainLayout = new Layout( 0, 0, GOFGSCMoblet::Self()->getScreenWidth(), GOFGSCMoblet::Self()->getScreenHeight(), NULL, 1, 4 );
 	setMain( mainLayout );
 
-	int unitSizeY = ( mainLayout->getHeight() - 10 - 48 ) / 5;
+	int unitSizeY = ( mainLayout->getHeight() - 48 ) / 5;
 
 	Layout *topMainLayout = new Layout( 0, 0, mainLayout->getWidth(), unitSizeY * 4, mainLayout, 2, 3 );
 
 	InfoPanel *heartRate = new InfoPanel( "bpm", 0, 0, topMainLayout->getWidth() / 2, unitSizeY * 2, topMainLayout, true );
 	heartRate->setImage( IMAGE_HR24 );
 
-	InfoPanel *speed = new InfoPanel( "km/h", 0, 0, topMainLayout->getWidth() / 2, unitSizeY * 2, topMainLayout, true );
-	speed->setImage( IMAGE_SPEED24 );
+	this->speed = new InfoPanel( "km/h", 0, 0, topMainLayout->getWidth() / 2, unitSizeY * 2, topMainLayout, true );
+	this->speed->setImage( IMAGE_SPEED24 );
 
-	InfoPanel *distance = new InfoPanel( "km", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
-	distance->setImage( IMAGE_DISTANCE24 );
+	this->distance = new InfoPanel( "km", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
+	this->distance->setImage( IMAGE_DISTANCE24 );
 
 	this->time = new InfoPanel( "hh:mm:ss", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
 	this->time->setImage( IMAGE_TIME24 );
 
-	InfoPanel *altitude = new InfoPanel( "m", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
-	altitude->setImage( IMAGE_ALTITUDE24 );
+	this->altitude = new InfoPanel( "m", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
+	this->altitude->setImage( IMAGE_ALTITUDE24 );
 
 	this->status = new InfoPanel( "Status", 0, 0, topMainLayout->getWidth() / 2, unitSizeY, topMainLayout, false );
 	this->status->setImage( IMAGE_STATUS24 );
 
-	InfoPanel *clock = new InfoPanel( "hh:mm", 0, 0, mainLayout->getWidth(), unitSizeY, mainLayout, false );
-	clock->setImage( IMAGE_CLOCK24 );
-
-	int currTime = maLocalTime();
-	tm *tmStruct = new tm();
-	split_time( currTime, tmStruct );
-
-	char *timeString = new char[10];
-	sprintf( timeString, "%02d:%02d", tmStruct->tm_hour, tmStruct->tm_min );
-
-	clock->setValue( timeString );
+	this->clock = new InfoPanel( "hh:mm", 0, 0, mainLayout->getWidth(), mainLayout->getHeight() - 4 * unitSizeY - 48, mainLayout, false );
+	this->clock->setImage( IMAGE_CLOCK24 );
 
 	// Add the menu-bar at the bottom
 	this->menuBar = new MenuBar( 0, 0, mainLayout->getWidth(), 48, mainLayout );
 	this->menuBar->setRightButton( IMAGE_PLAY48 );
 	this->menuBar->setLeftButton( IMAGE_DELETE48 );
-	this->menuBar->addMenuBarListener(this);
+	this->menuBar->addMenuBarListener( this );
 	/*this->menuBar->addRBWidgetListener(LocationHandler::Self());
 	this->menuBar->addRBWidgetListener(this);*/
 
+	this->trackingMenuBar = new MenuBar( 0, 0, mainLayout->getWidth(), 48, mainLayout );
+	this->trackingMenuBar->setLeftButton( IMAGE_STOP48 );
+	this->trackingMenuBar->addMenuBarListener( this );
+	this->trackingMenuBar->hide();
+//	this->trackingMenuBar;
+
 	// Add ourself as location listener
-	LocationHandler::Self()->addLocationListener(this);
+	LocationHandler::Self()->addLocationListener( this );
+
+	// Create clock timer & call it once
+	MainScreenClock::Self();
+	this->clock->setValue( MainScreenClock::Self()->formattedClock() );
 }
 
 MainScreen::~MainScreen() {
@@ -66,9 +70,12 @@ MainScreen::~MainScreen() {
 }
 
 void MainScreen::locationReceived(MALocation *location) {
-	this->status->setValue( "1" );
-
 	TrackHandler::Self()->addGPSData( location->lon, location->lat, location->alt );
+
+	//this->status->setValue( "1" );
+	this->speed->setValue( LocationHandler::Self()->getSpeed() );
+	this->distance->setValue( LocationHandler::Self()->getTotalDistance() );
+	this->altitude->setValue( LocationHandler::Self()->getAltitudeDiff() );
 }
 
 /*void MainScreen::pointerPressEvent(MAPoint2d point) {
@@ -80,7 +87,16 @@ void MainScreen::locationReceived(MALocation *location) {
 }*/
 
 void MainScreen::runTimerEvent() {
-	this->time->setValue( maLocalTime() - this->startTime );
+	char timeString[10];
+
+	tm *tmStruct = new tm();
+
+	split_time( maLocalTime() - this->startTime, tmStruct );
+
+	sprintf( timeString, "%02d:%02d:%02d", tmStruct->tm_hour, tmStruct->tm_min, tmStruct->tm_sec );
+	this->time->setValue( timeString );
+
+	delete tmStruct;
 }
 
 void MainScreen::triggered( Widget *widget ) {
@@ -88,9 +104,21 @@ void MainScreen::triggered( Widget *widget ) {
 }
 
 void MainScreen::leftButtonTriggered() {
-	TrackHandler::Self()->stopTracking();
+	if( this->menuBar->getHeight() > 0 ) {
+		GOFGSCMoblet::Self()->close();
+	}
+	else {
+		GOFGSCMoblet::getEnvironment().removeTimer( this );
+		LocationHandler::Self()->triggered( NULL );
 
-	GOFGSCMoblet::Self()->close();
+		TrackHandler::Self()->stopTracking();
+
+		this->trackingMenuBar->hide();
+		this->menuBar->show();
+
+		//this->trackingMenuBar->setHeight( 0 );
+		//this->menuBar->setHeight( 48 );
+	}
 }
 
 void MainScreen::rightButtonTriggered() {
@@ -100,5 +128,14 @@ void MainScreen::rightButtonTriggered() {
 
 	LocationHandler::Self()->triggered( NULL );
 	GOFGSCMoblet::getEnvironment().addTimer( this, 1000, 0 );
+
+	this->menuBar->hide();
+	this->trackingMenuBar->show();
+
+	//this->menuBar->setHeight( 0 );
+	//this->trackingMenuBar->setHeight( 48 );
 }
 
+void MainScreen::setClock( char *timeString ) {
+	this->clock->setValue( timeString );
+}

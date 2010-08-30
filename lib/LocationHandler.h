@@ -35,6 +35,10 @@ class LocationHandler : public ISingleton<LocationHandler>, public WidgetListene
 public:
 	void newLocation( MALocation *location );
 
+	float getSpeed();
+	float getTotalDistance();
+	float getAltitudeDiff();
+
 	void addLocationListener( ILocationListener *listener );
 	void removeLocationListener( ILocationListener *listener );
 
@@ -53,6 +57,8 @@ private:
 	float speed;
 	float distance;
 	float totalDistance;
+
+	float altitudeDiff;
 
 	bool bEnabled;
 };

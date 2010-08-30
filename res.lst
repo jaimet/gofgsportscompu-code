@@ -25,6 +25,9 @@
 .res IMAGE_DELETE48
 .image "images/delete.png"
 
+.res IMAGE_STOP48
+.image "images/stop.png"
+
 
 .res FONT_VERA14
 .bin
@@ -41,6 +44,10 @@
 .res FONT_VERA18
 .bin
 .include "fonts/bitstreamVera18.mof"
+
+.res FONT_VERA30B
+.bin
+.include "fonts/bitstreamVera30Bold.mof"
 
 .res FONT_VERA36B
 .bin

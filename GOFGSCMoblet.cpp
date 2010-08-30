@@ -36,7 +36,7 @@ int GOFGSCMoblet::getScreenHeight() {
 }
 
 GOFGSCMoblet::~GOFGSCMoblet() {
-	delete screen;
+	//delete screen;
 }
 
 GOFGSCMoblet::GOFGSCMoblet() {
@@ -47,9 +47,10 @@ GOFGSCMoblet::GOFGSCMoblet() {
 
 void GOFGSCMoblet::initGOFGSC() {
 	// initialize
-	screen = new MainScreen();
-	//screen->show();
+	screen = MainScreen::Self();
+	//screen = new MainScreen();
+	screen->show();
 
-	this->bluetoothScreen = new BluetoothScreen();
-	this->bluetoothScreen->show();
+	//this->bluetoothScreen = new BluetoothScreen();
+	//this->bluetoothScreen->show();
 }

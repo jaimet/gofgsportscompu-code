@@ -12,13 +12,16 @@ TrackHandler *ISingleton<TrackHandler>::mySelf = NULL;
 
 void TrackHandler::startTracking() {
 	this->trackHandle = maFileOpen( "test.gsc", MA_ACCESS_READ_WRITE );
-	if( maFileExists( this->trackHandle ) == 0 ) {
+	if( maFileExists( this->trackHandle ) <= 0 ) {
 		maFileCreate( this->trackHandle );
 	}
 }
 
 void TrackHandler::stopTracking() {
-	maFileClose( this->trackHandle );
+	if( this->trackHandle > 0 ) {
+		maFileClose( this->trackHandle );
+		this->trackHandle = 0;
+	}
 }
 
 void TrackHandler::addGPSData( double lon, double lat, double alt ) {
@@ -61,6 +64,8 @@ TrackHandler::TrackHandler() {
 	// By default all flags are set to true (the first datapoint must create a time entry)
 	this->dataFlags.gps = true;
 	this->dataFlags.distance = true;
+
+	this->trackHandle = 0;
 }
 
 void TrackHandler::checkData( int type ) {

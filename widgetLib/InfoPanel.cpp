@@ -30,7 +30,7 @@ InfoPanel::InfoPanel( char *unit, int x, int y, int width, int height, Widget *p
 	this->unitLabel->setVerticalAlignment( Label::VA_CENTER );
 
 	// Add the current label
-	this->currentLabel = new Label( 0, 0, this->getWidth(), this->getHeight() - titleLayout->getHeight(), this, "0", 0xFFFFFF, new Font(FONT_VERA36B) );
+	this->currentLabel = new Label( 0, 0, this->getWidth(), this->getHeight() - titleLayout->getHeight(), this, "0", 0xFFFFFF, new Font(FONT_VERA30B) );
 	this->currentLabel->setHorizontalAlignment( Label::HA_CENTER );
 	this->currentLabel->setVerticalAlignment( Label::VA_CENTER );
 
@@ -74,6 +74,9 @@ InfoPanel::InfoPanel( char *unit, int x, int y, int width, int height, Widget *p
 	//titleLayout->add(titleLabel);
 
 	//this->add(titleLayout);
+
+	// TODO: Automatic font size measuring
+	//MAExtent MAUI::Font::getStringDimensions
 }
 
 void InfoPanel::setImage( MAHandle image ) {

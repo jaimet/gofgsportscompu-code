@@ -44,6 +44,9 @@ public:
 
 	virtual void triggered( Widget *widget );
 
+	void show();
+	void hide();
+
 	//virtual void triggered( Widget *widget );
 
 private:

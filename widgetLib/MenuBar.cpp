@@ -43,11 +43,13 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	//this->rightButton->addWidgetListener(this);
 
 	// Add ourselves as pointer-listener
-	Environment::getEnvironment().addPointerListener(this);
+	//Environment::getEnvironment().addPointerListener(this);
+
+	this->show();
 }
 
 MenuBar::~MenuBar() {
-	Environment::getEnvironment().removePointerListener(this);
+	//Environment::getEnvironment().removePointerListener(this);
 }
 
 void MenuBar::setLeftButton( MAHandle image ) {
@@ -134,4 +136,14 @@ void MenuBar::triggered( Widget *widget ) {
 			(*i)->rightButtonTriggered();
 		}
 	}
+}
+
+void MenuBar::show() {
+	this->setHeight( 48 );
+	Environment::getEnvironment().addPointerListener(this);
+}
+
+void MenuBar::hide() {
+	this->setHeight( 0 );
+	Environment::getEnvironment().removePointerListener(this);
 }

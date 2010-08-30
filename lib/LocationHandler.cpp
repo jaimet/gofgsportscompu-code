@@ -22,6 +22,9 @@ void LocationHandler::newLocation(MALocation *location) {
 	this->distance = this->haversineDistance( this->currLocationRad, location );
 	this->totalDistance += this->distance;
 
+	this->altitudeDiff = location->alt - this->currLocationRad->alt;
+	if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
+
 	this->currLocationRad = location;
 
 		//this->currLocation = location;
@@ -42,6 +45,18 @@ void LocationHandler::newLocation(MALocation *location) {
 	/*for(Set<ILocationListener*>::Iterator itr = this->listeners.begin(); itr != this->listeners.end(); itr++) {
 		(*itr)->locationReceived(this->currLocation);
 	}*/
+}
+
+float LocationHandler::getSpeed() {
+	return this->speed;
+}
+
+float LocationHandler::getTotalDistance() {
+	return this->totalDistance;
+}
+
+float LocationHandler::getAltitudeDiff() {
+	return this->altitudeDiff;
 }
 
 // Add a new location listener
@@ -93,6 +108,7 @@ LocationHandler::LocationHandler() {
 	this->speed = 0.0;
 	this->distance = 0.0;
 	this->totalDistance = 0.0;
+	this->altitudeDiff = 0.0;
 }
 
 double LocationHandler::latLongToRad( double latLong ) {
@@ -103,7 +119,6 @@ double LocationHandler::latLongToRad( double latLong ) {
 	return rad;
 }
 
-// TODO: Continue here!!
 double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) {
 	double latitudeDiff = start->lat - end->lat;
 	double longitudeDiff = start->lon - end->lon;
