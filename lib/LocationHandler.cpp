@@ -7,24 +7,35 @@
 
 #include "LocationHandler.h"
 
-//#include "../GOFGSCMoblet.h"
+#include "../GOFGSCMoblet.h"
 
 template<>
 LocationHandler *ISingleton<LocationHandler>::mySelf = NULL;
 
 // Called by the Moblet class when a new location event is received
 void LocationHandler::newLocation(MALocation *location) {
+	int newSampleTime = maGetMilliSecondCount();
+
 	// Check if we have a correct location statement
 //	if( location->state == MA_LOC_QUALIFIED ) {
-	location->lat = this->latLongToRad( location->lat );
-	location->lon = this->latLongToRad( location->lon );
+	//location->lat = this->latLongToRad( location->lat );
+	//location->lon = this->latLongToRad( location->lon );
+	location->lat = this->degreeToRad( location->lat );
+	location->lon = this->degreeToRad( location->lon );
 
-	this->distance = this->haversineDistance( this->currLocationRad, location );
-	this->totalDistance += this->distance;
+	if( this->sampleTime > 0 ) {
+		this->distance = this->haversineDistance( this->currLocationRad, location );
+		this->totalDistance += this->distance;
 
-	this->altitudeDiff = location->alt - this->currLocationRad->alt;
-	if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
+		this->altitudeDiff = location->alt - this->currLocationRad->alt;
+		if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
+		this->totalAltitudeDiff  += this->altitudeDiff;
 
+		// Calculate speed
+		this->speed = this->distance / ( ( (double)newSampleTime - (double)this->sampleTime ) / 1000.0 );
+	}
+
+	this->sampleTime = newSampleTime;
 	this->currLocationRad = location;
 
 		//this->currLocation = location;
@@ -59,6 +70,10 @@ float LocationHandler::getAltitudeDiff() {
 	return this->altitudeDiff;
 }
 
+float LocationHandler::getTotalAltitudeDiff() {
+	return this->totalAltitudeDiff;
+}
+
 // Add a new location listener
 void LocationHandler::addLocationListener(ILocationListener *listener) {
 	//this->listeners.insert( listener );
@@ -84,11 +99,16 @@ void LocationHandler::triggered( Widget *widget ) {
 	if( this->bEnabled ) {
 		maLocationStop();
 		this->bEnabled = false;
+
+//		GOFGSCMoblet::Self()->getEnvironment().removeTimer(this);
 	}
 	else {
 		if( maLocationStart() == MA_LPS_AVAILABLE ) {
 			this->bEnabled = true;
 		}
+
+//		this->bEnabled = true;
+//		GOFGSCMoblet::Self()->getEnvironment().addTimer( this, 1000, 0 );
 
 		/*MAEvent event;
 		event.type = EVENT_TYPE_LOCATION;
@@ -109,14 +129,21 @@ LocationHandler::LocationHandler() {
 	this->distance = 0.0;
 	this->totalDistance = 0.0;
 	this->altitudeDiff = 0.0;
+	this->totalAltitudeDiff = 0.0;
+
+	this->sampleTime = 0;
 }
 
 double LocationHandler::latLongToRad( double latLong ) {
-	int degree = (int) latLong;
+	int degree = (int) (latLong / 100.0);
 	double minutes = latLong - ((double) degree) * 100.0;
-	double rad = ( degree + minutes / 60.0 ) / 180.0 * MAP::PI;
+	double rad = ( (double)degree + minutes / 60.0 ) / 180.0 * MAP::PI;
 
 	return rad;
+}
+
+double LocationHandler::degreeToRad( double degree ) {
+	return( degree / 180.0 * MAP::PI );
 }
 
 double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) {
@@ -127,6 +154,15 @@ double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) 
 	double distance = 2.0 * 6371.009 * asin(sqrt(h));
 
 	return distance;
+}
+
+void LocationHandler::runTimerEvent() {
+	MALocation *testLoc = new MALocation();
+	testLoc->alt = this->currLocationRad->alt + 1.5;
+	testLoc->lat = this->currLocationRad->lat * 180.0 / MAP::PI + 1.0;
+	testLoc->lon = this->currLocationRad->lon * 180.0 / MAP::PI + 1.0;
+
+	this->newLocation( testLoc );
 }
 
 /*

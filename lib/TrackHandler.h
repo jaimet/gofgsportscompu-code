@@ -11,6 +11,7 @@
 #include <maapi.h>
 #include <IX_FILE.h>
 //#include <mastring.h>
+#include <matime.h>
 #include <mavsprintf.h>
 
 #include "ISingleton.h"
@@ -44,7 +45,6 @@ protected:
 
 private:
 	void checkData( int type );
-
 	void addTimeData();
 
 	DataFlags dataFlags;

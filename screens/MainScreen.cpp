@@ -73,9 +73,9 @@ void MainScreen::locationReceived(MALocation *location) {
 	TrackHandler::Self()->addGPSData( location->lon, location->lat, location->alt );
 
 	//this->status->setValue( "1" );
-	this->speed->setValue( LocationHandler::Self()->getSpeed() );
-	this->distance->setValue( LocationHandler::Self()->getTotalDistance() );
-	this->altitude->setValue( LocationHandler::Self()->getAltitudeDiff() );
+	this->speed->setValue( LocationHandler::Self()->getSpeed() * 3.6 );
+	this->distance->setValue( LocationHandler::Self()->getTotalDistance() / 1000.0 );
+	this->altitude->setValue( LocationHandler::Self()->getTotalAltitudeDiff() );
 }
 
 /*void MainScreen::pointerPressEvent(MAPoint2d point) {
@@ -93,7 +93,8 @@ void MainScreen::runTimerEvent() {
 
 	split_time( maLocalTime() - this->startTime, tmStruct );
 
-	sprintf( timeString, "%02d:%02d:%02d", tmStruct->tm_hour, tmStruct->tm_min, tmStruct->tm_sec );
+//	sprintf( timeString, "%02d:%02d:%02d", tmStruct->tm_hour, tmStruct->tm_min, tmStruct->tm_sec );
+	sprintf( timeString, "%02d:%02d", tmStruct->tm_min, tmStruct->tm_sec );
 	this->time->setValue( timeString );
 
 	delete tmStruct;
@@ -104,7 +105,7 @@ void MainScreen::triggered( Widget *widget ) {
 }
 
 void MainScreen::leftButtonTriggered() {
-	if( this->menuBar->getHeight() > 0 ) {
+	if( !this->menuBar->isHidden() ) {
 		GOFGSCMoblet::Self()->close();
 	}
 	else {
@@ -122,15 +123,17 @@ void MainScreen::leftButtonTriggered() {
 }
 
 void MainScreen::rightButtonTriggered() {
-	TrackHandler::Self()->startTracking();
+	if( !this->menuBar->isHidden() ) {
+		TrackHandler::Self()->startTracking();
 
-	this->startTime = maLocalTime();
+		this->startTime = maLocalTime();
 
-	LocationHandler::Self()->triggered( NULL );
-	GOFGSCMoblet::getEnvironment().addTimer( this, 1000, 0 );
+		LocationHandler::Self()->triggered( NULL );
+		GOFGSCMoblet::getEnvironment().addTimer( this, 1000, 0 );
 
-	this->menuBar->hide();
-	this->trackingMenuBar->show();
+		this->menuBar->hide();
+		this->trackingMenuBar->show();
+	}
 
 	//this->menuBar->setHeight( 0 );
 	//this->trackingMenuBar->setHeight( 48 );

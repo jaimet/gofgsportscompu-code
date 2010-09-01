@@ -13,6 +13,7 @@
 
 #include <MAUI/Widget.h>
 
+#include <MAUtil/Environment.h>
 #include <MAUtil/Vector.h>
 
 #include <MAP/LonLat.h>
@@ -30,7 +31,7 @@ class ILocationListener {
     virtual void locationReceived(MALocation *location) = 0;
 };
 
-class LocationHandler : public ISingleton<LocationHandler>, public WidgetListener {
+class LocationHandler : public ISingleton<LocationHandler>, public WidgetListener, public TimerListener {
 	friend class ISingleton<LocationHandler>;
 public:
 	void newLocation( MALocation *location );
@@ -38,17 +39,21 @@ public:
 	float getSpeed();
 	float getTotalDistance();
 	float getAltitudeDiff();
+	float getTotalAltitudeDiff();
 
 	void addLocationListener( ILocationListener *listener );
 	void removeLocationListener( ILocationListener *listener );
 
 	virtual void triggered( Widget *widget );
 
+	void runTimerEvent();
+
 protected:
 	LocationHandler();
 
 private:
 	double latLongToRad( double latLong );
+	double degreeToRad( double degree );
 	double haversineDistance( MALocation *start, MALocation *end );
 
 	MALocation *currLocationRad;
@@ -59,6 +64,9 @@ private:
 	float totalDistance;
 
 	float altitudeDiff;
+	float totalAltitudeDiff;
+
+	int sampleTime;
 
 	bool bEnabled;
 };

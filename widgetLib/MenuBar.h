@@ -47,6 +47,8 @@ public:
 	void show();
 	void hide();
 
+	bool isHidden();
+
 	//virtual void triggered( Widget *widget );
 
 private:

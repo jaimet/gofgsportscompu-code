@@ -8,6 +8,10 @@
 #include "MenuBar.h"
 
 MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout( x, y, width, height, parent ) {
+	this->setPaddingTop( 1 );
+	this->setPaddingRight( 1 );
+	this->setPaddingBottom( 1 );
+	this->setPaddingLeft( 1 );
 	this->setNumRows( 1 );
 	this->setNumColumns( 5 );
 
@@ -146,4 +150,8 @@ void MenuBar::show() {
 void MenuBar::hide() {
 	this->setHeight( 0 );
 	Environment::getEnvironment().removePointerListener(this);
+}
+
+bool MenuBar::isHidden() {
+	return ( this->getHeight() <= 0 );
 }
