@@ -17,26 +17,26 @@ void LocationHandler::newLocation(MALocation *location) {
 	int newSampleTime = maGetMilliSecondCount();
 
 	// Check if we have a correct location statement
-//	if( location->state == MA_LOC_QUALIFIED ) {
+	if( location->state == MA_LOC_QUALIFIED ) {
 	//location->lat = this->latLongToRad( location->lat );
 	//location->lon = this->latLongToRad( location->lon );
-	location->lat = this->degreeToRad( location->lat );
-	location->lon = this->degreeToRad( location->lon );
+		location->lat = this->degreeToRad( location->lat );
+		location->lon = this->degreeToRad( location->lon );
 
-	if( this->sampleTime > 0 ) {
-		this->distance = this->haversineDistance( this->currLocationRad, location );
-		this->totalDistance += this->distance;
+		if( this->sampleTime > 0 ) {
+			this->distance = this->haversineDistance( this->currLocationRad, location );
+			this->totalDistance += this->distance;
 
-		this->altitudeDiff = location->alt - this->currLocationRad->alt;
-		if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
-		this->totalAltitudeDiff  += this->altitudeDiff;
+			this->altitudeDiff = location->alt - this->currLocationRad->alt;
+			if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
+			this->totalAltitudeDiff  += this->altitudeDiff;
 
-		// Calculate speed
-		this->speed = this->distance / ( ( (double)newSampleTime - (double)this->sampleTime ) / 1000.0 );
-	}
+			// Calculate speed
+			this->speed = this->distance / ( ( (double)newSampleTime - (double)this->sampleTime ) / 1000.0 );
+		}
 
-	this->sampleTime = newSampleTime;
-	this->currLocationRad = location;
+		this->sampleTime = newSampleTime;
+		this->currLocationRad = location;
 
 		//this->currLocation = location;
 
@@ -50,7 +50,7 @@ void LocationHandler::newLocation(MALocation *location) {
 		Vector_each(ILocationListener*, i, this->listeners) {
 			(*i)->locationReceived(this->currLocationRad);
 		}
-//	}
+	}
 
 	// Notify all listeners of the new location
 	/*for(Set<ILocationListener*>::Iterator itr = this->listeners.begin(); itr != this->listeners.end(); itr++) {
@@ -161,6 +161,7 @@ void LocationHandler::runTimerEvent() {
 	testLoc->alt = this->currLocationRad->alt + 1.5;
 	testLoc->lat = this->currLocationRad->lat * 180.0 / MAP::PI + 1.0;
 	testLoc->lon = this->currLocationRad->lon * 180.0 / MAP::PI + 1.0;
+	testLoc->state = MA_LOC_QUALIFIED;
 
 	this->newLocation( testLoc );
 }

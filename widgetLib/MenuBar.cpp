@@ -7,6 +7,8 @@
 
 #include "MenuBar.h"
 
+#include "../GOFGSCMoblet.h"
+
 MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout( x, y, width, height, parent ) {
 	this->setPaddingTop( 1 );
 	this->setPaddingRight( 1 );
@@ -34,6 +36,10 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	this->middleButton->setDrawBackground(true);
 	this->middleButton->setBackgroundColor(0xFFFFFF);
 	this->middleButton->addWidgetListener(this);
+
+//	this->middleLabel = new Label( 0, 0, height * 3, height, this, "-", 0xFFFFFF, new Font(FONT_VERA18) );
+	//this->middleLabel->setDrawBackground( true );
+	//this->middleLabel->setBackgroundColor(0xFFFFFF);
 	//this->middleButton->addWidgetListener(this);
 	// Second padding
 	this->mrPadding = new Image( 0, 0, spacerWidth, height, this );
@@ -47,7 +53,9 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	//this->rightButton->addWidgetListener(this);
 
 	// Add ourselves as pointer-listener
-	//Environment::getEnvironment().addPointerListener(this);
+//	Environment::getEnvironment().addPointerListener(this);
+//	Environment::getEnvironment().addFocusListener( this );
+	this->bEnabled = false;
 
 	this->show();
 }
@@ -101,15 +109,37 @@ void MenuBar::removeMenuBarListener(IMenuBarListener *listener) {
 }
 
 void MenuBar::pointerPressEvent( MAPoint2d p ) {
-	Point point(p.x,p.y);
+//	if( this->isHidden() ) return;
 
-	if( this->leftButton->contains( point ) ) {
+	//this->hide();
+
+//	char tmpString[40];
+//
+//	Rect rect = this->leftButton->getBounds();
+//
+//	sprintf( tmpString, "%d/%d/%d/%d %d/%d", rect.x, rect.y, rect.width, rect.height, p.x, p.y );
+//
+//	this->middleLabel->setMultiLine(true);
+//	this->middleLabel->setCaption( tmpString );
+
+//	Point point(p.x,p.y);
+//	Point pb = this->leftButton->getPosition();
+
+//	if( this->leftButton->contains( point ) ) {
+	if( this->leftButton->getBounds().contains( p.x, p.y ) ) {
+//	if( p.x >= pb.x && p.x <= (pb.x + this->leftButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->leftButton->getHeight()) ) {
+//		this->middleLabel->setCaption( "Left" );
 		this->leftButton->trigger();
 	}
-	else if( this->middleButton->contains( point ) ) {
+//	else if( this->middleButton->contains( point ) ) {
+	else if( this->middleButton->getBounds().contains( p.x, p.y ) ) {
+//	else if( p.x >= pb.x && p.x <= (pb.x + this->middleButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->middleButton->getHeight()) ) {
 		this->middleButton->trigger();
 	}
-	else if( this->rightButton->contains( point ) ) {
+//	else if( this->rightButton->contains( point ) ) {
+	else if( this->rightButton->getBounds().contains( p.x, p.y ) ) {
+//	else if( p.x >= pb.x && p.x <= (pb.x + this->rightButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->rightButton->getHeight()) ) {
+//		this->middleLabel->setCaption( "Right" );
 		this->rightButton->trigger();
 	}
 }
@@ -118,11 +148,35 @@ void MenuBar::pointerMoveEvent( MAPoint2d p ) {}
 
 void MenuBar::pointerReleaseEvent( MAPoint2d p ) {}
 
+void MenuBar::setEnabled( bool bE ) {
+	if( bE && !this->bEnabled ) {
+		GOFGSCMoblet::Self()->addPointerListener( this );
+	}
+	else if( !bE && this->bEnabled ) {
+		GOFGSCMoblet::Self()->removePointerListener( this );
+	}
+
+	this->bEnabled = bE;
+}
+
 /*void MenuBar::triggered( Widget *widget ) {
 	Image *buttonTriggered = (Image *)widget;
 
 	//buttonTriggered->setBackgroundColor(0xFF0000);
 }*/
+
+/*void MenuBar::focusLost() {
+	if( !this->isHidden() ) {
+		Environment::getEnvironment().removePointerListener(this);
+	}
+}
+
+void MenuBar::focusGained() {
+	if( !this->isHidden() ) {
+		Environment::getEnvironment().addPointerListener(this);
+	}
+}*/
+
 
 void MenuBar::triggered( Widget *widget ) {
 	if( widget == this->leftButton ) {
@@ -144,12 +198,15 @@ void MenuBar::triggered( Widget *widget ) {
 
 void MenuBar::show() {
 	this->setHeight( 48 );
-	Environment::getEnvironment().addPointerListener(this);
+//	Environment::getEnvironment().addPointerListener(this);
+//	GOFGSCMoblet::Self()->addPointerListener( this );
+
 }
 
 void MenuBar::hide() {
 	this->setHeight( 0 );
-	Environment::getEnvironment().removePointerListener(this);
+//	Environment::getEnvironment().removePointerListener(this);
+//	GOFGSCMoblet::Self()->removePointerListener( this );
 }
 
 bool MenuBar::isHidden() {

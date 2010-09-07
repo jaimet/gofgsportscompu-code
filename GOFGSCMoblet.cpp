@@ -27,6 +27,10 @@ void GOFGSCMoblet::customEvent( const MAEvent& event ) {
 	}
 }
 
+/*void GOFGSCMoblet::pointerPressEvent(MAPoint2d point ) {
+	this->screen->pointerPressEvent(point);
+}*/
+
 int GOFGSCMoblet::getScreenWidth() {
 	return this->screenWidth;
 }

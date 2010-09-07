@@ -28,6 +28,9 @@
 .res IMAGE_STOP48
 .image "images/stop.png"
 
+.res IMAGE_APP48
+.image "images/app.png"
+
 
 .res FONT_VERA14
 .bin

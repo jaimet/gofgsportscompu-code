@@ -10,6 +10,7 @@
 
 #include <MAUI/Layout.h>
 #include <MAUI/Image.h>
+#include <MAUI/Label.h>
 
 #include <MAUtil/Environment.h>
 
@@ -22,6 +23,7 @@ public:
 	virtual void rightButtonTriggered() {};
 };
 
+//class MenuBar : public Layout, PointerListener, FocusListener {
 class MenuBar : public Layout, PointerListener {
 //class MenuBar : public Layout {
 public:
@@ -38,11 +40,16 @@ public:
 	void addMenuBarListener( IMenuBarListener *mbl );
 	void removeMenuBarListener( IMenuBarListener *mbl );
 
-	virtual void pointerPressEvent( MAPoint2d p );
-	virtual void pointerMoveEvent( MAPoint2d p );
-	virtual void pointerReleaseEvent( MAPoint2d p );
+	void pointerPressEvent( MAPoint2d p );
+	void pointerMoveEvent( MAPoint2d p );
+	void pointerReleaseEvent( MAPoint2d p );
 
-	virtual void triggered( Widget *widget );
+	void setEnabled( bool bEnabled );
+
+/*	void focusLost();
+	void focusGained();*/
+
+	void triggered( Widget *widget );
 
 	void show();
 	void hide();
@@ -59,6 +66,9 @@ private:
 	Image *middleButton;
 	Image *lmPadding;
 	Image *mrPadding;
+//	Label *middleLabel;
+
+	bool bEnabled;
 };
 
 #endif /* MENUBAR_H_ */

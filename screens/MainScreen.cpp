@@ -17,6 +17,8 @@ MainScreen::MainScreen() {
 
 	mainLayout = new Layout( 0, 0, GOFGSCMoblet::Self()->getScreenWidth(), GOFGSCMoblet::Self()->getScreenHeight(), NULL, 1, 4 );
 	setMain( mainLayout );
+	this->mainLayout->setDrawBackground(true);
+	this->mainLayout->setBackgroundColor(0x000000);
 
 	int unitSizeY = ( mainLayout->getHeight() - 48 ) / 5;
 
@@ -45,8 +47,9 @@ MainScreen::MainScreen() {
 
 	// Add the menu-bar at the bottom
 	this->menuBar = new MenuBar( 0, 0, mainLayout->getWidth(), 48, mainLayout );
-	this->menuBar->setRightButton( IMAGE_PLAY48 );
 	this->menuBar->setLeftButton( IMAGE_DELETE48 );
+	this->menuBar->setMiddleButton( IMAGE_APP48 );
+	this->menuBar->setRightButton( IMAGE_PLAY48 );
 	this->menuBar->addMenuBarListener( this );
 	/*this->menuBar->addRBWidgetListener(LocationHandler::Self());
 	this->menuBar->addRBWidgetListener(this);*/
@@ -70,6 +73,10 @@ MainScreen::~MainScreen() {
 }
 
 void MainScreen::locationReceived(MALocation *location) {
+	char statusText[30];
+	sprintf( statusText, "%.2f %.2f %.2f", location->lon, location->lat, location->alt );
+	this->status->setValue( statusText );
+
 	TrackHandler::Self()->addGPSData( location->lon, location->lat, location->alt );
 
 	//this->status->setValue( "1" );
@@ -78,13 +85,18 @@ void MainScreen::locationReceived(MALocation *location) {
 	this->altitude->setValue( LocationHandler::Self()->getTotalAltitudeDiff() );
 }
 
-/*void MainScreen::pointerPressEvent(MAPoint2d point) {
-	Point myPoint(point.x, point.y);
-
-	if( this->menuBar->contains(myPoint) ) {
-		this->menuBar->triggerMenu(myPoint);
-	}
-}*/
+//void MainScreen::pointerPressEvent(MAPoint2d point) {
+//	Point myPoint(point.x, point.y);
+//
+//	if( this->menuBar->contains(myPoint) ) {
+//		this->menuBar->triggerMenu(myPoint);
+//	}
+//
+//	this->menuBar->pointerPressEvent(point);
+//	this->trackingMenuBar->pointerPressEvent(point);
+//
+//	this->status->setValue( point.y );
+//}
 
 void MainScreen::runTimerEvent() {
 	char timeString[10];
@@ -120,6 +132,12 @@ void MainScreen::leftButtonTriggered() {
 		//this->trackingMenuBar->setHeight( 0 );
 		//this->menuBar->setHeight( 48 );
 	}
+}
+
+void MainScreen::middleButtonTriggered() {
+	TrackScreen::Self()->show();
+	TrackScreen::Self()->refreshTrackList();
+	this->hide();
 }
 
 void MainScreen::rightButtonTriggered() {

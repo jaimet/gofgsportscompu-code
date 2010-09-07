@@ -19,26 +19,30 @@
 #include "../lib/TrackHandler.h"
 #include "../widgetLib/InfoPanel.h"
 #include "../widgetLib/MenuBar.h"
+
 #include "MainScreenClock.h"
+#include "TrackScreen.h"
 
 using namespace MAUI;
 
 class MainScreen : public ISingleton<MainScreen>, public Screen, ILocationListener, TimerListener, IMenuBarListener {
 	friend class ISingleton<MainScreen>;
 public:
-	virtual void locationReceived(MALocation *location);
-	virtual void runTimerEvent();
-	virtual void triggered( Widget *widget );
+	void locationReceived(MALocation *location);
+	void runTimerEvent();
+	void triggered( Widget *widget );
 
-	virtual void leftButtonTriggered();
-	virtual void rightButtonTriggered();
+	void leftButtonTriggered();
+	void middleButtonTriggered();
+	void rightButtonTriggered();
+
+//	void pointerPressEvent(MAPoint2d point);
 
 	void setClock( char *timeString );
 protected:
 	MainScreen();
 	~MainScreen();
 
-	//virtual void pointerPressEvent(MAPoint2d point);
 private:
 	Layout *mainLayout;
 	MenuBar *menuBar;

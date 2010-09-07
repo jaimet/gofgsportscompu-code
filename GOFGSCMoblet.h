@@ -20,7 +20,8 @@ class GOFGSCMoblet : public Moblet {
 public:
 	static GOFGSCMoblet *Self();
 
-	virtual void customEvent( const MAEvent& event );
+	void customEvent( const MAEvent& event );
+//	void pointerPressEvent(MAPoint2d point );
 
 	int getScreenWidth();
 	int getScreenHeight();
