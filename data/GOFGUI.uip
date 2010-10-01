@@ -1,0 +1,9 @@
+// IwUI Project file
+
+dir ""
+group "GOFGUI.group"
+palette "iwui_style\expmetapalette.ui"
+material "iwui_style/textures/iwui_style.mtl"
+stylesheet "iwui"
+hwswmode 2
+size 320 480

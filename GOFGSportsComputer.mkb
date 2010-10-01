@@ -1,0 +1,50 @@
+#!/usr/bin/env mkb
+
+options
+{
+	s3e-data-dir="data"
+}
+
+files
+{
+	(source)
+	GOFGSportsComputer.cpp
+	GOFGSportsComputerMain.cpp
+
+	lib/GPSHandler.h 
+	lib/GPSHandler.cpp 
+	lib/TrackHandler.cpp 
+	lib/TrackHandler.cpp 
+
+	uiLib/InfoPanel.h 
+	uiLib/InfoPanel.cpp 
+	uiLib/TrackTVItemSource.h 
+	uiLib/TrackTVItemSource.cpp 
+
+	[Data]
+	(data)
+	GOFGUI.group
+	main.ui
+	InfoPanel.ui
+	InfoPanel_small.ui
+	test.ui
+	ExportScreen.ui
+
+}
+
+subprojects
+{
+	iwui
+}
+
+assets
+{
+	(data-ram\data-gles1)
+	gofgui.group.bin
+	iwui_style/style.group.bin
+}
+deployments
+{
+	provider='GOFG'
+	version-minor=1
+}

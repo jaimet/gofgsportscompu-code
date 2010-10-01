@@ -1,0 +1,93 @@
+CIwUIElement 
+{
+	name "InfoPanel_Small"
+	size { 120 120 }
+	//aspectRatio  { 2 1 }
+	//sizeMin { 120 120 }
+	//sizeMax { 120 120 }
+	//sizeToContent true
+	CIwUIImage 
+	{
+		name "Background"
+		texture "Background"
+	}
+
+	CIwUIElement 
+	{
+		name "Grid_0"
+		
+		CIwUIElement {
+			name "UnitLayout"
+			
+			CIwUIImage 
+			{
+				name "Image"
+				size { 24 24 }
+				sizeMin { 24 24 }
+				sizeMax { 24 24 }
+				texture Image
+			}
+			CIwUILabel {
+				name "UnitLabel"
+				style <label_medium>
+				caption "Unit"
+				sizeMax  { -1 0 }
+			}
+			
+			CIwUILayoutHorizontal 
+			{
+				sizeToSpace true
+			
+				element {
+					name "Image"
+				}
+				element {
+					name "UnitLabel"
+					alignH "centre"
+				}
+			}
+		}
+		
+		CIwUILabel
+		{
+			name "CurrentLabel"
+			style <label_large>
+			caption "0.0"
+			sizeMax  { -1 0 }
+		}
+		CIwUILayoutGrid 
+		{
+			name "DisplayGrid"
+			numColumns 2
+			numRows 2
+			sizeToSpace true
+			
+			element 
+			{
+				name "UnitLayout"
+				columnSpan 2
+			}
+			element 
+			{
+				name "CurrentLabel"
+				columnSpan 2
+				row 1
+				alignH "centre"
+			}
+		}
+	}
+	CIwUILayout 
+	{
+		name "innerLayout"
+		sizeToSpace true
+				
+		element 
+		{
+			name "Background"
+		}
+		element 
+		{
+			name "Grid_0"
+		}
+	}
+}

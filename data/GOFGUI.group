@@ -1,0 +1,25 @@
+// IwUI Group file created by the tool
+include resource_templates.itx
+
+CIwResGroup
+{
+	name "GOFGUI"
+	
+	iwui_style/iwui_style.group { inline true }
+
+	.\textures\play.png
+	.\textures\gowebsite24.png
+	.\textures\web24.png
+	.\textures\mountain24.png
+	.\textures\delete.png
+	.\textures\play.png
+	.\textures\stop.png
+	.\textures\timer24.png
+	.\textures\clock24.png
+
+	"main.ui"
+	"infopanel.ui"
+	"infopanel_small.ui"
+	"test.ui"
+	"exportscreen.ui"
+}

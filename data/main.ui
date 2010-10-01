@@ -1,0 +1,173 @@
+CIwUIElement 
+{
+	name "main"
+//	sizeToContent true
+
+//	CIwUIImage 
+//	{
+//		name "Background_0"
+//		texture "Background"
+//	}
+	CIwUIElement 
+	{
+		name "Grid_0"
+
+		CIwUILabel 
+		{
+			name "LongitudeText"
+			style <label_medium>
+			caption "Longitude:"
+			sizeMax  { -1 0 }
+		}
+		CIwUILabel 
+		{
+			name "LongitudeLabel"
+			style <label_medium>
+			caption "0.0"
+			sizeMax  { -1 0 }
+		}
+		CIwUILabel 
+		{
+			name "LatitudeText"
+			style <label_medium>
+			caption "Latitude:"
+			localiseCaption ""
+			sizeMax  { -1 0 }
+		}
+		CIwUILabel 
+		{
+			name "LatitudeLabel"
+			style <label_medium>
+			caption "0.0"
+			sizeMax  { -1 0 }
+		}
+		CIwUILabel 
+		{
+			name "AltitudeText"
+			style <label_medium>
+			caption "Altitude:"
+			sizeMax  { -1 0 }
+		}
+		CIwUILabel 
+		{
+			name "AltitudeLabel"
+			style <label_medium>
+			caption "0.0"
+			sizeMax  { -1 0 }
+		}
+		CIwUIButton 
+		{
+			name "StopButton"
+			
+			drawableType "image"
+			caption ""
+			texture "stop"
+			sizeToContent true
+			//style <button>
+			//caption "Stop"
+			OnButtonClick  { "StopButtonClick" }
+			//sizeMax  { -1 0 }
+			visible false
+		}
+		CIwUIButton 
+		{
+			name "StartButton"
+			
+			drawableType "image"
+			//style <button>
+			//caption "Start"
+			caption ""
+			texture "play"
+			sizeToContent true
+			OnButtonClick  { "StartButtonClick" }
+			//sizeMax  { -1 0 }
+		}
+		CIwUIButton 
+		{
+			name "ExitButton"
+			
+			drawableType "image"
+			caption ""
+			texture "delete"
+			sizeToContent true
+			//style <button>
+			//caption ""
+			OnButtonClick  { "ExitButtonClick" }
+			//size  { 48 48 }
+			//sizeMin  { 48 48 }
+			//sizeMax  { 48 48 }
+		}
+		CIwUILayoutGrid 
+		{
+			name "Grid"
+			numColumns 2
+			numRows 4
+			sizeToSpace true
+			
+//			element 
+//			{
+//				name "LongitudeText"
+//			}
+//			element 
+//			{
+//				name "LongitudeLabel"
+//				column 1
+//			}
+//			element 
+//			{
+//				name "LatitudeText"
+//				row 1
+//			}
+//			element 
+//			{
+//				name "LatitudeLabel"
+//				row 1
+//				column 1
+//			}
+//			element 
+//			{
+//				name "AltitudeText"
+//				row 2
+//			}
+//			element 
+//			{
+//				name "AltitudeLabel"
+//				row 2
+//				column 1
+//			}
+			element 
+			{
+				name "StopButton"
+				row 3
+			}
+			element 
+			{
+				name "ExitButton"
+				row 3
+				//columnSpan 2
+			}
+			element 
+			{
+				name "StartButton"
+				row 3
+				column 1
+				
+				alignH "right"
+			}
+		}
+	}
+	CIwUILayout 
+	{
+		name "mainLayout"
+		sizeToSpace true
+				
+//		element 
+//		{
+//			name "Background_0"
+//		}
+		element 
+		{
+			name "Grid_0"
+		}
+	}
+}

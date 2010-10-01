@@ -1,0 +1,130 @@
+CIwUIElement 
+{
+	name "ExportScreen"
+	CIwUIImage 
+	{
+		name "Background_0"
+		texture "Background"
+	}
+
+	CIwUIElement {
+		name "innerLayout"
+		
+		CIwUILabel {
+			name "ExportLabel"
+			style <label_medium>
+			caption "Export Track"
+			sizeMax { -1 24 }
+		}
+		
+		CIwUITableView {
+			name "TrackList"
+			//sizeMax { -1 -1 }
+			
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "TrackList"
+				}
+			}
+		}
+		
+		CIwUIElement {
+			name "menuBar"
+			sizeMax { -1 48 }
+			
+			CIwUIButton 
+			{
+				name "LeftButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				//OnButtonClick  { "ExitButtonClick" }
+			}
+			
+			CIwUIButton 
+			{
+				name "MiddleButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				//OnButtonClick  { "ExitButtonClick" }
+			}
+			
+			CIwUIButton 
+			{
+				name "RightButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				//OnButtonClick  { "ExitButtonClick" }
+			}
+			
+			CIwUILayoutGrid {
+				sizeToSpace true
+				numColumns 3
+				numRows 1
+				
+				
+				element {
+					name "LeftButton"
+				}
+				element {
+					name "MiddleButton"
+					alignH "centre"
+					column 1
+				}
+				element {
+					name "RightButton"
+					alignH "right"
+					column 2
+				}
+			}
+		}
+
+		CIwUILayoutGrid 
+		{
+			sizeToSpace true
+			numRows 3
+			numColumns 1
+		
+			element {
+				name "ExportLabel"
+				alignH "centre"
+			}
+			element {
+				name "TrackList"
+				alignH "centre"
+				row 1
+			}
+			element {
+				name "menuBar"
+				alignH "centre"
+				alignV "bottom"
+				row 2
+			}
+		}
+	}
+
+	CIwUILayout 
+	{
+		name "exportLayout"
+		sizeToSpace true
+				
+		element 
+		{
+			name "Background_0"
+		}
+		element 
+		{
+			name "innerLayout"
+		}
+	}
+}
