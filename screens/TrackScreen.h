@@ -13,7 +13,7 @@
 #include <MAUI/Label.h>
 #include <MAUI/ListBox.h>
 
-#include <MAUtil/FileLister.h>
+//#include <MAUtil/FileLister.h>
 #include <MAUtil/String.h>
 
 #include "../screens/MainScreen.h"
@@ -36,7 +36,7 @@ private:
 	Layout *mainLayout;
 	ListBox *trackList;
 
-	FileLister *fileLister;
+//	FileLister *fileLister;
 
 	MenuBar *menuBar;
 };

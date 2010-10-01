@@ -27,7 +27,8 @@ void LocationHandler::newLocation(MALocation *location) {
 			this->distance = this->haversineDistance( this->currLocationRad, location );
 			this->totalDistance += this->distance;
 
-			this->altitudeDiff = location->alt - this->currLocationRad->alt;
+//			this->altitudeDiff = location->alt - this->currLocationRad->alt;
+			this->altitudeDiff = 0.0;
 			if( this->altitudeDiff < 0.0 ) this->altitudeDiff = 0.0;
 			this->totalAltitudeDiff  += this->altitudeDiff;
 
@@ -158,7 +159,7 @@ double LocationHandler::haversineDistance( MALocation *start, MALocation *end ) 
 
 void LocationHandler::runTimerEvent() {
 	MALocation *testLoc = new MALocation();
-	testLoc->alt = this->currLocationRad->alt + 1.5;
+//	testLoc->alt = this->currLocationRad->alt + 1.5;
 	testLoc->lat = this->currLocationRad->lat * 180.0 / MAP::PI + 1.0;
 	testLoc->lon = this->currLocationRad->lon * 180.0 / MAP::PI + 1.0;
 	testLoc->state = MA_LOC_QUALIFIED;

@@ -13,20 +13,20 @@ template<>
 TrackScreen *ISingleton<TrackScreen>::mySelf = NULL;
 
 void TrackScreen::refreshTrackList() {
-	String fileEntry;
-//	char fileEntry[50];
+//	String fileEntry;
+	char fileEntry[50];
 
-	this->trackList->clear();
+//	this->trackList->clear();
 
-//	MAHandle dirHandler = maFileListStart( "", "" );
+	MAHandle dirHandler = maFileListStart( "", "" );
 
-	this->fileLister->start( "", "" );
-	while( this->fileLister->next(fileEntry) > 0 ) {
-//	while( maFileListNext( dirHandler, fileEntry, 50 ) > 0 ) {
+//	this->fileLister->start( "", "" );
+//	while( this->fileLister->next(fileEntry) > 0 ) {
+	while( maFileListNext( dirHandler, fileEntry, 50 ) > 0 ) {
 		Label *entry = new Label( 0, 0, this->trackList->getWidth(), 24, this->trackList, fileEntry, 0xFFFFFF, new Font(FONT_VERA18) );
 	}
 
-//	maFileListClose( dirHandler );
+	maFileListClose( dirHandler );
 }
 
 void TrackScreen::leftButtonTriggered() {

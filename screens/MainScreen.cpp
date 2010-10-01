@@ -74,10 +74,12 @@ MainScreen::~MainScreen() {
 
 void MainScreen::locationReceived(MALocation *location) {
 	char statusText[30];
-	sprintf( statusText, "%.2f %.2f %.2f", location->lon, location->lat, location->alt );
+//	sprintf( statusText, "%.2f %.2f %.2f", location->lon, location->lat, location->alt );
+	sprintf( statusText, "%.2f %.2f", location->lon, location->lat );
 	this->status->setValue( statusText );
 
-	TrackHandler::Self()->addGPSData( location->lon, location->lat, location->alt );
+//	TrackHandler::Self()->addGPSData( location->lon, location->lat, location->alt );
+	TrackHandler::Self()->addGPSData( location->lon, location->lat, 0.00 );
 
 	//this->status->setValue( "1" );
 	this->speed->setValue( LocationHandler::Self()->getSpeed() * 3.6 );

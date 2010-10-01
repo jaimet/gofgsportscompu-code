@@ -25,7 +25,7 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	this->leftButton = new Image( 0, 0, height, height, this );
 	this->leftButton->setDrawBackground(true);
 	this->leftButton->setBackgroundColor(0xFFFFFF);
-	this->leftButton->addWidgetListener(this);
+//	this->leftButton->addWidgetListener(this);
 	//this->leftButton->addWidgetListener(this);
 	// First padding
 	this->lmPadding = new Image( 0, 0, spacerWidth, height, this );
@@ -35,7 +35,7 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	this->middleButton = new Image( 0, 0, height, height, this );
 	this->middleButton->setDrawBackground(true);
 	this->middleButton->setBackgroundColor(0xFFFFFF);
-	this->middleButton->addWidgetListener(this);
+//	this->middleButton->addWidgetListener(this);
 
 //	this->middleLabel = new Label( 0, 0, height * 3, height, this, "-", 0xFFFFFF, new Font(FONT_VERA18) );
 	//this->middleLabel->setDrawBackground( true );
@@ -49,7 +49,7 @@ MenuBar::MenuBar( int x, int y, int width, int height, Widget *parent ) : Layout
 	this->rightButton = new Image( 0, 0, height, height, this );
 	this->rightButton->setDrawBackground(true);
 	this->rightButton->setBackgroundColor(0xFFFFFF);
-	this->rightButton->addWidgetListener(this);
+//	this->rightButton->addWidgetListener(this);
 	//this->rightButton->addWidgetListener(this);
 
 	// Add ourselves as pointer-listener
@@ -129,18 +129,21 @@ void MenuBar::pointerPressEvent( MAPoint2d p ) {
 	if( this->leftButton->getBounds().contains( p.x, p.y ) ) {
 //	if( p.x >= pb.x && p.x <= (pb.x + this->leftButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->leftButton->getHeight()) ) {
 //		this->middleLabel->setCaption( "Left" );
-		this->leftButton->trigger();
+//		this->leftButton->trigger();
+		this->triggered( this->leftButton );
 	}
 //	else if( this->middleButton->contains( point ) ) {
 	else if( this->middleButton->getBounds().contains( p.x, p.y ) ) {
 //	else if( p.x >= pb.x && p.x <= (pb.x + this->middleButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->middleButton->getHeight()) ) {
-		this->middleButton->trigger();
+//		this->middleButton->trigger();
+		this->triggered( this->middleButton );
 	}
 //	else if( this->rightButton->contains( point ) ) {
 	else if( this->rightButton->getBounds().contains( p.x, p.y ) ) {
 //	else if( p.x >= pb.x && p.x <= (pb.x + this->rightButton->getWidth()) && p.y >= pb.y && p.y <= (pb.y + this->rightButton->getHeight()) ) {
 //		this->middleLabel->setCaption( "Right" );
-		this->rightButton->trigger();
+//		this->rightButton->trigger();
+		this->triggered( this->rightButton );
 	}
 }
 
