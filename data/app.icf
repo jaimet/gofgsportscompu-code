@@ -7,3 +7,4 @@ MemSize=5000000
 
 [GX]
 DataCacheSize=64000
+NumTPages=32

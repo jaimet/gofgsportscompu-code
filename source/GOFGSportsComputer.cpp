@@ -42,6 +42,7 @@ public:
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, StartButtonClick, CIwUIElement*)
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, StopButtonClick, CIwUIElement*)
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ExitButtonClick, CIwUIElement*)
+		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ExportButtonClick, CIwUIElement*)
 	}
 
 	void StartButtonClick(CIwUIElement*)
@@ -81,6 +82,12 @@ public:
 	{
 		s3eDeviceRequestQuit();
 	}
+
+	void ExportButtonClick(CIwUIElement*)
+	{
+		this->exportScreen->SetVisible( true );
+	}
+
 
 	void setLongitude( double value ) {
 		char buf[20];
@@ -162,6 +169,7 @@ public:
 	InfoPanel *timeInfo;
 	InfoPanel *clockInfo;
 
+	CIwUIElement *exportScreen;
 private:
 	static DisplayHandler *mySelf;
 	bool bStopPending;
@@ -188,6 +196,7 @@ void ExampleInit()
 {
 	IwGxInit();
 	IwUIInit();
+	IW_CLASS_REGISTER(TrackTVItemSource);
 	
 	//Instantiate the view and controller singletons.
 	new CIwUIController;
@@ -205,19 +214,23 @@ void ExampleInit()
     IwGetUIStyleManager()->SetStylesheet(IwSafeCast<CIwUIStylesheet*>(pResource));
 
 	// Add the built page to the view
-	CIwUIElement* pPage = CIwUIElement::CreateFromResource("ExportScreen");
+	//CIwUIElement* pPage = CIwUIElement::CreateFromResource("ExportScreen");
+	CIwUIElement* pPage = CIwUIElement::CreateFromResource("main");
 	IwGetUIView()->AddElement(pPage);
 	IwGetUIView()->AddElementToLayout(pPage);
 
-	CIwUITableView *exportView = (CIwUITableView*)pPage->GetChildNamed( "TrackList" );
+	DisplayHandler::Self()->exportScreen = CIwUIElement::CreateFromResource( "ExportScreen" );
+	IwGetUIView()->AddElementToLayout( DisplayHandler::Self()->exportScreen );
+	DisplayHandler::Self()->exportScreen->SetVisible( false );
+	/*CIwUITableView *exportView = (CIwUITableView*)pPage->GetChildNamed( "TrackList" );
 	exportView->SetItemSource( new TrackTVItemSource() );
 	//exportView->RecreateItemsFromSource();
 	exportView->InsertRow( 0 );
 	exportView->InsertRow( 1 );
 	exportView->InsertRow( 2 );
-	exportView->InsertRow( 3 );
+	exportView->InsertRow( 3 );*/
 
-	return;
+	//return;
 
 	// TODO: Image laden und buttons anzeigen
 	//CIwTexture* texture = (CIwTexture*)IwGetResManager()->GetResNamed( "play", IW_GX_RESTYPE_TEXTURE );
@@ -237,7 +250,7 @@ void ExampleInit()
 
 	// Add speed infopanel to grid
 	CIwTexture *texture = (CIwTexture*)IwGetResManager()->GetResNamed( "gowebsite24", IW_GX_RESTYPE_TEXTURE );
-	InfoPanel* speedInfo = new InfoPanel();
+	InfoPanel* speedInfo = new InfoPanel( "speedInfo" );
 	speedInfo->setUnit( "km/h" );
 	speedInfo->setImage( texture );
 	DisplayHandler::Self()->speedInfo = speedInfo;
@@ -245,7 +258,7 @@ void ExampleInit()
 
 	// Add distance infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "web24", IW_GX_RESTYPE_TEXTURE );
-	InfoPanel *distanceInfo = new InfoPanel( true );
+	InfoPanel *distanceInfo = new InfoPanel( "distanceInfo", true );
 	distanceInfo->setUnit ( "km" );
 	distanceInfo->setImage( texture );
 	DisplayHandler::Self()->distanceInfo = distanceInfo;
@@ -253,7 +266,7 @@ void ExampleInit()
 
 	// Add altitude infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "mountain24", IW_GX_RESTYPE_TEXTURE );
-	InfoPanel *altitudeInfo = new InfoPanel( true );
+	InfoPanel *altitudeInfo = new InfoPanel( "altitudeInfo", true );
 	altitudeInfo->setUnit( "m" );
 	altitudeInfo->setImage( texture );
 	DisplayHandler::Self()->altitudeInfo = altitudeInfo;
@@ -261,7 +274,7 @@ void ExampleInit()
 
 	// Add time infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "timer24", IW_GX_RESTYPE_TEXTURE );
-	InfoPanel *timeInfo = new InfoPanel( true );
+	InfoPanel *timeInfo = new InfoPanel( "timeInfo", true );
 	timeInfo->setUnit( "hh:mm:ss" );
 	timeInfo->setImage( texture );
 	DisplayHandler::Self()->timeInfo = timeInfo;
@@ -269,7 +282,7 @@ void ExampleInit()
 
 	// Add clock infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "clock24", IW_GX_RESTYPE_TEXTURE );
-	InfoPanel *clockInfo = new InfoPanel( true );
+	InfoPanel *clockInfo = new InfoPanel( "clockInfo", true );
 	clockInfo->setUnit( "hh:mm" );
 	clockInfo->setImage( texture );
 	DisplayHandler::Self()->clockInfo = clockInfo;

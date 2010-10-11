@@ -1,6 +1,6 @@
 #include "InfoPanel.h"
 
-InfoPanel::InfoPanel( bool p_bNoStatistics ) {
+InfoPanel::InfoPanel( char *name, bool p_bNoStatistics ) {
 	this->bNoStatistics = p_bNoStatistics;
 
 	if( this->bNoStatistics ) {
@@ -13,6 +13,9 @@ InfoPanel::InfoPanel( bool p_bNoStatistics ) {
 		this->maximumLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "MaximumLabel" );
 		this->averageLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "AverageLabel" );
 	}
+
+	// Rename element
+	this->uiInfoPanel->SetName( name );
 
 	this->unitLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "UnitLabel" );
 	this->currentLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "CurrentLabel" );

@@ -29,6 +29,7 @@ CIwUIElement
 			element 
 			{
 				name "Image_0"
+				border  { 1 1 }
 			}
 			element 
 			{

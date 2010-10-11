@@ -17,7 +17,7 @@ CIwUIPropertySet
 
 CIwUIElement
 {
-	name "ExportScreen"
+	name "FileList"
 	sizeHint { 300 200 }
 
 	CIwUIImage
@@ -69,11 +69,22 @@ CIwUIElement
 			
 			CIwUIButton 
 			{
+				name "MiddleButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				//OnButtonClick  { "ExitButtonClick" }
+			}
+			
+			CIwUIButton 
+			{
 				name "RightButton"
 				
 				drawableType "image"
 				caption ""
-				texture "foldermove"
+				texture "delete"
 				sizeToContent true
 				//OnButtonClick  { "ExitButtonClick" }
 			}
@@ -86,6 +97,11 @@ CIwUIElement
 				
 				element {
 					name "LeftButton"
+				}
+				element {
+					name "MiddleButton"
+					alignH "centre"
+					column 1
 				}
 				element {
 					name "RightButton"
@@ -117,6 +133,21 @@ CIwUIElement
 		}
 	}
 
+//	CIwUILayoutGrid {
+//		name "innerLayout"
+//
+//		sizeToSpace true
+//
+//		numRows 2
+//		numColumns 1
+//
+//		element { name "ExportLabel" }
+//		element	{
+//			name "TableView"
+//			row 1
+//		}
+//	}
+
 	CIwUILayout
 	{
 		sizeToSpace true
@@ -128,10 +159,10 @@ CIwUIElement
 
 CIwUITableViewItem
 {
-	name "trackItem"
+	name "fileItem"
 	style <tableViewItem>
 
-	OnTableViewItemSelected HandleTrackSelection
+	OnTableViewItemSelected HandleSelection
 
 	CIwUILabel
 	{

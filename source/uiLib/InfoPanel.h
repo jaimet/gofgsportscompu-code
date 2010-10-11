@@ -9,7 +9,7 @@
 
 class InfoPanel {
 public:
-	InfoPanel( bool bNoStatistics = false );
+	InfoPanel( char *name, bool bNoStatistics = false );
 
 	void setUnit( char *unit );
 	void setValue( double value );

@@ -25,7 +25,6 @@ CIwUIElement
 				size { 24 24 }
 				sizeMin { 24 24 }
 				sizeMax { 24 24 }
-				texture Image
 			}
 			CIwUILabel {
 				name "UnitLabel"

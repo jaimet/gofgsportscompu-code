@@ -13,7 +13,7 @@ files
 
 	lib/GPSHandler.h 
 	lib/GPSHandler.cpp 
-	lib/TrackHandler.cpp 
+	lib/TrackHandler.h
 	lib/TrackHandler.cpp 
 
 	uiLib/InfoPanel.h 
@@ -29,7 +29,6 @@ files
 	InfoPanel_small.ui
 	test.ui
 	ExportScreen.ui
-
 }
 
 subprojects

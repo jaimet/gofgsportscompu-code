@@ -55,48 +55,94 @@ CIwUIElement
 			caption "0.0"
 			sizeMax  { -1 0 }
 		}
-		CIwUIButton 
-		{
-			name "StopButton"
+
+		CIwUIElement {
+			name "menuBar"
+			sizeMax { -1 48 }
 			
-			drawableType "image"
-			caption ""
-			texture "stop"
-			sizeToContent true
-			//style <button>
-			//caption "Stop"
-			OnButtonClick  { "StopButtonClick" }
-			//sizeMax  { -1 0 }
-			visible false
-		}
-		CIwUIButton 
-		{
-			name "StartButton"
+			CIwUIButton 
+			{
+				name "StopButton"
 			
-			drawableType "image"
-			//style <button>
-			//caption "Start"
-			caption ""
-			texture "play"
-			sizeToContent true
-			OnButtonClick  { "StartButtonClick" }
-			//sizeMax  { -1 0 }
-		}
-		CIwUIButton 
-		{
-			name "ExitButton"
+				drawableType "image"
+				caption ""
+				texture "stop"
+				sizeToContent true
+				//style <button>
+				//caption "Stop"
+				OnButtonClick  { "StopButtonClick" }
+				//sizeMax  { -1 0 }
+				visible false
+			}
+			CIwUIButton 
+			{
+				name "StartButton"
 			
-			drawableType "image"
-			caption ""
-			texture "delete"
-			sizeToContent true
-			//style <button>
-			//caption ""
-			OnButtonClick  { "ExitButtonClick" }
-			//size  { 48 48 }
-			//sizeMin  { 48 48 }
-			//sizeMax  { 48 48 }
+				drawableType "image"
+				//style <button>
+				//caption "Start"
+				caption ""
+				texture "play"
+				sizeToContent true
+				OnButtonClick  { "StartButtonClick" }
+				//sizeMax  { -1 0 }
+			}
+			CIwUIButton 
+			{
+				name "ExitButton"
+			
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				//style <button>
+				//caption ""
+				OnButtonClick  { "ExitButtonClick" }
+				//size  { 48 48 }
+				//sizeMin  { 48 48 }
+				//sizeMax  { 48 48 }
+			}
+			CIwUIButton 
+			{
+				name "ExportButton"
+			
+				drawableType "image"
+				caption ""
+				texture "app"
+				sizeToContent true
+				//style <button>
+				//caption ""
+				OnButtonClick  { "ExportButtonClick" }
+				//size  { 48 48 }
+				//sizeMin  { 48 48 }
+				//sizeMax  { 48 48 }
+			}
+			
+			CIwUILayoutGrid {
+				sizeToSpace true
+				numColumns 3
+				numRows 1
+				
+				
+				element {
+					name "StopButton"
+				}
+				element {
+					name "ExitButton"
+				}
+				element {
+					name "ExportButton"
+					alignH "centre"
+					column 1
+				}
+				element {
+					name "StartButton"
+					alignH "right"
+					column 2
+				}
+			}
 		}
+
 		CIwUILayoutGrid 
 		{
 			name "Grid"
@@ -135,24 +181,29 @@ CIwUIElement
 //				row 2
 //				column 1
 //			}
-			element 
-			{
-				name "StopButton"
+//			element 
+//			{
+//				name "StopButton"
+//				row 3
+//			}
+//			element 
+//			{
+//				name "ExitButton"
+//				row 3
+//				//columnSpan 2
+//			}
+//			element 
+//			{
+//				name "StartButton"
+//				row 3
+//				column 1
+//				
+//				alignH "right"
+//			}
+			element {
+				name "menuBar"
 				row 3
-			}
-			element 
-			{
-				name "ExitButton"
-				row 3
-				//columnSpan 2
-			}
-			element 
-			{
-				name "StartButton"
-				row 3
-				column 1
-				
-				alignH "right"
+				columnSpan 2
 			}
 		}
 	}
