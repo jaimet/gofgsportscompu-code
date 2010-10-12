@@ -22,6 +22,7 @@
 
 #include "lib/GPSHandler.h"
 #include "lib/TrackHandler.h"
+#include "lib/TrackExportHandler.h"
 
 #include "uiLib/InfoPanel.h"
 #include "uiLib/TrackTVItemSource.h"
@@ -43,6 +44,10 @@ public:
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, StopButtonClick, CIwUIElement*)
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ExitButtonClick, CIwUIElement*)
 		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ExportButtonClick, CIwUIElement*)
+
+		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ES_ExitButtonClick, CIwUIElement*)
+		IW_UI_CREATE_VIEW_SLOT1(this, "DisplayHandler", DisplayHandler, ES_ExportButtonClick, CIwUIElement*)
+		IW_UI_CREATE_VIEW_SLOT2(this, "DisplayHandler", DisplayHandler, ES_HandleTrackSelection, CIwUIElement*,bool)
 	}
 
 	void StartButtonClick(CIwUIElement*)
@@ -88,6 +93,27 @@ public:
 		this->exportScreen->SetVisible( true );
 	}
 
+	void ES_ExitButtonClick(CIwUIElement*)
+	{
+		this->exportScreen->SetVisible( false );
+	}
+
+	void ES_ExportButtonClick(CIwUIElement*)
+	{
+		TrackExportHandler::Self()->exportToFitlog( this->es_currentFile, "export.fitlog" );
+	}
+
+	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected)
+	{
+		if( bIsSelected ) {
+			CIwPropertyString fileName;
+			if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", fileName))
+			{
+				sprintf( this->es_currentFile, "tracks/%s", fileName.c_str() );
+				//strcpy( this->es_currentFile, fileName.c_str() );
+			}
+		}
+	}
 
 	void setLongitude( double value ) {
 		char buf[20];
@@ -176,6 +202,8 @@ private:
 
 	double totalDistance;
 	time_t startTime;
+
+	char es_currentFile[20];
 };
 
 DisplayHandler *DisplayHandler::mySelf = NULL;

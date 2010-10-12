@@ -64,7 +64,7 @@ CIwUIElement
 				caption ""
 				texture "delete"
 				sizeToContent true
-				//OnButtonClick  { "ExitButtonClick" }
+				OnButtonClick  { "ES_ExitButtonClick" }
 			}
 			
 			CIwUIButton 
@@ -75,7 +75,7 @@ CIwUIElement
 				caption ""
 				texture "foldermove"
 				sizeToContent true
-				//OnButtonClick  { "ExitButtonClick" }
+				OnButtonClick  { "ES_ExportButtonClick" }
 			}
 			
 			CIwUILayoutGrid {
@@ -131,7 +131,7 @@ CIwUITableViewItem
 	name "trackItem"
 	style <tableViewItem>
 
-	OnTableViewItemSelected HandleTrackSelection
+	OnTableViewItemSelected ES_HandleTrackSelection
 
 	CIwUILabel
 	{
