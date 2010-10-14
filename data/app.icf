@@ -3,8 +3,8 @@ SplashscreenBkR=255
 SplashscreenBkG=255
 SplashscreenBkB=255
  
-MemSize=5000000
+MemSize=12000000
 
 [GX]
-DataCacheSize=64000
+DataCacheSize=128000
 NumTPages=32

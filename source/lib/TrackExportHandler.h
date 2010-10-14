@@ -7,6 +7,7 @@
 #include "s3eFile.h"
 
 #include <string.h>
+#include <time.h>
 
 // Simple helper struct for managing the data-point for an export
 struct DataPoint {
@@ -37,7 +38,7 @@ class TrackExportHandler {
 public:
 	static TrackExportHandler *Self();
 
-	void exportToTCX( char *fileName );
+	void exportToTCX( char *fileName, char *tcxName );
 	void exportToFitlog( char *fileName, char *fitlogName );
 
 private:

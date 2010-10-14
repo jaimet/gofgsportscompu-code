@@ -95,9 +95,18 @@ CIwUIElement
 			}
 		}
 		
+		CIwUITabBar {
+			name "exportFormat"
+			OnTabBarSelected { ES_ExportFormatChanged }
+			radioButtonStyles {
+				{ caption "Fitlog" style <radio_left> } 
+				{ caption "TCX" style <radio_right> } 
+			}
+		}
+
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 3
+			numRows 4
 			numColumns 1
 
 			element {
@@ -110,8 +119,14 @@ CIwUIElement
 				alignV "top"
 			}
 			element {
-				name "menuBar"
+				name "exportFormat"
 				row 2
+				alignH "centre"
+				alignV "bottom"
+			}
+			element {
+				name "menuBar"
+				row 3
 				alignV "bottom"
 			}
 		}

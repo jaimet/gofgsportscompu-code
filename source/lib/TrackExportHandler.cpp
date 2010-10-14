@@ -11,27 +11,57 @@ TrackExportHandler *TrackExportHandler::Self() {
 	return TrackExportHandler::mySelf;
 }
 
-void TrackExportHandler::exportToTCX( char *fileName ) {
+/*
+	TODO: Add TCX Export
+*/
+void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 }
 
 /*
 	Export a given Track to the FitLog Format
-	TODO: Add error handling for file operations
+	TODO: Add error handling for file operations & data conversions / splitting / etc.
 */
 void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
-	s3eFile *inFile = s3eFileOpen( fileName, "r" );
+	char myBuf[BUFFER_SIZE];
 
+	// Read first line of file to get the start time
+	s3eFile *inFile = s3eFileOpen( fileName, "r" );
+	s3eFileReadString( myBuf, BUFFER_SIZE, inFile );
+	char *timeData = strstr( myBuf, ";" );
+	timeData++;
+	int startTime = atoi( timeData );
+	// Create a formatted time string out of it
+	tm *stInfo = gmtime( (time_t *) &startTime );
+	char startTimeString[25];
+	strftime( startTimeString, 25, "%Y-%m-%dT%H:%M:%SZ", stInfo );
+
+	// Rewind back to the start
+	s3eFileSeekOrigin();
+
+	// Start reading the document
 	TiXmlDocument doc;
 	TiXmlDeclaration *decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild( decl );
 
-	TiXmlElement *rootNode = new TiXmlElement( "FitnessWorkbook" );
-	rootNode->SetAttribute( "xmlns", "http://www.zonefivesoftware.com/xmlschemas/FitnessLogbook/v2" );
-	rootNode->SetAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
-	rootNode->SetAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema" );
-	doc.LinkEndChild( rootNode );
+	TiXmlElement *topNode = new TiXmlElement( "FitnessWorkbook" );
+	topNode->SetAttribute( "xmlns", "http://www.zonefivesoftware.com/xmlschemas/FitnessLogbook/v2" );
+	topNode->SetAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
+	topNode->SetAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema" );
+	doc.LinkEndChild( topNode );
 
-	char myBuf[BUFFER_SIZE];
+	TiXmlElement *athleteNode = new TiXmlElement( "AthleteLog" );
+	topNode->LinkEndChild( athleteNode );
+	
+	//2002-05-30T09:30:10Z
+	TiXmlElement *activityNode = new TiXmlElement( "Activity" );
+	activityNode->SetAttribute( "Id", time( NULL ) );
+	activityNode->SetAttribute( "StartTime", startTimeString );
+	athleteNode->LinkEndChild( activityNode );
+
+	TiXmlElement *trackNode = new TiXmlElement( "Track" );
+	trackNode->SetAttribute( "StartTime", startTimeString );
+	activityNode->LinkEndChild( trackNode );
+
 	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
 		// Start splitting the data line
 		char *token = strtok( myBuf, ";" );
@@ -43,7 +73,7 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 		case 1:
 			// Check if this is already the timestamp of the next data-point
 			if( this->dataPoint.unixtime != 0 ) {
-				rootNode->LinkEndChild( this->createFitlogPoint() );
+				trackNode->LinkEndChild( this->createFitlogPoint() );
 
 				// Reset the data point
 				this->dataPoint.reset();
@@ -71,7 +101,7 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 		}
 	}
 	// Add last data-point
-	rootNode->LinkEndChild( this->createFitlogPoint() );
+	trackNode->LinkEndChild( this->createFitlogPoint() );
 
 	// Close file
 	s3eFileClose( inFile );
