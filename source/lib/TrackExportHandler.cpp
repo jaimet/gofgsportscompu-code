@@ -80,7 +80,7 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 			}
 
 			// Save new timestamp
-			this->dataPoint.unixtime = atoi( data );
+			this->dataPoint.unixtime = atoi( data ) - startTime;
 			break;
 		// Position data-point
 		case 2:

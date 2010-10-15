@@ -11,17 +11,26 @@ files
 	GOFGSportsComputer.cpp
 	GOFGSportsComputerMain.cpp
 
-	lib/GPSHandler.h 
-	lib/GPSHandler.cpp 
-	lib/TrackHandler.h
-	lib/TrackHandler.cpp 
-	lib/TrackExportHandler.h
-	lib/TrackExportHandler.cpp 
+  [Lib]
+  (source/lib)
+	GPSHandler.h 
+	GPSHandler.cpp 
+	TrackHandler.h
+	TrackHandler.cpp 
+	TrackExportHandler.h
+	TrackExportHandler.cpp 
 
-	uiLib/InfoPanel.h 
-	uiLib/InfoPanel.cpp 
-	uiLib/TrackTVItemSource.h 
-	uiLib/TrackTVItemSource.cpp 
+  [UiLib]
+  (source/uiLib)
+	InfoPanel.h 
+	InfoPanel.cpp 
+	TrackTVItemSource.h 
+	TrackTVItemSource.cpp 
+
+  [DisplayHandler]
+  (source/displayHandler)
+	ExportScreen.h 
+	ExportScreen.cpp 
 
 	[Data]
 	(data)
