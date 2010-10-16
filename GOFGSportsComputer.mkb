@@ -19,6 +19,7 @@ files
 	TrackHandler.cpp 
 	TrackExportHandler.h
 	TrackExportHandler.cpp 
+	Singleton.h
 
   [UiLib]
   (source/uiLib)
