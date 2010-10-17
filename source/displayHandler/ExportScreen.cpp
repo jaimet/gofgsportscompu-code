@@ -10,9 +10,13 @@ ExportScreen::ExportScreen()
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_HandleTrackSelection, CIwUIElement*,bool)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_ExportFormatChanged, CIwUIElement*,int16)
 	
+	// Initialize values
 	strcpy( this->es_currentFile, "" );
+	this->exportFormat = FITLOG;
 
 	this->exportScreen = CIwUIElement::CreateFromResource( "ExportScreen" );
+
+	((CIwUITabBar *)this->exportScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
 }
 
 void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
@@ -34,7 +38,7 @@ void ExportScreen::ES_ExportButtonClick(CIwUIElement*)
 		extString = strstr( exportName, ".gsc" );
 
 		// Check for export format: Fitlog...
-		if( this->es_format == 0 ) {
+		if( this->exportFormat == FITLOG ) {
 			strcpy( extString, ".fitlog" );
 			TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
 		}
@@ -59,7 +63,14 @@ void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSe
 }
 
 void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
-	this->es_format = selection;
+	switch( selection ) {
+	case 0:
+		this->exportFormat = FITLOG;
+		break;
+	default:
+		this->exportFormat = TCX;
+		break;
+	}
 }
 
 CIwUIElement *ExportScreen::GetScreen() {

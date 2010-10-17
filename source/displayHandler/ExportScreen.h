@@ -6,6 +6,11 @@
 #include "../lib/Singleton.h"
 #include "../lib/TrackExportHandler.h"
 
+enum ExportFormat {
+	FITLOG,
+	TCX
+};
+
 class ExportScreen : public Singleton<ExportScreen>
 {
 	friend class Singleton<ExportScreen>;
@@ -23,7 +28,7 @@ private:
 	CIwUIElement *exportScreen;
 
 	char es_currentFile[20];
-	int es_format;
+	ExportFormat exportFormat;
 };
 
 #endif

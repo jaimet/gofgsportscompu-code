@@ -1,15 +1,7 @@
 #include "TrackExportHandler.h"
 
-TrackExportHandler *TrackExportHandler::mySelf = NULL;
-
-// Singleton getter
-TrackExportHandler *TrackExportHandler::Self() {
-	if( TrackExportHandler::mySelf == NULL ) {
-		TrackExportHandler::mySelf = new TrackExportHandler();
-	}
-
-	return TrackExportHandler::mySelf;
-}
+template<>
+TrackExportHandler *Singleton<TrackExportHandler>::mySelf = NULL;
 
 /*
 	TODO: Add TCX Export

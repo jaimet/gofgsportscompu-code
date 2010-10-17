@@ -9,6 +9,8 @@
 #include <string.h>
 #include <time.h>
 
+#include "../lib/Singleton.h"
+
 // Simple helper struct for managing the data-point for an export
 struct DataPoint {
 	DataPoint() {
@@ -34,10 +36,9 @@ struct DataPoint {
 	int unixtime;	// Unix Timestamp
 };
 
-class TrackExportHandler {
+class TrackExportHandler : public Singleton<TrackExportHandler> {
+	friend class Singleton<TrackExportHandler>;
 public:
-	static TrackExportHandler *Self();
-
 	void exportToTCX( char *fileName, char *tcxName );
 	void exportToFitlog( char *fileName, char *fitlogName );
 
@@ -47,8 +48,6 @@ private:
 	TrackExportHandler();
 
 	DataPoint dataPoint;
-
-	static TrackExportHandler *mySelf;
 };
 
 #endif
