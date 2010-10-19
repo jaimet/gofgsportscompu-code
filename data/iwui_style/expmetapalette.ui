@@ -1,80 +1,5 @@
 CIwUIElement
 {
-	name ExpMetaPalette/Layouts
-
-	CIwUIElement
-	{
-		name			Layered
-		
-		CIwUILayout
-		{
-		}
-	}
-	CIwUIElement
-	{
-		name			Vertical
-		
-		CIwUILayoutVertical
-		{
-		}
-	}
-	CIwUIElement
-	{
-		name			Horizontal
-		
-		CIwUILayoutHorizontal
-		{
-		}
-	}
-	CIwUIElement
-	{
-		name			Grid
-		
-		CIwUILayoutGrid
-		{
-			numColumns 2
-			numRows 2
-		}
-	}
-	CIwUIScrollableView
-	{
-		name			ScrollableVertical
-		
-		clipped true
-		updatable true
-
-		CIwUIFocusHandlerTab
-		{
-			name "Focus"
-		}
-		
-		CIwUILayoutVertical
-		{
-		}
-	}
-	CIwUIElement
-	{
-		name			Panel
-		
-		// Background
-		CIwUIImage { name "Background" texture Background }
-
-		CIwUIElement 
-		{
-			name "Base"
-		}
-
-		CIwUILayout
-		{
-			sizeToSpace	true
-
-			element { name "Background" }
-			element { name "Base" }
-		}
-	}
-}
-CIwUIElement
-{
 	name ExpMetaPalette/Controls
 
 	CIwUIElement
@@ -137,6 +62,66 @@ CIwUIElement
 	}
 
 }
+CIwUIElement
+{
+	name ExpMetaPalette/LayoutsInElements
+
+
+	CIwUIElement
+	{
+		name			Layered
+		
+		CIwUILayout
+		{
+			name			Layered
+		}
+	}
+	CIwUIElement
+	{
+		name			Vertical
+		
+		CIwUILayoutVertical
+		{
+			name			Vertical
+		}
+	}
+	CIwUIElement
+	{
+		name			Horizontal
+		
+		CIwUILayoutHorizontal
+		{
+			name			Horizontal
+		}
+	}
+	CIwUIElement
+	{
+		name			Grid
+		
+		CIwUILayoutGrid
+		{
+			name			Grid
+			numColumns 2
+			numRows 2
+		}
+	}
+	CIwUIScrollableView
+	{
+		name			ScrollableVertical
+		
+		clipped true
+		updatable true
+
+		CIwUIFocusHandlerTab
+		{
+			name "Focus"
+		}
+		
+		CIwUILayoutVertical
+		{
+		}
+	}
+}
 
 CIwUIElement
 {
@@ -157,42 +142,60 @@ CIwUIElement
 }
 CIwUIElement
 {
-	name ExpMetaPalette:l/ChangeLayout
+	name ExpMetaPalette/Snippets
+	CIwUIImage
+	{
+		name "Background"
+		texture Background
+	}
+}
+CIwUIElement
+{
+	name ExpMetaPalette:l/ChangeElementsLayout
 
 	CIwUIElement
 	{
 		name			NoLayout
 	}
+
 	CIwUIElement
 	{
 		name			Layered
+		sizeToContent true
 		
 		CIwUILayout
 		{
+			name			Layered
 		}
 	}
 	CIwUIElement
 	{
 		name			Vertical
+		sizeToContent true
 		
 		CIwUILayoutVertical
 		{
+			name			Vertical
 		}
 	}
 	CIwUIElement
 	{
 		name			Horizontal
+		sizeToContent true
 		
 		CIwUILayoutHorizontal
 		{
+			name			Horizontal
 		}
 	}
 	CIwUIElement
 	{
 		name			Grid
+		sizeToContent true
 		
 		CIwUILayoutGrid
 		{
+			name			Grid
 			numColumns 2
 			numRows 2
 		}
@@ -200,7 +203,7 @@ CIwUIElement
 }
 CIwUIElement
 {
-	name ExpMetaPalette:f/ChangeFocus
+	name ExpMetaPalette:f/ChangeElementsFocus
 
 	CIwUIElement
 	{
@@ -227,7 +230,7 @@ CIwUIElement
 }
 CIwUIElement
 {
-	name ExpMetaPalette:s/Spacer
+	name ExpMetaPalette:s/AddSpacer
 
 	CIwUIElement
 	{
@@ -236,6 +239,7 @@ CIwUIElement
 		CIwUILayout
 		{
 			element {
+				name			Spacer
 				CIwUILayoutSpacer {
 					name "Spacer"
 					sizeMin  { 30 30 }
@@ -244,5 +248,35 @@ CIwUIElement
 				}
 			}
 		}
+	}
+}
+
+CIwUIElement
+{
+	name ExpMetaPalette:p/SizerPolicy
+
+	CIwUIElement
+	{
+		name "SizeToContent"
+		sizeMin  { -1 -1 }
+		sizeMax  { -1 -1 }
+		sizeHint  { -1 -1 }
+		sizeToContent true
+	}
+	CIwUIElement
+	{
+		name "ProportionalSize"
+		sizeMin  { 16 16 }
+		sizeMax  { -1 -1 }
+		sizeHint  { 500 500 }
+		sizeToContent false
+	}
+	CIwUIElement
+	{
+		name "FixedSize"
+		sizeMin  { 16 16 }
+		sizeMax  { 16 16 }
+		sizeHint  { 16 16 }
+		sizeToContent false
 	}
 }

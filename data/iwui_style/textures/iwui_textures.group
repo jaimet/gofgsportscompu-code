@@ -53,5 +53,6 @@ CIwResGroup
 	.\textField_cursor.tga
 
 
+	.\image.tga			// Don't remove me!
 	.\iwui_style.mtl
 }

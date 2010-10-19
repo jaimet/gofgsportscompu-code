@@ -51,7 +51,7 @@ subprojects
 
 assets
 {
-	(data-ram\data-gles1)
+	(data-ram\data-sw)
 	gofgui.group.bin
 	iwui_style/style.group.bin
 }
