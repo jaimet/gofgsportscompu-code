@@ -27,6 +27,8 @@ public:
 private:
 	GPSHandler();
 
+	void reset();	// Reset the GPS Handler, automatically called on startGPS()
+
 	double degreeToRad( double degree );
 	double haversineDistance( s3eLocation *start, s3eLocation *end );
 

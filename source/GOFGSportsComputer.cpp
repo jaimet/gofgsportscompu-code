@@ -29,6 +29,10 @@
 
 #include "displayHandler/ExportScreen.h"
 
+#define S_PER_DAY      86400
+#define S_PER_HOUR     3600
+#define S_PER_MINUTE   60
+
 class DisplayHandler
 {
 public:
@@ -58,11 +62,10 @@ public:
 		this->m_StopButton->SetVisible( true );
 
 		char fileName[20];
-		time_t *myTime = new time_t;
-		time( myTime );
-		strftime( fileName, strlen(fileName), "%Y%m%d_%H%M%S.gsc", localtime( myTime ) );
-		this->startTime = time( NULL );
 
+		// Generate file name for tracking
+		this->startTime = (int) (s3eTimerGetUTC() / 1000);
+		sprintf( fileName, "%d.gsc", this->startTime );
 		TrackHandler::Self()->startTracking( fileName );
 		GPSHandler::Self()->startGPS();
 
@@ -91,35 +94,11 @@ public:
 		ExportScreen::Self()->GetScreen()->SetVisible( true );
 	}
 
-	void setLongitude( double value ) {
-		char buf[20];
-
-		sprintf( buf, "%.6f", value );
-		this->m_LongitudeLabel->SetCaption( buf );
-	}
-
-	void setLatitude( double value ) {
-		char buf[20];
-
-		sprintf( buf, "%.6f", value );
-		this->m_LatitudeLabel->SetCaption( buf );
-	}
-
-	void setAltitude( double value ) {
-		char buf[20];
-
-		sprintf( buf, "%.6f", value );
-		this->m_AltitudeLabel->SetCaption( buf );
-	}
-
 	// TODO: CONTINUE WITH MAIN TIMER <=============
 	static int mainTimer( void *systemData, void *userData ) {
 		if( DisplayHandler::Self()->bStopPending ) return 1;
 
 		if( GPSHandler::Self()->updateLocation() ) {
-			DisplayHandler::Self()->setAltitude( GPSHandler::Self()->getAltitude() );
-			DisplayHandler::Self()->setLongitude( GPSHandler::Self()->getLongitude() );
-			DisplayHandler::Self()->setLatitude( GPSHandler::Self()->getLatitude() );
 			DisplayHandler::Self()->totalDistance += GPSHandler::Self()->getDistance();
 
 			TrackHandler::Self()->addGPSData( GPSHandler::Self()->getLongitude(), GPSHandler::Self()->getLatitude(), GPSHandler::Self()->getAltitude() );
@@ -131,9 +110,19 @@ public:
 
 		// Update timer (run-time)
 		char myBuf[10];
-		time_t timeDiff = (time_t)difftime( time( NULL ), DisplayHandler::Self()->startTime );
+		/*time_t currTime;
+
+		time( &currTime );
+		time_t timeDiff = difftime( currTime, DisplayHandler::Self()->startTime );
+
+		//time_t timeDiff = (time_t)difftime( time( NULL ), DisplayHandler::Self()->startTime );
 		tm *timeStruct = localtime( &timeDiff );
-		strftime( myBuf, strlen(myBuf), "%H:%M:%S", timeStruct );
+		strftime( myBuf, strlen(myBuf), "%H:%M:%S", timeStruct );*/
+		//int currTime = (s3eTimerGetUTC() / 1000) % S_PER_DAY;
+		//sprintf( myBuf, "%0.2d:%0.2d", currTime / S_PER_HOUR, (currTime % S_PER_HOUR) / 60 );
+		int timeDiff = (int) (s3eTimerGetUTC() / 1000) - DisplayHandler::Self()->startTime;
+		sprintf( myBuf, "%0.2d:%0.2d:%0.2d", timeDiff / S_PER_HOUR, (timeDiff % S_PER_HOUR) / S_PER_MINUTE, timeDiff % 60 );
+
 		DisplayHandler::Self()->timeInfo->setValue( myBuf );
 
 		s3eTimerSetTimer( 1000, &DisplayHandler::mainTimer, NULL );
@@ -144,9 +133,18 @@ public:
 	// Called once a minute to update the clock
 	static int clockTimer( void *systemData, void *userData ) {
 		char myBuf[6];
-		time_t currTime = time( NULL );
-		tm *timeStruct = localtime( &currTime );
-		strftime( myBuf, strlen(myBuf), "%H:%M", timeStruct );
+		/*time_t currTime;
+		tm *timeInfo;
+
+		time( &currTime );
+		timeInfo = localtime( &currTime );*/
+
+		//int64 timestamp = s3eTimerGetUTC();
+		int currTime = (s3eTimerGetUTC() / 1000) % S_PER_DAY;
+		sprintf( myBuf, "%0.2d:%0.2d", currTime / S_PER_HOUR, (currTime % S_PER_HOUR) / S_PER_MINUTE );
+
+		//tm *timeStruct = localtime( &currTime );
+		//strftime( myBuf, strlen(myBuf), "%H:%M", timeInfo );
 
 		DisplayHandler::Self()->clockInfo->setValue( myBuf );
 
@@ -157,9 +155,9 @@ public:
 	}
 
 public:
-	CIwUILabel* m_LongitudeLabel;
+	/*CIwUILabel* m_LongitudeLabel;
 	CIwUILabel* m_LatitudeLabel;
-	CIwUILabel* m_AltitudeLabel;
+	CIwUILabel* m_AltitudeLabel;*/
 
 	CIwUIButton* m_ExitButton;
 	CIwUIButton* m_StartButton;
@@ -175,7 +173,7 @@ private:
 	bool bStopPending;
 
 	double totalDistance;
-	time_t startTime;
+	int startTime;
 };
 
 DisplayHandler *DisplayHandler::mySelf = NULL;
@@ -219,6 +217,8 @@ void ExampleInit()
 	IwGetUIView()->AddElement(pPage);
 	IwGetUIView()->AddElementToLayout(pPage);
 
+	//return;
+
 	IwGetUIView()->AddElementToLayout( ExportScreen::Self()->GetScreen() );
 	ExportScreen::Self()->GetScreen()->SetVisible( false );
 	/*CIwUITableView *exportView = (CIwUITableView*)pPage->GetChildNamed( "TrackList" );
@@ -235,9 +235,9 @@ void ExampleInit()
 	//CIwTexture* texture = (CIwTexture*)IwGetResManager()->GetResNamed( "play", IW_GX_RESTYPE_TEXTURE );
 	//gowebsite24
 
-	DisplayHandler::Self()->m_LatitudeLabel = (CIwUILabel*)pPage->GetChildNamed("LatitudeLabel");
+	/*DisplayHandler::Self()->m_LatitudeLabel = (CIwUILabel*)pPage->GetChildNamed("LatitudeLabel");
 	DisplayHandler::Self()->m_LongitudeLabel = (CIwUILabel*)pPage->GetChildNamed("LongitudeLabel");
-	DisplayHandler::Self()->m_AltitudeLabel = (CIwUILabel*)pPage->GetChildNamed("AltitudeLabel");
+	DisplayHandler::Self()->m_AltitudeLabel = (CIwUILabel*)pPage->GetChildNamed("AltitudeLabel");*/
 
 	DisplayHandler::Self()->m_StartButton = (CIwUIButton*)pPage->GetChildNamed("StartButton");
 	DisplayHandler::Self()->m_StopButton = (CIwUIButton*)pPage->GetChildNamed("StopButton");
@@ -284,6 +284,7 @@ void ExampleInit()
 	InfoPanel *clockInfo = new InfoPanel( "clockInfo", true );
 	clockInfo->setUnit( "hh:mm" );
 	clockInfo->setImage( texture );
+	clockInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
 	DisplayHandler::Self()->clockInfo = clockInfo;
 	DisplayHandler::clockTimer( NULL, NULL );	// Call clock timer once to start displaying the current time
 	gridLayout->AddElement( clockInfo->getInfoPanel(), 0, 2, 2, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );

@@ -39,7 +39,6 @@ files
 	main.ui
 	InfoPanel.ui
 	InfoPanel_small.ui
-	test.ui
 	ExportScreen.ui
 }
 

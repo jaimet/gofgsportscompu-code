@@ -1,7 +1,7 @@
 CIwUIElement 
 {
 	name "InfoPanel_Small"
-	size { 120 120 }
+	sizeHint { 120 120 }
 	//aspectRatio  { 2 1 }
 	//sizeMin { 120 120 }
 	//sizeMax { 120 120 }
@@ -51,25 +51,26 @@ CIwUIElement
 		{
 			name "CurrentLabel"
 			style <label_large>
+			font "font_huge"
 			caption "0.0"
 			sizeMax  { -1 0 }
 		}
 		CIwUILayoutGrid 
 		{
 			name "DisplayGrid"
-			numColumns 2
+			numColumns 1
 			numRows 2
 			sizeToSpace true
 			
 			element 
 			{
 				name "UnitLayout"
-				columnSpan 2
+				//columnSpan 2
 			}
 			element 
 			{
 				name "CurrentLabel"
-				columnSpan 2
+				//columnSpan 2
 				row 1
 				alignH "centre"
 			}

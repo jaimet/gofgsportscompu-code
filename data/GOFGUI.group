@@ -18,6 +18,6 @@ CIwResGroup
 	"main.ui"
 	"infopanel.ui"
 	"infopanel_small.ui"
-	"test.ui"
+	//"test.ui"
 	"exportscreen.ui"
 }

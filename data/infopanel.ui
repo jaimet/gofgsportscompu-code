@@ -1,7 +1,7 @@
 CIwUIElement 
 {
 	name "InfoPanel"
-	size { 120 120 }
+	sizeHint { 120 120 }
 	//aspectRatio  { 1 1 }
 	//sizeMin { 120 120 }
 	//sizeMax { 120 120 }
@@ -51,6 +51,7 @@ CIwUIElement
 		{
 			name "CurrentLabel"
 			style <label_large>
+			font "font_huge"
 			caption "0.0"
 			sizeMax  { -1 0 }
 		}

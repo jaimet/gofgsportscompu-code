@@ -12,49 +12,49 @@ CIwUIElement
 	{
 		name "Grid_0"
 
-		CIwUILabel 
-		{
-			name "LongitudeText"
-			style <label_medium>
-			caption "Longitude:"
-			sizeMax  { -1 0 }
-		}
-		CIwUILabel 
-		{
-			name "LongitudeLabel"
-			style <label_medium>
-			caption "0.0"
-			sizeMax  { -1 0 }
-		}
-		CIwUILabel 
-		{
-			name "LatitudeText"
-			style <label_medium>
-			caption "Latitude:"
-			localiseCaption ""
-			sizeMax  { -1 0 }
-		}
-		CIwUILabel 
-		{
-			name "LatitudeLabel"
-			style <label_medium>
-			caption "0.0"
-			sizeMax  { -1 0 }
-		}
-		CIwUILabel 
-		{
-			name "AltitudeText"
-			style <label_medium>
-			caption "Altitude:"
-			sizeMax  { -1 0 }
-		}
-		CIwUILabel 
-		{
-			name "AltitudeLabel"
-			style <label_medium>
-			caption "0.0"
-			sizeMax  { -1 0 }
-		}
+//		CIwUILabel 
+//		{
+//			name "LongitudeText"
+//			style <label_medium>
+//			caption "Longitude:"
+//			sizeMax  { -1 0 }
+//		}
+//		CIwUILabel 
+//		{
+//			name "LongitudeLabel"
+//			style <label_medium>
+//			caption "0.0"
+//			sizeMax  { -1 0 }
+//		}
+//		CIwUILabel 
+//		{
+//			name "LatitudeText"
+//			style <label_medium>
+//			caption "Latitude:"
+//			localiseCaption ""
+//			sizeMax  { -1 0 }
+//		}
+//		CIwUILabel 
+//		{
+//			name "LatitudeLabel"
+//			style <label_medium>
+//			caption "0.0"
+//			sizeMax  { -1 0 }
+//		}
+//		CIwUILabel 
+//		{
+//			name "AltitudeText"
+//			style <label_medium>
+//			caption "Altitude:"
+//			sizeMax  { -1 0 }
+//		}
+//		CIwUILabel 
+//		{
+//			name "AltitudeLabel"
+//			style <label_medium>
+//			caption "0.0"
+//			sizeMax  { -1 0 }
+//		}
 
 		CIwUIElement {
 			name "menuBar"

@@ -88,6 +88,8 @@ double GPSHandler::getDistance() {
 // Start GPS tracking
 void GPSHandler::startGPS() {
 	if( !this->bGPSActive ) {
+		this->reset();
+
 		s3eLocationStart();
 		this->bGPSActive = true;
 	}
@@ -104,6 +106,11 @@ void GPSHandler::stopGPS() {
 
 // Initialize the gps handler
 GPSHandler::GPSHandler() {
+	this->reset();
+}
+
+// Reset the GPS Handler, automatically called on startGPS()
+void GPSHandler::reset() {
 	this->currLocation = NULL;
 	this->bGPSActive = false;
 	this->distance = 0.0;

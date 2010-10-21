@@ -14,6 +14,9 @@ bool TrackHandler::startTracking( char *fileName ) {
 	this->fileHandler = s3eFileOpen( fileName, "w" );
 
 	if( this->fileHandler != NULL ) {
+		// Reset track handler
+		this->dataFlags->Reset();
+
 		return true;
 	}
 
@@ -24,11 +27,7 @@ void TrackHandler::stopTracking() {
 	if( this->fileHandler != NULL ) {
 		s3eFileClose( this->fileHandler );
 		this->fileHandler = NULL;
-
-		// Reset track handler
-		this->dataFlags->Reset();
 	}
-
 }
 
 void TrackHandler::addGPSData( double lon, double lat, double alt ) {

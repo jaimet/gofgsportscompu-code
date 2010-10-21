@@ -44,6 +44,7 @@ public:
 
 private:
 	TiXmlElement *createFitlogPoint();
+	TiXmlElement *createTCXPoint( int startTime );
 
 	TrackExportHandler();
 
