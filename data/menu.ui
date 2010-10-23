@@ -1,0 +1,24 @@
+CIwUIElement 
+{
+	name "menu"
+
+	CIwUIImage 
+	{
+		name "Image_0"
+		texture "background"
+		SizeMax { -1 -1 }
+		colour { 192 192 255 192 }
+	}
+
+	CIwUILayoutGrid 
+	{
+		name "Grid"
+		sizeToSpace true
+		numColumns 1
+		numRows 1
+		element 
+		{
+			name "Image_0"
+		}
+	}
+}

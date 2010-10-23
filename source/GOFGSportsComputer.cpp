@@ -29,9 +29,14 @@
 
 #include "displayHandler/ExportScreen.h"
 
-#define S_PER_DAY      86400
+/*#define S_PER_DAY      86400
 #define S_PER_HOUR     3600
 #define S_PER_MINUTE   60
+
+#define MS_PER_DAY      86400000
+#define MS_PER_HOUR     3600000
+#define MS_PER_MINUTE   60000
+#define MS_PER_SECOND   1000*/
 
 class DisplayHandler
 {
@@ -64,7 +69,7 @@ public:
 		char fileName[20];
 
 		// Generate file name for tracking
-		this->startTime = (int) (s3eTimerGetUTC() / 1000);
+		this->startTime = time( NULL );
 		sprintf( fileName, "%d.gsc", this->startTime );
 		TrackHandler::Self()->startTracking( fileName );
 		GPSHandler::Self()->startGPS();
@@ -120,8 +125,17 @@ public:
 		strftime( myBuf, strlen(myBuf), "%H:%M:%S", timeStruct );*/
 		//int currTime = (s3eTimerGetUTC() / 1000) % S_PER_DAY;
 		//sprintf( myBuf, "%0.2d:%0.2d", currTime / S_PER_HOUR, (currTime % S_PER_HOUR) / 60 );
-		int timeDiff = (int) (s3eTimerGetUTC() / 1000) - DisplayHandler::Self()->startTime;
-		sprintf( myBuf, "%0.2d:%0.2d:%0.2d", timeDiff / S_PER_HOUR, (timeDiff % S_PER_HOUR) / S_PER_MINUTE, timeDiff % 60 );
+		//uint32 timeDiff = (uint32) (s3eTimerGetUTC() / 1000) - DisplayHandler::Self()->startTime;
+		time_t timeNow = time( NULL );
+		int timeDiff = (int) difftime( timeNow, DisplayHandler::Self()->startTime );
+
+		int hours = timeDiff / 3600;
+		int mins = (timeDiff % 3600) / 60;
+		int secs = ((timeDiff % 3600) % 60);
+
+		sprintf( myBuf, "%d:%02d:%02d", hours, mins, secs );
+
+		//sprintf( myBuf, "%02d:%02d:%02d", timeDiff / S_PER_HOUR, (timeDiff % S_PER_HOUR) / S_PER_MINUTE, timeDiff % 60 );
 
 		DisplayHandler::Self()->timeInfo->setValue( myBuf );
 
@@ -140,9 +154,18 @@ public:
 		timeInfo = localtime( &currTime );*/
 
 		//int64 timestamp = s3eTimerGetUTC();
-		int currTime = (s3eTimerGetUTC() / 1000) % S_PER_DAY;
-		sprintf( myBuf, "%0.2d:%0.2d", currTime / S_PER_HOUR, (currTime % S_PER_HOUR) / S_PER_MINUTE );
+		//int currTime = (s3eTimerGetUTC() / 1000) % S_PER_DAY;
+		//sprintf( myBuf, "%0.2d:%0.2d", currTime / S_PER_HOUR, (currTime % S_PER_HOUR) / S_PER_MINUTE );
 
+		// Get time and split it up
+		//uint64 timeSecs = ( s3eTimerGetUTC() / 1000 ) % S_PER_DAY;
+		//uint8 hr =  (uint8)  (timeSecs / S_PER_HOUR);
+		//uint8 min = (uint8) ((timeSecs / S_PER_MINUTE) % 60);
+		time_t now = time(NULL);
+		struct tm* local_tm = localtime(&now);
+		strftime( myBuf, strlen(myBuf), "%H:%M", local_tm );
+
+		//sprintf( myBuf, "%02d:%02d", hr, min );
 		//tm *timeStruct = localtime( &currTime );
 		//strftime( myBuf, strlen(myBuf), "%H:%M", timeInfo );
 
@@ -173,7 +196,7 @@ private:
 	bool bStopPending;
 
 	double totalDistance;
-	int startTime;
+	time_t startTime;
 };
 
 DisplayHandler *DisplayHandler::mySelf = NULL;
