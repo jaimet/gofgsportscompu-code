@@ -41,10 +41,11 @@ files
 	(data)
 	GOFGUI.group
 	main.ui
-	InfoPanel.ui
-	InfoPanel_small.ui
-	ExportScreen.ui
-	MenuScreen.ui
+	infopanel.ui
+	infopanel_small.ui
+	exportscreen.ui
+	menuscreen.ui
+	menuscreen_anim.itx
 }
 
 subprojects

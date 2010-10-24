@@ -14,6 +14,11 @@ CIwResGroup
 	.\textures\timer24.png
 	.\textures\clock24.png
 	.\textures\foldermove.png
+	.\textures\menu_close.png
+	.\textures\menu_export.png
+	.\textures\menu_settings.png
+
+	"menuscreen_anim.itx"
 
 	"main.ui"
 	"infopanel.ui"

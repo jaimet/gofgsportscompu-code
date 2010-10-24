@@ -10,15 +10,81 @@ CIwUIElement
 		colour { 192 192 255 192 }
 	}
 
-	CIwUILayoutGrid 
+	CIwUIElement {
+		name "menuGrid"
+
+		CIwUIButton {
+			name "TracksButton"
+			
+			drawableType "image"
+			caption ""
+			texture "menu_export"
+			sizeToContent true
+			OnButtonClick  { "MS_TracksButtonClick" }
+		}
+
+		CIwUIButton {
+			name "CloseButton"
+			
+			drawableType "image"
+			caption ""
+			texture "menu_close"
+			sizeToContent true
+			OnButtonClick  { "MS_CloseButtonClick" }
+		}
+
+		CIwUIButton {
+			name "SettingsButton"
+			
+			drawableType "image"
+			caption ""
+			texture "menu_settings"
+			sizeToContent true
+			//OnButtonClick  { "MS_CloseButtonClick" }
+		}
+
+		CIwUILayoutGrid 
+		{
+			name "menuGrid_Layout"
+			sizeToSpace true
+			numColumns 2
+			numRows 4
+			element 
+			{
+				name "TracksButton"
+				alignH "centre"
+				alignV "middle"
+			}
+			element 
+			{
+				name "SettingsButton"
+				alignH "centre"
+				alignV "middle"
+				column 1
+			}
+
+			element
+			{
+				name "CloseButton"
+				alignH "centre"
+				alignV "middle"
+				row 3
+				column 1
+			}
+		}
+	}
+
+	CIwUILayout
 	{
-		name "Grid"
 		sizeToSpace true
-		numColumns 1
-		numRows 1
+
 		element 
 		{
 			name "Image_0"
+		}
+		element 
+		{
+			name "menuGrid"
 		}
 	}
 }

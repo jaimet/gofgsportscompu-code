@@ -3,7 +3,7 @@
 template<>
 ExportScreen *Singleton<ExportScreen>::mySelf = NULL;
 
-ExportScreen::ExportScreen()
+ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 {
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExportButtonClick, CIwUIElement*)
@@ -14,9 +14,9 @@ ExportScreen::ExportScreen()
 	strcpy( this->es_currentFile, "" );
 	this->exportFormat = FITLOG;
 
-	this->myScreen = CIwUIElement::CreateFromResource( "ExportScreen" );
-
 	((CIwUITabBar *)this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
+
+	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
 
 void ExportScreen::ES_ExitButtonClick(CIwUIElement*)

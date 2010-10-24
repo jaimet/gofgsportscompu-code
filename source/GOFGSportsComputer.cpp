@@ -28,6 +28,7 @@
 #include "uiLib/TrackTVItemSource.h"
 
 #include "displayHandler/ExportScreen.h"
+#include "displayHandler/MenuScreen.h"
 
 /*#define S_PER_DAY      86400
 #define S_PER_HOUR     3600
@@ -96,7 +97,9 @@ public:
 
 	void ExportButtonClick(CIwUIElement*)
 	{
-		ExportScreen::Self()->GetScreen()->SetVisible( true );
+		MenuScreen::Self()->SetVisible( true );
+		//MenuScreen::Self()->GetScreen()->SetVisible(true);
+		//ExportScreen::Self()->GetScreen()->SetVisible( true );
 	}
 
 	// TODO: CONTINUE WITH MAIN TIMER <=============
@@ -162,6 +165,7 @@ public:
 		//uint8 hr =  (uint8)  (timeSecs / S_PER_HOUR);
 		//uint8 min = (uint8) ((timeSecs / S_PER_MINUTE) % 60);
 		time_t now = time(NULL);
+
 		struct tm* local_tm = localtime(&now);
 		strftime( myBuf, strlen(myBuf), "%H:%M", local_tm );
 
@@ -241,9 +245,13 @@ void ExampleInit()
 	IwGetUIView()->AddElementToLayout(pPage);
 
 	//return;
+	//IwGetUIView()->AddElementToLayout( MenuScreen::Self()->GetScreen() );
+	MenuScreen::Self()->SetVisible( false );
+	//MenuScreen::Self()->GetScreen()->SetVisible( false );
 
-	IwGetUIView()->AddElementToLayout( ExportScreen::Self()->GetScreen() );
-	ExportScreen::Self()->GetScreen()->SetVisible( false );
+	//IwGetUIView()->AddElementToLayout( ExportScreen::Self()->GetScreen() );
+	//ExportScreen::Self()->GetScreen()->SetVisible( false );
+	ExportScreen::Self()->SetVisible( false );
 	/*CIwUITableView *exportView = (CIwUITableView*)pPage->GetChildNamed( "TrackList" );
 	exportView->SetItemSource( new TrackTVItemSource() );
 	//exportView->RecreateItemsFromSource();

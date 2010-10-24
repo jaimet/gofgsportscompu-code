@@ -5,7 +5,9 @@
 
 class Screen {
 public:
-	CIwUIElement *GetScreen();
+	Screen( char *screenName );
+
+	void SetVisible( bool p_bVisible );
 
 protected:
 	CIwUIElement *myScreen;
