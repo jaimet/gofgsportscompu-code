@@ -31,7 +31,11 @@ files
   [DisplayHandler]
   (source/displayHandler)
 	ExportScreen.h 
-	ExportScreen.cpp 
+	ExportScreen.cpp
+  Screen.h
+  Screen.cpp 
+  MenuScreen.h
+  MenuScreen.cpp 
 
 	[Data]
 	(data)
@@ -40,7 +44,7 @@ files
 	InfoPanel.ui
 	InfoPanel_small.ui
 	ExportScreen.ui
-	menu.ui
+	MenuScreen.ui
 }
 
 subprojects

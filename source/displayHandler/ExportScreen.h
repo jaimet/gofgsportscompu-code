@@ -3,6 +3,7 @@
 
 #include "IwUI.h"
 
+#include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 #include "../lib/TrackExportHandler.h"
 
@@ -11,7 +12,7 @@ enum ExportFormat {
 	TCX
 };
 
-class ExportScreen : public Singleton<ExportScreen>
+class ExportScreen : public Screen, public Singleton<ExportScreen>
 {
 	friend class Singleton<ExportScreen>;
 public:
@@ -20,12 +21,8 @@ public:
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
 
-	CIwUIElement *GetScreen();
-
 private:
 	ExportScreen();
-
-	CIwUIElement *exportScreen;
 
 	char es_currentFile[20];
 	ExportFormat exportFormat;

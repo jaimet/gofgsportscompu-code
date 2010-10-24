@@ -1,6 +1,6 @@
 CIwUIElement 
 {
-	name "menu"
+	name "MenuScreen"
 
 	CIwUIImage 
 	{

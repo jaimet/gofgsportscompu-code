@@ -14,14 +14,14 @@ ExportScreen::ExportScreen()
 	strcpy( this->es_currentFile, "" );
 	this->exportFormat = FITLOG;
 
-	this->exportScreen = CIwUIElement::CreateFromResource( "ExportScreen" );
+	this->myScreen = CIwUIElement::CreateFromResource( "ExportScreen" );
 
-	((CIwUITabBar *)this->exportScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
+	((CIwUITabBar *)this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
 }
 
 void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
 {
-	this->exportScreen->SetVisible( false );
+	this->myScreen->SetVisible( false );
 }
 
 void ExportScreen::ES_ExportButtonClick(CIwUIElement*)
@@ -71,8 +71,4 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 		this->exportFormat = TCX;
 		break;
 	}
-}
-
-CIwUIElement *ExportScreen::GetScreen() {
-	return this->exportScreen;
 }
