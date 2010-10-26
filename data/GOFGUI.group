@@ -20,7 +20,7 @@ CIwResGroup
 
 	"menuscreen_anim.itx"
 
-	"main.ui"
+	"mainscreen.ui"
 	"infopanel.ui"
 	"infopanel_small.ui"
 	//"test.ui"

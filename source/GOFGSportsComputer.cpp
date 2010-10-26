@@ -27,8 +27,9 @@
 #include "uiLib/InfoPanel.h"
 #include "uiLib/TrackTVItemSource.h"
 
-#include "displayHandler/ExportScreen.h"
+#include "displayHandler/MainScreen.h"
 #include "displayHandler/MenuScreen.h"
+#include "displayHandler/ExportScreen.h"
 
 /*#define S_PER_DAY      86400
 #define S_PER_HOUR     3600
@@ -240,18 +241,18 @@ void ExampleInit()
 
 	// Add the built page to the view
 	//CIwUIElement* pPage = CIwUIElement::CreateFromResource("ExportScreen");
-	CIwUIElement* pPage = CIwUIElement::CreateFromResource("main");
+	CIwUIElement* pPage = CIwUIElement::CreateFromResource("MainScreen");
 	IwGetUIView()->AddElement(pPage);
 	IwGetUIView()->AddElementToLayout(pPage);
 
 	//return;
 	//IwGetUIView()->AddElementToLayout( MenuScreen::Self()->GetScreen() );
-	MenuScreen::Self()->SetVisible( false );
+	//MenuScreen::Self()->SetVisible( false );
 	//MenuScreen::Self()->GetScreen()->SetVisible( false );
 
 	//IwGetUIView()->AddElementToLayout( ExportScreen::Self()->GetScreen() );
 	//ExportScreen::Self()->GetScreen()->SetVisible( false );
-	ExportScreen::Self()->SetVisible( false );
+	//ExportScreen::Self()->SetVisible( false );
 	/*CIwUITableView *exportView = (CIwUITableView*)pPage->GetChildNamed( "TrackList" );
 	exportView->SetItemSource( new TrackTVItemSource() );
 	//exportView->RecreateItemsFromSource();

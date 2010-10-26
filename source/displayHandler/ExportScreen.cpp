@@ -21,7 +21,8 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 
 void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
 {
-	this->myScreen->SetVisible( false );
+	//this->myScreen->SetVisible( false );
+	this->SetVisible( false );
 }
 
 void ExportScreen::ES_ExportButtonClick(CIwUIElement*)

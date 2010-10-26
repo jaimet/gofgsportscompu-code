@@ -1,5 +1,8 @@
 #include "MenuScreen.h"
 
+template<>
+MenuScreen *Singleton<MenuScreen>::mySelf = NULL;
+
 void MenuScreen::MS_TracksButtonClick(CIwUIElement*) {
 	//ExportScreen::Self()->GetScreen()->SetVisible(true);
 	ExportScreen::Self()->SetVisible( true );

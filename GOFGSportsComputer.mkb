@@ -13,13 +13,13 @@ files
 
   [Lib]
   (source/lib)
+	Singleton.h
 	GPSHandler.h 
 	GPSHandler.cpp 
 	TrackHandler.h
 	TrackHandler.cpp 
 	TrackExportHandler.h
 	TrackExportHandler.cpp 
-	Singleton.h
 
   [UiLib]
   (source/uiLib)
@@ -30,17 +30,19 @@ files
 
   [DisplayHandler]
   (source/displayHandler)
-	ExportScreen.h 
-	ExportScreen.cpp
   Screen.h
   Screen.cpp 
+	ExportScreen.h 
+	ExportScreen.cpp
   MenuScreen.h
-  MenuScreen.cpp 
+  MenuScreen.cpp
+  MainScreen.h
+  MainScreen.cpp 
 
 	[Data]
 	(data)
 	GOFGUI.group
-	main.ui
+	mainscreen.ui
 	infopanel.ui
 	infopanel_small.ui
 	exportscreen.ui

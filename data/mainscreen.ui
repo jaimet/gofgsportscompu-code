@@ -1,6 +1,6 @@
 CIwUIElement 
 {
-	name "main"
+	name "MainScreen"
 //	sizeToContent true
 
 //	CIwUIImage 
