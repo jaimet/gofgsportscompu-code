@@ -1,48 +1,47 @@
 /*
- * This file is part of the Airplay SDK Code Samples.
- *
- * Copyright (C) 2001-2010 Ideaworks3D Ltd.
- * All Rights Reserved.
- *
- * This source code is intended only as a supplement to Ideaworks Labs
- * Development Tools and/or on-line documentation.
- *
- * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- * PARTICULAR PURPOSE.
- */
-// UITutorial main file 
-//-------------------------------------------------------------------------- 
+* Copyright (C) 2010 Wolfgang Koller
+* 
+* This file is part of GOFG Sports Computer.
+* 
+* GOFG Sports Computer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* GOFG Sports Computer is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// NOTE: Parts of the code in this file are based on the SDK Examples from Airplay - see http://www.airplaysdk.com/
 
 #include "s3e.h"
 #include "IwGx.h"
 
-// Externs for functions which examples must implement 
-void ExampleInit(); 
-void ExampleShutDown(); 
-void ExampleRender(); 
-bool ExampleUpdate(); 
+// Pre-Define our main functions for GOFG
+void GOFGInit(); 
+void GOFGShutDown(); 
+void GOFGRender(); 
+bool GOFGUpdate(); 
 
-//-------------------------------------------------------------------------- 
-// Main global function 
-//-------------------------------------------------------------------------- 
-int main()
-{ 
-#ifdef EXAMPLE_DEBUG_ONLY 
-	// Test for Debug only examples 
-#endif
-
-	// Example main loop 
-	ExampleInit(); 
+/**
+* Main Function for program flow control
+*/
+int main() {
+	// Start with the main loop
+	GOFGInit(); 
 	IwGxSetColClear(0x0, 0x0, 0x0, 0xff);
 
-	while (1) 
-	{ 
+	// Do this until asked to stop
+	while (1) {
 		s3eDeviceYield(0); 
 		s3eKeyboardUpdate();
 		s3ePointerUpdate();
-		bool result = ExampleUpdate(); 
+		bool result = GOFGUpdate(); 
 		if ( 
 			(result == false) || 
 			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) 
@@ -52,9 +51,12 @@ int main()
 			(s3eDeviceCheckQuitRequest()) 
 			) 
 			break; 
-		ExampleRender(); 
-		//s3eSurfaceShow(); 
+
+		// Render content
+		GOFGRender(); 
 	} 
-	ExampleShutDown(); 
+
+	// Do the shutdown
+	GOFGShutDown(); 
 	return 0;
 }

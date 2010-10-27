@@ -18,14 +18,13 @@ CIwUIPropertySet
 CIwUIElement
 {
 	name "ExportScreen"
-	sizeHint { 300 200 }
 
-	CIwUIImage
-	{
-		name "Background"
-
+	CIwUIButton {
+		name "BGButton"
+		drawableType "image"
+		caption ""
 		texture "background"
-		//colour { 192 192 255 192 }
+		sizeMax { -1 -1 }
 	}
 
 	CIwUIElement {
@@ -104,9 +103,16 @@ CIwUIElement
 			}
 		}
 
+		CIwUIProgressBar {
+			name "exportProgress"
+
+			style <progressBar>
+			progress 0.0
+		}
+
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 4
+			numRows 5
 			numColumns 1
 
 			element {
@@ -125,8 +131,14 @@ CIwUIElement
 				alignV "bottom"
 			}
 			element {
-				name "menuBar"
+				name "exportProgress"
 				row 3
+				alignH "centre"
+				alignV "bottom"
+			}
+			element {
+				name "menuBar"
+				row 4
 				alignV "bottom"
 			}
 		}
@@ -136,8 +148,12 @@ CIwUIElement
 	{
 		sizeToSpace true
 
-		element { name "Background"	}
-		element	{ name "innerLayout" }
+		element {
+			name "BGButton"
+		}
+		element	{
+			name "innerLayout"
+		}
 	}
 }
 

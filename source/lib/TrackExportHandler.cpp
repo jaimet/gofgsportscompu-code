@@ -1,13 +1,36 @@
+/*
+* Copyright (C) 2010 Wolfgang Koller
+* 
+* This file is part of GOFG Sports Computer.
+* 
+* GOFG Sports Computer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* GOFG Sports Computer is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "TrackExportHandler.h"
 
 template<>
 TrackExportHandler *Singleton<TrackExportHandler>::mySelf = NULL;
 
 /*
-	TODO: Add TCX Export
+	Add TCX Export
+	TODO: Add file I/O error handling
 */
 void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	char myBuf[BUFFER_SIZE];
+
+	// Update progress
+	this->announceProgress( 0 );
 
 	// Read first line of file to get the start time
 	s3eFile *inFile = s3eFileOpen( fileName, "r" );
@@ -21,7 +44,10 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	strftime( startTimeString, 25, "%Y-%m-%dT%H:%M:%SZ", stInfo );
 
 	// Rewind back to the start
-	s3eFileSeekOrigin();
+	s3eFileSeek( inFile, 0, S3E_FILESEEK_SET );
+	// Get the size of the file
+	int32 totalBytes = s3eFileGetSize( inFile );
+	int32 bytesRead = 0;
 
 	// Start reading the document
 	TiXmlDocument doc;
@@ -56,6 +82,8 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	trackNode->SetAttribute( "StartTime", startTimeString );
 
 	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
+		bytesRead += strlen( myBuf );
+
 		// Start splitting the data line
 		char *token = strtok( myBuf, ";" );
 		int recordType = atoi( token );
@@ -92,6 +120,9 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 		default:
 			break;
 		}
+
+		// Update progress
+		this->announceProgress( (int) (100.0 / (float) totalBytes * (float) bytesRead) );
 	}
 	// Add last data-point
 	trackNode->LinkEndChild( this->createTCXPoint(startTime) );
@@ -136,7 +167,7 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	strftime( startTimeString, 25, "%Y-%m-%dT%H:%M:%SZ", stInfo );
 
 	// Rewind back to the start
-	s3eFileSeekOrigin();
+	s3eFileSeek( inFile, 0, S3E_FILESEEK_SET );
 
 	// Start reading the document
 	TiXmlDocument doc;
@@ -275,5 +306,20 @@ TiXmlElement *TrackExportHandler::createTCXPoint( int startTime ) {
 	// We are done, return node
 	return ptNode;
 }
+
+void TrackExportHandler::SetProgressCallback( s3eCallback p_progressCallback ) {
+	this->progressCallback = p_progressCallback;
+}
+
+// Calls the progress callback with the current progress
+void TrackExportHandler::announceProgress( int percent ) {
+	if( this->progressCallback != NULL ) {
+		iwfixed progress = IW_FIXED( (float)percent / 100.0 );
+
+		(*progressCallback)( &progress, NULL );
+	}
+}
+
 TrackExportHandler::TrackExportHandler() {
+	this->progressCallback = NULL;
 }

@@ -1,17 +1,21 @@
 /*
- * This file is part of the Airplay SDK Code Samples.
- *
- * Copyright (C) 2001-2010 Ideaworks3D Ltd.
- * All Rights Reserved.
- *
- * This source code is intended only as a supplement to Ideaworks Labs
- * Development Tools and/or on-line documentation.
- *
- * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- * PARTICULAR PURPOSE.
- */
+* Copyright (C) 2010 Wolfgang Koller
+* 
+* This file is part of GOFG Sports Computer.
+* 
+* GOFG Sports Computer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* GOFG Sports Computer is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "TrackTVItemSource.h"
 //-----------------------------------------------------------------------------

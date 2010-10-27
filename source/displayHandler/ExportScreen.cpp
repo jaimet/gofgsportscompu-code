@@ -1,3 +1,22 @@
+/*
+* Copyright (C) 2010 Wolfgang Koller
+* 
+* This file is part of GOFG Sports Computer.
+* 
+* GOFG Sports Computer is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* GOFG Sports Computer is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "ExportScreen.h"
 
 template<>
@@ -14,7 +33,10 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 	strcpy( this->es_currentFile, "" );
 	this->exportFormat = FITLOG;
 
-	((CIwUITabBar *)this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
+	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
+	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
+
+	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::UpdateProgress );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
@@ -72,4 +94,16 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 		this->exportFormat = TCX;
 		break;
 	}
+}
+
+int ExportScreen::UpdateProgress( void *systemData, void *userData  ) {
+	iwfixed *progress = (iwfixed *) systemData;
+
+	ExportScreen::Self()->exportProgress->SetProgress( *progress );
+
+	// TODO: Fix progress bar
+	//IwGetUIView()->Update(25);
+	//IwGetUIView()->Render();
+
+	return 0;
 }
