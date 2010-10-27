@@ -8,13 +8,24 @@ Screen::Screen( char *screenName ) {
 void Screen::SetVisible( bool p_bVisible ) {
 	if( p_bVisible ) {
 		this->myScreen->SetVisible( true );
-		IwGetUIAnimManager()->StopAnim( this->myScreen );
-		IwGetUIAnimManager()->PlayAnim("ScreenSlideIn", this->myScreen);
+
+		// Only play animation if we should
+		//if( !p_bNoAnim ) {
+			IwGetUIAnimManager()->StopAnim( this->myScreen );
+			IwGetUIAnimManager()->PlayAnim("ScreenSlideIn", this->myScreen);
+		//}
 	}
 	else {
-		IwGetUIAnimManager()->StopAnim( this->myScreen );
-		uint32 outHandle = IwGetUIAnimManager()->PlayAnim("ScreenSlideOut", this->myScreen);
-		IwGetUIAnimManager()->SetObserver( outHandle, this );
+		// Play Slide-Out animation when we should
+		//if( !p_bNoAnim ) {
+			IwGetUIAnimManager()->StopAnim( this->myScreen );
+			uint32 outHandle = IwGetUIAnimManager()->PlayAnim("ScreenSlideOut", this->myScreen);
+			IwGetUIAnimManager()->SetObserver( outHandle, this );
+		/*}
+		// Else just hide the screen
+		else {
+			this->myScreen->SetVisible( false );
+		}*/
 	}
 }
 

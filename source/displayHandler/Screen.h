@@ -8,7 +8,7 @@ class Screen : public IIwUIAnimatorObserver {
 public:
 	Screen( char *screenName );
 
-	void SetVisible( bool p_bVisible );
+	void SetVisible( bool p_bVisible );		// Show / Hide the screen
 
 	void NotifyProgress( CIwUIAnimator *pAnimator );
 	void NotifyStopped( CIwUIAnimator *pAnimator );
