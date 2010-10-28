@@ -116,3 +116,34 @@ void InfoPanel::setImage( CIwTexture *texture ) {
 CIwUIElement *InfoPanel::getInfoPanel() {
 	return this->uiInfoPanel;
 }
+
+/*CIwGxFont *InfoPanel::GetSizedFont( char *text, int sizeX ) {
+	CIwGxFont *currentFont = this->currentLabel->GetFont();
+	CIwGxFontPreparedData currentData;
+
+	IwGxFontSetFont( currentFont );
+	IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
+	IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_LEFT );
+	IwGxFontPrepareText( currentData, text, -1 );
+
+	const char *fontName = currentFont->DebugGetName();
+	char *lastFontName = NULL;
+	char *newFontName = NULL;
+
+	if( currentData.GetWidth() > this->currentLabel->GetSize().x ) {
+		IW_ARRAY_ITERATE(char*,it,this->fontTypes) {
+			if( strcmp( fontName, *it ) == 0 ) {
+				newFontName = lastFontName;
+				break;
+			}
+			lastFontName = *it;
+		}
+
+		if( newFontName != NULL ) {
+			this->currentLabel->SetFont( (CIwGxFont *)IwGetResManager()->GetResNamed( newFontName, "CIwGxFont" ) );
+		}
+	}
+
+	return (CIwGxFont *)IwGetResManager()->GetResNamed( newFontName, "CIwGxFont" );
+}
+*/

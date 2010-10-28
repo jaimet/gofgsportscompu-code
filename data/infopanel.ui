@@ -54,6 +54,7 @@ CIwUIElement
 			font "font_huge"
 			caption "0.0"
 			sizeMax  { -1 0 }
+			oneLine true
 		}
 		CIwUILabel 
 		{

@@ -17,45 +17,25 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INFOPANEL
-#define INFOPANEL
+#ifndef CIWUIAUTOSIZELABEL
+#define CIWUIAUTOSIZELABEL
 
-#include "IwUI.h"
-
-#include <IwUIElement.h>
 #include <IwUILabel.h>
-#include <IwUILayoutGrid.h>
 
-class InfoPanel {
+#include <IwGxFont.h>
+
+//#include <IwGxFontPreparedData.h>
+
+class CIwUIAutoSizeLabel : public CIwUILabel {
 public:
-	InfoPanel( char *name, bool bNoStatistics = false );
-
-	void setUnit( char *unit );
-	void setValue( double value );
-	void setValue( char *value );
-
-	void setImage( CIwTexture *texture );
-
-	CIwUIElement *getInfoPanel();
+	CIwUIAutoSizeLabel();
+	
+	void SetCaption( const char *pString );
 
 private:
-	//CIwGxFont *GetSizedFont( char *text, int sizeX );
+	CIwGxFont *GetSizedFont( int fontIndex, char *measureString );
 
-	CIwUILabel *unitLabel;
-	CIwUILabel *currentLabel;
-	CIwUILabel *averageLabel;
-	CIwUILabel *maximumLabel;
-
-	CIwUIImage *image;
-
-	bool bNoStatistics;
-	double maximum;
-	double average;
-	int numPoints;
-
-	CIwUIElement *uiInfoPanel;
-
-	//CIwArray<char*> fontTypes;
+	CIwArray<CIwGxFont*> fontTypes;
 };
 
 #endif

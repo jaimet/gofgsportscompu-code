@@ -27,6 +27,8 @@ files
 	InfoPanel.cpp 
 	TrackTVItemSource.h 
 	TrackTVItemSource.cpp 
+  CIwUIAutoSizeLabel.h
+  CIwUIAutoSizeLabel.cpp
 
   [DisplayHandler]
   (source/displayHandler)

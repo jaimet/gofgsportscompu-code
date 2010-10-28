@@ -40,11 +40,18 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*)
 	TrackHandler::Self()->startTracking( fileName );
 	GPSHandler::Self()->startGPS();
 
+	// Prevent device from going to sleep
+	s3eDeviceRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend, NULL );
+
+	// Start main timer
 	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
 }
 
 void MainScreen::MA_StopButtonClick(CIwUIElement*)
 {
+	// Allow sleep again
+	s3eDeviceUnRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend );
+
 	GPSHandler::Self()->stopGPS();
 	TrackHandler::Self()->stopTracking();
 
@@ -93,7 +100,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	int mins = (timeDiff % 3600) / 60;
 	int secs = ((timeDiff % 3600) % 60);
 	// Create formatted time-stamp & display it
-	sprintf( myBuf, "%d:%02d:%02d", hours, mins, secs );
+	sprintf( myBuf, "%02d:%02d:%02d", hours, mins, secs );
 	MainScreen::Self()->timeInfo->setValue( myBuf );
 
 	// Call main-timer again
@@ -184,4 +191,13 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 
 	//this->tracksButton = this->myScreen->GetChildNamed( "TracksButton" );
 	IwGetUIView()->AddElementToLayout( this->myScreen );
+}
+
+/**
+* Called to prevent device from going to suspend, only used if tracking is active
+*/
+int32 MainScreen::CB_Suspend( void *systemData, void *userData ) {
+	s3eDeviceBacklightOn();
+
+	return 0;
 }

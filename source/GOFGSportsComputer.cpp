@@ -31,7 +31,7 @@ void GOFGInit() {
 	IwGxInit();
 	IwUIInit();
 	IW_CLASS_REGISTER(TrackTVItemSource);
-	
+
 	//Instantiate the view and controller singletons.
 	new CIwUIController;
 	new CIwUIView;

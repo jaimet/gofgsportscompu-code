@@ -40,6 +40,8 @@ public:
 	static int clockTimer( void *systemData, void *userData );
 	static int mainTimer( void *systemData, void *userData );
 
+	static int32 CB_Suspend( void *systemData, void *userData );
+
 protected:
 	MainScreen();
 
