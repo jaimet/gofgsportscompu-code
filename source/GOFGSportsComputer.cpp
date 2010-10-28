@@ -22,6 +22,7 @@
 #include "IwUI.h"
 
 #include "uiLib/TrackTVItemSource.h"
+#include "uiLib/CIwUIAutoSizeLabel.h"
 #include "displayHandler/MainScreen.h"
 
 /**
@@ -31,6 +32,7 @@ void GOFGInit() {
 	IwGxInit();
 	IwUIInit();
 	IW_CLASS_REGISTER(TrackTVItemSource);
+	IW_CLASS_REGISTER(CIwUIAutoSizeLabel);
 
 	//Instantiate the view and controller singletons.
 	new CIwUIController;

@@ -90,13 +90,13 @@ LicenseStatus = 		Type=string, Allowed="EXPIRED" "DEMO" "USECOUNT" "EXPIRYDATE" 
 
 LicenseUsesRemaining = 		Type=int, Min=0.000000, Max=10000000.000000, Default="0", Value = "0"
 
-LocationAltitude = 		Type=float, Min=-2000.000000, Max=100000.000000, Default="60.0", Value = "60.0"
+LocationAltitude = 		Type=float, Min=-2000.000000, Max=100000.000000, Default="60.0", Value = "10000.0000000000000000"
 
 LocationAvailable = 		Type=bool, Default="true", Value = "true"
 
 LocationHorizontalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="20.0", Value = "20.0"
 
-LocationLatitude = 		Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "60.1300000000000030"
+LocationLatitude = 		Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "10.0000000000000000"
 
 LocationLongitude = 		Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "-10.0000000000000000"
 

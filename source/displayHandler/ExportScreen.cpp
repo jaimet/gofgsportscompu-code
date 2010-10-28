@@ -36,7 +36,7 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
 
-	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::UpdateProgress );
+	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
@@ -47,34 +47,13 @@ void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
 	this->SetVisible( false );
 }
 
-void ExportScreen::ES_ExportButtonClick(CIwUIElement*)
-{
+void ExportScreen::ES_ExportButtonClick(CIwUIElement*) {
 	if( strlen( this->es_currentFile ) > 0 ) {
-		char fullFileName[30];
-		char exportName[30];
-		char *extString;
-
-		sprintf( fullFileName, "tracks/%s", this->es_currentFile );
-		sprintf( exportName, "%s", this->es_currentFile );
-
-		// Change extension
-		extString = strstr( exportName, ".gsc" );
-
-		// Check for export format: Fitlog...
-		if( this->exportFormat == FITLOG ) {
-			strcpy( extString, ".fitlog" );
-			TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
-		}
-		// or Garmin TCX
-		else {
-			strcpy( extString, ".tcx" );
-			TrackExportHandler::Self()->exportToTCX( fullFileName, exportName );
-		}
+		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
 	}
 }
 
-void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected)
-{
+void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected) {
 	if( bIsSelected ) {
 		CIwPropertyString fileName;
 		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", fileName))
@@ -96,14 +75,44 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 	}
 }
 
-int ExportScreen::UpdateProgress( void *systemData, void *userData  ) {
+int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	iwfixed *progress = (iwfixed *) systemData;
 
 	ExportScreen::Self()->exportProgress->SetProgress( *progress );
 
-	// TODO: Fix progress bar
-	//IwGetUIView()->Update(25);
-	//IwGetUIView()->Render();
+	// Manually call the drawing functions
+	IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
+	IwGetUIView()->Render();
+	IwGxFlush();
+	IwGxSwapBuffers();
+
+	return 0;
+}
+
+// Callback for calling the export function using a timer, the advantage is,
+// that it then is called from s3eDeviceYield which allows calling the render functions
+// from within the callback of the export
+int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
+	char fullFileName[30];
+	char exportName[30];
+	char *extString;
+
+	sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
+	sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
+
+	// Change extension
+	extString = strstr( exportName, ".gsc" );
+
+	// Check for export format: Fitlog...
+	if( ExportScreen::Self()->exportFormat == FITLOG ) {
+		strcpy( extString, ".fitlog" );
+		TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
+	}
+	// or Garmin TCX
+	else {
+		strcpy( extString, ".tcx" );
+		TrackExportHandler::Self()->exportToTCX( fullFileName, exportName );
+	}
 
 	return 0;
 }

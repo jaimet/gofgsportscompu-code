@@ -25,39 +25,56 @@ CIwUIElement
 				size { 24 24 }
 				sizeMin { 24 24 }
 				sizeMax { 24 24 }
+				sizeHint { 24 24 }
 			}
+
 			CIwUILabel {
 				name "UnitLabel"
 				style <label_medium>
 				caption "Unit"
-				sizeMax  { -1 0 }
+				sizeMax  { -1 24 }
+				sizeToContent false
+				alignH centre
+				alignV top
 			}
-			
-			CIwUILayoutHorizontal 
-			{
+
+			CIwUILayout {
 				sizeToSpace true
-			
+
 				element {
 					name "Image"
 				}
 				element {
 					name "UnitLabel"
-					alignH "centre"
 				}
 			}
+			
+//			CIwUILayoutHorizontal 
+//			{
+//				//sizeToSpace true
+//			
+//				element {
+//					name "Image"
+//				}
+//				element {
+//					name "UnitLabel"
+//				}
+//			}
 		}
 		
-		CIwUILabel
+		CIwUIAutoSizeLabel
 		{
 			name "CurrentLabel"
 			style <label_large>
 			font "font_huge"
-			caption "0.0"
-			sizeMax  { -1 0 }
-			oneLine true
+			caption ""
+			sizeMax  { -1 -1 }
+			//sizeToContent false
+			alignH centre
+			alignV top
 		}
-		CIwUILayoutGrid 
-		{
+
+		CIwUILayoutGrid {
 			name "DisplayGrid"
 			numColumns 1
 			numRows 2
@@ -73,12 +90,13 @@ CIwUIElement
 				name "CurrentLabel"
 				//columnSpan 2
 				row 1
-				alignH "centre"
+				//alignH "centre"
+				alignV top
 			}
 		}
 	}
-	CIwUILayout 
-	{
+
+	CIwUILayout {
 		name "innerLayout"
 		sizeToSpace true
 				

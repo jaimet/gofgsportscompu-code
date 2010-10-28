@@ -183,14 +183,20 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	clockInfo->setImage( texture );
 	clockInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
 	this->clockInfo = clockInfo;
-	s3eTimerSetTimer( 1000, &MainScreen::clockTimer, NULL ); // Start calling the timer to display the current time
 	//MainScreen::clockTimer( NULL, NULL );	// Call clock timer once to start displaying the current time
 	gridLayout->AddElement( clockInfo->getInfoPanel(), 0, 2, 2, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
+	s3eTimerSetTimer( 100, &MainScreen::clockTimer, NULL ); // Start calling the timer to display the current time
 
 	//this->myScreen = CIwUIElement::CreateFromResource( "MenuScreen" );
 
 	//this->tracksButton = this->myScreen->GetChildNamed( "TracksButton" );
 	IwGetUIView()->AddElementToLayout( this->myScreen );
+
+	// Set our labels once, so that scaling can take place
+	this->speedInfo->setValue( "0.00" );
+	this->distanceInfo->setValue( "0.00" );
+	this->altitudeInfo->setValue( "0.00" );
+	this->timeInfo->setValue( "00:00:00" );
 }
 
 /**

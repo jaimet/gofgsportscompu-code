@@ -26,4 +26,5 @@ CIwResGroup
 	//"test.ui"
 	"exportscreen.ui"
 	"menuscreen.ui"
+	"test.ui"
 }

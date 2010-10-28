@@ -28,14 +28,19 @@
 
 class CIwUIAutoSizeLabel : public CIwUILabel {
 public:
+	IW_MANAGED_DECLARE(CIwUIAutoSizeLabel)
 	CIwUIAutoSizeLabel();
 	
 	void SetCaption( const char *pString );
 
-private:
-	CIwGxFont *GetSizedFont( int fontIndex, char *measureString );
+protected:
+	virtual void Clone( CIwUIElement *pTarget ) const;
 
+private:
+	CIwGxFont *GetSizedFont( int fontIndex, const char *measureString, int lastFontIndex = -1 );
 	CIwArray<CIwGxFont*> fontTypes;
+
+	int32 sizeAvailable;
 };
 
 #endif

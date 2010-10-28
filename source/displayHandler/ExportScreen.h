@@ -40,7 +40,8 @@ public:
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
 
-	static int UpdateProgress( void *systemData, void *userData  );
+	static int32 CB_UpdateProgress( void *systemData, void *userData  );
+	static int32 CB_StartExport( void *systemData, void *userData );
 
 private:
 	ExportScreen();

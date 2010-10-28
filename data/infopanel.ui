@@ -25,36 +25,40 @@ CIwUIElement
 				size { 24 24 }
 				sizeMin { 24 24 }
 				sizeMax { 24 24 }
+				sizeHint { 24 24 }
 			}
+
 			CIwUILabel {
 				name "UnitLabel"
 				style <label_medium>
 				caption "Unit"
-				sizeMax  { -1 0 }
+				sizeMax  { -1 24 }
+				sizeToContent false
+				alignH centre
+				alignV top
 			}
-			
-			CIwUILayoutHorizontal 
-			{
+
+			CIwUILayout {
 				sizeToSpace true
-			
+
 				element {
 					name "Image"
 				}
 				element {
 					name "UnitLabel"
-					alignH "centre"
 				}
 			}
 		}
 		
-		CIwUILabel
+		CIwUIAutoSizeLabel
 		{
 			name "CurrentLabel"
 			style <label_large>
 			font "font_huge"
-			caption "0.0"
-			sizeMax  { -1 0 }
-			oneLine true
+			caption ""
+			sizeMax  { -1 -1 }
+			//sizeToContent false
+			alignH centre
 		}
 		CIwUILabel 
 		{
@@ -67,7 +71,7 @@ CIwUIElement
 		{
 			name "MaximumLabel"
 			style <label_small>
-			caption "0.0"
+			caption ""
 			sizeMax  { -1 0 }
 		}
 		CIwUILabel 
@@ -81,7 +85,7 @@ CIwUIElement
 		{
 			name "AverageLabel"
 			style <label_small>
-			caption "0.0"
+			caption ""
 			sizeMax  { -1 0 }
 		}
 		CIwUILayoutGrid 
@@ -101,7 +105,7 @@ CIwUIElement
 				name "CurrentLabel"
 				columnSpan 2
 				row 1
-				alignH "centre"
+				//alignH "centre"
 			}
 			element 
 			{

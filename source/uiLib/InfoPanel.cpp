@@ -36,9 +36,9 @@ InfoPanel::InfoPanel( char *name, bool p_bNoStatistics ) {
 	// Rename element
 	this->uiInfoPanel->SetName( name );
 
-	this->unitLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "UnitLabel" );
-	this->currentLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "CurrentLabel" );
-	this->image = (CIwUIImage *)this->uiInfoPanel->GetChildNamed( "Image" );
+	this->unitLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "UnitLabel" );
+	this->currentLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "CurrentLabel" );
+	this->image = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "Image" );
 
 	// Initialize statistics vars
 	this->maximum = 0.0;

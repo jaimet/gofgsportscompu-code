@@ -81,6 +81,7 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	TiXmlElement *trackNode = new TiXmlElement( "Track" );
 	trackNode->SetAttribute( "StartTime", startTimeString );
 
+	int lastProgress = 0;
 	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
 		bytesRead += strlen( myBuf );
 
@@ -122,7 +123,13 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 		}
 
 		// Update progress
-		this->announceProgress( (int) (100.0 / (float) totalBytes * (float) bytesRead) );
+		int currProgress = (int) (100.0 / (float) totalBytes * (float) bytesRead);
+		// Only update the progress on full percentage changes
+		if( currProgress > lastProgress ) {
+			this->announceProgress( (int) (100.0 / (float) totalBytes * (float) bytesRead) );
+
+			lastProgress = currProgress;
+		}
 	}
 	// Add last data-point
 	trackNode->LinkEndChild( this->createTCXPoint(startTime) );
@@ -146,6 +153,9 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 
 	// Save XML
 	doc.SaveFile( tcxName );
+
+	// We are done
+	this->announceProgress( 100 );
 }
 
 /*

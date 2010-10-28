@@ -20,45 +20,76 @@
 #include "CIwUIAutoSizeLabel.h"
 
 CIwUIAutoSizeLabel::CIwUIAutoSizeLabel() : CIwUILabel() {
-	// Initialize our fonts
+	// Disable sizeToContent because else the font auto-sizing wont make any sense...
+	this->SetProperty( "sizeToContent", false );
+
+	// Initialize our fonts (Note: these are the standard fonts from iwui)
+	// NOTE: Fonts MUST be ordered by size, so smaller ones come first
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_tiny", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_small", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_medium", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_large", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_huge", "CIwGxFont" ) );
+
+	// Initialize our available size
+	this->sizeAvailable = 0;
 }
 
 void CIwUIAutoSizeLabel::SetCaption( const char *pString ) {
-	// Check if the strlen of our caption changed
-	// NOTE: I'm perfectly aware that this is not a save check for a new string size
-	//		 but I want to prevent setting the font-size for each call of SetCaption
-	if( strlen( this->GetCaption() ) != strlen( pString ) ) {
-		// Now check if the font of the label is in our managed list
-		if( this->fontTypes.contains( this->GetFont() ) ) {
-			int fontIndex = this->fontTypes.find( this->GetFont() );
-		}
+	// Now check if the font of the label is in our managed list
+	if( this->fontTypes.contains( this->GetFont() ) ) {
+		int fontIndex = this->fontTypes.find( this->GetFont() );
+
+		// Re-calculate available size
+		CIwSVec2 labelMargin;
+		this->GetProperty( "margin", labelMargin );
+		this->sizeAvailable = this->GetSize().x - labelMargin.x;
+
+		// Setup IwGxFont API to be ready for our measurements...
+		IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
+		IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_LEFT );
+		// Find & set our fitting font
+		this->SetFont( this->GetSizedFont( fontIndex, pString ) );
 	}
 
 	CIwUILabel::SetCaption( pString );
 }
 
-CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, char *measureString ) {
+CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureString, int lastFontIndex ) {
 	// Measure the size of the measure string
 	CIwGxFontPreparedData measureData;
 	IwGxFontSetFont( this->fontTypes[fontIndex] );
-	IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
-	IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_LEFT );
-	IwGxFontPrepareText( measureData, measureString, -1 );
+	IwGxFontPrepareText( measureData, measureString );
 
 	// Check if size is bigger or smaller than our label
-	if( measureData.GetWidth() > this->GetSize().x ) {
+	if( measureData.GetWidth() > this->sizeAvailable ) {
+		// If size is to big, check if we have a smaller one available
 		if( fontIndex > 0 ) {
-			return this->GetSizedFont( fontIndex - 1, measureString );
+			return this->GetSizedFont( fontIndex - 1, measureString, fontIndex );
+		}
+		// If not return the current one
+		else {
+			return this->fontTypes[fontIndex];
+		}
+	}
+	else if( measureData.GetWidth() < this->sizeAvailable ) {
+		if( lastFontIndex > fontIndex ) return this->fontTypes[fontIndex];
+
+		// Check if a bigger font is available at all
+		if( (uint32)(fontIndex + 1) < this->fontTypes.size() ) {
+			return this->GetSizedFont( fontIndex + 1, measureString, fontIndex );
 		}
 		else {
 			return this->fontTypes[fontIndex];
 		}
 	}
-	else if( measureData.GetWidth() < this->GetSize().x ) {
-	}
+
+	// If the font should be the exact size of the label, return it
+	return this->fontTypes[fontIndex];
 }
+
+void CIwUIAutoSizeLabel::Clone( CIwUIElement *pTarget ) const {
+	IW_UI_CLONE_SUPERCLASS(pTarget, CIwUIAutoSizeLabel, CIwUILabel);
+}
+
+IW_MANAGED_IMPLEMENT_FACTORY(CIwUIAutoSizeLabel);

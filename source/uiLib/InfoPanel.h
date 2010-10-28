@@ -26,6 +26,8 @@
 #include <IwUILabel.h>
 #include <IwUILayoutGrid.h>
 
+#include "CIwUIAutoSizeLabel.h"
+
 class InfoPanel {
 public:
 	InfoPanel( char *name, bool bNoStatistics = false );
@@ -42,7 +44,7 @@ private:
 	//CIwGxFont *GetSizedFont( char *text, int sizeX );
 
 	CIwUILabel *unitLabel;
-	CIwUILabel *currentLabel;
+	CIwUIAutoSizeLabel *currentLabel;
 	CIwUILabel *averageLabel;
 	CIwUILabel *maximumLabel;
 
