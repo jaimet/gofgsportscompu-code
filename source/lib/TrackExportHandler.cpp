@@ -22,6 +22,82 @@
 template<>
 TrackExportHandler *Singleton<TrackExportHandler>::mySelf = NULL;
 
+int TrackExportHandler::ReadNextPoint( s3eFile *inFile ) {
+	static int next_unixtime = 0;
+
+	// Reset the current dataPoint
+	this->dataPoint.reset();
+
+	// Store unixtime from last call in the datapoint reference
+	this->dataPoint.unixtime = next_unixtime;
+	
+	// Buffer for reading the file content
+	char myBuf[BUFFER_SIZE];
+	// Count the bytes read from the file (to return them)
+	int bytesRead = 0;
+
+	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
+		bytesRead += strlen(myBuf);
+
+		// Start splitting the data line
+		char *token = strtok( myBuf, ";" );
+		if( token == NULL ) {
+			this->announceProgress( 0, "Invalid Data-Line found (No recordType)" );
+			return -1;
+		}
+		int recordType = atoi( token );
+		// Now get the data-part
+		char *data = strtok( NULL, ";" );
+		if( data == NULL ) {
+			this->announceProgress( 0, "Invalid Data-Line found (No data)" );
+			return -1;
+		}
+
+		switch( recordType ) {
+		// Time data-point
+		case 1:
+			// Save new timestamp
+			next_unixtime = atoi( data );
+
+			// Check if this is already the timestamp of the next data-point
+			if( this->dataPoint.unixtime != 0 ) {
+				return bytesRead;
+			}
+			break;
+		// Position data-point
+		case 2:
+			token = strtok( data, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no lat)" );
+				return -1;
+			}
+			this->dataPoint.lat = atof( token );
+			token = strtok( NULL, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no lon)" );
+				return -1;
+			}
+			this->dataPoint.lon = atof( token );
+			token = strtok( NULL, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no alt)" );
+				return -1;
+			}
+			this->dataPoint.alt = atof( token );
+			break;
+		// Distance data-point
+		case 4:
+			this->dataPoint.dist = atof( data );
+			break;
+		// This should never happen...
+		default:
+			break;
+		}
+	}
+
+	return 0;
+}
+
 /*
 	Add TCX Export
 	TODO: Add file I/O error handling
@@ -82,43 +158,22 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	trackNode->SetAttribute( "StartTime", startTimeString );
 
 	int lastProgress = 0;
-	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
-		bytesRead += strlen( myBuf );
+	while( 1 ) {
+		int currBytes = this->ReadNextPoint( inFile );
 
-		// Start splitting the data line
-		char *token = strtok( myBuf, ";" );
-		int recordType = atoi( token );
-		char *data = strtok( NULL, ";" );
+		// Successful read
+		if( currBytes > 0 ) {
+			bytesRead += currBytes;
 
-		switch( recordType ) {
-		// Time data-point
-		case 1:
-			// Check if this is already the timestamp of the next data-point
-			if( this->dataPoint.unixtime != 0 ) {
-				trackNode->LinkEndChild( this->createTCXPoint( startTime ) );
-
-				// Reset the data point
-				this->dataPoint.reset();
-			}
-
-			// Save new timestamp
-			this->dataPoint.unixtime = atoi( data ) - startTime;
-			break;
-		// Position data-point
-		case 2:
-			token = strtok( data, ":" );
-			this->dataPoint.lat = atof( token );
-			token = strtok( NULL, ":" );
-			this->dataPoint.lon = atof( token );
-			token = strtok( NULL, ":" );
-			this->dataPoint.alt = atof( token );
-			break;
-		// Distance data-point
-		case 4:
-			this->dataPoint.dist = atof( data );
-			break;
-		// This should never happen...
-		default:
+			trackNode->LinkEndChild( this->createTCXPoint() );
+		}
+		// <0 Only occurs if there was an error
+		else if( currBytes < 0 ) {
+			s3eFileClose( inFile );
+			return;
+		}
+		// If the function returns 0, we are at the end of the file
+		else {
 			break;
 		}
 
@@ -132,11 +187,11 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 		}
 	}
 	// Add last data-point
-	trackNode->LinkEndChild( this->createTCXPoint(startTime) );
+	trackNode->LinkEndChild( this->createTCXPoint() );
 
 	// Write total duration
 	TiXmlElement *ttsNode = new TiXmlElement( "TotalTimeSeconds" );
-	sprintf( myBuf, "%d", this->dataPoint.unixtime );
+	sprintf( myBuf, "%d", this->dataPoint.unixtime - startTime );
 	ttsNode->LinkEndChild( new TiXmlText( myBuf ) );
 	lapNode->LinkEndChild( ttsNode );
 	// Write total distance
@@ -152,7 +207,10 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	s3eFileClose( inFile );
 
 	// Save XML
-	doc.SaveFile( tcxName );
+	if( !doc.SaveFile( tcxName ) ) {
+		this->announceProgress( 0, "Error writing output file" );
+		return;
+	}
 
 	// We are done
 	this->announceProgress( 100 );
@@ -160,8 +218,6 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 
 /*
 	Export a given Track to the FitLog Format
-	TODO: Add error handling for file operations & data conversions / splitting / etc.
-	TODO: Merge export main-loop for fitlog & tcx export (because they look almost the same)
 */
 void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	char myBuf[BUFFER_SIZE];
@@ -224,64 +280,22 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	activityNode->LinkEndChild( trackNode );
 
 	int lastProgress = 0;
-	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
-		bytesRead += strlen( myBuf );
+	while( 1 ) {
+		int currBytes = this->ReadNextPoint( inFile );
 
-		// Start splitting the data line
-		char *token = strtok( myBuf, ";" );
-		if( token == NULL ) {
-			this->announceProgress( 0, "Invalid Data-Line found (No recordType)" );
+		// Successful read
+		if( currBytes > 0 ) {
+			bytesRead += currBytes;
+
+			trackNode->LinkEndChild( this->createFitlogPoint( startTime ) );
+		}
+		// <0 Only occurs if there was an error
+		else if( currBytes < 0 ) {
+			s3eFileClose( inFile );
 			return;
 		}
-		int recordType = atoi( token );
-		// Now get the data-part
-		char *data = strtok( NULL, ";" );
-		if( data == NULL ) {
-			this->announceProgress( 0, "Invalid Data-Line found (No data)" );
-			return;
-		}
-
-		switch( recordType ) {
-		// Time data-point
-		case 1:
-			// Check if this is already the timestamp of the next data-point
-			if( this->dataPoint.unixtime != 0 ) {
-				trackNode->LinkEndChild( this->createFitlogPoint() );
-
-				// Reset the data point
-				this->dataPoint.reset();
-			}
-
-			// Save new timestamp
-			this->dataPoint.unixtime = atoi( data ) - startTime;
-			break;
-		// Position data-point
-		case 2:
-			token = strtok( data, ":" );
-			if( token == NULL ) {
-				this->announceProgress( 0, "Invalid Position info found (no lat)" );
-				return;
-			}
-			this->dataPoint.lat = atof( token );
-			token = strtok( NULL, ":" );
-			if( token == NULL ) {
-				this->announceProgress( 0, "Invalid Position info found (no lon)" );
-				return;
-			}
-			this->dataPoint.lon = atof( token );
-			token = strtok( NULL, ":" );
-			if( token == NULL ) {
-				this->announceProgress( 0, "Invalid Position info found (no alt)" );
-				return;
-			}
-			this->dataPoint.alt = atof( token );
-			break;
-		// Distance data-point
-		case 4:
-			this->dataPoint.dist = atof( data );
-			break;
-		// This should never happen...
-		default:
+		// If the function returns 0, we are at the end of the file
+		else {
 			break;
 		}
 
@@ -295,7 +309,7 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 		}
 	}
 	// Add last data-point
-	trackNode->LinkEndChild( this->createFitlogPoint() );
+	trackNode->LinkEndChild( this->createFitlogPoint( startTime ) );
 
 	// Close file
 	s3eFileClose( inFile );
@@ -311,9 +325,9 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 }
 
 // Create a new Fitlog Xml-Element out of the current (internal) datapoint
-TiXmlElement *TrackExportHandler::createFitlogPoint() {
+TiXmlElement *TrackExportHandler::createFitlogPoint( int startTime ) {
 	TiXmlElement *ptNode = new TiXmlElement( "pt" );
-	ptNode->SetAttribute( "tm", this->dataPoint.unixtime );
+	ptNode->SetAttribute( "tm", this->dataPoint.unixtime - startTime );
 	ptNode->SetDoubleAttribute( "lat", this->dataPoint.lat );
 	ptNode->SetDoubleAttribute( "lon", this->dataPoint.lon );
 	ptNode->SetDoubleAttribute( "ele", this->dataPoint.alt );
@@ -324,7 +338,7 @@ TiXmlElement *TrackExportHandler::createFitlogPoint() {
 }
 
 // Create a new Fitlog Xml-Element out of the current (internal) datapoint
-TiXmlElement *TrackExportHandler::createTCXPoint( int startTime ) {
+TiXmlElement *TrackExportHandler::createTCXPoint() {
 	char myBuf[25];
 
 	// Create root trackpoint node
@@ -332,8 +346,7 @@ TiXmlElement *TrackExportHandler::createTCXPoint( int startTime ) {
 
 	// Add time node
 	TiXmlElement *timeNode = new TiXmlElement( "Time" );
-	int currTime = startTime + this->dataPoint.unixtime;
-	tm *stInfo = gmtime( (time_t *) &currTime );
+	tm *stInfo = gmtime( (time_t *) &this->dataPoint.unixtime );
 	strftime( myBuf, 25, "%Y-%m-%dT%H:%M:%SZ", stInfo );
 	timeNode->LinkEndChild( new TiXmlText( myBuf ) );
 	ptNode->LinkEndChild( timeNode );

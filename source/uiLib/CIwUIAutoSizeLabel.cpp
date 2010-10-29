@@ -73,6 +73,7 @@ CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureS
 		}
 	}
 	else if( measureData.GetWidth() < this->sizeAvailable ) {
+		// This check is required to detect if the current font is the first one which is smaller than the one before (which means it the optimal one)
 		if( lastFontIndex > fontIndex ) return this->fontTypes[fontIndex];
 
 		// Check if a bigger font is available at all

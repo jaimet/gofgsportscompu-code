@@ -64,8 +64,10 @@ public:
 
 	void SetProgressCallback( s3eCallback p_progressCallback );
 private:
-	TiXmlElement *createFitlogPoint();
-	TiXmlElement *createTCXPoint( int startTime );
+	int ReadNextPoint( s3eFile *inFile );
+
+	TiXmlElement *createFitlogPoint( int startTime );
+	TiXmlElement *createTCXPoint();
 
 	void announceProgress( int percent, char *message = NULL );
 

@@ -21,10 +21,7 @@
 #define CIWUIAUTOSIZELABEL
 
 #include <IwUILabel.h>
-
 #include <IwGxFont.h>
-
-//#include <IwGxFontPreparedData.h>
 
 class CIwUIAutoSizeLabel : public CIwUILabel {
 public:
