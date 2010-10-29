@@ -35,6 +35,7 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 
 	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
+	this->exportStatus = (CIwUILabel*) this->myScreen->GetChildNamed( "exportStatus" );
 
 	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
 
@@ -77,8 +78,22 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 
 int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	iwfixed *progress = (iwfixed *) systemData;
-
 	ExportScreen::Self()->exportProgress->SetProgress( *progress );
+	char *status = NULL;
+
+	// Check if we have a custom message
+	if( userData != NULL ) {
+		status = (char *) userData;
+	}
+	// if not just display the percent
+	else {
+		char statusBuf[6];
+		sprintf( statusBuf, "%d %%", (int)(IW_FIXED_TO_FLOAT(*progress) * 100.0) );
+
+		status = statusBuf;
+	}
+	// Update status text
+	ExportScreen::Self()->exportStatus->SetCaption( status );
 
 	// Manually call the drawing functions
 	IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);

@@ -22,9 +22,7 @@
 template<>
 MainScreen *Singleton<MainScreen>::mySelf = NULL;
 
-// TODO: Continue here with creating MainScreen Class
-void MainScreen::MA_StartButtonClick(CIwUIElement*)
-{
+void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->bStopPending = false;
 	this->totalDistance = 0.0;
 

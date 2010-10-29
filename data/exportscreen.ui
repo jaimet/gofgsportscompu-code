@@ -110,9 +110,20 @@ CIwUIElement
 			progress 0.0
 		}
 
+		CIwUILabel {
+			name "exportStatus"
+
+			caption ""
+
+			style <label_small>
+			sizeMax { -1 16 }
+			sizeToContent false
+			alignH centre
+		}
+
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 5
+			numRows 6
 			numColumns 1
 
 			element {
@@ -137,8 +148,12 @@ CIwUIElement
 				alignV "bottom"
 			}
 			element {
-				name "menuBar"
+				name "exportStatus"
 				row 4
+			}
+			element {
+				name "menuBar"
+				row 5
 				alignV "bottom"
 			}
 		}

@@ -49,6 +49,7 @@ private:
 	char es_currentFile[20];
 	ExportFormat exportFormat;
 	CIwUIProgressBar *exportProgress;
+	CIwUILabel *exportStatus;
 };
 
 #endif

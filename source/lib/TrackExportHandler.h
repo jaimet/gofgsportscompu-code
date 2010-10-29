@@ -67,7 +67,7 @@ private:
 	TiXmlElement *createFitlogPoint();
 	TiXmlElement *createTCXPoint( int startTime );
 
-	void announceProgress( int percent );
+	void announceProgress( int percent, char *message = NULL );
 
 	TrackExportHandler();
 

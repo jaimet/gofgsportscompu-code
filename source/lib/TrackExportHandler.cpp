@@ -29,7 +29,7 @@ TrackExportHandler *Singleton<TrackExportHandler>::mySelf = NULL;
 void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 	char myBuf[BUFFER_SIZE];
 
-	// Update progress
+	// Reset progress
 	this->announceProgress( 0 );
 
 	// Read first line of file to get the start time
@@ -161,13 +161,30 @@ void TrackExportHandler::exportToTCX( char *fileName, char *tcxName ) {
 /*
 	Export a given Track to the FitLog Format
 	TODO: Add error handling for file operations & data conversions / splitting / etc.
+	TODO: Merge export main-loop for fitlog & tcx export (because they look almost the same)
 */
 void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	char myBuf[BUFFER_SIZE];
+	char *operationReturn = NULL;
+
+	// Reset progress
+	this->announceProgress( 0 );
 
 	// Read first line of file to get the start time
 	s3eFile *inFile = s3eFileOpen( fileName, "r" );
-	s3eFileReadString( myBuf, BUFFER_SIZE, inFile );
+	// Check if we have a valid 
+	if( inFile == NULL ) {
+		this->announceProgress( 0, "Error opening input File" );
+		return;
+	}
+	// Read the first line
+	operationReturn = s3eFileReadString( myBuf, BUFFER_SIZE, inFile );
+	if( operationReturn == NULL ) {
+		this->announceProgress( 0, "Error Reading Initial Data" );
+		s3eFileClose( inFile );
+		return;
+	}
+	// Extract the pure time-data
 	char *timeData = strstr( myBuf, ";" );
 	timeData++;
 	int startTime = atoi( timeData );
@@ -178,6 +195,9 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 
 	// Rewind back to the start
 	s3eFileSeek( inFile, 0, S3E_FILESEEK_SET );
+	// Get the size of the file
+	int32 totalBytes = s3eFileGetSize( inFile );
+	int32 bytesRead = 0;
 
 	// Start reading the document
 	TiXmlDocument doc;
@@ -203,11 +223,23 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	trackNode->SetAttribute( "StartTime", startTimeString );
 	activityNode->LinkEndChild( trackNode );
 
+	int lastProgress = 0;
 	while( s3eFileReadString( myBuf, BUFFER_SIZE, inFile ) != NULL ) {
+		bytesRead += strlen( myBuf );
+
 		// Start splitting the data line
 		char *token = strtok( myBuf, ";" );
+		if( token == NULL ) {
+			this->announceProgress( 0, "Invalid Data-Line found (No recordType)" );
+			return;
+		}
 		int recordType = atoi( token );
+		// Now get the data-part
 		char *data = strtok( NULL, ";" );
+		if( data == NULL ) {
+			this->announceProgress( 0, "Invalid Data-Line found (No data)" );
+			return;
+		}
 
 		switch( recordType ) {
 		// Time data-point
@@ -226,10 +258,22 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 		// Position data-point
 		case 2:
 			token = strtok( data, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no lat)" );
+				return;
+			}
 			this->dataPoint.lat = atof( token );
 			token = strtok( NULL, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no lon)" );
+				return;
+			}
 			this->dataPoint.lon = atof( token );
 			token = strtok( NULL, ":" );
+			if( token == NULL ) {
+				this->announceProgress( 0, "Invalid Position info found (no alt)" );
+				return;
+			}
 			this->dataPoint.alt = atof( token );
 			break;
 		// Distance data-point
@@ -240,6 +284,15 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 		default:
 			break;
 		}
+
+		// Update progress
+		int currProgress = (int) (100.0 / (float) totalBytes * (float) bytesRead);
+		// Only update the progress on full percentage changes
+		if( currProgress > lastProgress ) {
+			this->announceProgress( (int) (100.0 / (float) totalBytes * (float) bytesRead) );
+
+			lastProgress = currProgress;
+		}
 	}
 	// Add last data-point
 	trackNode->LinkEndChild( this->createFitlogPoint() );
@@ -248,7 +301,13 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	s3eFileClose( inFile );
 
 	// Save XML
-	doc.SaveFile( fitlogName );
+	if( !doc.SaveFile( fitlogName ) ) {
+		this->announceProgress( 0, "Error writing output file" );
+		return;
+	}
+
+	// We are done
+	this->announceProgress( 100 );
 }
 
 // Create a new Fitlog Xml-Element out of the current (internal) datapoint
@@ -322,11 +381,11 @@ void TrackExportHandler::SetProgressCallback( s3eCallback p_progressCallback ) {
 }
 
 // Calls the progress callback with the current progress
-void TrackExportHandler::announceProgress( int percent ) {
+void TrackExportHandler::announceProgress( int percent, char *message ) {
 	if( this->progressCallback != NULL ) {
 		iwfixed progress = IW_FIXED( (float)percent / 100.0 );
 
-		(*progressCallback)( &progress, NULL );
+		(*progressCallback)( &progress, message );
 	}
 }
 
