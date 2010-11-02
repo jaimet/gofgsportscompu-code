@@ -41,27 +41,40 @@ bool GPSHandler::updateLocation() {
 	int64 currTime = s3eTimerGetUTC();
 
 	if( g_Error == S3E_RESULT_SUCCESS ) {
+		bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
+
 		// Check if we have an old location
 		if( this->currLocation != NULL ) {
-			// Calculate distance and speed based on gps location
-			this->distance = this->haversineDistance( this->currLocation, newLocation );
-			this->currSpeed = this->distance / ((double)( currTime - this->lastTime ) / 1000.0);
+			// Calculate distance between last and new location
+			double newDistance = this->haversineDistance( this->currLocation, newLocation );
 
-			this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
-			this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime / 1000.0);
-			this->historyCount++;
+			// Check if the distance is outside the last accuracy (using average horiz & verti accuracy => avoid too complicated calculations)
+			if( newDistance >= ( this->currLocation->m_HorizontalAccuracy + this->currLocation->m_VerticalAccuracy ) / 2.0 ) {
+				// Calculate distance and speed based on gps location
+				//this->distance = this->haversineDistance( this->currLocation, newLocation );
+				this->distance = newDistance;
+				this->currSpeed = this->distance / ((double)( currTime - this->lastTime ) / 1000.0);
 
-			// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
-			double totalDistance = 0.0;
-			double totalTime = 0.0;
-			for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
-				totalDistance += this->distanceHistory[i];
-				totalTime += this->timeHistory[i];
+				// Update tracking history
+				this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
+				this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime / 1000.0);
+				this->historyCount++;
+
+				// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
+				double totalDistance = 0.0;
+				double totalTime = 0.0;
+				for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
+					totalDistance += this->distanceHistory[i];
+					totalTime += this->timeHistory[i];
+				}
+				this->speed = totalDistance / totalTime;
+
+				// Save altitude
+				this->altitude = newLocation->m_Altitude;
+
+				// Set status to true (we have an update)
+				bLocationUpdated = true;
 			}
-			this->speed = totalDistance / totalTime;
-
-			// Save altitude
-			this->altitude = newLocation->m_Altitude;
 		
 			// Free up some memory
 			delete this->currLocation;
@@ -69,11 +82,10 @@ bool GPSHandler::updateLocation() {
 
 		// Save new location
 		this->currLocation = newLocation;
-
 		// Save current time
 		this->lastTime = currTime;
 
-		return true;
+		return bLocationUpdated;
 	}
 
 	return false;

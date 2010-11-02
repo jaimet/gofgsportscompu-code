@@ -63,6 +63,10 @@ int TrackExportHandler::ReadNextPoint( s3eFile *inFile ) {
 			if( this->dataPoint.unixtime != 0 ) {
 				return bytesRead;
 			}
+			// This is the first datapoint
+			else {
+				this->dataPoint.unixtime = next_unixtime;
+			}
 			break;
 		// Position data-point
 		case 2:

@@ -20,6 +20,8 @@ files
 	TrackHandler.cpp 
 	TrackExportHandler.h
 	TrackExportHandler.cpp 
+	SettingsHandler.h
+	SettingsHandler.cpp 
 
   [UiLib]
   (source/uiLib)
