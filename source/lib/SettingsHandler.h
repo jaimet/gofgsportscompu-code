@@ -20,6 +20,9 @@
 #ifndef SETTINGSHANDLER
 #define SETTINGSHANDLER
 
+#include <map>
+#include <string>
+
 #include "tinyxml.h"
 
 #include "../lib/Singleton.h"
@@ -27,8 +30,13 @@
 class SettingsHandler : public Singleton<SettingsHandler> {
 	friend class Singleton<SettingsHandler>;
 public:
-private:
+	void Set( std::string name, std::string value );
+	void Set( std::string name, int value );
+
+protected:
 	SettingsHandler();
+private:
+	std::map<std::string,std::string> settingsStore;
 };
 
 #endif
