@@ -22,8 +22,15 @@
 template<>
 ExportScreen *Singleton<ExportScreen>::mySelf = NULL;
 
-ExportScreen::ExportScreen() : Screen( "ExportScreen" )
-{
+void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
+	if( p_bVisible ) {
+		this->trackList->RecreateItemsFromSource();
+	}
+
+	Screen::SetVisible( p_bVisible, p_bNoAnim );
+}
+
+ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExportButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_HandleTrackSelection, CIwUIElement*,bool)
@@ -33,9 +40,10 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" )
 	strcpy( this->es_currentFile, "" );
 	this->exportFormat = FITLOG;
 
-	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( 0 );
+	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( SettingsHandler::Self()->GetInt( "DefaultExportType" ) );
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
 	this->exportStatus = (CIwUILabel*) this->myScreen->GetChildNamed( "exportStatus" );
+	this->trackList = (CIwUITableView*) this->myScreen->GetChildNamed( "TrackList" );
 
 	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
 

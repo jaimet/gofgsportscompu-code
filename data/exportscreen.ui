@@ -39,7 +39,7 @@ CIwUIElement
 
 		CIwUITableView
 		{
-			name "TableView"
+			name "TrackList"
 			sizeMax { -1 -1 }
 
 			sizeMin { -1 100 }
@@ -131,7 +131,7 @@ CIwUIElement
 				alignH "centre"
 			}
 			element {
-				name "TableView"
+				name "TrackList"
 				row 1
 				alignV "top"
 			}

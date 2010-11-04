@@ -25,6 +25,7 @@
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 #include "../lib/TrackExportHandler.h"
+#include "../lib/SettingsHandler.h"
 
 enum ExportFormat {
 	FITLOG,
@@ -35,6 +36,8 @@ class ExportScreen : public Screen, public Singleton<ExportScreen>
 {
 	friend class Singleton<ExportScreen>;
 public:
+	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
+
 	void ES_ExitButtonClick(CIwUIElement*);
 	void ES_ExportButtonClick(CIwUIElement*);
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
@@ -50,6 +53,7 @@ private:
 	ExportFormat exportFormat;
 	CIwUIProgressBar *exportProgress;
 	CIwUILabel *exportStatus;
+	CIwUITableView *trackList;
 };
 
 #endif

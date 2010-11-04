@@ -62,7 +62,7 @@
 		if (val)
 		{
 			DIR* pDir = opendir("tracks");
-			IwAssertMsg(UI, pDir, ("Failed to open music folder"));
+			IwAssertMsg(UI, pDir, ("Failed to open track folder"));
 			
 			if(pDir)
 			{

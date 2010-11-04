@@ -30,8 +30,16 @@
 class SettingsHandler : public Singleton<SettingsHandler> {
 	friend class Singleton<SettingsHandler>;
 public:
+	// Setter functions
 	void Set( std::string name, std::string value );
 	void Set( std::string name, int value );
+
+	// Getter functions
+	int GetInt( std::string name );
+	std::string GetString( std::string name );
+
+	bool Load();	// Load from disk
+	bool Save();	// Save to disk
 
 protected:
 	SettingsHandler();
