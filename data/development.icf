@@ -98,7 +98,7 @@ LocationHorizontalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Defa
 
 LocationLatitude = 		Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "21.0290000000000000"
 
-LocationLongitude = 		Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "-10.0000000000000000"
+LocationLongitude = 		Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "-20.0000000000000000"
 
 LocationVerticalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="100.0", Value = "1000.0000000000000000"
 

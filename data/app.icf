@@ -1,9 +1,13 @@
-[S3E]
+[S3E] 
+MemSize=12000000
+
+# These lines specify a splash screen to display while the s3e file is loaded
 SplashscreenBkR=255
 SplashscreenBkG=255
 SplashscreenBkB=255
- 
-MemSize=12000000
+Splashscreen=splash.jpg
+SplashscreenWidth=160
+SplashscreenHeight=100
 
 [GX]
 DataCacheSize=128000

@@ -57,7 +57,7 @@ bool GPSHandler::updateLocation() {
 
 				// Update tracking history
 				this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
-				this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime / 1000.0);
+				this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime) / 1000.0;
 				this->historyCount++;
 
 				// Calculate the speed (as average out of the last AVERAGE_LENGTH points)

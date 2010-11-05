@@ -47,7 +47,7 @@ void CIwUIAutoSizeLabel::SetCaption( const char *pString ) {
 
 		// Setup IwGxFont API to be ready for our measurements...
 		IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
-		IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_LEFT );
+		IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_CENTRE );
 		// Find & set our fitting font
 		this->SetFont( this->GetSizedFont( fontIndex, pString ) );
 	}
@@ -72,7 +72,8 @@ CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureS
 			return this->fontTypes[fontIndex];
 		}
 	}
-	else if( measureData.GetWidth() < this->sizeAvailable ) {
+	else {
+	//else if( measureData.GetWidth() < this->sizeAvailable ) {
 		// This check is required to detect if the current font is the first one which is smaller than the one before (which means it the optimal one)
 		if( lastFontIndex > fontIndex ) return this->fontTypes[fontIndex];
 
@@ -86,7 +87,7 @@ CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureS
 	}
 
 	// If the font should be the exact size of the label, return it
-	return this->fontTypes[fontIndex];
+	//return this->fontTypes[fontIndex];
 }
 
 void CIwUIAutoSizeLabel::Clone( CIwUIElement *pTarget ) const {

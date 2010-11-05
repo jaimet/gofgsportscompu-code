@@ -25,6 +25,7 @@ ExportScreen *Singleton<ExportScreen>::mySelf = NULL;
 void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	if( p_bVisible ) {
 		this->trackList->RecreateItemsFromSource();
+		this->trackList->SetSelection( 0 );
 	}
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
