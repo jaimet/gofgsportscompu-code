@@ -99,7 +99,8 @@ CIwUIElement
 			OnTabBarSelected { ES_ExportFormatChanged }
 			radioButtonStyles {
 				{ caption "Fitlog" style <radio_left> } 
-				{ caption "TCX" style <radio_right> } 
+				{ caption "TCX" style <radio_centre> } 
+				{ caption "GPSies" style <radio_right> } 
 			}
 		}
 

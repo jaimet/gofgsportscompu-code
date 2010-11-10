@@ -29,7 +29,8 @@
 
 enum ExportFormat {
 	FITLOG,
-	TCX
+	TCX,
+	GPSIES
 };
 
 class ExportScreen : public Screen, public Singleton<ExportScreen>

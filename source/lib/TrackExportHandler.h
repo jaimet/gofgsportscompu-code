@@ -25,6 +25,7 @@
 #include "tinyxml.h"
 #include "s3eFile.h"
 #include "IwGeomCore.h"
+#include "IwHTTP.h"
 
 #include <string.h>
 #include <time.h>
@@ -61,8 +62,11 @@ class TrackExportHandler : public Singleton<TrackExportHandler> {
 public:
 	void exportToTCX( char *fileName, char *tcxName );
 	void exportToFitlog( char *fileName, char *fitlogName );
+	void exportToGPSies( char *fileName );
 
 	void SetProgressCallback( s3eCallback p_progressCallback );
+
+	static int32 HTTPCallback( void *systemData, void *userData );
 private:
 	int ReadNextPoint( s3eFile *inFile );
 
@@ -75,6 +79,8 @@ private:
 
 	DataPoint dataPoint;
 	s3eCallback progressCallback;
+
+	char *myBody;
 };
 
 #endif

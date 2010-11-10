@@ -328,6 +328,81 @@ void TrackExportHandler::exportToFitlog( char *fileName, char *fitlogName ) {
 	this->announceProgress( 100 );
 }
 
+void TrackExportHandler::exportToGPSies( char *fileName ) {
+//	char myBuf[BUFFER_SIZE];
+	char *operationReturn = NULL;
+	// HTTP Client
+	CIwHTTP *myHTTP = new CIwHTTP();
+	myHTTP->SetRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+
+	// Reset progress
+	this->announceProgress( 0 );
+
+	// Read first line of file to get the start time
+	s3eFile *inFile = s3eFileOpen( fileName, "r" );
+	// Check if we have a valid
+	if( inFile == NULL ) {
+		this->announceProgress( 0, "Error opening input File" );
+		return;
+	}
+	// Get the size of the file
+	int32 totalBytes = s3eFileGetSize( inFile );
+	int32 bytesRead = 0;
+
+	// Start reading the document
+	int lastProgress = 0;
+	int sequence = 0;
+	while( 1 ) {
+		int currBytes = this->ReadNextPoint( inFile );
+
+		// Successful read
+		if( currBytes > 0 ) {
+			bytesRead += currBytes;
+
+			// Format the post body
+			sprintf( this->myBody, "sequence=%d&unixtime=%d&lat=%.4f&lon=%.4f&alt=%.4f&distance=%.2f&speed=%.2f&hr=%d", sequence, this->dataPoint.unixtime, this->dataPoint.lat, this->dataPoint.lon, this->dataPoint.alt, this->dataPoint.dist, this->dataPoint.speed, this->dataPoint.hr );
+
+			myHTTP->Post( "http://www.senegate.at/post_test.php", this->myBody, strlen( this->myBody ), &TrackExportHandler::HTTPCallback, NULL );
+		}
+		// <0 Only occurs if there was an error
+		else if( currBytes < 0 ) {
+			s3eFileClose( inFile );
+			return;
+		}
+		// If the function returns 0, we are at the end of the file
+		else {
+			break;
+		}
+
+		// Update progress
+		int currProgress = (int) (100.0 / (float) totalBytes * (float) bytesRead);
+		// Only update the progress on full percentage changes
+		if( currProgress > lastProgress ) {
+			this->announceProgress( (int) (100.0 / (float) totalBytes * (float) bytesRead) );
+
+			lastProgress = currProgress;
+		}
+
+		sequence++;
+		//break;
+	}
+	// Close file
+	s3eFileClose( inFile );
+
+	// We are done
+	this->announceProgress( 100 );
+
+	//char myBody[] = "user=test";
+
+//	myHTTP->Post( "http://www.senegate.at/post_test.php", this->myBody, strlen( this->myBody ), &TrackExportHandler::HTTPCallback, NULL );
+//	myHTTP->Get( "http://www.senegate.at:45678/post_test.php?user=test", &TrackExportHandler::HTTPCallback, NULL );
+}
+
+int32 TrackExportHandler::HTTPCallback( void *systemData, void *userData ) {
+	return 0;
+}
+
+
 // Create a new Fitlog Xml-Element out of the current (internal) datapoint
 TiXmlElement *TrackExportHandler::createFitlogPoint( int startTime ) {
 	TiXmlElement *ptNode = new TiXmlElement( "pt" );
@@ -408,4 +483,6 @@ void TrackExportHandler::announceProgress( int percent, char *message ) {
 
 TrackExportHandler::TrackExportHandler() {
 	this->progressCallback = NULL;
+
+	this->myBody = (char *) s3eMalloc( 100 );
 }

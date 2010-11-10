@@ -79,6 +79,9 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 	case 0:
 		this->exportFormat = FITLOG;
 		break;
+	case 2:
+		this->exportFormat = GPSIES;
+		break;
 	default:
 		this->exportFormat = TCX;
 		break;
@@ -131,6 +134,10 @@ int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
 	if( ExportScreen::Self()->exportFormat == FITLOG ) {
 		strcpy( extString, ".fitlog" );
 		TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
+	}
+	// .. direct upload to GPSies.com ..
+	else if( ExportScreen::Self()->exportFormat == GPSIES ) {
+		TrackExportHandler::Self()->exportToGPSies( fullFileName );
 	}
 	// or Garmin TCX
 	else {
