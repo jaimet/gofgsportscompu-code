@@ -17,27 +17,26 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef TASKHTTPEXPORT_C
+#define TASKHTTPEXPORT_C
+
 #include "Task.h"
+#include "TrackReader.h"
 
-Task::Task() {
-	this->processID = 0;
-	this->progressCallback = NULL;
-}
+#include "IwHTTP.h"
 
-void Task::SetProgressCallback( s3eCallback p_progressCallback ) {
-	this->progressCallback = p_progressCallback;
-}
+class TaskHTTPExport : public Task, public TrackReader {
+public:
+	TaskHTTPExport( char *p_filename );
 
-void Task::SetProcessID( int p_processID ) {
-	this->processID = p_processID;
-}
+	void Start();
+	int Next();
+	void Stop();
 
-int Task::GetProcessID() {
-	return this->processID;
-}
+protected:
+	CIwHTTP *http;
+	char sendBuffer[100];
+	int sequence;
+};
 
-void Task::UpdateProgress( int p_percent ) {
-	int *percent = &p_percent;
-
-	(*progressCallback)( percent, NULL );
-}
+#endif

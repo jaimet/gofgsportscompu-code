@@ -25,6 +25,8 @@
 #include "uiLib/CIwUIAutoSizeLabel.h"
 #include "displayHandler/MainScreen.h"
 
+#include "lib/TaskHandler.h"
+
 /**
 * Initialize our system
 */
@@ -64,6 +66,9 @@ void GOFGShutDown() {
 * Update the View
 */
 bool GOFGUpdate() {
+	// Update the tasks
+	TaskHandler::Self()->Run();
+
 	IwGetUIController()->Update();
 	IwGetUIView()->Update(25);
 

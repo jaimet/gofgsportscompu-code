@@ -20,6 +20,8 @@
 #ifndef TASK_C
 #define TASK_C
 
+#include "s3eTypes.h"
+
 /**
 * Implements a basic iterative task
 * Call Sequence is:
@@ -29,9 +31,23 @@
 */
 class Task {
 public:
+	Task();
+
 	virtual void Start() = 0;
 	virtual int Next() = 0;
 	virtual void Stop() = 0;
+
+	void SetProgressCallback( s3eCallback p_progressCallback );
+
+	void SetProcessID( int p_processID );
+	int GetProcessID();
+
+protected:
+	void UpdateProgress( int p_percent );
+
+private:
+	int processID;
+	s3eCallback progressCallback;
 };
 
 #endif

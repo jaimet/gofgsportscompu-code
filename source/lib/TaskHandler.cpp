@@ -23,8 +23,13 @@ template<>
 TaskHandler *Singleton<TaskHandler>::mySelf = NULL;
 
 // TODO: Continue task handler here
-void TaskHandler::Add( Task *p_Task ) {
-//	if( this->tasks.
+int TaskHandler::Add( Task *p_Task ) {
+	if( p_Task->GetProcessID() <= 0 ) {
+		p_Task->SetProcessID( ++(this->processCounter) );
+		this->tasks.push_back( p_Task );
+	}
+
+	return p_Task->GetProcessID();
 }
 
 void TaskHandler::Run() {
@@ -36,5 +41,17 @@ void TaskHandler::Run() {
 	}
 }
 
-void TaskHandler::Remove( Task *p_Task ) {
+bool TaskHandler::Remove( Task *p_Task ) {
+	for( list<Task*>::iterator it = this->tasks.begin(); it != this->tasks.end(); it++ ) {
+		if( (*it) == p_Task ) {
+			this->tasks.remove( *it );
+			return true;
+		}
+	}
+
+	return false;
+}
+
+TaskHandler::TaskHandler() {
+	this->processCounter = 0;
 }

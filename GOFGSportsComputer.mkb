@@ -26,6 +26,10 @@ files
 	TaskHandler.cpp
   Task.h
   Task.cpp 
+  TaskHTTPExport.h
+  TaskHTTPExport.cpp 
+	TrackReader.h
+	TrackReader.cpp
 
   [UiLib]
   (source/uiLib)

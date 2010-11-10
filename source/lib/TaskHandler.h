@@ -30,11 +30,17 @@ using namespace std;
 class TaskHandler : public Singleton<TaskHandler> {
 	friend class Singleton<TaskHandler>;
 public:
-	void Add( Task *p_Task );
+	int Add( Task *p_Task );
 	void Run();
-	void Remove( Task *p_Task );
+	bool Remove( Task *p_Task );
+
+protected:
+	TaskHandler();
+
 private:
 	list<Task*> tasks;
+
+	int processCounter;
 };
 
 #endif
