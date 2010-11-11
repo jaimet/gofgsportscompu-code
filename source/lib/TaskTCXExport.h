@@ -17,29 +17,35 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef TASKTCXEXPORT_C
+#define TASKTCXEXPORT_C
+
+#include <string>
+
+#include <tinyxml.h>
+
 #include "Task.h"
+#include "TrackReader.h"
 
-Task::Task() {
-	this->processID = 0;
-	this->progressCallback = NULL;
-}
 
-void Task::SetProgressCallback( s3eCallback p_progressCallback ) {
-	this->progressCallback = p_progressCallback;
-}
+class TaskTCXExport : public Task, public TrackReader {
+public:
+	TaskTCXExport( std::string p_fileName, std::string p_exportFileName );
 
-void Task::SetProcessID( int p_processID ) {
-	this->processID = p_processID;
-}
+	void Start();
+	int Next();
+	void Stop();
 
-int Task::GetProcessID() {
-	return this->processID;
-}
+protected:
+	TiXmlElement *CreateTCXPoint();
 
-void Task::UpdateProgress( int p_percent ) {
-	int *percent = &p_percent;
+	std::string exportFileName;	// Name of export file
+	TiXmlDocument doc;			// Reference to XML doc
+	TiXmlElement *trackNode;	// TrackNode is the master-noder for all data-points
+	TiXmlElement *lapNode;		// LapNode is the master node for all additional information
 
-	if( this->progressCallback != NULL ) {
-		(*progressCallback)( percent, NULL );
-	}
-}
+	DataPoint *currentPoint;	// Current data point
+	int lastProgressUpdate;		// Percent value the progress was last updated
+};
+
+#endif

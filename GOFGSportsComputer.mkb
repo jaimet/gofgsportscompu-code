@@ -28,6 +28,8 @@ files
   Task.cpp 
   TaskHTTPExport.h
   TaskHTTPExport.cpp 
+  TaskTCXExport.h
+  TaskTCXExport.cpp 
 	TrackReader.h
 	TrackReader.cpp
 

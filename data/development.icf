@@ -24,7 +24,7 @@ ContactsFromAddrBook = 		Type=bool, Default="false", Value = "false"
 
 DeviceAdvanceSoftkeyPosition = 		Type=string, Allowed="Bottom Left" "Bottom Right" "Top Right" "Top Left", Default="Bottom Left", Value = "Bottom Left"
 
-DeviceArch = 		Type=string, Allowed="ARM4T" "ARM4" "ARM5T" "ARM5TE" "ARM5TEJ" "ARM6" "ARM6K" "ARM6T2" "ARM6Z" "X86", Default="X86", Value = "X86"
+DeviceArch = 		Type=string, Allowed="<Use Native Architecture>" "ARM4T" "ARM4" "ARM5T" "ARM5TE" "ARM5TEJ" "ARM6" "ARM6K" "ARM6T2" "ARM6Z" "X86" "PPC" "AMD64" "ARM7", Default="<Use Native Architecture>", Value = "X86"
 
 DeviceBackSoftkeyPosition = 		Type=string, Allowed="Bottom Left" "Bottom Right" "Top Right" "Top Left", Default="Bottom Right", Value = "Bottom Right"
 
@@ -44,7 +44,7 @@ DeviceIMSI = 		Type=string, Default="SIMULATOR_IMSI", Value = "SIMULATOR_IMSI"
 
 DeviceLSKIsBack = 		Type=bool, Default="false", Value = "false"
 
-DeviceLanguage = 		Type=string, Allowed="UNKNOWN" "ENGLISH" "FRENCH" "GERMAN" "SPANISH" "ITALIAN" "PORTUGUESE" "DUTCH" "TURKISH" "CROATIAN" "CZECH" "DANISH" "FINNISH" "HUNGARIAN" "NORWEGIAN" "POLISH" "RUSSIAN" "SERBIAN" "SLOVAK" "SLOVENIAN" "SWEDISH" "UKRAINIAN" "GREEK" "JAPANESE" "SIMPL_CHINESE" "TRAD_CHINESE" "KOREAN" "ICELANDIC" "FLEMISH" "THAI" "AFRIKAANS" "ALBANIAN" "AMHARIC" "ARABIC" "ARMENIAN" "AZERBAIJANI" "TAGALOG" "BELARUSSIAN" "BENGALI" "BULGARIAN" "BURMESE" "CATALAN" "ESTONIAN" "FARSI" "GAELIC" "GEORGIAN" "GUJARATI" "HEBREW" "HINDI" "INDONESIAN" "IRISH" "KANNADA" "KAZAKH" "KHMER" "LAO" "LATVIAN" "LITHUANIAN" "MACEDONIAN" "MALAY" "MALAYALAM" "MARATHI" "MOLDOVIAN" "MONGOLIAN" "PUNJABI" "ROMANIAN" "SINHALESE" "SOMALI" "SWAHILI" "TAJIK" "TAMIL" "TELUGU" "TIBETAN" "TIGRINYA" "TURKMEN" "URDU" "UZBEK" "VIETNAMESE" "WELSH" "ZULU", Default="ENGLISH", Value = "ENGLISH"
+DeviceLanguage = 		Type=string, Allowed="UNKNOWN" "ENGLISH" "FRENCH" "GERMAN" "SPANISH" "ITALIAN" "PORTUGUESE" "DUTCH" "TURKISH" "CROATIAN" "CZECH" "DANISH" "FINNISH" "HUNGARIAN" "NORWEGIAN" "POLISH" "RUSSIAN" "SERBIAN" "SLOVAK" "SLOVENIAN" "SWEDISH" "UKRAINIAN" "GREEK" "JAPANESE" "SIMPL_CHINESE" "TRAD_CHINESE" "KOREAN" "ICELANDIC" "FLEMISH" "THAI" "AFRIKAANS" "ALBANIAN" "AMHARIC" "ARABIC" "ARMENIAN" "AZERBAIJANI" "TAGALOG" "BELARUSSIAN" "BENGALI" "BULGARIAN" "BURMESE" "CATALAN" "ESTONIAN" "FARSI" "GAELIC" "GEORGIAN" "GUJARATI" "HEBREW" "HINDI" "INDONESIAN" "IRISH" "KANNADA" "KAZAKH" "KHMER" "LAO" "LATVIAN" "LITHUANIAN" "MACEDONIAN" "MALAY" "MALAYALAM" "MARATHI" "MOLDOVIAN" "MONGOLIAN" "PUNJABI" "ROMANIAN" "SINHALESE" "SOMALI" "SWAHILI" "TAJIK" "TAMIL" "TELUGU" "TIBETAN" "TIGRINYA" "TURKMEN" "URDU" "UZBEK" "VIETNAMESE" "WELSH" "ZULU" "<Use Native Language>", Default="<Use Native Language>", Value = "ENGLISH"
 
 DeviceMainsPower = 		Type=bool, Default="false", Value = "false"
 
@@ -73,6 +73,8 @@ FileUseTotalStorageSize = 		Type=bool, Default="false", Value = "false"
 GLAPI = 		Type=string, Allowed="None" "GLES 1.0 Common-Lite Profile from Imagination POWERVR(TM)" "GLES 1.1 Common-Lite Profile from Imagination POWERVR(TM)" "GLES 1.0 Common Profile from Imagination POWERVR(TM)" "GLES 1.1 Common Profile from Imagination POWERVR(TM)" "GLES 2.0 from Imagination POWERVR(TM)" "Obey [S3E] GLESVersion .icf setting" "GLES 1.1 Common Profile from Qualcomm Snapdragon(TM)" "GLES 2.0 from Qualcomm Snapdragon(TM)", Default="Obey [S3E] GLESVersion .icf setting", Value = "Obey [S3E] GLESVersion .icf setting"
 
 GLDontUseHiddenWindow = 		Type=bool, Default="false", Value = "false"
+
+GLUsePVRVFrame = 		Type=bool, Default="false", Value = "false"
 
 KeyboardHasAlpha = 		Type=bool, Default="true", Value = "true"
 
@@ -129,6 +131,12 @@ SocketDNSDelay = 		Type=int, Min=0.000000, Max=30000.000000, Default="0", Value 
 SocketHTTPProxy = 		Type=string, Default="", Value = ""
 
 SocketHostName = 		Type=string, Default="", Value = ""
+
+SocketNetworkAvailable = 		Type=bool, Default="true", Value = "true"
+
+SocketNetworkLoss = 		Type=bool, Default="false", Value = "false"
+
+SocketNetworkType = 		Type=string, Allowed="NONE" "UNKNOWN" "LAN" "WLAN" "GPRS" "UMTS" "EVDO" "CDMA2000" "HSDPA", Default="LAN", Value = "LAN"
 
 SoundEnabled = 		Type=bool, Default="true", Value = "true"
 

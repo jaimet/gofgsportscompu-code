@@ -27,6 +27,8 @@ int TaskHandler::Add( Task *p_Task ) {
 	if( p_Task->GetProcessID() <= 0 ) {
 		p_Task->SetProcessID( ++(this->processCounter) );
 		this->tasks.push_back( p_Task );
+
+		p_Task->Start();
 	}
 
 	return p_Task->GetProcessID();
@@ -35,21 +37,19 @@ int TaskHandler::Add( Task *p_Task ) {
 void TaskHandler::Run() {
 	for( list<Task*>::iterator it = this->tasks.begin(); it != this->tasks.end(); it++ ) {
 		if( (*it)->Next() <= 0 ) {
-			(*it)->Stop();
-			this->tasks.remove( *it );
+			this->Remove( (*it) );
+			//delete (*it);
+			break;
 		}
 	}
 }
 
 bool TaskHandler::Remove( Task *p_Task ) {
-	for( list<Task*>::iterator it = this->tasks.begin(); it != this->tasks.end(); it++ ) {
-		if( (*it) == p_Task ) {
-			this->tasks.remove( *it );
-			return true;
-		}
-	}
+	p_Task->Stop();
+	p_Task->SetProcessID( 0 );
+	this->tasks.remove( p_Task );
 
-	return false;
+	return true;
 }
 
 TaskHandler::TaskHandler() {

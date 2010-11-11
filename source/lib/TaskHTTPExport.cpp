@@ -19,30 +19,85 @@
 
 #include "TaskHTTPExport.h"
 
-TaskHTTPExport::TaskHTTPExport( char *p_filename ) : Task(), TrackReader() {
+template<>
+TaskHTTPExport *Singleton<TaskHTTPExport>::mySelf = NULL;
+
+TaskHTTPExport::TaskHTTPExport() : Task(), TrackReader() {
 	this->http = new CIwHTTP();
-	this->sequence = 0;
+	this->http->SetRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
 
 	// Prepare the track reader part
-	this->SetFile( p_filename );
+	//this->SetFile( p_filename );
 }
 
 void TaskHTTPExport::Start() {
+	this->sequence = 0;
+	this->bRequestPending = false;
+	this->sendBuffer = "a=b";	// Prefix to have a valid request string
+
+	if( !this->filename.empty() ) {
+		this->SetFile( (char*) this->filename.c_str() );
+	}
 }
 
 int TaskHTTPExport::Next() {
+	if( this->bRequestPending ) return 1;
+
 	DataPoint *myPoint = this->ReadNextPoint();
 	if( myPoint == NULL ) {
 		return -1;
 	}
 
 	// Format the post body
-	sprintf( this->sendBuffer, "sequence=%d&unixtime=%d&lat=%.4f&lon=%.4f&alt=%.4f&distance=%.2f&speed=%.2f&hr=%d", this->sequence++, myPoint->unixtime, myPoint->lat, myPoint->lon, myPoint->alt, myPoint->dist, myPoint->speed, myPoint->hr );
-	this->http->Post( "http://www.senegate.at/post_test.php", this->sendBuffer, strlen( this->sendBuffer ), NULL, NULL );
+	// Add time information
+	sprintf( this->formatBuffer, "&unixtime[%d]=%d", this->sequence, myPoint->unixtime );
+	this->sendBuffer += this->formatBuffer;
+	// Add position information
+	sprintf( this->formatBuffer, "&lat[%d]=%.9f", this->sequence, myPoint->lat );
+	this->sendBuffer += this->formatBuffer;
+	sprintf( this->formatBuffer, "&lon[%d]=%.9f", this->sequence, myPoint->lon );
+	this->sendBuffer += this->formatBuffer;
+	sprintf( this->formatBuffer, "&alt[%d]=%.2f", this->sequence, myPoint->alt );
+	this->sendBuffer += this->formatBuffer;
+	// Add distance info
+	sprintf( this->formatBuffer, "&distance[%d]=%.2f", this->sequence, myPoint->dist );
+	this->sendBuffer += this->formatBuffer;
+	// Add speed info
+	sprintf( this->formatBuffer, "&speed[%d]=%.2f", this->sequence, myPoint->speed );
+	this->sendBuffer += this->formatBuffer;
+	// Add heartrate info
+	sprintf( this->formatBuffer, "&hr[%d]=%d", this->sequence, myPoint->hr );
+	this->sendBuffer += this->formatBuffer;
+
+	// Increase sequence
+	this->sequence++;
+
+	// Always send 10 datapoints at once
+	if( (this->sequence % 50) == 0 ) {
+		this->http->Post( "http://www.senegate.at/post_test.php", this->sendBuffer.c_str(), strlen( this->sendBuffer.c_str() ), &TaskHTTPExport::CB_HeaderReceived, NULL );
+		this->bRequestPending = true;
+	}
 
 	return 1;
 }
 
 void TaskHTTPExport::Stop() {
+	this->http->Cancel();
 	this->CloseFile();
+}
+
+void TaskHTTPExport::SetFileName( std::string p_filename ) {
+	this->filename = p_filename;
+}
+
+// Called by the HTTP Object once the answer headers are received (and thus the request is finished)
+// TODO: Add status checks for the request
+int32 TaskHTTPExport::CB_HeaderReceived( void *systemData, void *userData ) {
+	TaskHTTPExport::Self()->bRequestPending = false;
+	//TaskHTTPExport::Self()->sendBuffer.clear();
+	TaskHTTPExport::Self()->sendBuffer = "a=b";	// Prefix to have a valid request string
+
+	TaskHTTPExport::Self()->UpdateProgress( (int) (100.0 / (float) TaskHTTPExport::Self()->GetFileSize() * (float) TaskHTTPExport::Self()->GetBytesRead()) );
+
+	return 0;
 }

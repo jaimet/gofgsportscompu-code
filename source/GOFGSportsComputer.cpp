@@ -66,8 +66,10 @@ void GOFGShutDown() {
 * Update the View
 */
 bool GOFGUpdate() {
-	// Update the tasks
-	TaskHandler::Self()->Run();
+	// Update the tasks (run 50 cycles per rendering)
+	for( int i = 0; i < 50; i++ ) {
+		TaskHandler::Self()->Run();
+	}
 
 	IwGetUIController()->Update();
 	IwGetUIView()->Update(25);

@@ -27,6 +27,10 @@
 #include "../lib/TrackExportHandler.h"
 #include "../lib/SettingsHandler.h"
 
+#include "../lib/TaskHandler.h"
+#include "../lib/TaskHTTPExport.h"
+#include "../lib/TaskTCXExport.h"
+
 enum ExportFormat {
 	FITLOG,
 	TCX,

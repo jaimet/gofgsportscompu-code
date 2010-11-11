@@ -23,13 +23,14 @@ template<>
 TrackReader *Singleton<TrackReader>::mySelf = NULL;
 
 DataPoint *TrackReader::ReadNextPoint() {
-	static int next_unixtime = 0;
+	// Check if the file is open
+	if( this->inFile == NULL ) return NULL;
 
 	// Reset the current dataPoint
 	this->dataPoint->reset();
 
 	// Store unixtime from last call in the datapoint reference
-	this->dataPoint->unixtime = next_unixtime;
+	this->dataPoint->unixtime = this->next_unixtime;
 	
 	// Buffer for reading the file content
 	char myBuf[BUFFER_SIZE];
@@ -53,7 +54,7 @@ DataPoint *TrackReader::ReadNextPoint() {
 		// Time data-point
 		case 1:
 			// Save new timestamp
-			next_unixtime = atoi( data );
+			this->next_unixtime = atoi( data );
 
 			// Check if this is already the timestamp of the next data-point
 			if( this->dataPoint->unixtime != 0 ) {
@@ -61,7 +62,8 @@ DataPoint *TrackReader::ReadNextPoint() {
 			}
 			// This is the first datapoint
 			else {
-				this->dataPoint->unixtime = next_unixtime;
+				this->dataPoint->unixtime = this->next_unixtime;
+				this->startTime = this->next_unixtime;
 			}
 			break;
 		// Position data-point
@@ -107,6 +109,8 @@ bool TrackReader::SetFile( char *p_fileName ) {
 
 void TrackReader::CloseFile() {
 	s3eFileClose( this->inFile );
+
+	this->Reset();
 }
 
 int TrackReader::GetFileSize() {
@@ -115,8 +119,24 @@ int TrackReader::GetFileSize() {
 	return s3eFileGetSize( this->inFile );
 }
 
+int TrackReader::GetBytesRead() {
+	return this->bytesRead;
+}
+
+int TrackReader::GetStartTime() {
+	return this->startTime;
+}
+
 TrackReader::TrackReader() {
 	this->dataPoint = new DataPoint();
+
+	this->Reset();
+}
+
+void TrackReader::Reset() {
 	this->inFile = NULL;
 	this->bytesRead = 0;
+	this->next_unixtime = 0;
+	this->startTime = 0;
+	this->dataPoint->reset();
 }

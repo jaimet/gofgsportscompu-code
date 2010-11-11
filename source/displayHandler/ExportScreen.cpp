@@ -89,8 +89,10 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 }
 
 int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
-	iwfixed *progress = (iwfixed *) systemData;
-	ExportScreen::Self()->exportProgress->SetProgress( *progress );
+	int *percent = (int*) systemData;
+
+	//iwfixed *progress = (iwfixed *) systemData;
+	ExportScreen::Self()->exportProgress->SetProgress( IW_FIXED( (float) *percent / 100.0 ) );
 	char *status = NULL;
 
 	// Check if we have a custom message
@@ -100,7 +102,7 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	// if not just display the percent
 	else {
 		char statusBuf[6];
-		sprintf( statusBuf, "%d %%", (int)(IW_FIXED_TO_FLOAT(*progress) * 100.0) );
+		sprintf( statusBuf, "%d %%", *percent );
 
 		status = statusBuf;
 	}
@@ -108,10 +110,10 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	ExportScreen::Self()->exportStatus->SetCaption( status );
 
 	// Manually call the drawing functions
-	IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
+	/*IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
 	IwGetUIView()->Render();
 	IwGxFlush();
-	IwGxSwapBuffers();
+	IwGxSwapBuffers();*/
 
 	return 0;
 }
@@ -137,12 +139,20 @@ int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
 	}
 	// .. direct upload to GPSies.com ..
 	else if( ExportScreen::Self()->exportFormat == GPSIES ) {
-		TrackExportHandler::Self()->exportToGPSies( fullFileName );
+		//TrackExportHandler::Self()->exportToGPSies( fullFileName );
+		TaskHTTPExport::Self()->SetFileName( fullFileName );
+		TaskHTTPExport::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+
+		TaskHandler::Self()->Add( TaskHTTPExport::Self() );
 	}
 	// or Garmin TCX
 	else {
 		strcpy( extString, ".tcx" );
-		TrackExportHandler::Self()->exportToTCX( fullFileName, exportName );
+		TaskTCXExport *tcxExport = new TaskTCXExport( fullFileName, exportName );
+		tcxExport->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+
+		TaskHandler::Self()->Add( tcxExport );
+		//TrackExportHandler::Self()->exportToTCX( fullFileName, exportName );
 	}
 
 	return 0;

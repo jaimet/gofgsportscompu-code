@@ -29,7 +29,7 @@
 #include <time.h>
 
 // Simple helper struct for managing the data-point for an export
-struct DataPoint {
+/*struct DataPoint {
 	DataPoint() {
 		this->reset();
 	}
@@ -51,22 +51,29 @@ struct DataPoint {
 	double speed;	// Current speed
 	int hr;			// Heart rate
 	int unixtime;	// Unix Timestamp
-};
+};*/
+
+#include "TrackExportHandler.h"
 
 class TrackReader {
-public:
+protected:
+	TrackReader();
+
 	DataPoint *ReadNextPoint();
 	bool SetFile( char *p_fileName );
 	void CloseFile();
 	int GetFileSize();
+	int GetBytesRead();
+	int GetStartTime();
 
-protected:
-	TrackReader();
+	void Reset();
 
 private:
 	DataPoint *dataPoint;
 	s3eFile *inFile;
 	int bytesRead;
+	int next_unixtime;
+	int startTime;
 };
 
 #endif

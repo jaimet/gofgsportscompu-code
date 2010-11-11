@@ -20,23 +20,35 @@
 #ifndef TASKHTTPEXPORT_C
 #define TASKHTTPEXPORT_C
 
+#include <IwHTTP.h>
+#include <string>
+
 #include "Task.h"
 #include "TrackReader.h"
+#include "Singleton.h"
 
-#include "IwHTTP.h"
 
-class TaskHTTPExport : public Task, public TrackReader {
+class TaskHTTPExport : public Task, public TrackReader, public Singleton<TaskHTTPExport> {
+	friend class Singleton<TaskHTTPExport>;
 public:
-	TaskHTTPExport( char *p_filename );
-
 	void Start();
 	int Next();
 	void Stop();
 
+	void SetFileName( std::string p_filename );
+
+	static int32 CB_HeaderReceived( void *systemData, void *userData );
+
 protected:
+	TaskHTTPExport();
+
 	CIwHTTP *http;
-	char sendBuffer[100];
+	char formatBuffer[30];
 	int sequence;
+	bool bRequestPending;
+
+	std::string filename;
+	std::string sendBuffer;
 };
 
 #endif
