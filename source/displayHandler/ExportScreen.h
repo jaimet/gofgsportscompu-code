@@ -49,7 +49,7 @@ public:
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
 
 	static int32 CB_UpdateProgress( void *systemData, void *userData  );
-	static int32 CB_StartExport( void *systemData, void *userData );
+//	static int32 CB_StartExport( void *systemData, void *userData );
 
 private:
 	ExportScreen();
@@ -59,6 +59,8 @@ private:
 	CIwUIProgressBar *exportProgress;
 	CIwUILabel *exportStatus;
 	CIwUITableView *trackList;
+
+	Task *exportTask;
 };
 
 #endif

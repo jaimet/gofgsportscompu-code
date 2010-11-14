@@ -40,6 +40,7 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	// Initialize values
 	strcpy( this->es_currentFile, "" );
 	this->exportFormat = FITLOG;
+	this->exportTask = NULL;
 
 	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( SettingsHandler::Self()->GetInt( "DefaultExportType" ) );
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
@@ -59,7 +60,36 @@ void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
 
 void ExportScreen::ES_ExportButtonClick(CIwUIElement*) {
 	if( strlen( this->es_currentFile ) > 0 ) {
-		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
+//		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
+		char fullFileName[30];
+		char exportName[30];
+		char *extString;
+
+		sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
+		sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
+
+		// Change extension
+		extString = strstr( exportName, ".gsc" );
+
+		// Start the correct process
+		switch( this->exportFormat ) {
+		case FITLOG:
+			strcpy( extString, ".fitlog" );
+			TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
+			break;
+		case GPSIES:
+			TaskHTTPExport::Self()->SetFileName( fullFileName );
+			TaskHTTPExport::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+			TaskHandler::Self()->Add( TaskHTTPExport::Self() );
+			break;
+		case TCX:
+		default:
+			strcpy( extString, ".tcx" );
+			TaskTCXExport *tcxExport = new TaskTCXExport( fullFileName, exportName );
+			tcxExport->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+			TaskHandler::Self()->Add( tcxExport );
+			break;
+		}
 	}
 }
 
@@ -121,7 +151,7 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 // Callback for calling the export function using a timer, the advantage is,
 // that it then is called from s3eDeviceYield which allows calling the render functions
 // from within the callback of the export
-int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
+/*int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
 	char fullFileName[30];
 	char exportName[30];
 	char *extString;
@@ -156,4 +186,4 @@ int32 ExportScreen::CB_StartExport( void *systemData, void *userData ) {
 	}
 
 	return 0;
-}
+}*/
