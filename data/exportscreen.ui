@@ -74,7 +74,7 @@ CIwUIElement
 				caption ""
 				texture "foldermove"
 				sizeToContent true
-				OnButtonClick  { "ES_ExportButtonClick" }
+				OnButtonClick  { "CB_ESExportButtonClick" }
 			}
 			
 			CIwUILayoutGrid {
@@ -100,7 +100,7 @@ CIwUIElement
 			radioButtonStyles {
 				{ caption "Fitlog" style <radio_left> } 
 				{ caption "TCX" style <radio_centre> } 
-				{ caption "GPSies" style <radio_right> } 
+				{ caption "GOFG" style <radio_right> } 
 			}
 		}
 

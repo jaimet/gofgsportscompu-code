@@ -24,17 +24,17 @@
 
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
-#include "../lib/TrackExportHandler.h"
 #include "../lib/SettingsHandler.h"
 
 #include "../lib/TaskHandler.h"
 #include "../lib/TaskHTTPExport.h"
 #include "../lib/TaskTCXExport.h"
+#include "../lib/TaskFitlogExport.h"
 
 enum ExportFormat {
 	FITLOG,
 	TCX,
-	GPSIES
+	GOFG
 };
 
 class ExportScreen : public Screen, public Singleton<ExportScreen>
@@ -44,7 +44,7 @@ public:
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 
 	void ES_ExitButtonClick(CIwUIElement*);
-	void ES_ExportButtonClick(CIwUIElement*);
+	void CB_ESExportButtonClick(CIwUIElement*);
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
 

@@ -18,8 +18,6 @@ files
 	GPSHandler.cpp 
 	TrackHandler.h
 	TrackHandler.cpp 
-	TrackExportHandler.h
-	TrackExportHandler.cpp 
 	SettingsHandler.h
 	SettingsHandler.cpp 
 	TaskHandler.h
@@ -32,6 +30,8 @@ files
   TaskTCXExport.cpp 
 	TrackReader.h
 	TrackReader.cpp
+	TaskFitlogExport.h
+	TaskFitlogExport.cpp
 
   [UiLib]
   (source/uiLib)

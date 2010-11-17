@@ -25,7 +25,7 @@ ExportScreen *Singleton<ExportScreen>::mySelf = NULL;
 void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	if( p_bVisible ) {
 		this->trackList->RecreateItemsFromSource();
-		this->trackList->SetSelection( 0 );
+		//this->trackList->SetSelection( 0 );
 	}
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
@@ -33,7 +33,7 @@ void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 
 ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExitButtonClick, CIwUIElement*)
-	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExportButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESExportButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_HandleTrackSelection, CIwUIElement*,bool)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_ExportFormatChanged, CIwUIElement*,int16)
 	
@@ -47,18 +47,21 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	this->exportStatus = (CIwUILabel*) this->myScreen->GetChildNamed( "exportStatus" );
 	this->trackList = (CIwUITableView*) this->myScreen->GetChildNamed( "TrackList" );
 
-	TrackExportHandler::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
-
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
 
 void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
 {
+	if( this->exportTask != NULL ) {
+		TaskHandler::Self()->Remove( this->exportTask );
+		this->exportTask = NULL;
+	}
+
 	//this->myScreen->SetVisible( false );
 	this->SetVisible( false );
 }
 
-void ExportScreen::ES_ExportButtonClick(CIwUIElement*) {
+void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	if( strlen( this->es_currentFile ) > 0 ) {
 //		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
 		char fullFileName[30];
@@ -75,21 +78,23 @@ void ExportScreen::ES_ExportButtonClick(CIwUIElement*) {
 		switch( this->exportFormat ) {
 		case FITLOG:
 			strcpy( extString, ".fitlog" );
-			TrackExportHandler::Self()->exportToFitlog( fullFileName, exportName );
+			this->exportTask = new TaskFitlogExport( fullFileName, exportName );
 			break;
-		case GPSIES:
+		case GOFG:
 			TaskHTTPExport::Self()->SetFileName( fullFileName );
-			TaskHTTPExport::Self()->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
-			TaskHandler::Self()->Add( TaskHTTPExport::Self() );
+			this->exportTask = TaskHTTPExport::Self();
+			//TaskHandler::Self()->Add( TaskHTTPExport::Self() );
 			break;
 		case TCX:
 		default:
 			strcpy( extString, ".tcx" );
-			TaskTCXExport *tcxExport = new TaskTCXExport( fullFileName, exportName );
-			tcxExport->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
-			TaskHandler::Self()->Add( tcxExport );
+			this->exportTask = new TaskTCXExport( fullFileName, exportName );
 			break;
 		}
+
+		// Set progress callback & add the task to the taskhandler
+		this->exportTask->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+		TaskHandler::Self()->Add( this->exportTask );
 	}
 }
 
@@ -110,7 +115,7 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 		this->exportFormat = FITLOG;
 		break;
 	case 2:
-		this->exportFormat = GPSIES;
+		this->exportFormat = GOFG;
 		break;
 	default:
 		this->exportFormat = TCX;

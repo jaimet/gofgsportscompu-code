@@ -25,6 +25,8 @@ MainScreen *Singleton<MainScreen>::mySelf = NULL;
 void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->bStopPending = false;
 	this->totalDistance = 0.0;
+	this->totalAltitudeDiff = 0.0;
+	this->lastAltitude = 0.0;
 
 	this->StartButton->SetVisible( false );
 	this->ExitButton->SetVisible( false );
@@ -80,12 +82,15 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 
 	if( GPSHandler::Self()->updateLocation() ) {
 		MainScreen::Self()->totalDistance += GPSHandler::Self()->getDistance();
+		MainScreen::Self()->totalAltitudeDiff += (GPSHandler::Self()->getAltitude() - MainScreen::Self()->lastAltitude);
+		MainScreen::Self()->lastAltitude = GPSHandler::Self()->getAltitude();
 
 		TrackHandler::Self()->addGPSData( GPSHandler::Self()->getLongitude(), GPSHandler::Self()->getLatitude(), GPSHandler::Self()->getAltitude() );
 		TrackHandler::Self()->addDistanceData( MainScreen::Self()->totalDistance );
 		
 		MainScreen::Self()->speedInfo->setValue( GPSHandler::Self()->getSpeed() * 3.6 );
 		MainScreen::Self()->distanceInfo->setValue( MainScreen::Self()->totalDistance / 1000.0 ); // /1000.0 to convert meters to km
+		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );
 	}
 
 	// Update timer (run-time)

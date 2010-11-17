@@ -57,6 +57,8 @@ protected:
 
 	bool bStopPending;
 	double totalDistance;
+	double totalAltitudeDiff;
+	double lastAltitude;
 	time_t startTime;
 };
 
