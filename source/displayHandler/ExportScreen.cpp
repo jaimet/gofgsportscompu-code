@@ -32,7 +32,7 @@ void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 }
 
 ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
-	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, ES_ExitButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESExportButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_HandleTrackSelection, CIwUIElement*,bool)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_ExportFormatChanged, CIwUIElement*,int16)
@@ -46,18 +46,25 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
 	this->exportStatus = (CIwUILabel*) this->myScreen->GetChildNamed( "exportStatus" );
 	this->trackList = (CIwUITableView*) this->myScreen->GetChildNamed( "TrackList" );
+	this->exitButton = (CIwUIButton*) this->myScreen->GetChildNamed( "LeftButton" );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
 
-void ExportScreen::ES_ExitButtonClick(CIwUIElement*)
+void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 {
 	if( this->exportTask != NULL ) {
-		TaskHandler::Self()->Remove( this->exportTask );
+		if( this->exportTask->GetProcessID() > 0 ) {
+			TaskHandler::Self()->Remove( this->exportTask );
+		}
+
+		delete this->exportTask;
 		this->exportTask = NULL;
+
+		// Enable all controls again
+		this->SetEnabled( true );
 	}
 
-	//this->myScreen->SetVisible( false );
 	this->SetVisible( false );
 }
 
@@ -95,6 +102,15 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 		// Set progress callback & add the task to the taskhandler
 		this->exportTask->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
 		TaskHandler::Self()->Add( this->exportTask );
+
+		//this->DisableChildren( this->myScreen );
+
+		// Disable all controls
+		this->SetEnabled( false );
+		// But keep exit button active
+		this->exitButton->SetEnabled( true );
+
+		//this->mysc
 	}
 }
 
@@ -143,6 +159,11 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	}
 	// Update status text
 	ExportScreen::Self()->exportStatus->SetCaption( status );
+
+	// If progress is 100%, then we switch on controls again
+	if( *percent >= 100 ) {
+		ExportScreen::Self()->SetEnabled( true );
+	}
 
 	// Manually call the drawing functions
 	/*IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);

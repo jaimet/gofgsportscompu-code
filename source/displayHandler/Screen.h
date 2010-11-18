@@ -28,11 +28,14 @@ public:
 	Screen( char *screenName );
 
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );		// Show / Hide the screen
+	void SetEnabled( bool p_bEnabled );
 
 	void NotifyProgress( CIwUIAnimator *pAnimator );
 	void NotifyStopped( CIwUIAnimator *pAnimator );
 
 protected:
+	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
+
 	CIwUIElement *myScreen;
 };
 

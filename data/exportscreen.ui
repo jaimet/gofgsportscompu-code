@@ -63,7 +63,7 @@ CIwUIElement
 				caption ""
 				texture "delete"
 				sizeToContent true
-				OnButtonClick  { "ES_ExitButtonClick" }
+				OnButtonClick  { "CB_ESExitButtonClick" }
 			}
 			
 			CIwUIButton 

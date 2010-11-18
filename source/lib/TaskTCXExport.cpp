@@ -90,9 +90,9 @@ int TaskTCXExport::Next() {
 	}
 
 	// Read the next point
+	// We need the check here because Stop() also references currentPoint so it MUST NOT be NULL
 	DataPoint *newPoint = this->ReadNextPoint();
 	if( newPoint == NULL ) return -1;
-	
 	this->currentPoint = newPoint;
 
 	return 1;

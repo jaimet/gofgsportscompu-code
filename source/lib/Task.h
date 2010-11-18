@@ -43,7 +43,7 @@ public:
 	int GetProcessID();
 
 protected:
-	void UpdateProgress( int p_percent );
+	void UpdateProgress( int p_percent, char *message = NULL );
 
 private:
 	int processID;

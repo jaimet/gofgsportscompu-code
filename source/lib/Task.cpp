@@ -36,10 +36,10 @@ int Task::GetProcessID() {
 	return this->processID;
 }
 
-void Task::UpdateProgress( int p_percent ) {
+void Task::UpdateProgress( int p_percent, char *message ) {
 	int *percent = &p_percent;
 
 	if( this->progressCallback != NULL ) {
-		(*progressCallback)( percent, NULL );
+		(*progressCallback)( percent, message );
 	}
 }

@@ -19,8 +19,8 @@
 
 #include "TrackReader.h"
 
-template<>
-TrackReader *Singleton<TrackReader>::mySelf = NULL;
+//template<>
+//TrackReader *Singleton<TrackReader>::mySelf = NULL;
 
 DataPoint *TrackReader::ReadNextPoint() {
 	// Check if the file is open

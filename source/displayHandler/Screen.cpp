@@ -48,9 +48,30 @@ void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	}
 }
 
+void Screen::SetEnabled( bool p_bEnabled ) {
+	this->SetChildrenEnabled( this->myScreen, p_bEnabled );
+}
+
 void Screen::NotifyProgress( CIwUIAnimator *pAnimator ) {
 }
 
 void Screen::NotifyStopped( CIwUIAnimator *pAnimator ) {
 	this->myScreen->SetVisible( false );
+}
+
+void Screen::SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled ) {
+	// Disable all buttons, except the exit button
+	for( int i = 0; i < p_parent->GetNumChildren(); i++ ) {
+		CIwUIElement *currentChild = p_parent->GetChild( i );
+
+		if( dynamic_cast<CIwUIButton*>(currentChild) != NULL ) {
+			((CIwUIButton*) currentChild)->SetEnabled( p_bEnabled );
+		}
+		else if( dynamic_cast<CIwUITableViewItem*>(currentChild) != NULL ) {
+			((CIwUITableViewItem*) currentChild)->SetEnabled( p_bEnabled );
+		}
+
+		// Disable the sub-childs
+		this->SetChildrenEnabled( currentChild, p_bEnabled );
+	}
 }

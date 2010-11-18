@@ -43,7 +43,7 @@ class ExportScreen : public Screen, public Singleton<ExportScreen>
 public:
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 
-	void ES_ExitButtonClick(CIwUIElement*);
+	void CB_ESExitButtonClick(CIwUIElement*);
 	void CB_ESExportButtonClick(CIwUIElement*);
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
@@ -59,6 +59,7 @@ private:
 	CIwUIProgressBar *exportProgress;
 	CIwUILabel *exportStatus;
 	CIwUITableView *trackList;
+	CIwUIButton *exitButton;
 
 	Task *exportTask;
 };
