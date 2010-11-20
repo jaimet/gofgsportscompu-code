@@ -33,7 +33,7 @@ TaskHTTPExport::TaskHTTPExport() : Task(), TrackReader() {
 void TaskHTTPExport::Start() {
 	this->sequence = 0;
 	this->bRequestPending = false;
-	this->sendBuffer = "a=b";	// Prefix to have a valid request string
+	this->sendBuffer = "a=b";
 
 	if( !this->filename.empty() ) {
 		this->SetFile( (char*) this->filename.c_str() );
@@ -74,7 +74,10 @@ int TaskHTTPExport::Next() {
 
 	// Always send 10 datapoints at once
 	if( (this->sequence % 50) == 0 ) {
-		this->http->Post( "http://www.senegate.at/post_test.php", this->sendBuffer.c_str(), strlen( this->sendBuffer.c_str() ), &TaskHTTPExport::CB_HeaderReceived, NULL );
+		sprintf( this->formatBuffer, "&IDTrack=%d", this->GetStartTime() );
+		this->sendBuffer += this->formatBuffer;	// Prefix to have a valid request string
+
+		this->http->Post( "http://www.gofg.at/gofgst/index.php?mode=device_upload", this->sendBuffer.c_str(), strlen( this->sendBuffer.c_str() ), &TaskHTTPExport::CB_HeaderReceived, NULL );
 		this->bRequestPending = true;
 	}
 
@@ -84,6 +87,8 @@ int TaskHTTPExport::Next() {
 void TaskHTTPExport::Stop() {
 	this->http->Cancel();
 	this->CloseFile();
+
+	this->UpdateProgress( 100 );
 }
 
 void TaskHTTPExport::SetFileName( std::string p_filename ) {
