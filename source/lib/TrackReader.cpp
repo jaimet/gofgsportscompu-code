@@ -51,6 +51,20 @@ DataPoint *TrackReader::ReadNextPoint() {
 		}
 
 		switch( recordType ) {
+		// Header information
+		case 0:
+			token = strtok( data, ":" );
+			if( token == NULL ) {
+				return NULL;
+			}
+			// First entry is the GUID
+			this->trackUUID = token;
+			token = strtok( NULL, ":" );
+			if( token == NULL ) {
+				return NULL;
+			}
+			this->startTime = atoi( token );
+			break;
 		// Time data-point
 		case 1:
 			// Save new timestamp
@@ -63,7 +77,7 @@ DataPoint *TrackReader::ReadNextPoint() {
 			// This is the first datapoint
 			else {
 				this->dataPoint->unixtime = this->next_unixtime;
-				this->startTime = this->next_unixtime;
+				//this->startTime = this->next_unixtime;
 			}
 			break;
 		// Position data-point
@@ -121,6 +135,10 @@ int TrackReader::GetFileSize() {
 
 int TrackReader::GetBytesRead() {
 	return this->bytesRead;
+}
+
+std::string TrackReader::GetUUID() {
+	return this->trackUUID;
 }
 
 int TrackReader::GetStartTime() {

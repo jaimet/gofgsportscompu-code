@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <string>
+
 // Simple helper struct for managing the data-point for an export
 struct DataPoint {
 	DataPoint() {
@@ -64,6 +66,7 @@ protected:
 	int GetFileSize();
 	int GetBytesRead();
 	int GetStartTime();
+	std::string GetUUID();
 
 	void Reset();
 
@@ -73,6 +76,8 @@ private:
 	int bytesRead;
 	int next_unixtime;
 	int startTime;
+
+	std::string trackUUID;
 };
 
 #endif

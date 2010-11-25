@@ -36,6 +36,18 @@ bool TrackHandler::startTracking( char *fileName ) {
 		// Reset track handler
 		this->dataFlags->Reset();
 
+		// Write header information
+		char headerBuffer[49];
+		IwRandSeed( (int32) s3eTimerGetUTC() );
+		// Generate Type-4 UUID here
+		sprintf( headerBuffer, "%04X%04X-%04X-4%03X-%X%03X-%04X%04X%04X", IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFF ), IwRandMinMax( 0x8, 0xB ), IwRandMinMax( 0, 0xFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ) );
+		s3eFileWrite( "00;", 3, 1, this->fileHandler );
+		s3eFileWrite( headerBuffer, strlen( headerBuffer ), 1, this->fileHandler );
+		sprintf( headerBuffer, ":%d\n", (int)((double) s3eTimerGetUTC() / 1000.0) );
+		s3eFileWrite( headerBuffer, strlen( headerBuffer ), 1, this->fileHandler );
+		//sprintf( headerBuffer, "00;%s:%d", 
+		//s3eFileWrite( "00;", 3, 1, this->fileHandler );
+
 		return true;
 	}
 

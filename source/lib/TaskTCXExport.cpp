@@ -64,7 +64,7 @@ void TaskTCXExport::Start() {
 		athleteNode->LinkEndChild( activityNode );
 
 		TiXmlElement *idNode = new TiXmlElement( "Id" );
-		idNode->LinkEndChild( new TiXmlText( startTimeString ) );
+		idNode->LinkEndChild( new TiXmlText( this->GetUUID().c_str() ) );
 		activityNode->LinkEndChild( idNode );
 
 		this->lapNode = new TiXmlElement( "Lap" );

@@ -55,7 +55,7 @@ void TaskFitlogExport::Start() {
 		topNode->LinkEndChild( athleteNode );
 
 		TiXmlElement *activityNode = new TiXmlElement( "Activity" );
-		activityNode->SetAttribute( "Id", time( NULL ) );
+		activityNode->SetAttribute( "Id", this->GetUUID().c_str() );
 		activityNode->SetAttribute( "StartTime", startTimeString );
 		athleteNode->LinkEndChild( activityNode );
 

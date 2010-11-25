@@ -63,8 +63,8 @@ int TaskHTTPExport::Next() {
 	sprintf( this->formatBuffer, "&distance[%d]=%.2f", this->sequence, myPoint->dist );
 	this->sendBuffer += this->formatBuffer;
 	// Add speed info
-	sprintf( this->formatBuffer, "&speed[%d]=%.2f", this->sequence, myPoint->speed );
-	this->sendBuffer += this->formatBuffer;
+	//sprintf( this->formatBuffer, "&speed[%d]=%.2f", this->sequence, myPoint->speed );
+	//this->sendBuffer += this->formatBuffer;
 	// Add heartrate info
 	sprintf( this->formatBuffer, "&hr[%d]=%d", this->sequence, myPoint->hr );
 	this->sendBuffer += this->formatBuffer;
@@ -74,7 +74,7 @@ int TaskHTTPExport::Next() {
 
 	// Always send 10 datapoints at once
 	if( (this->sequence % 50) == 0 ) {
-		sprintf( this->formatBuffer, "&IDTrack=%d", this->GetStartTime() );
+		sprintf( this->formatBuffer, "&trackUUID=%s", this->GetUUID() );
 		this->sendBuffer += this->formatBuffer;	// Prefix to have a valid request string
 
 		this->http->Post( "http://www.gofg.at/gofgst/index.php?mode=device_upload", this->sendBuffer.c_str(), strlen( this->sendBuffer.c_str() ), &TaskHTTPExport::CB_HeaderReceived, NULL );

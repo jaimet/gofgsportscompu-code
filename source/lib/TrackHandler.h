@@ -23,6 +23,8 @@
 #include "s3eFile.h"
 #include "IwGx.h"
 
+#include "IwRandom.h"
+
 #include "time.h"
 
 struct DataFlags {
