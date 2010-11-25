@@ -43,7 +43,7 @@ protected:
 	TaskHTTPExport();
 
 	CIwHTTP *http;
-	char formatBuffer[30];
+	char formatBuffer[50];
 	int sequence;
 	bool bRequestPending;
 

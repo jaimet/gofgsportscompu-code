@@ -72,7 +72,7 @@ int TaskHTTPExport::Next() {
 	// Increase sequence
 	this->sequence++;
 
-	// Always send 10 datapoints at once
+	// Always send 50 datapoints at once
 	if( (this->sequence % 50) == 0 ) {
 		sprintf( this->formatBuffer, "&trackUUID=%s", this->GetUUID() );
 		this->sendBuffer += this->formatBuffer;	// Prefix to have a valid request string
