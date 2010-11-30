@@ -22,10 +22,11 @@
 
 #include "s3eFile.h"
 #include "IwGx.h"
-
 #include "IwRandom.h"
 
 #include "time.h"
+
+#include <string>
 
 struct DataFlags {
 	bool bGPS;
@@ -45,7 +46,7 @@ class TrackHandler {
 public:
 	static TrackHandler *Self();
 
-	bool startTracking( char *fileName );
+	bool startTracking( std::string fileName );
 	void stopTracking();
 
 	void addGPSData( double lon, double lat, double alt );

@@ -24,6 +24,8 @@
 #include "IwUIElement.h"
 #include "IwPropertyString.h"
 
+#include "../lib/SettingsHandler.h"
+
 #include "dirent.h"
 #include <string>
 #include <vector>

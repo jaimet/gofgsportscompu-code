@@ -100,7 +100,7 @@ CIwUIElement
 			radioButtonStyles {
 				{ caption "Fitlog" style <radio_left> } 
 				{ caption "TCX" style <radio_centre> } 
-				{ caption "GOFG" style <radio_right> } 
+				{ caption "GOFG" style <radio_right> visible false } 
 			}
 		}
 

@@ -42,6 +42,7 @@ CIwUIElement
 			caption ""
 			texture "menu_settings"
 			sizeToContent true
+			visible false
 			//OnButtonClick  { "MS_CloseButtonClick" }
 		}
 

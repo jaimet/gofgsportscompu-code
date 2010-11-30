@@ -94,7 +94,7 @@ bool SettingsHandler::Save() {
 
 SettingsHandler::SettingsHandler() {
 	// Define default settings here
-	this->settingsStore["TrackFolder"] = "tracks";
+	this->settingsStore["TrackFolder"] = "./";
 	this->settingsStore["DefaultExportType"] = "0";
 
 	this->Load();

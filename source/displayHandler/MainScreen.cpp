@@ -32,12 +32,17 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->ExitButton->SetVisible( false );
 	this->StopButton->SetVisible( true );
 
-	char fileName[20];
+	//char fileName[20];
+	std::ostringstream fileName;
 
 	// Generate file name for tracking
 	this->startTime = time( NULL );
-	sprintf( fileName, "%d.gsc", this->startTime );
-	TrackHandler::Self()->startTracking( fileName );
+
+	// Create the fileName
+	fileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << this->startTime << ".gsc";
+
+	//sprintf( fileName, "%d.gsc", this->startTime );
+	TrackHandler::Self()->startTracking( fileName.str() );
 	GPSHandler::Self()->startGPS();
 
 	// Prevent device from going to sleep

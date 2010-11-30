@@ -20,10 +20,15 @@
 #ifndef MAINSCREEN
 #define MAINSCREEN
 
+#include <string>
+#include <iostream>
+#include <sstream>
+
 #include "Screen.h"
 #include "../lib/Singleton.h"
 #include "../lib/GPSHandler.h"
 #include "../lib/TrackHandler.h"
+#include "../lib/SettingsHandler.h"
 
 #include "../uiLib/InfoPanel.h"
 

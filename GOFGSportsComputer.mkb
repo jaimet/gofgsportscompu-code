@@ -76,9 +76,16 @@ assets
 	(data-ram\data-sw)
 	gofgui.group.bin
 	iwui_style/style.group.bin
+	(data)
+	splash.jpg
+
 }
+
 deployments
 {
-	provider='GOFG'
+	name='GOFGSportsComputer'
+	caption='GOFG Sports Computer'
+	provider='Wolfgang Koller'
 	version-minor=1
+	version-major=0
 }

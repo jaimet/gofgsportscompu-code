@@ -61,7 +61,7 @@
 
 		if (val)
 		{
-			DIR* pDir = opendir("tracks");
+			DIR* pDir = opendir(SettingsHandler::Self()->GetString("TrackFolder").c_str());
 			IwAssertMsg(UI, pDir, ("Failed to open track folder"));
 			
 			if(pDir)

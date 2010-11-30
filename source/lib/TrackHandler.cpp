@@ -29,8 +29,8 @@ TrackHandler *TrackHandler::Self() {
 	return TrackHandler::mySelf;
 }
 
-bool TrackHandler::startTracking( char *fileName ) {
-	this->fileHandler = s3eFileOpen( fileName, "w" );
+bool TrackHandler::startTracking( std::string fileName ) {
+	this->fileHandler = s3eFileOpen( fileName.c_str(), "w" );
 
 	if( this->fileHandler != NULL ) {
 		// Reset track handler
