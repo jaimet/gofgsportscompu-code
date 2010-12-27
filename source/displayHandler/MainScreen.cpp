@@ -98,6 +98,17 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );
 	}
 
+	if( GPSHandler::Self()->getAccuracy() < 5.0 ) {
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_full", IW_GX_RESTYPE_TEXTURE ) );
+	}
+	else {
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_none", IW_GX_RESTYPE_TEXTURE ) );
+	}
+
+
+	// Update accuracy
+	//MainScreen::Self()->statusInfo->setValue( GPSHandler::Self()->getAccuracy() );
+
 	// Update timer (run-time)
 	char myBuf[10];
 	time_t timeNow = time( NULL );
@@ -176,13 +187,27 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->altitudeInfo = altitudeInfo;
 	gridLayout->AddElement( altitudeInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
+	// Find timer/status grid
+	CIwUIElement *timeStatusElement = this->myScreen->GetChildNamed( "TimeStatusElement" );
+	CIwUILayoutGrid *timeStatusLayout = (CIwUILayoutGrid*) timeStatusElement->GetLayout();
+
 	// Add time infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "timer24", IW_GX_RESTYPE_TEXTURE );
 	InfoPanel *timeInfo = new InfoPanel( "timeInfo", true );
 	timeInfo->setUnit( "hh:mm:ss" );
 	timeInfo->setImage( texture );
+	timeInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
 	this->timeInfo = timeInfo;
-	gridLayout->AddElement( timeInfo->getInfoPanel(), 1, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
+	timeStatusLayout->AddElement( timeInfo->getInfoPanel(), 0, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
+
+	// Add time infopanel to grid
+	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "Satellite", IW_GX_RESTYPE_TEXTURE );
+	InfoPanel *statusInfo = new InfoPanel( "statusInfo", true );
+	statusInfo->setUnit( "Status" );
+	statusInfo->setImage( texture );
+	statusInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
+	this->statusInfo = statusInfo;
+	timeStatusLayout->AddElement( statusInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
 	// Add clock infopanel to grid
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "clock24", IW_GX_RESTYPE_TEXTURE );
@@ -205,6 +230,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->distanceInfo->setValue( "0.00" );
 	this->altitudeInfo->setValue( "0.00" );
 	this->timeInfo->setValue( "00:00:00" );
+	this->statusInfo->setValue( "0000.00" );
 }
 
 /**

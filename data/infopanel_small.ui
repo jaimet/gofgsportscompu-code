@@ -52,6 +52,7 @@ CIwUIElement
 //			CIwUILayoutHorizontal 
 //			{
 //				//sizeToSpace true
+				sizeMax { -1 24 }
 //			
 //				element {
 //					name "Image"
@@ -74,6 +75,12 @@ CIwUIElement
 			alignV top
 		}
 
+		CIwUIImage {
+			name "CurrentImage"
+			texture "delete"
+			visible false
+		}
+
 		CIwUILayoutGrid {
 			name "DisplayGrid"
 			numColumns 1
@@ -92,6 +99,10 @@ CIwUIElement
 				row 1
 				//alignH "centre"
 				alignV top
+			}
+			element {
+				name "CurrentImage"
+				row 1
 			}
 		}
 	}

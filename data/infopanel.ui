@@ -19,8 +19,7 @@ CIwUIElement
 		CIwUIElement {
 			name "UnitLayout"
 			
-			CIwUIImage 
-			{
+			CIwUIImage {
 				name "Image"
 				size { 24 24 }
 				sizeMin { 24 24 }
@@ -39,7 +38,8 @@ CIwUIElement
 			}
 
 			CIwUILayout {
-				sizeToSpace true
+				//sizeToSpace true
+				sizeMax { -1 24 }
 
 				element {
 					name "Image"
@@ -50,8 +50,7 @@ CIwUIElement
 			}
 		}
 		
-		CIwUIAutoSizeLabel
-		{
+		CIwUIAutoSizeLabel {
 			name "CurrentLabel"
 			style <label_large>
 			font "font_huge"
@@ -60,15 +59,21 @@ CIwUIElement
 			//sizeToContent false
 			alignH centre
 		}
-		CIwUILabel 
-		{
+
+		CIwUIImage {
+			name "CurrentImage"
+			texture "delete"
+			visible false
+		}
+
+		CIwUILabel {
 			name "MaximumText"
 			style <label_small>
 			caption "Max:"
 			sizeMax  { -1 0 }
 		}
-		CIwUILabel 
-		{
+
+		CIwUILabel {
 			name "MaximumLabel"
 			style <label_small>
 			caption ""
@@ -106,6 +111,11 @@ CIwUIElement
 				columnSpan 2
 				row 1
 				//alignH "centre"
+			}
+			element {
+				name "CurrentImage"
+				columnSpan 2
+				row 1
 			}
 			element 
 			{

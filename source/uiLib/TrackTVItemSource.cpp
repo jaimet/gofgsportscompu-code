@@ -71,10 +71,15 @@
 					if (pDirEnt->d_type == DT_REG)
 					{
 						std::string fileName(pDirEnt->d_name);
-						if(!stricmp(fileName.substr(fileName.rfind('.')).c_str(), ".gsc"))
+						//size_t 
+						if( fileName.rfind( ".gsc" ) == ( fileName.length() - 4 ) ) {
+							m_Files.push_back( fileName.c_str() );
+						}
+
+						/*if(!stricmp(fileName.substr(fileName.rfind('.')).c_str(), ".gsc"))
 						{
 							m_Files.push_back(fileName.c_str());
-						}
+						}*/
 					}
 				}
 				

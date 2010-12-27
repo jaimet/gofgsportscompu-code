@@ -40,6 +40,8 @@ public:
 	double getSpeed();			// Get the current speed (in m/s)
 	double getDistance();		// Get the current distance (in m)
 
+	double getAccuracy();		// Get the current accuracy of the fix (in m)
+
 	void startGPS();
 	void stopGPS();
 
@@ -55,10 +57,11 @@ private:
 
 	s3eLocation *currLocation;
 	bool bGPSActive;
-	double distance;	// Last distance in meters
-	double speed;		// Speed in meters / second (average of last 3 points)
-	double altitude;	// Current altitude in meters
-	double currSpeed;	// Current speed in meters / second
+	double distance;		// Last distance in meters
+	double speed;			// Speed in meters / second (average of last 3 points)
+	double altitude;		// Current altitude in meters
+	double currSpeed;		// Current speed in meters / second
+	double currAccuracy;	// Current accuracy of the position
 	int64 lastTime;
 
 	double distanceHistory[AVERAGE_LENGTH];

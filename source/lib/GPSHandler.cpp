@@ -43,13 +43,22 @@ bool GPSHandler::updateLocation() {
 	if( g_Error == S3E_RESULT_SUCCESS ) {
 		bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
 
+		// TODO: Replace with more generic check
+		double newAccuracy = (newLocation->m_HorizontalAccuracy + newLocation->m_VerticalAccuracy) / 2.0;
+		// Just update the accuracy (so that the app can check the accuracy)
+		if( newAccuracy > 15.0 ) {
+			this->currAccuracy = newAccuracy;
+
+			return false;
+		}
+
 		// Check if we have an old location
 		if( this->currLocation != NULL ) {
 			// Calculate distance between last and new location
 			double newDistance = this->haversineDistance( this->currLocation, newLocation );
 
 			// Check if the distance is outside the last accuracy (using average horiz & verti accuracy => avoid too complicated calculations)
-			if( newDistance >= ( this->currLocation->m_HorizontalAccuracy + this->currLocation->m_VerticalAccuracy ) / 2.0 ) {
+			if( newDistance >= this->currAccuracy ) {
 				// Calculate distance and speed based on gps location
 				//this->distance = this->haversineDistance( this->currLocation, newLocation );
 				this->distance = newDistance;
@@ -82,6 +91,8 @@ bool GPSHandler::updateLocation() {
 
 		// Save new location
 		this->currLocation = newLocation;
+		// Calculate accuracy based on average value
+		this->currAccuracy = newAccuracy;
 		// Save current time
 		this->lastTime = currTime;
 
@@ -116,6 +127,11 @@ double GPSHandler::getDistance() {
 	return this->distance;
 }
 
+// Get the current accuracy of the fix (in m)
+double GPSHandler::getAccuracy() {
+	return this->currAccuracy;
+}
+
 // Start GPS tracking
 void GPSHandler::startGPS() {
 	if( !this->bGPSActive ) {
@@ -148,6 +164,7 @@ void GPSHandler::reset() {
 	this->speed = 0.0;
 	this->currSpeed = 0.0;
 	this->altitude = 0.0;
+	this->currAccuracy = -1.0;
 
 	this->historyCount = 0;
 	for( int i = 0; i < AVERAGE_LENGTH; i++ ) {

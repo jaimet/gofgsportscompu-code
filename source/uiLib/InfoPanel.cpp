@@ -39,6 +39,7 @@ InfoPanel::InfoPanel( char *name, bool p_bNoStatistics ) {
 	this->unitLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "UnitLabel" );
 	this->currentLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "CurrentLabel" );
 	this->image = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "Image" );
+	this->currentImage = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "CurrentImage" );
 
 	// Initialize statistics vars
 	this->maximum = 0.0;
@@ -107,6 +108,17 @@ void InfoPanel::setValue( double value ) {
 
 void InfoPanel::setValue( char *value ) {
 	this->currentLabel->SetCaption( value );
+}
+
+void InfoPanel::setValue( CIwTexture *valueTexture ) {
+	if( !this->currentImage->IsVisible() ) {
+		this->currentImage->SetVisible( true );
+		this->currentLabel->SetVisible( false );
+
+		//this->currentImage->SetSize( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ), true );
+	}
+
+	this->currentImage->SetTexture( valueTexture );
 }
 
 void InfoPanel::setImage( CIwTexture *texture ) {

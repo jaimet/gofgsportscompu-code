@@ -41,8 +41,8 @@ CIwUIElement
 				sizeToContent true
 				OnButtonClick  { "MA_ExitButtonClick" }
 			}
-			CIwUIButton 
-			{
+
+			CIwUIButton {
 				name "MenuButton"
 			
 				drawableType "image"
@@ -76,12 +76,28 @@ CIwUIElement
 			}
 		}
 
+		CIwUIElement {
+			name "TimeStatusElement"
+
+			CIwUILayoutGrid {
+				numColumns 1
+				numRows 2
+				sizeToSpace true
+			}
+		}
+
 		CIwUILayoutGrid 
 		{
 			name "Grid"
 			numColumns 2
 			numRows 4
 			sizeToSpace true
+
+			element {
+				name "TimeStatusElement"
+				row 1
+				column 1
+			}
 			
 			element {
 				name "menuBar"

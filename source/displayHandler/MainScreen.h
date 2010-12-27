@@ -59,6 +59,7 @@ protected:
 	InfoPanel *altitudeInfo;
 	InfoPanel *timeInfo;
 	InfoPanel *clockInfo;
+	InfoPanel *statusInfo;
 
 	bool bStopPending;
 	double totalDistance;

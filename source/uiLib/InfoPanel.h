@@ -35,6 +35,7 @@ public:
 	void setUnit( char *unit );
 	void setValue( double value );
 	void setValue( char *value );
+	void setValue( CIwTexture *valueTexture );
 
 	void setImage( CIwTexture *texture );
 
@@ -49,6 +50,7 @@ private:
 	CIwUILabel *maximumLabel;
 
 	CIwUIImage *image;
+	CIwUIImage *currentImage;
 
 	bool bNoStatistics;
 	double maximum;
