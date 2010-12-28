@@ -36,6 +36,7 @@ public:
 
 	// Getter functions
 	int GetInt( std::string name );
+	double GetDouble( std::string name );
 	std::string GetString( std::string name );
 
 	bool Load();	// Load from disk

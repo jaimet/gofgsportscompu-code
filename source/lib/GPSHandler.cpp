@@ -43,10 +43,10 @@ bool GPSHandler::updateLocation() {
 	if( g_Error == S3E_RESULT_SUCCESS ) {
 		bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
 
-		// TODO: Replace with more generic check
+		// Calculate new accuracy
 		double newAccuracy = (newLocation->m_HorizontalAccuracy + newLocation->m_VerticalAccuracy) / 2.0;
-		// Just update the accuracy (so that the app can check the accuracy)
-		if( newAccuracy > 15.0 ) {
+		// Check if accuracy is high enough, if not just update the current accuracy and return an invalid point
+		if( this->minAccuracy > 0.0 && newAccuracy > this->minAccuracy ) {
 			this->currAccuracy = newAccuracy;
 
 			return false;
@@ -132,6 +132,11 @@ double GPSHandler::getAccuracy() {
 	return this->currAccuracy;
 }
 
+// Set the minimum accuracy a fix must have to be used by the GPSHandler
+void GPSHandler::SetMinAccuracy( double p_minAccuracy ) {
+	this->minAccuracy = p_minAccuracy;
+}
+
 // Start GPS tracking
 void GPSHandler::startGPS() {
 	if( !this->bGPSActive ) {
@@ -165,6 +170,7 @@ void GPSHandler::reset() {
 	this->currSpeed = 0.0;
 	this->altitude = 0.0;
 	this->currAccuracy = -1.0;
+	this->minAccuracy = -1.0;
 
 	this->historyCount = 0;
 	for( int i = 0; i < AVERAGE_LENGTH; i++ ) {

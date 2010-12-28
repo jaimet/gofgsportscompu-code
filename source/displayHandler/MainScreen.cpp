@@ -43,10 +43,13 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 
 	//sprintf( fileName, "%d.gsc", this->startTime );
 	TrackHandler::Self()->startTracking( fileName.str() );
+
+	// Initialize & start the GPS handler
+	GPSHandler::Self()->SetMinAccuracy( SettingsHandler::Self()->GetInt( "MinLocationAccuracy" ) );
 	GPSHandler::Self()->startGPS();
 
 	// Prevent device from going to sleep
-	s3eDeviceRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend, NULL );
+	//s3eDeviceRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend, NULL );
 
 	// Start main timer
 	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
@@ -55,7 +58,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 void MainScreen::MA_StopButtonClick(CIwUIElement*)
 {
 	// Allow sleep again
-	s3eDeviceUnRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend );
+	//s3eDeviceUnRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend );
 
 	GPSHandler::Self()->stopGPS();
 	TrackHandler::Self()->stopTracking();

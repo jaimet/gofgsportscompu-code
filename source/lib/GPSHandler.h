@@ -42,6 +42,8 @@ public:
 
 	double getAccuracy();		// Get the current accuracy of the fix (in m)
 
+	void SetMinAccuracy( double p_minAccuracy );	// Set the minimum accuracy a fix must have to be used by the GPSHandler
+
 	void startGPS();
 	void stopGPS();
 
@@ -62,6 +64,7 @@ private:
 	double altitude;		// Current altitude in meters
 	double currSpeed;		// Current speed in meters / second
 	double currAccuracy;	// Current accuracy of the position
+	double minAccuracy;		// Minimum accuracy for the GPSHandler
 	int64 lastTime;
 
 	double distanceHistory[AVERAGE_LENGTH];

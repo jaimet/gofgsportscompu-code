@@ -38,10 +38,18 @@ void SettingsHandler::Set( std::string name, int value ) {
 
 int SettingsHandler::GetInt( std::string name ) {
 	if( this->settingsStore.find( name ) != this->settingsStore.end() ) {
-		return atoi( this->settingsStore[name].c_str() );
+		return strtol( this->settingsStore[name].c_str(), NULL, 10 );
 	}
 
 	return -1;
+}
+
+double SettingsHandler::GetDouble( std::string name ) {
+	if( this->settingsStore.find( name ) != this->settingsStore.end() ) {
+		return strtod( this->settingsStore[name].c_str(), NULL );
+	}
+
+	return -1.0;
 }
 
 std::string SettingsHandler::GetString( std::string name ) {
@@ -96,7 +104,7 @@ SettingsHandler::SettingsHandler() {
 	// Define default settings here
 	this->settingsStore["TrackFolder"] = "./";
 	this->settingsStore["DefaultExportType"] = "0";
-	this->settingsStore["MinLocationAccuracy"] = "15";
+	this->settingsStore["MinLocationAccuracy"] = "25";
 
 	this->Load();
 }
