@@ -85,6 +85,9 @@ void MainScreen::MA_MenuButtonClick(CIwUIElement*)
 int MainScreen::mainTimer( void *systemData, void *userData ) {
 	if( MainScreen::Self()->bStopPending ) return 1;
 
+	// As long as the main timer is running, keep the device awake
+	s3eDeviceBacklightOn();
+
 	if( GPSHandler::Self()->updateLocation() ) {
 		MainScreen::Self()->totalDistance += GPSHandler::Self()->getDistance();
 		MainScreen::Self()->totalAltitudeDiff += (GPSHandler::Self()->getAltitude() - MainScreen::Self()->lastAltitude);
@@ -98,11 +101,20 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );
 	}
 
-	if( GPSHandler::Self()->getAccuracy() < 5.0 ) {
-		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_full", IW_GX_RESTYPE_TEXTURE ) );
+	// Update accuracy image based on minimum location accuracy
+	double currAccuracy = GPSHandler::Self()->getAccuracy();
+	double minAccuracy = (double) SettingsHandler::Self()->GetInt( "MinLocationAccuracy" );
+	if( currAccuracy > minAccuracy || currAccuracy < 0.0 ) {
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_none", IW_GX_RESTYPE_TEXTURE ) );
+	}
+	else if( currAccuracy > (minAccuracy / 3.0 * 2.0) ) {
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_low", IW_GX_RESTYPE_TEXTURE ) );
+	}
+	else if( currAccuracy > (minAccuracy / 3.0 * 1.0) ) {
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_medium", IW_GX_RESTYPE_TEXTURE ) );
 	}
 	else {
-		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_none", IW_GX_RESTYPE_TEXTURE ) );
+		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_full", IW_GX_RESTYPE_TEXTURE ) );
 	}
 
 
@@ -230,7 +242,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->distanceInfo->setValue( "0.00" );
 	this->altitudeInfo->setValue( "0.00" );
 	this->timeInfo->setValue( "00:00:00" );
-	this->statusInfo->setValue( "0000.00" );
+	//this->statusInfo->setValue( "0000.00" );
 }
 
 /**

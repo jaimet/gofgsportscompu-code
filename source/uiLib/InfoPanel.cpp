@@ -115,7 +115,10 @@ void InfoPanel::setValue( CIwTexture *valueTexture ) {
 		this->currentImage->SetVisible( true );
 		this->currentLabel->SetVisible( false );
 
-		//this->currentImage->SetSize( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ), true );
+		//this->currentImage->SetSize( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ) );
+		//this->currentImage->SetSizeMin( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ) );
+		this->currentImage->SetSizeMax( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ) );
+		this->currentImage->SetSizeHint( CIwVec2( valueTexture->GetWidth(), valueTexture->GetHeight() ) );
 	}
 
 	this->currentImage->SetTexture( valueTexture );

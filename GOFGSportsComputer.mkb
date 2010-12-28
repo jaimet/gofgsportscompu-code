@@ -88,4 +88,10 @@ deployments
 	provider='Wolfgang Koller'
 	version-major=1
 	networking='1'
+	android-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
+	android-icon-hdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-72x72.png
+	android-icon-ldpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-036x036.png
+	android-icon-mdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
+	android-unsigned='0'
+	version-revision=4
 }

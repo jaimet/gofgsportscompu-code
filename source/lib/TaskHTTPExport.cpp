@@ -74,7 +74,7 @@ int TaskHTTPExport::Next() {
 
 	// Always send 50 datapoints at once
 	if( (this->sequence % 50) == 0 ) {
-		sprintf( this->formatBuffer, "&trackUUID=%s", this->GetUUID() );
+		sprintf( this->formatBuffer, "&trackUUID=%s", this->GetUUID().c_str() );
 		this->sendBuffer += this->formatBuffer;	// Prefix to have a valid request string
 
 		this->http->Post( "http://www.gofg.at/gofgst/index.php?mode=device_upload", this->sendBuffer.c_str(), strlen( this->sendBuffer.c_str() ), &TaskHTTPExport::CB_HeaderReceived, NULL );

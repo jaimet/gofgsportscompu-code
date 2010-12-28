@@ -7,7 +7,7 @@ SplashscreenBkG=255
 SplashscreenBkB=255
 Splashscreen=splash.jpg
 SplashscreenWidth=160
-SplashscreenHeight=100
+SplashscreenHeight=160
 
 [GX]
 DataCacheSize=128000
