@@ -33,6 +33,7 @@
 #include "../uiLib/InfoPanel.h"
 
 #include "MenuScreen.h"
+#include "MsgBox.h"
 
 class MainScreen : public Screen, public Singleton<MainScreen> {
 	friend class Singleton<MainScreen>;

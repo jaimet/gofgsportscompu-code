@@ -9,6 +9,9 @@ Splashscreen=splash.jpg
 SplashscreenWidth=160
 SplashscreenHeight=160
 
+# Save data on SDCard by default
+AndroidUseSdcard=1
+
 [GX]
 DataCacheSize=128000
 NumTPages=32

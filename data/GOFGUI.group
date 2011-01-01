@@ -28,8 +28,8 @@ CIwResGroup
 	"mainscreen.ui"
 	"infopanel.ui"
 	"infopanel_small.ui"
-	//"test.ui"
 	"exportscreen.ui"
 	"menuscreen.ui"
 	"test.ui"
+	"msgboxscreen.ui"
 }

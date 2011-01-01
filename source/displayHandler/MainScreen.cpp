@@ -28,6 +28,14 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->totalAltitudeDiff = 0.0;
 	this->lastAltitude = 0.0;
 
+	s3eBool locAvail = s3eLocationAvailable();
+
+	// Check if Location API is available at all
+	if( !s3eLocationAvailable() ) {
+		MsgBox::Self()->SetVisible( true, true );
+		return;
+	}
+
 	this->StartButton->SetVisible( false );
 	this->ExitButton->SetVisible( false );
 	this->StopButton->SetVisible( true );
