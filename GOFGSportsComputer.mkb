@@ -92,9 +92,13 @@ deployments
 	version-major=1
 	networking='1'
 	android-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
-	android-icon-hdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-72x72.png
+	android-icon-hdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-072x072.png
 	android-icon-ldpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-036x036.png
 	android-icon-mdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
 	android-unsigned='0'
-	version-revision=6
+	android-manifest=deploy/AndroidManifest.xml
+	version-minor=1
+	winmobile-png45=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-045x045.png
+	winmobile-png60=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-060x060.png
+	winmobile-png90=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-090x090.png
 }

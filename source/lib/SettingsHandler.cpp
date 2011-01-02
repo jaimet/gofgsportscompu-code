@@ -103,6 +103,7 @@ bool SettingsHandler::Save() {
 SettingsHandler::SettingsHandler() {
 	// Define default settings here
 	this->settingsStore["TrackFolder"] = "./";
+	this->settingsStore["ExportFolder"] = "./";
 	this->settingsStore["DefaultExportType"] = "0";
 	this->settingsStore["MinLocationAccuracy"] = "25";
 

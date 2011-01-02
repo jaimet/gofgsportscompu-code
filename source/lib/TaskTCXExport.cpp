@@ -101,24 +101,27 @@ int TaskTCXExport::Next() {
 void TaskTCXExport::Stop() {
 	char formatBuffer[15];
 
-	// Write total duration
-	TiXmlElement *ttsNode = new TiXmlElement( "TotalTimeSeconds" );
-	sprintf( formatBuffer, "%d", this->currentPoint->unixtime - this->GetStartTime() );
-	ttsNode->LinkEndChild( new TiXmlText( formatBuffer ) );
-	this->lapNode->LinkEndChild( ttsNode );
-	// Write total distance
-	TiXmlElement *distNode = new TiXmlElement( "DistanceMeters" );
-	sprintf( formatBuffer, "%.2f", this->currentPoint->dist );
-	distNode->LinkEndChild( new TiXmlText( formatBuffer ) );
-	this->lapNode->LinkEndChild( distNode );
+	// Check if we have at least one data point
+	if( this->currentPoint != NULL ) {
+		// Write total duration
+		TiXmlElement *ttsNode = new TiXmlElement( "TotalTimeSeconds" );
+		sprintf( formatBuffer, "%d", this->currentPoint->unixtime - this->GetStartTime() );
+		ttsNode->LinkEndChild( new TiXmlText( formatBuffer ) );
+		this->lapNode->LinkEndChild( ttsNode );
+		// Write total distance
+		TiXmlElement *distNode = new TiXmlElement( "DistanceMeters" );
+		sprintf( formatBuffer, "%.2f", this->currentPoint->dist );
+		distNode->LinkEndChild( new TiXmlText( formatBuffer ) );
+		this->lapNode->LinkEndChild( distNode );
 
-	// Finally link the track
-	this->lapNode->LinkEndChild( trackNode );
+		// Finally link the track
+		this->lapNode->LinkEndChild( trackNode );
 
-	// Save XML
-	if( !doc.SaveFile( this->exportFileName.c_str() ) ) {
-		this->UpdateProgress( -1 );
-		return;
+		// Save XML
+		if( !doc.SaveFile( this->exportFileName.c_str() ) ) {
+			this->UpdateProgress( -1 );
+			return;
+		}
 	}
 
 	// We are done

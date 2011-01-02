@@ -20,6 +20,10 @@
 #ifndef EXPORTSCREEN
 #define EXPORTSCREEN
 
+#include <string>
+#include <iostream>
+#include <sstream>
+
 #include "IwUI.h"
 
 #include "../displayHandler/Screen.h"

@@ -71,31 +71,43 @@ void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	if( strlen( this->es_currentFile ) > 0 ) {
 //		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
-		char fullFileName[30];
-		char exportName[30];
-		char *extString;
+		//char fullFileName[30];
+		//char exportName[30];
+		//char *extString;
+		std::string baseFileName( ExportScreen::Self()->es_currentFile );
 
-		sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
-		sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
+		std::ostringstream inputFileName;
+		std::ostringstream exportFileName;
+
+		baseFileName.replace( baseFileName.find_last_of( ".gsc" ), 4, "" );
+
+		// Create the fileNames
+		inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << baseFileName << ".gsc";
+		exportFileName << SettingsHandler::Self()->GetString( "ExportFolder" ) << baseFileName;
+
+		//sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
+		//sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
 
 		// Change extension
-		extString = strstr( exportName, ".gsc" );
+		//extString = strstr( exportName, ".gsc" );
 
 		// Start the correct process
 		switch( this->exportFormat ) {
 		case FITLOG:
-			strcpy( extString, ".fitlog" );
-			this->exportTask = new TaskFitlogExport( fullFileName, exportName );
+			//strcpy( extString, ".fitlog" );
+			exportFileName << ".fitlog";
+			this->exportTask = new TaskFitlogExport( inputFileName.str(), exportFileName.str() );
 			break;
 		case GOFG:
-			TaskHTTPExport::Self()->SetFileName( fullFileName );
+			TaskHTTPExport::Self()->SetFileName( inputFileName.str() );
 			this->exportTask = TaskHTTPExport::Self();
 			//TaskHandler::Self()->Add( TaskHTTPExport::Self() );
 			break;
 		case TCX:
 		default:
-			strcpy( extString, ".tcx" );
-			this->exportTask = new TaskTCXExport( fullFileName, exportName );
+			//strcpy( extString, ".tcx" );
+			exportFileName << ".tcx";
+			this->exportTask = new TaskTCXExport( inputFileName.str(), exportFileName.str() );
 			break;
 		}
 
