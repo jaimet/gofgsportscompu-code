@@ -26,7 +26,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->bStopPending = false;
 	this->totalDistance = 0.0;
 	this->totalAltitudeDiff = 0.0;
-	this->lastAltitude = 0.0;
+	this->lastAltitude = -1000.0;
 
 	// Check if Location API is available at all
 	if( !s3eLocationAvailable() ) {
@@ -98,13 +98,19 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	s3eDeviceBacklightOn();
 
 	if( GPSHandler::Self()->updateLocation() ) {
-		MainScreen::Self()->totalDistance += GPSHandler::Self()->getDistance();
-		MainScreen::Self()->totalAltitudeDiff += (GPSHandler::Self()->getAltitude() - MainScreen::Self()->lastAltitude);
+		// Update Altitude (only if positive, so upwards)
+		double currAltitudeDiff = GPSHandler::Self()->getAltitude() - MainScreen::Self()->lastAltitude;
+		if( currAltitudeDiff > 0 && MainScreen::Self()->lastAltitude > -1000.0 ) MainScreen::Self()->totalAltitudeDiff += currAltitudeDiff;
 		MainScreen::Self()->lastAltitude = GPSHandler::Self()->getAltitude();
 
+		// Update total distance
+		MainScreen::Self()->totalDistance += GPSHandler::Self()->getDistance();
+
+		// Add GPS & Distance data to our track
 		TrackHandler::Self()->addGPSData( GPSHandler::Self()->getLongitude(), GPSHandler::Self()->getLatitude(), GPSHandler::Self()->getAltitude() );
 		TrackHandler::Self()->addDistanceData( MainScreen::Self()->totalDistance );
 		
+		// Update displays
 		MainScreen::Self()->speedInfo->setValue( GPSHandler::Self()->getSpeed() * 3.6 );
 		MainScreen::Self()->distanceInfo->setValue( MainScreen::Self()->totalDistance / 1000.0 ); // /1000.0 to convert meters to km
 		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );

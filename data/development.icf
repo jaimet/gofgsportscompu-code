@@ -96,13 +96,13 @@ LocationAltitude = 		Type=float, Min=-2000.000000, Max=100000.000000, Default="6
 
 LocationAvailable = 		Type=bool, Default="true", Value = "true"
 
-LocationHorizontalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="20.0", Value = "1.0000000000000000"
+LocationHorizontalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="20.0", Value = "200.0000000000000000"
 
-LocationLatitude = 		Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "21.1290000000000010"
+LocationLatitude = 		Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "21.2399999999999980"
 
-LocationLongitude = 		Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "-20.0000000000000000"
+LocationLongitude = 		Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "20.0000000000000000"
 
-LocationVerticalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="100.0", Value = "1.0000000000000000"
+LocationVerticalAccuracy = 		Type=float, Min=0.000000, Max=100000.000000, Default="100.0", Value = "200.0000000000000000"
 
 MemoryPoison = 		Type=bool, Default="true", Value = "true"
 

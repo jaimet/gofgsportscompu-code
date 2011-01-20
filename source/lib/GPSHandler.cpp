@@ -41,7 +41,7 @@ bool GPSHandler::updateLocation() {
 	int64 currTime = s3eTimerGetUTC();
 
 	if( g_Error == S3E_RESULT_SUCCESS ) {
-		bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
+		//bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
 
 		// Calculate new accuracy
 		double newAccuracy = (newLocation->m_HorizontalAccuracy + newLocation->m_VerticalAccuracy) / 2.0;
@@ -82,21 +82,32 @@ bool GPSHandler::updateLocation() {
 				this->altitude = newLocation->m_Altitude;
 
 				// Set status to true (we have an update)
-				bLocationUpdated = true;
+				//bLocationUpdated = true;
+				// Free up some memory
+				delete this->currLocation;
+			}
+			// New location is within old accuracy
+			else {
+				this->distance = 0.0;
+				this->speed = 0.0;
+
+				// We keep the old data point
+				delete newLocation;
+				newLocation = this->currLocation;
+				newAccuracy = this->currAccuracy;
 			}
 		
-			// Free up some memory
-			delete this->currLocation;
 		}
 
 		// Save new location
 		this->currLocation = newLocation;
-		// Calculate accuracy based on average value
+		// Set accuracy based on average value
 		this->currAccuracy = newAccuracy;
 		// Save current time
 		this->lastTime = currTime;
 
-		return bLocationUpdated;
+		//return bLocationUpdated;
+		return true;
 	}
 
 	return false;
