@@ -124,6 +124,10 @@ void InfoPanel::setValue( CIwTexture *valueTexture ) {
 	this->currentImage->SetTexture( valueTexture );
 }
 
+void InfoPanel::setValue( std::string value ) {
+	this->currentLabel->SetCaption( value.c_str() );
+}
+
 void InfoPanel::setImage( CIwTexture *texture ) {
 	this->image->SetTexture( texture );
 }

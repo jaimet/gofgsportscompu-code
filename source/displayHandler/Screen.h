@@ -20,6 +20,8 @@
 #ifndef SCREEN
 #define SCREEN
 
+#include <string>
+
 #include "IwUI.h"
 #include "IwUIAnimManager.h"
 
@@ -29,14 +31,19 @@ public:
 
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );		// Show / Hide the screen
 	void SetEnabled( bool p_bEnabled );
+	void SetAnimation( std::string p_animInName = "ScreenSlideIn", std::string p_animOutName = "ScreenSlideOut" );
 
 	void NotifyProgress( CIwUIAnimator *pAnimator );
 	void NotifyStopped( CIwUIAnimator *pAnimator );
+
 
 protected:
 	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
 
 	CIwUIElement *myScreen;
+
+private:
+	std::string animInName, animOutName;
 };
 
 #endif

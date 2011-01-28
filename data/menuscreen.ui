@@ -1,3 +1,27 @@
+CIwUIElement {
+	name "MenuRowButton"
+
+	size { -1 48 }
+	sizeMax { -1 48 }
+	sizeMin { -1 48 }
+
+	CIwUIButton {
+		name "IconButton"
+
+		drawableType "image"
+		caption ""
+		texture "icon"
+		size { 48 48 }
+		sizeMax { 48 48 }
+		sizeMin { 48 48 }
+	}
+
+	CIwUIButton {
+		name "TextButton"
+
+	}
+}
+
 CIwUIElement 
 {
 	name "MenuScreen"

@@ -157,16 +157,17 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 
 // Called once a minute to update the clock
 int MainScreen::clockTimer( void *systemData, void *userData ) {
-	char myBuf[6];
+	std::ostringstream clockString;
+
 	// Get current time
 	time_t now = time(NULL);
 	// Convert to tm-struct
 	struct tm* local_tm = localtime(&now);
 	// Create formatted time string
-	strftime( myBuf, strlen(myBuf), "%H:%M", local_tm );
+	clockString << std::setfill('0') << std::setw(2) << local_tm->tm_hour << ":" << std::setfill('0') << std::setw(2) << local_tm->tm_min;
 
 	// Update display-label
-	MainScreen::Self()->clockInfo->setValue( myBuf );
+	MainScreen::Self()->clockInfo->setValue( clockString.str() );
 
 	// Continue calling the clock timer
 	s3eTimerSetTimer( 60000, &MainScreen::clockTimer, NULL );

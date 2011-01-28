@@ -20,6 +20,8 @@
 #ifndef INFOPANEL
 #define INFOPANEL
 
+#include <string>
+
 #include "IwUI.h"
 
 #include <IwUIElement.h>
@@ -36,6 +38,7 @@ public:
 	void setValue( double value );
 	void setValue( char *value );
 	void setValue( CIwTexture *valueTexture );
+	void setValue( std::string value );
 
 	void setImage( CIwTexture *texture );
 

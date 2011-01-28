@@ -2,9 +2,13 @@ CIwUIAnimation
 {
 	name "ScreenSlideIn"
 	
-	CIwUIAnimKeyFrame	{	time 0		scale 0.0	offset { 0 1000 } }
-	CIwUIAnimKeyFrame	{	time 900	scale 0.2	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 1500	scale 1.0	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 0		scale 0.0	offset { 0 1000 } }
+
+	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 1000 0 } }
+	CIwUIAnimKeyFrame	{	time 1000	scale 1.0	offset { 0 0 } }
+
+//	CIwUIAnimKeyFrame	{	time 900	scale 0.2	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 1500	scale 1.0	offset { 0 0 } }
 //	CIwUIAnimKeyFrame	{	time 0		offset { 1000 0 } }
 //	CIwUIAnimKeyFrame	{	time 1500	offset { 0 0 } }
 }
@@ -14,8 +18,11 @@ CIwUIAnimation
 	name "ScreenSlideOut"
 	
 	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 600	scale 0.2	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 1500	scale 0.0	offset { 0 1000 } }
+	CIwUIAnimKeyFrame	{	time 1000	scale 1.0	offset { 1000 0 } }
+
+//	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 600	scale 0.2	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 1500	scale 0.0	offset { 0 1000 } }
 //	CIwUIAnimKeyFrame	{	time 0		offset { 0 0 } }
 //	CIwUIAnimKeyFrame	{	time 1500	offset { -1000 0 } }
 }
@@ -24,9 +31,12 @@ CIwUIAnimation
 {
 	name "MenuSlideIn"
 	
-	CIwUIAnimKeyFrame	{	time 0		scale 0.0	offset { 0 1000 } }
-	CIwUIAnimKeyFrame	{	time 900	scale 0.2	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 1500	scale 1.0	offset { 0 0 } }
+	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 0 1000 } }
+	CIwUIAnimKeyFrame	{	time 1000	scale 1.0	offset { 0 0 } }
+
+//	CIwUIAnimKeyFrame	{	time 0		scale 0.0	offset { 0 1000 } }
+//	CIwUIAnimKeyFrame	{	time 900	scale 0.2	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 1500	scale 1.0	offset { 0 0 } }
 }
 
 CIwUIAnimation
@@ -34,6 +44,9 @@ CIwUIAnimation
 	name "MenuSlideOut"
 	
 	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 600	scale 0.2	offset { 0 0 } }
-	CIwUIAnimKeyFrame	{	time 1500	scale 0.0	offset { 0 1000 } }
+	CIwUIAnimKeyFrame	{	time 1000	scale 1.0	offset { 0 1000 } }
+
+//	CIwUIAnimKeyFrame	{	time 0		scale 1.0	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 600	scale 0.2	offset { 0 0 } }
+//	CIwUIAnimKeyFrame	{	time 1500	scale 0.0	offset { 0 1000 } }
 }

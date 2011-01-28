@@ -23,6 +23,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 #include "Screen.h"
 #include "../lib/Singleton.h"

@@ -56,6 +56,8 @@ MenuScreen::MenuScreen() : Screen( "MenuScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, MS_TracksButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, MS_CloseButtonClick, CIwUIElement*)
 
+	this->SetAnimation( "MenuSlideIn", "MenuSlideOut" );
+
 	//this->myScreen = CIwUIElement::CreateFromResource( "MenuScreen" );
 
 	//this->tracksButton = this->myScreen->GetChildNamed( "TracksButton" );

@@ -20,6 +20,9 @@
 #include "Screen.h"
 
 Screen::Screen( char *screenName ) {
+	// Set Default animations
+	this->SetAnimation();
+
 	this->myScreen = CIwUIElement::CreateFromResource( screenName );
 	this->myScreen->SetVisible( false );
 }
@@ -31,14 +34,14 @@ void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 		// Only play animation if we should
 		if( !p_bNoAnim ) {
 			IwGetUIAnimManager()->StopAnim( this->myScreen );
-			IwGetUIAnimManager()->PlayAnim("ScreenSlideIn", this->myScreen);
+			IwGetUIAnimManager()->PlayAnim(animInName.c_str(), this->myScreen);
 		}
 	}
 	else {
 		// Play Slide-Out animation when we should
 		if( !p_bNoAnim ) {
 			IwGetUIAnimManager()->StopAnim( this->myScreen );
-			uint32 outHandle = IwGetUIAnimManager()->PlayAnim("ScreenSlideOut", this->myScreen);
+			uint32 outHandle = IwGetUIAnimManager()->PlayAnim(animOutName.c_str(), this->myScreen);
 			IwGetUIAnimManager()->SetObserver( outHandle, this );
 		}
 		// Else just hide the screen
@@ -50,6 +53,11 @@ void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 
 void Screen::SetEnabled( bool p_bEnabled ) {
 	this->SetChildrenEnabled( this->myScreen, p_bEnabled );
+}
+
+void Screen::SetAnimation( std::string p_animInName, std::string p_animOutName ) {
+	this->animInName = p_animInName;
+	this->animOutName = p_animOutName;
 }
 
 void Screen::NotifyProgress( CIwUIAnimator *pAnimator ) {
