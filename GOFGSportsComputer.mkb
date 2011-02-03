@@ -41,6 +41,8 @@ files
 	TrackTVItemSource.cpp 
   CIwUIAutoSizeLabel.h
   CIwUIAutoSizeLabel.cpp
+  CIwUIMenuButton.h
+  CIwUIMenuButton.cpp
 
   [DisplayHandler]
   (source/displayHandler)
@@ -54,6 +56,8 @@ files
   MainScreen.cpp 
   MsgBox.h
   MsgBox.cpp 
+	AboutScreen.h 
+	AboutScreen.cpp
 
 	[Data]
 	(data)
@@ -65,6 +69,7 @@ files
 	menuscreen.ui
 	menuscreen_anim.itx
 	msgboxscreen.ui
+	aboutscreen.ui
 }
 
 subprojects

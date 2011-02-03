@@ -1,29 +1,4 @@
 CIwUIElement {
-	name "MenuRowButton"
-
-	size { -1 48 }
-	sizeMax { -1 48 }
-	sizeMin { -1 48 }
-
-	CIwUIButton {
-		name "IconButton"
-
-		drawableType "image"
-		caption ""
-		texture "icon"
-		size { 48 48 }
-		sizeMax { 48 48 }
-		sizeMin { 48 48 }
-	}
-
-	CIwUIButton {
-		name "TextButton"
-
-	}
-}
-
-CIwUIElement 
-{
 	name "MenuScreen"
 
 	CIwUIButton {
@@ -37,78 +12,219 @@ CIwUIElement
 	}
 
 	CIwUIElement {
-		name "menuGrid"
+		name "MenuButtons"
 
 		CIwUIButton {
-			name "TracksButton"
-			
-			drawableType "image"
-			caption ""
-			texture "menu_export"
-			sizeToContent true
+			name "MenuButton_Tracks"
+
 			OnButtonClick  { "MS_TracksButtonClick" }
+
+			drawableType "image"
+			caption ""
+			texture "background"
+
+			size { -1 48 }
+			sizeMax { -1 48 }
+			sizeMin { -1 48 }
+
+			CIwUIElement {
+				name "MB_T_Grid"
+
+				CIwUIImage {
+					name "MB_T_ButtonIcon"
+
+					texture "textfile32"
+
+					size { 32 32 }
+					sizeMax { 32 32 }
+					sizeMin { 32 32 }
+				}
+
+				CIwUILabel {
+					name "MB_T_ButtonLabel"
+					style <label_large>
+					caption "Export Tracks"
+					sizeMax { -1 32 }
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "MB_T_ButtonIcon"
+						row 0
+						column 0
+						alignV middle
+						border { 8 8 }
+					}
+					element {
+						name "MB_T_ButtonLabel"
+						row 0
+						column 1
+						alignV middle
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "MB_T_Grid"
+				}
+			}
 		}
 
 		CIwUIButton {
-			name "CloseButton"
-			
+			name "MenuButton_About"
+
+			//OnButtonClick  { "MS_TracksButtonClick" }
+
 			drawableType "image"
 			caption ""
-			texture "menu_close"
-			sizeToContent true
+			texture "background"
+
+			size { -1 48 }
+			sizeMax { -1 48 }
+			sizeMin { -1 48 }
+
+			CIwUIElement {
+				name "MB_A_Grid"
+
+				CIwUIImage {
+					name "MB_A_ButtonIcon"
+
+					texture "infoabout32"
+
+					size { 32 32 }
+					sizeMax { 32 32 }
+					sizeMin { 32 32 }
+				}
+
+				CIwUILabel {
+					name "MB_A_ButtonLabel"
+					style <label_large>
+					caption "About"
+					sizeMax { -1 32 }
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "MB_A_ButtonIcon"
+						row 0
+						column 0
+						alignV middle
+						border { 8 8 }
+					}
+					element {
+						name "MB_A_ButtonLabel"
+						row 0
+						column 1
+						alignV middle
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "MB_A_Grid"
+				}
+			}
+		}
+
+		CIwUIButton {
+			name "MenuButton_Close"
+
 			OnButtonClick  { "MS_CloseButtonClick" }
-		}
 
-		CIwUIButton {
-			name "SettingsButton"
-			
 			drawableType "image"
 			caption ""
-			texture "menu_settings"
-			sizeToContent true
-			visible false
-			//OnButtonClick  { "MS_CloseButtonClick" }
+			texture "background"
+
+			size { -1 48 }
+			sizeMax { -1 48 }
+			sizeMin { -1 48 }
+
+			CIwUIElement {
+				name "MB_C_Grid"
+
+				CIwUIImage {
+					name "MB_C_ButtonIcon"
+
+					texture "close32"
+
+					size { 32 32 }
+					sizeMax { 32 32 }
+					sizeMin { 32 32 }
+				}
+
+				CIwUILabel {
+					name "MB_C_ButtonLabel"
+					style <label_large>
+					caption "Close"
+					sizeMax { -1 32 }
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "MB_C_ButtonIcon"
+						row 0
+						column 0
+						alignV middle
+						border { 8 8 }
+					}
+					element {
+						name "MB_C_ButtonLabel"
+						row 0
+						column 1
+						alignV middle
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "MB_C_Grid"
+				}
+			}
 		}
 
-		CIwUILayoutGrid 
-		{
-			name "menuGrid_Layout"
-			sizeToSpace true
-			numColumns 2
-			numRows 4
-			element 
-			{
-				name "TracksButton"
-				alignH "centre"
-				alignV "middle"
+		CIwUILayoutVertical {
+			element {
+				name "MenuButton_Tracks"
 			}
-			element 
-			{
-				name "SettingsButton"
-				alignH "centre"
-				alignV "middle"
-				column 1
+			element {
+				name "MenuButton_About"
 			}
-
-			element
-			{
-				name "CloseButton"
-				alignH "centre"
-				alignV "middle"
-				row 3
-				column 1
+			element {
+				name "MenuButton_Close"
 			}
 		}
 	}
 
 	CIwUILayout {
-		sizeToSpace true
-
 		element {
 			name "BGButton"
 		}
 		element {
-			name "menuGrid"
+			name "MenuButtons"
 		}
 	}
 }

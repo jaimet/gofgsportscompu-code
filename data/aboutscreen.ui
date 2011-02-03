@@ -1,0 +1,21 @@
+CIwUIElement
+{
+	name "AboutScreen"
+
+	CIwUIButton {
+		name "BGButton"
+		drawableType "image"
+		caption ""
+		texture "background"
+		sizeMax { -1 -1 }
+	}
+
+	CIwUILayout
+	{
+		sizeToSpace true
+
+		element {
+			name "BGButton"
+		}
+	}
+}

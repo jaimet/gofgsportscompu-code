@@ -15,13 +15,15 @@ CIwResGroup
 	.\textures\clock24.png
 	.\textures\Satellite.png
 	.\textures\foldermove.png
-	.\textures\menu_close.png
-	.\textures\menu_export.png
-	.\textures\menu_settings.png
 	.\textures\wireless_full.png
 	.\textures\wireless_medium.png
 	.\textures\wireless_low.png
 	.\textures\wireless_none.png
+	.\textures\configure32.png
+	.\textures\close32.png
+	.\textures\textfile32.png
+	.\textures\infoabout32.png
+	.\textures\bg_white.png
 
 	"menuscreen_anim.itx"
 
@@ -32,4 +34,5 @@ CIwResGroup
 	"menuscreen.ui"
 	"test.ui"
 	"msgboxscreen.ui"
+	"aboutscreen.ui"
 }

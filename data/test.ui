@@ -1,0 +1,24 @@
+CIwUIElement 
+{
+	name "test/Element_0"
+	size  { 50 50 }
+	CIwUIElement 
+	{
+		name "Grid_0"
+		CIwUILayoutGrid 
+		{
+			name "Grid"
+			numColumns 2
+			numRows 1
+		}
+	}
+	CIwUILayout 
+	{
+		name ""
+		sizeToSpace true
+		element 
+		{
+			name "Grid_0"
+		}
+	}
+}

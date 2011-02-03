@@ -38,8 +38,7 @@ CIwUIElement
 			}
 
 			CIwUILayout {
-				//sizeToSpace true
-				sizeMax { -1 24 }
+				sizeToSpace true
 
 				element {
 					name "Image"
