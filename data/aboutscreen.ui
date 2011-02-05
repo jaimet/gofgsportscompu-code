@@ -10,12 +10,107 @@ CIwUIElement
 		sizeMax { -1 -1 }
 	}
 
-	CIwUILayout
-	{
+	CIwUIElement {
+		name "AboutScreen_Content"
+
+		CIwUIElement {
+			name "AboutScreen_Text"
+
+			CIwUILabel {
+				name "Image_Copyright"
+				style <label_medium>
+
+				caption "All images are copyrighted by their respective owners."
+			}
+			
+			CIwUILabel {
+				name "Boomy_Copyright"
+				style <label_medium>
+
+				caption "Boomy Icons: Milosz Wlazlo miloszwl.deviantart.com"
+			}
+
+			CIwUILabel {
+				name "MBP_Copyright"
+				style <label_medium>
+
+				caption "Mountainbike Pack Icons: Bruno Maia, IconTexto www.icontexto.com"
+			}
+
+			CIwUILabel {
+				name "GOFG_Copyright"
+				style <label_medium>
+
+				caption "Software Developed by Wolfgang Koller: www.gofg.at"
+			}
+
+			CIwUILayoutVertical {
+				spacing 5
+
+				element {
+					name "Image_Copyright"
+				}
+				element {
+					name "Boomy_Copyright"
+				}
+				element {
+					name "MBP_Copyright"
+				}
+				element {
+					name "GOFG_Copyright"
+				}
+			}
+		}
+
+		CIwUIElement {
+			name "menuBar"
+			sizeMax { -1 48 }
+
+			CIwUIButton {
+				name "LeftButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_ASExitButtonClick" }
+			}
+
+			CIwUILayoutGrid {
+				sizeToSpace true
+				numColumns 3
+				numRows 1
+
+				element {
+					name "LeftButton"
+				}
+			}
+		}
+
+		CIwUILayoutGrid {
+			sizeToSpace true
+			numRows 2
+			numColumns 1
+
+			element {
+				name "AboutScreen_Text"
+			}
+			element {
+				name "menuBar"
+				row 1
+				alignV "bottom"
+			}
+		}
+	}
+
+	CIwUILayout {
 		sizeToSpace true
 
 		element {
 			name "BGButton"
+		}
+		element {
+			name "AboutScreen_Content"
 		}
 	}
 }

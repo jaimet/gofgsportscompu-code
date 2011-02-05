@@ -27,6 +27,7 @@ class AboutScreen : public Screen, public Singleton<AboutScreen>
 {
 	friend class Singleton<AboutScreen>;
 public:
+	void CB_ASExitButtonClick(CIwUIElement*);
 private:
 	AboutScreen();
 };

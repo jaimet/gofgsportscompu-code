@@ -17,7 +17,7 @@ CIwUIElement {
 		CIwUIButton {
 			name "MenuButton_Tracks"
 
-			OnButtonClick  { "MS_TracksButtonClick" }
+			OnButtonClick  { "CB_MSTracksButtonClick" }
 
 			drawableType "image"
 			caption ""
@@ -81,7 +81,7 @@ CIwUIElement {
 		CIwUIButton {
 			name "MenuButton_About"
 
-			//OnButtonClick  { "MS_TracksButtonClick" }
+			OnButtonClick  { "CB_MSAboutButtonClick" }
 
 			drawableType "image"
 			caption ""
@@ -145,7 +145,7 @@ CIwUIElement {
 		CIwUIButton {
 			name "MenuButton_Close"
 
-			OnButtonClick  { "MS_CloseButtonClick" }
+			OnButtonClick  { "CB_MSCloseButtonClick" }
 
 			drawableType "image"
 			caption ""

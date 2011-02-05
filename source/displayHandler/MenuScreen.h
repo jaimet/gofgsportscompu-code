@@ -24,12 +24,14 @@
 #include "../lib/Singleton.h"
 
 #include "ExportScreen.h"
+#include "AboutScreen.h"
 
 class MenuScreen : public Screen, public Singleton<MenuScreen> {
 	friend class Singleton<MenuScreen>;
 public:
-	void MS_TracksButtonClick(CIwUIElement*);
-	void MS_CloseButtonClick(CIwUIElement*);
+	void CB_MSTracksButtonClick(CIwUIElement*);
+	void CB_MSCloseButtonClick(CIwUIElement*);
+	void CB_MSAboutButtonClick(CIwUIElement*);
 protected:
 	MenuScreen();
 

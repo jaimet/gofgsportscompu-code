@@ -22,18 +22,22 @@
 template<>
 MenuScreen *Singleton<MenuScreen>::mySelf = NULL;
 
-void MenuScreen::MS_TracksButtonClick(CIwUIElement*) {
+void MenuScreen::CB_MSTracksButtonClick(CIwUIElement*) {
 	//ExportScreen::Self()->GetScreen()->SetVisible(true);
-	ExportScreen::Self()->SetVisible( true );
+	ExportScreen::Self()->SetVisible(true);
 
 	//this->SetVisible( false );
 }
 
-void MenuScreen::MS_CloseButtonClick(CIwUIElement*) {
+void MenuScreen::CB_MSCloseButtonClick(CIwUIElement*) {
 	//this->myScreen->SetVisible(false);
 	//MainScreen::Self()->SetVisible( true );
 
-	this->SetVisible( false );
+	this->SetVisible(false);
+}
+
+void MenuScreen::CB_MSAboutButtonClick(CIwUIElement*) {
+	AboutScreen::Self()->SetVisible(true);
 }
 
 /*void MenuScreen::SetVisible( bool p_bVisible ) {
@@ -53,8 +57,9 @@ void MenuScreen::MS_CloseButtonClick(CIwUIElement*) {
 
 
 MenuScreen::MenuScreen() : Screen( "MenuScreen" ) {
-	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, MS_TracksButtonClick, CIwUIElement*)
-	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, MS_CloseButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSTracksButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSCloseButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSAboutButtonClick, CIwUIElement*)
 
 	this->SetAnimation( "MenuSlideIn", "MenuSlideOut" );
 

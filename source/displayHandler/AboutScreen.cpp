@@ -22,6 +22,12 @@
 template<>
 AboutScreen *Singleton<AboutScreen>::mySelf = NULL;
 
+void AboutScreen::CB_ASExitButtonClick(CIwUIElement*) {
+	this->SetVisible(false);
+}
+
 AboutScreen::AboutScreen() : Screen( "AboutScreen" ) {
+	IW_UI_CREATE_VIEW_SLOT1(this, "AboutScreen", AboutScreen, CB_ASExitButtonClick, CIwUIElement*)
+
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
