@@ -40,6 +40,10 @@ void MenuScreen::CB_MSAboutButtonClick(CIwUIElement*) {
 	AboutScreen::Self()->SetVisible(true);
 }
 
+void MenuScreen::CB_MSSettingsButtonClick(CIwUIElement*) {
+	SettingsScreen::Self()->SetVisible(true);
+}
+
 /*void MenuScreen::SetVisible( bool p_bVisible ) {
 	Screen::SetVisible( p_bVisible );
 
@@ -60,6 +64,7 @@ MenuScreen::MenuScreen() : Screen( "MenuScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSTracksButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSCloseButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSAboutButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MenuScreen", MenuScreen, CB_MSSettingsButtonClick, CIwUIElement*)
 
 	this->SetAnimation( "MenuSlideIn", "MenuSlideOut" );
 

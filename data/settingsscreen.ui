@@ -1,0 +1,116 @@
+CIwUIElement
+{
+	name "SettingsScreen"
+
+	CIwUIButton {
+		name "BGButton"
+		drawableType "image"
+		caption ""
+		texture "background"
+		sizeMax { -1 -1 }
+	}
+
+	CIwUIElement {
+		name "SettingsScreen_Content"
+
+		CIwUIElement {
+			name "SettingsScreen_Pane"
+
+			CIwUILabel {
+				name "MinLocationAccuracy_Label"
+				style <label_medium>
+				caption "Minimum Accuracy:"
+				sizeToContent false
+			}
+
+			CIwUITextField {
+				name "MinLocationAccuracy_Value"
+				style <textField>
+				caption "25"
+			}
+
+			CIwUILayoutGrid {
+				sizeToSpace true
+				numColumns 2
+				numRows 1
+
+				element {
+					name "MinLocationAccuracy_Label"
+					column 0
+				}
+				element {
+					name "MinLocationAccuracy_Value"
+					alignH "centre"
+					column 1
+				}
+			}
+		}
+
+		CIwUIElement {
+			name "menuBar"
+			sizeMax { -1 48 }
+
+			CIwUIButton {
+				name "LeftButton"
+				
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_SSExitButtonClick" }
+			}
+
+			CIwUIButton {
+				name "RightButton"
+				
+				drawableType "image"
+				caption ""
+				texture "floppy"
+				sizeToContent true
+				OnButtonClick  { "CB_SSSaveButtonClick" }
+			}
+
+			CIwUILayoutGrid {
+				sizeToSpace true
+				numColumns 3
+				numRows 1
+
+				element {
+					name "LeftButton"
+				}
+				element {
+					name "RightButton"
+					column 2
+					alignH "right"
+				}
+			}
+		}
+
+		CIwUILayoutGrid {
+			sizeToSpace true
+			numRows 2
+			numColumns 1
+
+			element {
+				name "SettingsScreen_Pane"
+				row 0
+			}
+			element {
+				name "menuBar"
+				row 1
+				alignV "bottom"
+			}
+		}
+	}
+
+	CIwUILayout {
+		sizeToSpace true
+
+		element {
+			name "BGButton"
+		}
+		element {
+			name "SettingsScreen_Content"
+		}
+	}
+}

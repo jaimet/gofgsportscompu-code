@@ -143,6 +143,70 @@ CIwUIElement {
 		}
 
 		CIwUIButton {
+			name "MenuButton_Settings"
+
+			OnButtonClick  { "CB_MSSettingsButtonClick" }
+
+			drawableType "image"
+			caption ""
+			texture "background"
+
+			size { -1 48 }
+			sizeMax { -1 48 }
+			sizeMin { -1 48 }
+
+			CIwUIElement {
+				name "MB_S_Grid"
+
+				CIwUIImage {
+					name "MB_S_ButtonIcon"
+
+					texture "configure32"
+
+					size { 32 32 }
+					sizeMax { 32 32 }
+					sizeMin { 32 32 }
+				}
+
+				CIwUILabel {
+					name "MB_S_ButtonLabel"
+					style <label_large>
+					caption "Settings"
+					sizeMax { -1 32 }
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "MB_S_ButtonIcon"
+						row 0
+						column 0
+						alignV middle
+						border { 8 8 }
+					}
+					element {
+						name "MB_S_ButtonLabel"
+						row 0
+						column 1
+						alignV middle
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "MB_S_Grid"
+				}
+			}
+		}
+
+		CIwUIButton {
 			name "MenuButton_Close"
 
 			OnButtonClick  { "CB_MSCloseButtonClick" }
@@ -209,6 +273,9 @@ CIwUIElement {
 		CIwUILayoutVertical {
 			element {
 				name "MenuButton_Tracks"
+			}
+			element {
+				name "MenuButton_Settings"
 			}
 			element {
 				name "MenuButton_About"

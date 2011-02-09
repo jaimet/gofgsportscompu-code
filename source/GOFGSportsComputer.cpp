@@ -21,6 +21,8 @@
 #include "IwGx.h"
 #include "IwUI.h"
 
+#include <IwUITextInput.h>
+
 #include "uiLib/TrackTVItemSource.h"
 #include "uiLib/CIwUIAutoSizeLabel.h"
 #include "displayHandler/MainScreen.h"
@@ -39,6 +41,7 @@ void GOFGInit() {
 	//Instantiate the view and controller singletons.
 	new CIwUIController;
 	new CIwUIView;
+	new CIwUITextInput;
 
 	// Load the GOFG UI
 	IwGetResManager()->LoadGroup("GOFGUI.group");
@@ -46,6 +49,11 @@ void GOFGInit() {
     //Set the default style sheet
     CIwResource* pResource = IwGetResManager()->GetResNamed("iwui", IW_UI_RESTYPE_STYLESHEET);
     IwGetUIStyleManager()->SetStylesheet(IwSafeCast<CIwUIStylesheet*>(pResource));
+
+	// Setup text input
+	IwGetUITextInput()->CreateSoftKeyboard();
+	IwGetUIView()->GetChildNamed("soft_keyboard")->SetRenderSlot(INT32_MAX-1);
+	IwGetUITextInput()->SetEditorMode(CIwUITextInput::EDITOR_OS);
 
 	// Instantiate our main screen and show it
 	MainScreen::Self()->SetVisible( true, true );
@@ -59,7 +67,7 @@ void GOFGShutDown() {
 	delete IwGetUIView();
 
 	IwUITerminate();
-	IwGxTerminate();
+//	IwGxTerminate();
 }
 
 /**

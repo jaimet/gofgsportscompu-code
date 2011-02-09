@@ -23,6 +23,7 @@ CIwResGroup
 	.\textures\close32.png
 	.\textures\textfile32.png
 	.\textures\infoabout32.png
+	.\textures\floppy.png
 
 	"menuscreen_anim.itx"
 
@@ -34,4 +35,5 @@ CIwResGroup
 	"test.ui"
 	"msgboxscreen.ui"
 	"aboutscreen.ui"
+	"settingsscreen.ui"
 }

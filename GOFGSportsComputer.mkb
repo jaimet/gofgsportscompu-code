@@ -58,6 +58,8 @@ files
   MsgBox.cpp 
 	AboutScreen.h 
 	AboutScreen.cpp
+	SettingsScreen.h 
+  SettingsScreen.cpp
 
 	[Data]
 	(data)
@@ -70,6 +72,7 @@ files
 	menuscreen_anim.itx
 	msgboxscreen.ui
 	aboutscreen.ui
+	settingsscreen.ui
 }
 
 subprojects
@@ -102,7 +105,7 @@ deployments
 	android-icon-mdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
 	android-unsigned='0'
 	android-manifest=deploy/AndroidManifest.xml
-	version-minor=1
+	version-minor=2
 	winmobile-png45=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-045x045.png
 	winmobile-png60=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-060x060.png
 	winmobile-png90=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-090x090.png

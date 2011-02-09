@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -17,27 +17,26 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MENUSCREEN
-#define MENUSCREEN
+#ifndef SETTINGSSCREEN
+#define SETTINGSSCREEN
 
-#include "Screen.h"
+#include "../lib/SettingsHandler.h"
+
+#include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 
-#include "ExportScreen.h"
-#include "AboutScreen.h"
-#include "SettingsScreen.h"
-
-class MenuScreen : public Screen, public Singleton<MenuScreen> {
-	friend class Singleton<MenuScreen>;
+class SettingsScreen : public Screen, public Singleton<SettingsScreen>
+{
+	friend class Singleton<SettingsScreen>;
 public:
-	void CB_MSTracksButtonClick(CIwUIElement*);
-	void CB_MSCloseButtonClick(CIwUIElement*);
-	void CB_MSAboutButtonClick(CIwUIElement*);
-	void CB_MSSettingsButtonClick(CIwUIElement*);
-protected:
-	MenuScreen();
+	void CB_SSExitButtonClick(CIwUIElement*);
+	void CB_SSSaveButtonClick(CIwUIElement*);
 
-	//CIwUIElement *tracksButton;
+	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
+private:
+	SettingsScreen();
+
+	CIwUITextField *MinLocationAccuracy_Value;
 };
 
 #endif
