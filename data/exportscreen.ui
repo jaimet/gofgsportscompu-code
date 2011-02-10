@@ -54,42 +54,64 @@ CIwUIElement
 		CIwUIElement {
 			name "menuBar"
 			sizeMax { -1 48 }
-			
-			CIwUIButton 
-			{
-				name "LeftButton"
-				
+
+			CIwUIButton {
+				name "menuBar_background"
 				drawableType "image"
 				caption ""
-				texture "delete"
-				sizeToContent true
-				OnButtonClick  { "CB_ESExitButtonClick" }
+				texture "menuBar_bg"
+				sizeMax { -1 -1 }
 			}
-			
-			CIwUIButton 
-			{
-				name "RightButton"
-				
-				drawableType "image"
-				caption ""
-				texture "foldermove"
-				sizeToContent true
-				OnButtonClick  { "CB_ESExportButtonClick" }
-			}
-			
-			CIwUILayoutGrid {
-				sizeToSpace true
-				numColumns 3
-				numRows 1
-				
-				
-				element {
+
+			CIwUIElement {
+				name "menuBar_buttons"
+				sizeMax { -1 -1 }
+
+				CIwUIButton {
 					name "LeftButton"
+			
+					drawableType "image"
+					caption ""
+					texture "delete"
+					sizeToContent true
+					OnButtonClick  { "CB_ESExitButtonClick" }
+				}
+
+				CIwUIButton {
+					name "RightButton"
+				
+					drawableType "image"
+					caption ""
+					texture "foldermove"
+					sizeToContent true
+					OnButtonClick  { "CB_ESExportButtonClick" }
+				}
+
+				CIwUILayoutGrid {
+					sizeToSpace true
+					numColumns 3
+					numRows 1
+
+					element {
+						name "LeftButton"
+						column 0
+					}
+					element {
+						name "RightButton"
+						column 2
+						alignH "right"
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "menuBar_background"
 				}
 				element {
-					name "RightButton"
-					alignH "right"
-					column 2
+					name "menuBar_buttons"
 				}
 			}
 		}

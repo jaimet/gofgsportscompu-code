@@ -36,6 +36,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 
 	this->StartButton->SetVisible( false );
 	this->ExitButton->SetVisible( false );
+	this->MenuButton->SetVisible( false );
 	this->StopButton->SetVisible( true );
 
 	//char fileName[20];
@@ -71,6 +72,7 @@ void MainScreen::MA_StopButtonClick(CIwUIElement*)
 
 	this->StartButton->SetVisible( true );
 	this->ExitButton->SetVisible( true );
+	this->MenuButton->SetVisible( true );
 	this->StopButton->SetVisible( false );
 
 	this->bStopPending = true;
@@ -186,6 +188,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->StartButton = (CIwUIButton*) this->myScreen->GetChildNamed("StartButton");
 	this->StopButton = (CIwUIButton*) this->myScreen->GetChildNamed("StopButton");
 	this->ExitButton = (CIwUIButton*) this->myScreen->GetChildNamed("ExitButton");
+	this->MenuButton = (CIwUIButton*) this->myScreen->GetChildNamed("MenuButton");
 
 	// Find our main grid and fill it
 	CIwUIElement* gridElement = this->myScreen->GetChildNamed( "MainGrid" );

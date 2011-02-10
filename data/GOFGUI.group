@@ -24,6 +24,7 @@ CIwResGroup
 	.\textures\textfile32.png
 	.\textures\infoabout32.png
 	.\textures\floppy.png
+	.\textures\menuBar_bg.png
 
 	"menuscreen_anim.itx"
 

@@ -9,69 +9,94 @@ CIwUIElement
 		CIwUIElement {
 			name "menuBar"
 			sizeMax { -1 48 }
-			
-			CIwUIButton 
-			{
-				name "StopButton"
-			
-				drawableType "image"
-				caption ""
-				texture "stop"
-				sizeToContent true
-				OnButtonClick  { "MA_StopButtonClick" }
-				visible false
-			}
-			CIwUIButton 
-			{
-				name "StartButton"
-			
-				drawableType "image"
-				caption ""
-				texture "play"
-				sizeToContent true
-				OnButtonClick  { "MA_StartButtonClick" }
-			}
-			CIwUIButton 
-			{
-				name "ExitButton"
-			
-				drawableType "image"
-				caption ""
-				texture "delete"
-				sizeToContent true
-				OnButtonClick  { "MA_ExitButtonClick" }
-			}
 
 			CIwUIButton {
-				name "MenuButton"
-			
+				name "menuBar_background"
 				drawableType "image"
 				caption ""
-				texture "app"
-				sizeToContent true
-				OnButtonClick  { "MA_MenuButtonClick" }
+				texture "menuBar_bg"
+				sizeMax { -1 -1 }
 			}
-			
-			CIwUILayoutGrid {
-				sizeToSpace true
-				numColumns 3
-				numRows 1
-				
-				element {
+
+			CIwUIElement {
+				name "menuBar_buttons"
+				sizeMax { -1 -1 }
+
+				CIwUIButton {
 					name "StopButton"
+			
+					drawableType "image"
+					caption ""
+					texture "stop"
+					sizeToContent true
+					OnButtonClick  { "MA_StopButtonClick" }
+					visible false
 				}
-				element {
-					name "ExitButton"
-				}
-				element {
-					name "MenuButton"
-					alignH "centre"
-					column 1
-				}
-				element {
+
+				CIwUIButton {
 					name "StartButton"
-					alignH "right"
-					column 2
+			
+					drawableType "image"
+					caption ""
+					texture "play"
+					sizeToContent true
+					OnButtonClick  { "MA_StartButtonClick" }
+				}
+
+				CIwUIButton {
+					name "ExitButton"
+			
+					drawableType "image"
+					caption ""
+					texture "delete"
+					sizeToContent true
+					OnButtonClick  { "MA_ExitButtonClick" }
+				}
+
+				CIwUIButton {
+					name "MenuButton"
+			
+					drawableType "image"
+					caption ""
+					texture "app"
+					sizeToContent true
+					OnButtonClick  { "MA_MenuButtonClick" }
+				}
+
+				CIwUILayoutGrid {
+					sizeToSpace true
+					numColumns 3
+					numRows 1
+
+					element {
+						name "StopButton"
+						column 0
+					}
+					element {
+						name "ExitButton"
+						column 0
+					}
+					element {
+						name "MenuButton"
+						alignH "centre"
+						column 1
+					}
+					element {
+						name "StartButton"
+						alignH "right"
+						column 2
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "menuBar_background"
+				}
+				element {
+					name "menuBar_buttons"
 				}
 			}
 		}
@@ -103,6 +128,7 @@ CIwUIElement
 				name "menuBar"
 				row 3
 				columnSpan 2
+				alignV "bottom"
 			}
 		}
 	}

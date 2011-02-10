@@ -52,9 +52,10 @@ public:
 protected:
 	MainScreen();
 
-	CIwUIButton* ExitButton;
-	CIwUIButton* StartButton;
-	CIwUIButton* StopButton;
+	CIwUIButton *ExitButton;
+	CIwUIButton *StartButton;
+	CIwUIButton *StopButton;
+	CIwUIButton *MenuButton;
 
 	InfoPanel *speedInfo;
 	InfoPanel *distanceInfo;

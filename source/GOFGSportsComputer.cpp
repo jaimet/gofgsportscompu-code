@@ -67,7 +67,7 @@ void GOFGShutDown() {
 	delete IwGetUIView();
 
 	IwUITerminate();
-//	IwGxTerminate();
+	IwGxTerminate();
 }
 
 /**

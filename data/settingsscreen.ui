@@ -19,14 +19,15 @@ CIwUIElement
 			CIwUILabel {
 				name "MinLocationAccuracy_Label"
 				style <label_medium>
-				caption "Minimum Accuracy:"
-				sizeToContent false
+				caption "Min. Location Accuracy (m):"
+				sizeToContent true
 			}
 
 			CIwUITextField {
 				name "MinLocationAccuracy_Value"
 				style <textField>
-				caption "25"
+				caption "0"
+				sizeToContent false
 			}
 
 			CIwUILayoutGrid {
@@ -51,37 +52,62 @@ CIwUIElement
 			sizeMax { -1 48 }
 
 			CIwUIButton {
-				name "LeftButton"
-				
+				name "menuBar_background"
 				drawableType "image"
 				caption ""
-				texture "delete"
-				sizeToContent true
-				OnButtonClick  { "CB_SSExitButtonClick" }
+				texture "menuBar_bg"
+				sizeMax { -1 -1 }
 			}
 
-			CIwUIButton {
-				name "RightButton"
+			CIwUIElement {
+				name "menuBar_buttons"
+				sizeMax { -1 -1 }
+
+				CIwUIButton {
+					name "LeftButton"
+			
+					drawableType "image"
+					caption ""
+					texture "delete"
+					sizeToContent true
+					OnButtonClick  { "CB_SSExitButtonClick" }
+				}
+
+				CIwUIButton {
+					name "RightButton"
 				
-				drawableType "image"
-				caption ""
-				texture "floppy"
-				sizeToContent true
-				OnButtonClick  { "CB_SSSaveButtonClick" }
+					drawableType "image"
+					caption ""
+					texture "floppy"
+					sizeToContent true
+					OnButtonClick  { "CB_SSSaveButtonClick" }
+				}
+
+				CIwUILayoutGrid {
+					sizeToSpace true
+					numColumns 3
+					numRows 1
+
+					element {
+						name "LeftButton"
+						column 0
+					}
+					element {
+						name "RightButton"
+						column 2
+						alignH "right"
+					}
+				}
 			}
 
-			CIwUILayoutGrid {
+			CIwUILayout {
 				sizeToSpace true
-				numColumns 3
-				numRows 1
 
 				element {
-					name "LeftButton"
+					name "menuBar_background"
 				}
 				element {
-					name "RightButton"
-					column 2
-					alignH "right"
+					name "menuBar_buttons"
 				}
 			}
 		}
@@ -110,6 +136,7 @@ CIwUIElement
 			name "BGButton"
 		}
 		element {
+			border { 5 5 }
 			name "SettingsScreen_Content"
 		}
 	}

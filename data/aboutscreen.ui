@@ -67,22 +67,47 @@ CIwUIElement
 			sizeMax { -1 48 }
 
 			CIwUIButton {
-				name "LeftButton"
-				
+				name "menuBar_background"
 				drawableType "image"
 				caption ""
-				texture "delete"
-				sizeToContent true
-				OnButtonClick  { "CB_ASExitButtonClick" }
+				texture "menuBar_bg"
+				sizeMax { -1 -1 }
 			}
 
-			CIwUILayoutGrid {
+			CIwUIElement {
+				name "menuBar_buttons"
+				sizeMax { -1 -1 }
+
+				CIwUIButton {
+					name "LeftButton"
+			
+					drawableType "image"
+					caption ""
+					texture "delete"
+					sizeToContent true
+					OnButtonClick  { "CB_ASExitButtonClick" }
+				}
+
+				CIwUILayoutGrid {
+					sizeToSpace true
+					numColumns 3
+					numRows 1
+
+					element {
+						name "LeftButton"
+						column 0
+					}
+				}
+			}
+
+			CIwUILayout {
 				sizeToSpace true
-				numColumns 3
-				numRows 1
 
 				element {
-					name "LeftButton"
+					name "menuBar_background"
+				}
+				element {
+					name "menuBar_buttons"
 				}
 			}
 		}
