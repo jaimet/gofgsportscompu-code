@@ -106,8 +106,8 @@ void TaskFitlogExport::Stop() {
 TiXmlElement *TaskFitlogExport::CreateFitlogPoint() {
 	TiXmlElement *ptNode = new TiXmlElement( "pt" );
 	ptNode->SetAttribute( "tm", this->currentPoint->unixtime - this->GetStartTime() );
-	ptNode->SetDoubleAttribute( "lat", this->currentPoint->lat );
-	ptNode->SetDoubleAttribute( "lon", this->currentPoint->lon );
+	ptNode->SetDoubleAttribute( "lat", this->currentPoint->lat / M_PI * 180.0 );
+	ptNode->SetDoubleAttribute( "lon", this->currentPoint->lon / M_PI * 180.0 );
 	ptNode->SetDoubleAttribute( "ele", this->currentPoint->alt );
 	ptNode->SetDoubleAttribute( "dist", this->currentPoint->dist );
 	ptNode->SetAttribute( "hr", this->currentPoint->hr );

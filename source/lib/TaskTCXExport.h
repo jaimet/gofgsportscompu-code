@@ -21,8 +21,8 @@
 #define TASKTCXEXPORT_C
 
 #include <string>
-
 #include <tinyxml.h>
+#include <math.h>
 
 #include "Task.h"
 #include "TrackReader.h"

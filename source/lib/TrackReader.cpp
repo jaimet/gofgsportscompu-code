@@ -86,12 +86,12 @@ DataPoint *TrackReader::ReadNextPoint() {
 			if( token == NULL ) {
 				return NULL;
 			}
-			this->dataPoint->lat = atof( token );
+			this->dataPoint->lon = atof( token );
 			token = strtok( NULL, ":" );
 			if( token == NULL ) {
 				return NULL;
 			}
-			this->dataPoint->lon = atof( token );
+			this->dataPoint->lat = atof( token );
 			token = strtok( NULL, ":" );
 			if( token == NULL ) {
 				return NULL;

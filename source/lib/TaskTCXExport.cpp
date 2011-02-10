@@ -64,7 +64,7 @@ void TaskTCXExport::Start() {
 		athleteNode->LinkEndChild( activityNode );
 
 		TiXmlElement *idNode = new TiXmlElement( "Id" );
-		idNode->LinkEndChild( new TiXmlText( this->GetUUID().c_str() ) );
+		idNode->LinkEndChild( new TiXmlText( startTimeString ) );
 		activityNode->LinkEndChild( idNode );
 
 		this->lapNode = new TiXmlElement( "Lap" );
@@ -152,11 +152,11 @@ TiXmlElement *TaskTCXExport::CreateTCXPoint() {
 	ptNode->LinkEndChild( positionNode );
 	// Add lat & lon information nodes
 	TiXmlElement *latNode = new TiXmlElement( "LatitudeDegrees" );
-	sprintf( myBuf, "%.9f", this->currentPoint->lat );
+	sprintf( myBuf, "%.9f", this->currentPoint->lat / M_PI * 180.0 );
 	latNode->LinkEndChild( new TiXmlText( myBuf ) );
 	positionNode->LinkEndChild( latNode );
 	TiXmlElement *lonNode = new TiXmlElement( "LongitudeDegrees" );
-	sprintf( myBuf, "%.9f", this->currentPoint->lon );
+	sprintf( myBuf, "%.9f", this->currentPoint->lon / M_PI * 180.0 );
 	lonNode->LinkEndChild( new TiXmlText( myBuf ) );
 	positionNode->LinkEndChild( lonNode );
 

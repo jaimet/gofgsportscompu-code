@@ -79,7 +79,7 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 		std::ostringstream inputFileName;
 		std::ostringstream exportFileName;
 
-		baseFileName.replace( baseFileName.find_last_of( ".gsc" ), 4, "" );
+		baseFileName.replace( baseFileName.find_last_of( "." ), 4, "" );
 
 		// Create the fileNames
 		inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << baseFileName << ".gsc";
