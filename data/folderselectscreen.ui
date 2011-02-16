@@ -1,0 +1,160 @@
+//CIwUIPropertySet
+//{
+//	name	<tableViewItem>
+//
+//	background <radio_buttonUp>
+//
+//	itemDown <radio_buttonDown>
+//
+//	itemSelected
+//	{
+//		parent <radio_buttonUp>
+//		imageColour { 192 192 192 }
+//	}
+//
+//	focus <focus_centre>
+//}
+
+CIwUIElement
+{
+	name "FolderSelectScreen"
+
+	CIwUIButton {
+		name "BGButton"
+		drawableType "image"
+		caption ""
+		texture "background"
+		sizeMax { -1 -1 }
+	}
+
+	CIwUIElement {
+		name "innerLayout"
+
+		CIwUILabel {
+			name "SelectFolderLabel"
+			style <label_medium>
+			caption "Select Folder"
+			sizeMax { -1 24 }
+		}
+
+		CIwUITableView
+		{
+			name "FolderList"
+			sizeMax { -1 -1 }
+
+			sizeMin { -1 100 }
+			size { -1 100 }
+
+			FolderTVItemSource
+			{
+
+			}
+		}
+
+		CIwUIElement {
+			name "menuBar"
+			sizeMax { -1 48 }
+
+			CIwUIButton {
+				name "menuBar_background"
+				drawableType "image"
+				caption ""
+				texture "menuBar_bg"
+				sizeMax { -1 -1 }
+			}
+
+			CIwUIElement {
+				name "menuBar_buttons"
+				sizeMax { -1 -1 }
+
+				CIwUIButton {
+					name "LeftButton"
+			
+					drawableType "image"
+					caption ""
+					texture "delete"
+					sizeToContent true
+					OnButtonClick  { "CB_FSSExitButtonClick" }
+				}
+
+				CIwUILayoutGrid {
+					sizeToSpace true
+					numColumns 3
+					numRows 1
+
+					element {
+						name "LeftButton"
+						column 0
+					}
+				}
+			}
+
+			CIwUILayout {
+				sizeToSpace true
+
+				element {
+					name "menuBar_background"
+				}
+				element {
+					name "menuBar_buttons"
+				}
+			}
+		}
+		
+		CIwUILayoutGrid {
+			sizeToSpace true
+			numRows 3
+			numColumns 1
+
+			element {
+				name "SelectFolderLabel"
+				alignH "centre"
+			}
+			element {
+				name "FolderList"
+				row 1
+				alignV "top"
+			}
+			element {
+				name "menuBar"
+				row 2
+				alignV "bottom"
+			}
+		}
+	}
+
+	CIwUILayout {
+		sizeToSpace true
+
+		element {
+			name "BGButton"
+		}
+		element	{
+			name "innerLayout"
+		}
+	}
+}
+
+CIwUITableViewItem
+{
+	name "folderItem"
+	style <tableViewItem>
+
+	OnTableViewItemSelected CB_FSSHandleFolderSelection
+
+	CIwUILabel
+	{
+		name "fileName"
+		style <label_medium>
+	}
+
+	CIwUILayout
+	{
+		element
+		{
+			name "fileName"
+			alignH left
+			alignV middle
+		}
+	}
+}

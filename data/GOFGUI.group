@@ -37,4 +37,5 @@ CIwResGroup
 	"msgboxscreen.ui"
 	"aboutscreen.ui"
 	"settingsscreen.ui"
+	"folderselectscreen.ui"
 }

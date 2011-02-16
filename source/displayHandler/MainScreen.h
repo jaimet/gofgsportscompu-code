@@ -31,6 +31,8 @@
 #include "../lib/TrackHandler.h"
 #include "../lib/SettingsHandler.h"
 
+#include "FolderSelectScreen.h"
+
 #include "../uiLib/InfoPanel.h"
 
 #include "MenuScreen.h"

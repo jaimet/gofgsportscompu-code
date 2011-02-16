@@ -87,6 +87,8 @@ void MainScreen::MA_MenuButtonClick(CIwUIElement*)
 {
 	MenuScreen::Self()->SetVisible( true );
 
+	//FolderSelectScreen::Self()->SetVisible( true );
+
 	//this->SetVisible( false );
 	//MenuScreen::Self()->GetScreen()->SetVisible(true);
 	//ExportScreen::Self()->GetScreen()->SetVisible( true );

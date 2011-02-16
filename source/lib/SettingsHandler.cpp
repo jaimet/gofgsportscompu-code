@@ -106,6 +106,7 @@ SettingsHandler::SettingsHandler() {
 	this->settingsStore["ExportFolder"] = "./";
 	this->settingsStore["DefaultExportType"] = "0";
 	this->settingsStore["MinLocationAccuracy"] = "25";
+	this->settingsStore["SelectFolderPath"] = "/";
 
 	this->Load();
 }

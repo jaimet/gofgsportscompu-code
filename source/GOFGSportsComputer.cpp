@@ -36,6 +36,7 @@ void GOFGInit() {
 	IwGxInit();
 	IwUIInit();
 	IW_CLASS_REGISTER(TrackTVItemSource);
+	IW_CLASS_REGISTER(FolderTVItemSource);
 	IW_CLASS_REGISTER(CIwUIAutoSizeLabel);
 
 	//Instantiate the view and controller singletons.

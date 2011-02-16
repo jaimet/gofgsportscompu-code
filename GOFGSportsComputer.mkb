@@ -30,8 +30,10 @@ files
   TaskTCXExport.cpp 
 	TrackReader.h
 	TrackReader.cpp
-	TaskFitlogExport.h
+	TaskFitlogExport.h     
 	TaskFitlogExport.cpp
+	TaskSelectFolderRefresh.h
+	TaskSelectFolderRefresh.cpp
 
   [UiLib]
   (source/uiLib)
@@ -43,6 +45,8 @@ files
   CIwUIAutoSizeLabel.cpp
   CIwUIMenuButton.h
   CIwUIMenuButton.cpp
+	FolderTVItemSource.h 
+	FolderTVItemSource.cpp 
 
   [DisplayHandler]
   (source/displayHandler)
@@ -60,6 +64,8 @@ files
 	AboutScreen.cpp
 	SettingsScreen.h 
   SettingsScreen.cpp
+	FolderSelectScreen.h 
+	FolderSelectScreen.cpp
 
 	[Data]
 	(data)
@@ -73,6 +79,7 @@ files
 	msgboxscreen.ui
 	aboutscreen.ui
 	settingsscreen.ui
+	folderselectscreen.ui
 }
 
 subprojects
