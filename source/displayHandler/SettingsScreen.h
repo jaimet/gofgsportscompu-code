@@ -25,18 +25,26 @@
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 
+#include "FolderSelectScreen.h"
+
 class SettingsScreen : public Screen, public Singleton<SettingsScreen>
 {
 	friend class Singleton<SettingsScreen>;
 public:
 	void CB_SSExitButtonClick(CIwUIElement*);
 	void CB_SSSaveButtonClick(CIwUIElement*);
+	void CB_SSTrackFolderButtonClick(CIwUIElement*);
+	void CB_SSExportFolderButtonClick(CIwUIElement*);
+
+	static int32 CB_SSSelectFolder( void *systemData, void *userData  );
 
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 private:
 	SettingsScreen();
 
 	CIwUITextField *MinLocationAccuracy_Value;
+	CIwUITextField *TrackFolder_Value;
+	CIwUITextField *ExportFolder_Value;
 };
 
 #endif

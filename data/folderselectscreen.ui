@@ -37,6 +37,13 @@ CIwUIElement
 			sizeMax { -1 24 }
 		}
 
+		CIwUILabel {
+			name "CurrentFolderLabel"
+			style <label_medium>
+			caption "/"
+			sizeMax { -1 24 }
+		}
+
 		CIwUITableView
 		{
 			name "FolderList"
@@ -77,6 +84,16 @@ CIwUIElement
 					OnButtonClick  { "CB_FSSExitButtonClick" }
 				}
 
+				CIwUIButton {
+					name "RightButton"
+			
+					drawableType "image"
+					caption ""
+					texture "foldermove"
+					sizeToContent true
+					OnButtonClick  { "CB_FSSSelectButtonClick" }
+				}
+
 				CIwUILayoutGrid {
 					sizeToSpace true
 					numColumns 3
@@ -85,6 +102,11 @@ CIwUIElement
 					element {
 						name "LeftButton"
 						column 0
+					}
+					element {
+						name "RightButton"
+						column 2
+						alignH "right"
 					}
 				}
 			}
@@ -103,21 +125,27 @@ CIwUIElement
 		
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 3
+			numRows 4
 			numColumns 1
 
 			element {
 				name "SelectFolderLabel"
 				alignH "centre"
+				row 0
+			}
+			element {
+				name "CurrentFolderLabel"
+				alignH "centre"
+				row 1
 			}
 			element {
 				name "FolderList"
-				row 1
+				row 2
 				alignV "top"
 			}
 			element {
 				name "menuBar"
-				row 2
+				row 3
 				alignV "bottom"
 			}
 		}

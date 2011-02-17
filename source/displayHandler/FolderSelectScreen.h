@@ -39,16 +39,23 @@ class FolderSelectScreen : public Screen, public Singleton<FolderSelectScreen>
 {
 	friend class Singleton<FolderSelectScreen>;
 public:
+	static void Show( s3eCallback p_selectCallback, void *userData = NULL );
+
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 	void Refresh();
 
 	void CB_FSSHandleFolderSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void CB_FSSExitButtonClick(CIwUIElement*);
+	void CB_FSSSelectButtonClick(CIwUIElement*);
 private:
 	FolderSelectScreen();
 
 	CIwUITableView *folderList;
+	CIwUILabel *CurrentFolderLabel;
+
 	Task *refreshTask;
+	s3eCallback selectCallback;
+	void *selectCallbackUserData;
 };
 
 #endif

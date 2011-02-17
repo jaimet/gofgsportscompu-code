@@ -1,3 +1,14 @@
+CIwUIPropertySet  {
+	name "<pathField>"
+	parent <label_small>
+	sizeToContent false
+	oneLine true
+	background <textField_background>
+	cursorSize  { 3 17 }
+	cursor <textField_cursor>
+	focus <focus_textField>
+}
+
 CIwUIElement
 {
 	name "SettingsScreen"
@@ -16,33 +27,169 @@ CIwUIElement
 		CIwUIElement {
 			name "SettingsScreen_Pane"
 
-			CIwUILabel {
-				name "MinLocationAccuracy_Label"
-				style <label_medium>
-				caption "Min. Location Accuracy (m):"
-				sizeToContent true
-			}
+			CIwUIElement {
+				name "MinLocationAccuracy_Pane"
 
-			CIwUITextField {
-				name "MinLocationAccuracy_Value"
-				style <textField>
-				caption "0"
-				sizeToContent false
-			}
-
-			CIwUILayoutGrid {
-				sizeToSpace true
-				numColumns 2
-				numRows 1
-
-				element {
+				CIwUILabel {
 					name "MinLocationAccuracy_Label"
-					column 0
+					style <label_medium>
+					caption "Min. Location Accuracy (m):"
+					sizeToContent true
+				}
+
+				CIwUITextField {
+					name "MinLocationAccuracy_Value"
+					style <textField>
+					caption "0"
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "MinLocationAccuracy_Label"
+						column 0
+					}
+					element {
+						name "MinLocationAccuracy_Value"
+						alignH "centre"
+						column 1
+					}
+				}
+			}
+
+			CIwUIElement {
+				name "TrackFolder_Pane"
+
+				CIwUILabel {
+					name "TrackFolder_Label"
+					style <label_medium>
+					caption "Track Folder:"
+					sizeToContent true
+				}
+
+				CIwUIElement {
+					name "TrackFolder_SelectPane"
+
+					CIwUITextField {
+						name "TrackFolder_Value"
+						style <pathField>
+						caption "/"
+						sizeToContent false
+						enabled false
+					}
+
+					CIwUIButton {
+						name "TrackFolder_Button"
+			
+						drawableType "image"
+						caption ""
+						texture "folder24"
+						sizeToContent true
+						OnButtonClick  { "CB_SSTrackFolderButtonClick" }
+					}
+
+					CIwUILayoutGrid {
+						numColumns 2
+						numRows 1
+						sizeToSpace true
+
+						element {
+							name "TrackFolder_Value"
+							alignH "left"
+							column 0
+						}
+						element {
+							name "TrackFolder_Button"
+							alignH "right"
+							border { 4 0 }
+							column 1
+						}
+					}
+				}
+
+				CIwUILayoutVertical {
+					element {
+						name "TrackFolder_Label"
+					}
+					element {
+						name "TrackFolder_SelectPane"
+					}
+				}
+			}
+
+			CIwUIElement {
+				name "ExportFolder_Pane"
+
+				CIwUILabel {
+					name "ExportFolder_Label"
+					style <label_medium>
+					caption "Export Folder:"
+					sizeToContent true
+				}
+
+				CIwUIElement {
+					name "ExportFolder_SelectPane"
+
+					CIwUITextField {
+						name "ExportFolder_Value"
+						style <pathField>
+						caption "/"
+						sizeToContent false
+						enabled false
+					}
+
+					CIwUIButton {
+						name "ExportFolder_Button"
+			
+						drawableType "image"
+						caption ""
+						texture "folder24"
+						sizeToContent true
+						OnButtonClick  { "CB_SSExportFolderButtonClick" }
+					}
+
+					CIwUILayoutGrid {
+						numColumns 2
+						numRows 1
+						sizeToSpace true
+
+						element {
+							name "ExportFolder_Value"
+							alignH "left"
+							column 0
+						}
+						element {
+							name "ExportFolder_Button"
+							alignH "right"
+							border { 4 0 }
+							column 1
+						}
+					}
+				}
+
+				CIwUILayoutVertical {
+					element {
+						name "ExportFolder_Label"
+					}
+					element {
+						name "ExportFolder_SelectPane"
+					}
+				}
+			}
+
+			CIwUILayoutVertical {
+				element {
+					name "MinLocationAccuracy_Pane"
 				}
 				element {
-					name "MinLocationAccuracy_Value"
-					alignH "centre"
-					column 1
+					name "TrackFolder_Pane"
+				}
+				element {
+					name "ExportFolder_Pane"
 				}
 			}
 		}

@@ -117,5 +117,5 @@ deployments
 	winmobile-png60=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-060x060.png
 	winmobile-png90=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-090x090.png
 	webos-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-036x036.png
-	version-revision=1
+	version-revision=90
 }

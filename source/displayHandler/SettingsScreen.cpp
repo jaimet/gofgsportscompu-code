@@ -29,14 +29,34 @@ void SettingsScreen::CB_SSExitButtonClick(CIwUIElement*) {
 void SettingsScreen::CB_SSSaveButtonClick(CIwUIElement*) {
 	// Store all settings and save them
 	SettingsHandler::Self()->Set( "MinLocationAccuracy", strtol(this->MinLocationAccuracy_Value->GetCaption(), NULL, 10) );
+	SettingsHandler::Self()->Set( "TrackFolder", this->TrackFolder_Value->GetCaption() );
+	SettingsHandler::Self()->Set( "ExportFolder", this->ExportFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Save();
 
 	this->SetVisible(false);
 }
 
+void SettingsScreen::CB_SSTrackFolderButtonClick(CIwUIElement*) {
+	FolderSelectScreen::Self()->Show( &SettingsScreen::CB_SSSelectFolder, this->TrackFolder_Value );
+}
+
+void SettingsScreen::CB_SSExportFolderButtonClick(CIwUIElement*) {
+	FolderSelectScreen::Self()->Show( &SettingsScreen::CB_SSSelectFolder, this->ExportFolder_Value );
+}
+
+int32 SettingsScreen::CB_SSSelectFolder( void *systemData, void *userData  ) {
+	((CIwUITextField*) userData)->SetCaption( (const char*) systemData );
+
+	//SettingsScreen::Self()->TrackFolder_Value->SetCaption( (char*) systemData );
+
+	return 0;
+}
+
 void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
-	// Read the setting of the minimum location accuracy value
+	// Read all settings and display them
 	this->MinLocationAccuracy_Value->SetCaption( SettingsHandler::Self()->GetString( "MinLocationAccuracy" ).c_str() );
+	this->TrackFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "TrackFolder" ).c_str() );
+	this->ExportFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportFolder" ).c_str() );
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
 }
@@ -44,9 +64,13 @@ void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "SettingsScreen", SettingsScreen, CB_SSExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "SettingsScreen", SettingsScreen, CB_SSSaveButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "SettingsScreen", SettingsScreen, CB_SSTrackFolderButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "SettingsScreen", SettingsScreen, CB_SSExportFolderButtonClick, CIwUIElement*)
 
 	// Find the ui elements for each setting
 	this->MinLocationAccuracy_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "MinLocationAccuracy_Value" );
+	this->TrackFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "TrackFolder_Value" );
+	this->ExportFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportFolder_Value" );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
