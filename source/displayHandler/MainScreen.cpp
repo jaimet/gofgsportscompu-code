@@ -98,6 +98,10 @@ void MainScreen::MA_MenuButtonClick(CIwUIElement*)
 int MainScreen::mainTimer( void *systemData, void *userData ) {
 	if( MainScreen::Self()->bStopPending ) return 1;
 
+	// Calculate current time difference
+	time_t timeNow = time( NULL );
+	int timeDiff = (int) difftime( timeNow, MainScreen::Self()->startTime );
+
 	// As long as the main timer is running, keep the device awake
 	s3eDeviceBacklightOn();
 
@@ -116,6 +120,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		
 		// Update displays
 		MainScreen::Self()->speedInfo->setValue( GPSHandler::Self()->getSpeed() * 3.6 );
+		MainScreen::Self()->speedInfo->setAverage( (MainScreen::Self()->totalDistance / (double) timeDiff) * 3.6 );
 		MainScreen::Self()->distanceInfo->setValue( MainScreen::Self()->totalDistance / 1000.0 ); // /1000.0 to convert meters to km
 		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );
 	}
@@ -142,8 +147,6 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 
 	// Update timer (run-time)
 	char myBuf[10];
-	time_t timeNow = time( NULL );
-	int timeDiff = (int) difftime( timeNow, MainScreen::Self()->startTime );
 
 	// Calculate hours, mins and seconds
 	int hours = timeDiff / 3600;

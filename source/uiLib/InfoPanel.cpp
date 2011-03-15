@@ -128,6 +128,16 @@ void InfoPanel::setValue( std::string value ) {
 	this->currentLabel->SetCaption( value.c_str() );
 }
 
+void InfoPanel::setAverage( double value ) {
+	std::ostringstream averageString;
+
+	// Format the value
+	averageString.precision(2);
+	averageString << value;
+
+	this->averageLabel->SetCaption( averageString.str().c_str() );
+}
+
 void InfoPanel::setImage( CIwTexture *texture ) {
 	this->image->SetTexture( texture );
 }

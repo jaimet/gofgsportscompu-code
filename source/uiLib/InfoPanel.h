@@ -21,6 +21,8 @@
 #define INFOPANEL
 
 #include <string>
+#include <iostream>
+#include <sstream>
 
 #include "IwUI.h"
 
@@ -39,6 +41,8 @@ public:
 	void setValue( char *value );
 	void setValue( CIwTexture *valueTexture );
 	void setValue( std::string value );
+
+	void setAverage( double value );
 
 	void setImage( CIwTexture *texture );
 

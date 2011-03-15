@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -27,7 +27,7 @@ Screen::Screen( char *screenName ) {
 	this->myScreen->SetVisible( false );
 
 	// Find background button
-	this->background = (CIwUIButton*) this->myScreen->GetChildNamed( "BGButton" );
+	this->background = (CIwUIButton*) this->myScreen->GetChildNamed( "BGButton", true, true );
 }
 
 void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
