@@ -25,6 +25,9 @@ Screen::Screen( char *screenName ) {
 
 	this->myScreen = CIwUIElement::CreateFromResource( screenName );
 	this->myScreen->SetVisible( false );
+
+	// Find background button
+	this->background = (CIwUIButton*) this->myScreen->GetChildNamed( "BGButton" );
 }
 
 void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
@@ -72,7 +75,7 @@ void Screen::SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled ) {
 	for( int i = 0; i < p_parent->GetNumChildren(); i++ ) {
 		CIwUIElement *currentChild = p_parent->GetChild( i );
 
-		if( dynamic_cast<CIwUIButton*>(currentChild) != NULL ) {
+		if( dynamic_cast<CIwUIButton*>(currentChild) != NULL && currentChild != this->background ) {
 			((CIwUIButton*) currentChild)->SetEnabled( p_bEnabled );
 		}
 		else if( dynamic_cast<CIwUITableViewItem*>(currentChild) != NULL ) {

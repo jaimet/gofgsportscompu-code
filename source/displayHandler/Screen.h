@@ -41,6 +41,7 @@ protected:
 	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
 
 	CIwUIElement *myScreen;
+	CIwUIButton *background;
 
 private:
 	std::string animInName, animOutName;
