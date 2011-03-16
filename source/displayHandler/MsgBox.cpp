@@ -30,4 +30,12 @@ MsgBox::MsgBox() : Screen( "MsgBox" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "MsgBox", MsgBox, MSGBOX_QuitButtonClick, CIwUIElement*)
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
+
+	// Get reference to own alert dialog
+	this->alertDialog = (CIwUIAlertDialog*) this->myScreen->GetChildNamed( "alert_dialog" );
+}
+
+void MsgBox::Show( std::string text ) {
+	MsgBox::Self()->alertDialog->SetLabelCaption( text.c_str() );
+	MsgBox::Self()->SetVisible( true );
 }

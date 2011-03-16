@@ -23,14 +23,22 @@
 #include "Screen.h"
 #include "../lib/Singleton.h"
 
+#include <string>
+
+#include <IwUIAlertDialog.h>
+
 class MsgBox : public Screen, public Singleton<MsgBox> {
 	friend class Singleton<MsgBox>;
 public:
 	void MSGBOX_QuitButtonClick(CIwUIElement*);
+
+	static void Show( std::string text );
+
 protected:
 	MsgBox();
 
 	//CIwUIElement *tracksButton;
+	CIwUIAlertDialog *alertDialog;
 };
 
 #endif

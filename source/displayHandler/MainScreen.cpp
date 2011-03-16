@@ -267,6 +267,8 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->altitudeInfo->setValue( "0.00" );
 	this->timeInfo->setValue( "00:00:00" );
 	//this->statusInfo->setValue( "0000.00" );
+
+	MsgBox::Self();
 }
 
 /**
