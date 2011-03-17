@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -22,33 +22,32 @@
 
 #include <IwHTTP.h>
 #include <string>
+#include <sstream>
 
 #include "Task.h"
 #include "TrackReader.h"
-#include "Singleton.h"
 
-
-class TaskHTTPExport : public Task, public TrackReader, public Singleton<TaskHTTPExport> {
-	friend class Singleton<TaskHTTPExport>;
+class TaskHTTPExport : public Task, public TrackReader {
+	friend class CIwHTTP;
 public:
+	TaskHTTPExport( std::string p_filename, std::string p_targetURL );
+
 	void Start();
 	int Next();
 	void Stop();
 
-	void SetFileName( std::string p_filename );
-
+protected:
 	static int32 CB_HeaderReceived( void *systemData, void *userData );
 
-protected:
-	TaskHTTPExport();
+	void sendData();
 
 	CIwHTTP *http;
-	char formatBuffer[50];
-	int sequence;
-	bool bRequestPending;
-
 	std::string filename;
-	std::string sendBuffer;
+	std::string targetURL;
+
+	bool bRequestPending;
+	int sequence;
+	std::ostringstream sendBuffer;
 };
 
 #endif

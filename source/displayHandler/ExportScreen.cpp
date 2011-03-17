@@ -94,18 +94,14 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 		// Start the correct process
 		switch( this->exportFormat ) {
 		case FITLOG:
-			//strcpy( extString, ".fitlog" );
 			exportFileName << ".fitlog";
 			this->exportTask = new TaskFitlogExport( inputFileName.str(), exportFileName.str() );
 			break;
 		case GOFG:
-			TaskHTTPExport::Self()->SetFileName( inputFileName.str() );
-			this->exportTask = TaskHTTPExport::Self();
-			//TaskHandler::Self()->Add( TaskHTTPExport::Self() );
+			this->exportTask = new TaskHTTPExport( inputFileName.str(), "http://www.gofg.at/gofgst/index.php?mode=device_upload" );
 			break;
 		case TCX:
 		default:
-			//strcpy( extString, ".tcx" );
 			exportFileName << ".tcx";
 			this->exportTask = new TaskTCXExport( inputFileName.str(), exportFileName.str() );
 			break;

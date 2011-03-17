@@ -24,7 +24,7 @@
 
 DataPoint *TrackReader::ReadNextPoint() {
 	// Check if the file is open
-	if( this->inFile == NULL ) return NULL;
+	if( this->inFile == NULL || this->dataPoint == NULL ) return NULL;
 
 	// Reset the current dataPoint
 	this->dataPoint->reset();
