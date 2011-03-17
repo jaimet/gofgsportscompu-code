@@ -128,7 +128,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	// Update accuracy image based on minimum location accuracy
 	double currAccuracy = GPSHandler::Self()->getAccuracy();
 	double minAccuracy = (double) SettingsHandler::Self()->GetInt( "MinLocationAccuracy" );
-	if( currAccuracy > minAccuracy || currAccuracy < 0.0 ) {
+	if( currAccuracy > minAccuracy || currAccuracy <= 0.0 ) {
 		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_none", IW_GX_RESTYPE_TEXTURE ) );
 	}
 	else if( currAccuracy > (minAccuracy / 3.0 * 2.0) ) {
@@ -268,7 +268,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->timeInfo->setValue( "00:00:00" );
 	//this->statusInfo->setValue( "0000.00" );
 
-	MsgBox::Self();
+	//MsgBox::Self();
 }
 
 /**
