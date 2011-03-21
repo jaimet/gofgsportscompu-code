@@ -142,19 +142,16 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	}
 
 
-	// Update accuracy
-	//MainScreen::Self()->statusInfo->setValue( GPSHandler::Self()->getAccuracy() );
-
-	// Update timer (run-time)
-	char myBuf[10];
-
 	// Calculate hours, mins and seconds
 	int hours = timeDiff / 3600;
 	int mins = (timeDiff % 3600) / 60;
 	int secs = ((timeDiff % 3600) % 60);
+
 	// Create formatted time-stamp & display it
-	sprintf( myBuf, "%02d:%02d:%02d", hours, mins, secs );
-	MainScreen::Self()->timeInfo->setValue( myBuf );
+	std::ostringstream formatBuffer;
+	formatBuffer.fill( '0' );
+	formatBuffer << right << setw(2) << hours << ":" << setw(2) << mins << ":" << setw(2) << secs;
+	MainScreen::Self()->timeInfo->setValue( formatBuffer.str().c_str() );
 
 	// Call main-timer again
 	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
