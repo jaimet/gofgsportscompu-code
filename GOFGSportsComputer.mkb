@@ -112,10 +112,16 @@ deployments
 	android-icon-mdpi=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-048x048.png
 	android-unsigned='0'
 	android-manifest=deploy/AndroidManifest.xml
-	version-minor=1
+	version-minor=2
 	winmobile-png45=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-045x045.png
 	winmobile-png60=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-060x060.png
 	winmobile-png90=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-090x090.png
 	webos-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-036x036.png
-	version-revision=90
+	symbian-icon1=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x044.bmp
+	symbian-icon1-mask=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x044-mask.bmp
+	symbian-icon2=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x029.bmp
+	symbian-icon2-mask=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x029-mask.bmp
+	symbian-locationsupport='0'
+	symbian-platsecflags='LocalServices+ReadUserData+WriteUserData+NetworkServices+Location'
+	uid=0x20040763
 }
