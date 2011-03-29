@@ -19,7 +19,9 @@
 
 #include "Screen.h"
 
-Screen::Screen( char *screenName ) {
+std::list<Screen*> Screen::screens;
+
+Screen::Screen( const char *screenName ) {
 	// Set Default animations
 	this->SetAnimation();
 
@@ -28,6 +30,14 @@ Screen::Screen( char *screenName ) {
 
 	// Find background button
 	this->background = (CIwUIButton*) this->myScreen->GetChildNamed( "BGButton", true, true );
+
+	// Add reference to ourselves
+	Screen::screens.push_back( this );
+}
+
+Screen::~Screen() {
+//	if( this->background != NULL ) delete this->background;
+//	if( this->myScreen != NULL ) delete this->myScreen;
 }
 
 void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
@@ -68,6 +78,21 @@ void Screen::NotifyProgress( CIwUIAnimator *pAnimator ) {
 
 void Screen::NotifyStopped( CIwUIAnimator *pAnimator ) {
 	this->myScreen->SetVisible( false );
+}
+
+
+/**
+ * <summary>	Delete all created screens. </summary>
+ *
+ * <remarks>	Wkoller, 29.03.2011. </remarks>
+ */
+void Screen::DeleteScreens() {
+	while( !Screen::screens.empty() ) {
+		Screen *currScreen = Screen::screens.front();
+		Screen::screens.pop_front();
+
+		delete currScreen;
+	}
 }
 
 void Screen::SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled ) {

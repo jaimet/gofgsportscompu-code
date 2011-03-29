@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -21,13 +21,15 @@
 #define SCREEN
 
 #include <string>
+#include <list>
 
 #include "IwUI.h"
 #include "IwUIAnimManager.h"
 
 class Screen : public IIwUIAnimatorObserver {
 public:
-	Screen( char *screenName );
+	Screen( const char *screenName );
+	virtual ~Screen();
 
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );		// Show / Hide the screen
 	void SetEnabled( bool p_bEnabled );
@@ -36,6 +38,7 @@ public:
 	void NotifyProgress( CIwUIAnimator *pAnimator );
 	void NotifyStopped( CIwUIAnimator *pAnimator );
 
+	static void DeleteScreens();
 
 protected:
 	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
@@ -45,6 +48,7 @@ protected:
 
 private:
 	std::string animInName, animOutName;
+	static std::list<Screen*> screens;
 };
 
 #endif

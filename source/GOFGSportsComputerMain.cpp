@@ -40,7 +40,7 @@ int main() {
 
 	// Do this until asked to stop
 	while (1) {
-		s3eDeviceYield(0); 
+		s3eDeviceYield(); 
 		s3eKeyboardUpdate();
 		s3ePointerUpdate();
 

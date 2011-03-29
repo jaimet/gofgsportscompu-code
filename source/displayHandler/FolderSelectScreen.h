@@ -49,6 +49,7 @@ public:
 	void CB_FSSSelectButtonClick(CIwUIElement*);
 private:
 	FolderSelectScreen();
+	~FolderSelectScreen();
 
 	CIwUITableView *folderList;
 	CIwUILabel *CurrentFolderLabel;

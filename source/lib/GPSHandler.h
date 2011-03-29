@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -20,16 +20,19 @@
 #ifndef GPSHANDLER
 #define GPSHANDLER
 
-#define AVERAGE_LENGTH 3
+#define AVERAGE_LENGTH 5
+
+#include "Singleton.h"
 
 #include "s3eLocation.h"
 #include "s3eTimer.h"
 
 #include <math.h>
 
-class GPSHandler {
+class GPSHandler : public Singleton<GPSHandler> {
+	friend class Singleton<GPSHandler>;
 public:
-	static GPSHandler *Self();
+	//static GPSHandler *Self();
 
 	bool updateLocation();
 
@@ -47,17 +50,20 @@ public:
 	void startGPS();
 	void stopGPS();
 
-private:
+protected:
 	GPSHandler();
 
+private:
 	void reset();	// Reset the GPS Handler, automatically called on startGPS()
 
 	double degreeToRad( double degree );
 	double haversineDistance( s3eLocation *start, s3eLocation *end );
 
-	static GPSHandler *mySelf;
+	//static GPSHandler *mySelf;
 
 	s3eLocation *currLocation;
+	s3eLocation *newLocation;
+	s3eLocationCourseData *courseData;
 	bool bGPSActive;
 	double distance;		// Last distance in meters
 	double speed;			// Speed in meters / second (average of last 3 points)

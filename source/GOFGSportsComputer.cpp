@@ -33,7 +33,7 @@
 * Initialize our system
 */
 void GOFGInit() {
-	IwGxInit();
+//	IwGxInit();
 	IwUIInit();
 	IW_CLASS_REGISTER(TrackTVItemSource);
 	IW_CLASS_REGISTER(FolderTVItemSource);
@@ -64,11 +64,14 @@ void GOFGInit() {
 * Cleanup and exit
 */
 void GOFGShutDown() {
-	delete IwGetUIController();
+	delete IwGetUITextInput();
 	delete IwGetUIView();
+	delete IwGetUIController();
+
+	Screen::DeleteScreens();
 
 	IwUITerminate();
-	IwGxTerminate();
+//	IwGxTerminate();
 }
 
 /**

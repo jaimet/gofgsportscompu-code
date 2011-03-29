@@ -43,6 +43,7 @@ public:
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 private:
 	SettingsScreen();
+	~SettingsScreen();
 
 	CIwUITextField *MinLocationAccuracy_Value;
 	CIwUITextField *TrackFolder_Value;

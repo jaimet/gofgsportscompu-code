@@ -20,6 +20,8 @@
 #ifndef SINGLETON
 #define SINGLETON
 
+#include <cstring>	// Required for NULL reference
+
 template <class S>
 class Singleton {
 public:

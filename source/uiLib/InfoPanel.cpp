@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -19,7 +19,7 @@
 
 #include "InfoPanel.h"
 
-InfoPanel::InfoPanel( char *name, bool p_bNoStatistics ) {
+InfoPanel::InfoPanel( const char *name, bool p_bNoStatistics ) {
 	this->bNoStatistics = p_bNoStatistics;
 
 	if( this->bNoStatistics ) {
@@ -67,7 +67,19 @@ InfoPanel::InfoPanel( char *name, bool p_bNoStatistics ) {
 	//this->SetProperty( "sizeToContent", true );
 }
 
-void InfoPanel::setUnit( char *unit ) {
+InfoPanel::~InfoPanel() {
+	/*delete this->uiInfoPanel;
+
+	delete this->unitLabel;
+	delete this->currentLabel;
+	delete this->averageLabel;
+	delete this->maximumLabel;
+
+	delete this->image;
+	delete this->currentImage;*/
+}
+
+void InfoPanel::setUnit( const char *unit ) {
 	this->unitLabel->SetCaption( unit );
 }
 
@@ -106,7 +118,7 @@ void InfoPanel::setValue( double value ) {
 	}
 }
 
-void InfoPanel::setValue( char *value ) {
+void InfoPanel::setValue( const char *value ) {
 	this->currentLabel->SetCaption( value );
 }
 

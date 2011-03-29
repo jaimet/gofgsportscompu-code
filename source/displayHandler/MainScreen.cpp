@@ -285,6 +285,20 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	//s3eOSExecExecute( "https://www.facebook.com/dialog/oauth?client_id=144229302291327&redirect_uri=www.gofg.at", false );
 }
 
+MainScreen::~MainScreen() {
+	delete this->speedInfo;
+	delete this->distanceInfo;
+	delete this->altitudeInfo;
+	delete this->timeInfo;
+	delete this->clockInfo;
+	delete this->statusInfo;
+
+	/*this->ExitButton = NULL;
+	this->StartButton = NULL;
+	this->StopButton = NULL;
+	this->MenuButton = NULL;*/
+}
+
 
 /**
  * <summary>	Update the display timer for the passed time. </summary>

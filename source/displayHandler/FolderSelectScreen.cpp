@@ -102,3 +102,8 @@ FolderSelectScreen::FolderSelectScreen() : Screen( "FolderSelectScreen" ) {
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
+
+FolderSelectScreen::~FolderSelectScreen() {
+/*	delete this->folderList;
+	delete this->CurrentFolderLabel;*/
+}

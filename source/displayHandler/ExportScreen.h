@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -35,6 +35,8 @@
 #include "../lib/TaskTCXExport.h"
 #include "../lib/TaskFitlogExport.h"
 
+#include "MsgBox.h"
+
 enum ExportFormat {
 	FITLOG,
 	TCX,
@@ -54,6 +56,7 @@ public:
 
 	static int32 CB_UpdateProgress( void *systemData, void *userData  );
 //	static int32 CB_StartExport( void *systemData, void *userData );
+	~ExportScreen();
 
 private:
 	ExportScreen();

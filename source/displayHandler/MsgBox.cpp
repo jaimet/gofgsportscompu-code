@@ -35,7 +35,11 @@ MsgBox::MsgBox() : Screen( "MsgBox" ) {
 	this->alertDialog = (CIwUIAlertDialog*) this->myScreen->GetChildNamed( "alert_dialog" );
 }
 
+MsgBox::~MsgBox() {
+//	delete this->alertDialog;
+}
+
 void MsgBox::Show( std::string text ) {
 	MsgBox::Self()->alertDialog->SetLabelCaption( text.c_str() );
-	MsgBox::Self()->SetVisible( true );
+	MsgBox::Self()->SetVisible( true, true );
 }

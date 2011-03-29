@@ -36,6 +36,7 @@ public:
 
 protected:
 	MsgBox();
+	~MsgBox();
 
 	//CIwUIElement *tracksButton;
 	CIwUIAlertDialog *alertDialog;

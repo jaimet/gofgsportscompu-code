@@ -69,57 +69,60 @@ void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 }
 
 void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
-	if( strlen( this->es_currentFile ) > 0 ) {
-//		s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
-		//char fullFileName[30];
-		//char exportName[30];
-		//char *extString;
-		std::string baseFileName( ExportScreen::Self()->es_currentFile );
-
-		std::ostringstream inputFileName;
-		std::ostringstream exportFileName;
-
-		baseFileName.replace( baseFileName.find_last_of( "." ), 4, "" );
-
-		// Create the fileNames
-		inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << baseFileName << ".gsc";
-		exportFileName << SettingsHandler::Self()->GetString( "ExportFolder" ) << baseFileName;
-
-		//sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
-		//sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
-
-		// Change extension
-		//extString = strstr( exportName, ".gsc" );
-
-		// Start the correct process
-		switch( this->exportFormat ) {
-		case FITLOG:
-			exportFileName << ".fitlog";
-			this->exportTask = new TaskFitlogExport( inputFileName.str(), exportFileName.str() );
-			break;
-		case GOFG:
-			this->exportTask = new TaskHTTPExport( inputFileName.str(), "http://www.gofg.at/gofgst/index.php?mode=device_upload" );
-			break;
-		case TCX:
-		default:
-			exportFileName << ".tcx";
-			this->exportTask = new TaskTCXExport( inputFileName.str(), exportFileName.str() );
-			break;
-		}
-
-		// Set progress callback & add the task to the taskhandler
-		this->exportTask->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
-		TaskHandler::Self()->Add( this->exportTask );
-
-		//this->DisableChildren( this->myScreen );
-
-		// Disable all controls
-		this->SetEnabled( false );
-		// But keep exit button active
-		this->exitButton->SetEnabled( true );
-
-		//this->mysc
+	if( strlen( this->es_currentFile ) <= 0 ) {
+		MsgBox::Show( "Please select a file for export!" );
+		return;
 	}
+
+	//s3eTimerSetTimer( 1, &ExportScreen::CB_StartExport, NULL );
+	//char fullFileName[30];
+	//char exportName[30];
+	//char *extString;
+	std::string baseFileName( ExportScreen::Self()->es_currentFile );
+
+	std::ostringstream inputFileName;
+	std::ostringstream exportFileName;
+
+	baseFileName.replace( baseFileName.find_last_of( "." ), 4, "" );
+
+	// Create the fileNames
+	inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << baseFileName << ".gsc";
+	exportFileName << SettingsHandler::Self()->GetString( "ExportFolder" ) << baseFileName;
+
+	//sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
+	//sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
+
+	// Change extension
+	//extString = strstr( exportName, ".gsc" );
+
+	// Start the correct process
+	switch( this->exportFormat ) {
+	case FITLOG:
+		exportFileName << ".fitlog";
+		this->exportTask = new TaskFitlogExport( inputFileName.str(), exportFileName.str() );
+		break;
+	case GOFG:
+		this->exportTask = new TaskHTTPExport( inputFileName.str(), "http://www.gofg.at/gofgst/index.php?mode=device_upload" );
+		break;
+	case TCX:
+	default:
+		exportFileName << ".tcx";
+		this->exportTask = new TaskTCXExport( inputFileName.str(), exportFileName.str() );
+		break;
+	}
+
+	// Set progress callback & add the task to the taskhandler
+	this->exportTask->SetProgressCallback( &ExportScreen::CB_UpdateProgress );
+	TaskHandler::Self()->Add( this->exportTask );
+
+	//this->DisableChildren( this->myScreen );
+
+	// Disable all controls
+	this->SetEnabled( false );
+	// But keep exit button active
+	this->exitButton->SetEnabled( true );
+
+	//this->mysc
 }
 
 void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected) {
@@ -180,6 +183,13 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	IwGxSwapBuffers();*/
 
 	return 0;
+}
+
+ExportScreen::~ExportScreen() {
+/*	delete this->exportProgress;
+	delete this->exportStatus;
+	delete this->trackList;
+	delete this->exitButton;*/
 }
 
 // Callback for calling the export function using a timer, the advantage is,

@@ -19,34 +19,43 @@
 
 #include "GPSHandler.h"
 
-GPSHandler *GPSHandler::mySelf = NULL;
+//GPSHandler *GPSHandler::mySelf = NULL;
+template<>
+GPSHandler *Singleton<GPSHandler>::mySelf = NULL;
 
 // Singleton function
-GPSHandler *GPSHandler::Self() {
+/*GPSHandler *GPSHandler::Self() {
 	if( GPSHandler::mySelf == NULL ) {
 		GPSHandler::mySelf = new GPSHandler();
 	}
 
 	return GPSHandler::mySelf;
-}
+}*/
 
 // Get a new location statement and update all values
 bool GPSHandler::updateLocation() {
 	if( !this->bGPSActive ) return false;
 
 	s3eResult g_Error = S3E_RESULT_ERROR;
-	s3eLocation *newLocation = new s3eLocation();
 
-	g_Error = s3eLocationGet(newLocation);
+	g_Error = s3eLocationGet(this->newLocation);
 	int64 currTime = s3eTimerGetUTC();
 
 	if( g_Error == S3E_RESULT_SUCCESS ) {
-		//bool bLocationUpdated = false;	// This is set to true, if the new location is outside the last accuracy (which means data is updated)
-
 		// Calculate new accuracy
-		double newAccuracy = (newLocation->m_HorizontalAccuracy + newLocation->m_VerticalAccuracy) / 2.0;
+		double newAccuracy = (this->newLocation->m_HorizontalAccuracy + this->newLocation->m_VerticalAccuracy) / 2.0;
+
+		// Use extended functionality to check if the location is fixed, else use our own "detector"
+		// Note: This is a hybdrid check to work on devices which do not support s3eLocationGetInt too
+		if( s3eLocationGetInt( S3E_LOCATION_HAS_POSITION ) <= 0 ) {
+			// Check if this is a real error, or if unsupported make a "dummy" check on the accuracy
+			if( s3eLocationGetError() !=  S3E_LOCATION_ERR_UNSUPPORTED || newAccuracy <= 0.0 ) {
+				return false;
+			}
+		}
+
 		// Check if accuracy is high enough, if not just update the current accuracy and return an invalid point
-		if( (this->minAccuracy > 0.0 && newAccuracy > this->minAccuracy) || newAccuracy <= 0.0 ) {
+		if( (this->minAccuracy > 0.0 && newAccuracy > this->minAccuracy) ) {
 			this->currAccuracy = newAccuracy;
 
 			return false;
@@ -55,7 +64,7 @@ bool GPSHandler::updateLocation() {
 		// Check if we have an old location
 		if( this->currLocation != NULL ) {
 			// Calculate distance between last and new location
-			double newDistance = this->haversineDistance( this->currLocation, newLocation );
+			double newDistance = this->haversineDistance( this->currLocation, this->newLocation );
 
 			// Check if the distance is outside the last accuracy (using average horiz & verti accuracy => avoid too complicated calculations)
 			if( newDistance >= this->currAccuracy ) {
@@ -79,7 +88,7 @@ bool GPSHandler::updateLocation() {
 				this->speed = totalDistance / totalTime;
 
 				// Save altitude
-				this->altitude = newLocation->m_Altitude;
+				this->altitude = this->newLocation->m_Altitude;
 
 				// Set status to true (we have an update)
 				//bLocationUpdated = true;
@@ -88,19 +97,28 @@ bool GPSHandler::updateLocation() {
 			}
 			// New location is within old accuracy
 			else {
-				this->distance = 0.0;
+				return false;
+
+				/*this->distance = 0.0;
 				this->speed = 0.0;
 
 				// We keep the old data point
-				delete newLocation;
-				newLocation = this->currLocation;
-				newAccuracy = this->currAccuracy;
+				//delete newLocation;
+				this->newLocation = this->currLocation;
+				newAccuracy = this->currAccuracy;*/
 			}
 		
 		}
 
-		// Save new location
-		this->currLocation = newLocation;
+		// Check if advanced location info is available (will use that for speed info then)
+		if( s3eLocationGetCourse(this->courseData) == S3E_RESULT_SUCCESS ) {
+			this->speed = this->courseData->m_Speed;
+			this->currSpeed = this->courseData->m_Speed;
+		}
+
+		// Save new location & create new space for new location
+		this->currLocation = this->newLocation;
+		this->newLocation = new s3eLocation();
 		// Set accuracy based on average value
 		this->currAccuracy = newAccuracy;
 		// Save current time
@@ -175,6 +193,8 @@ GPSHandler::GPSHandler() {
 // Reset the GPS Handler, automatically called on startGPS()
 void GPSHandler::reset() {
 	this->currLocation = NULL;
+	this->newLocation = new s3eLocation();
+	this->courseData = new s3eLocationCourseData();
 	this->bGPSActive = false;
 	this->distance = 0.0;
 	this->speed = 0.0;

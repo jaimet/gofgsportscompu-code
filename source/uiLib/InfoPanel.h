@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -34,11 +34,12 @@
 
 class InfoPanel {
 public:
-	InfoPanel( char *name, bool bNoStatistics = false );
+	InfoPanel( const char *name, bool bNoStatistics = false );
+	~InfoPanel();
 
-	void setUnit( char *unit );
+	void setUnit( const char *unit );
 	void setValue( double value );
-	void setValue( char *value );
+	void setValue( const char *value );
 	void setValue( CIwTexture *valueTexture );
 	void setValue( std::string value );
 
@@ -50,6 +51,8 @@ public:
 
 private:
 	//CIwGxFont *GetSizedFont( char *text, int sizeX );
+
+	CIwUIElement *uiInfoPanel;
 
 	CIwUILabel *unitLabel;
 	CIwUIAutoSizeLabel *currentLabel;
@@ -64,7 +67,6 @@ private:
 	double average;
 	int numPoints;
 
-	CIwUIElement *uiInfoPanel;
 
 	//CIwArray<char*> fontTypes;
 };
