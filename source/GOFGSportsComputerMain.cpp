@@ -26,7 +26,7 @@
 void GOFGInit(); 
 void GOFGShutDown(); 
 void GOFGRender(); 
-bool GOFGUpdate(); 
+bool GOFGUpdate( int32 deltaMs );
 
 /**
 * Main Function for program flow control
@@ -36,21 +36,25 @@ int main() {
 	GOFGInit(); 
 	IwGxSetColClear(0x0, 0x0, 0x0, 0xff);
 
+	int64 updateTime = s3eTimerGetUST();
+
 	// Do this until asked to stop
 	while (1) {
 		s3eDeviceYield(0); 
 		s3eKeyboardUpdate();
 		s3ePointerUpdate();
-		bool result = GOFGUpdate(); 
-		if ( 
-			(result == false) || 
-			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) 
-			|| 
-			(s3eKeyboardGetState(s3eKeyLSK) & S3E_KEY_STATE_DOWN) 
-			|| 
-			(s3eDeviceCheckQuitRequest()) 
-			) 
-			break; 
+
+		int64 currTime = s3eTimerGetUST();
+
+		bool result = GOFGUpdate( (int32) (currTime - updateTime) );
+		updateTime = currTime;
+		if( (result == false)
+			|| (s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) 
+			|| (s3eKeyboardGetState(s3eKeyLSK) & S3E_KEY_STATE_DOWN) 
+			|| (s3eDeviceCheckQuitRequest()) 
+			) {
+				break;
+		}
 
 		// Render content
 		GOFGRender(); 

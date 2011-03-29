@@ -39,27 +39,16 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	this->MenuButton->SetVisible( false );
 	this->StopButton->SetVisible( true );
 
-	//char fileName[20];
-	std::ostringstream fileName;
-
-	// Generate file name for tracking
+	// Save start time for tracking duration
 	this->startTime = time( NULL );
-
-	// Create the fileName
-	fileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << this->startTime << ".gsc";
-
-	//sprintf( fileName, "%d.gsc", this->startTime );
-	TrackHandler::Self()->startTracking( fileName.str() );
 
 	// Initialize & start the GPS handler
 	GPSHandler::Self()->SetMinAccuracy( SettingsHandler::Self()->GetInt( "MinLocationAccuracy" ) );
 	GPSHandler::Self()->startGPS();
 
-	// Prevent device from going to sleep
-	//s3eDeviceRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_Suspend, NULL );
-
 	// Start main timer
-	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	//s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	MainScreen::startupTimer( NULL, NULL );
 }
 
 void MainScreen::MA_StopButtonClick(CIwUIElement*)
@@ -78,20 +67,67 @@ void MainScreen::MA_StopButtonClick(CIwUIElement*)
 	this->bStopPending = true;
 }
 
-void MainScreen::MA_ExitButtonClick(CIwUIElement*)
-{
+void MainScreen::MA_ExitButtonClick(CIwUIElement*) {
 	s3eDeviceRequestQuit();
 }
 
-void MainScreen::MA_MenuButtonClick(CIwUIElement*)
-{
+void MainScreen::MA_MenuButtonClick(CIwUIElement*) {
 	MenuScreen::Self()->SetVisible( true );
+}
 
-	//FolderSelectScreen::Self()->SetVisible( true );
+// Called once a minute to update the clock
+int MainScreen::clockTimer( void *systemData, void *userData ) {
+	std::ostringstream clockString;
 
-	//this->SetVisible( false );
-	//MenuScreen::Self()->GetScreen()->SetVisible(true);
-	//ExportScreen::Self()->GetScreen()->SetVisible( true );
+	// Get current time
+	time_t now = time(NULL);
+	// Convert to tm-struct
+	struct tm* local_tm = localtime(&now);
+	// Create formatted time string
+	clockString << std::setfill('0') << std::setw(2) << local_tm->tm_hour << ":" << std::setfill('0') << std::setw(2) << local_tm->tm_min;
+
+	// Update display-label
+	MainScreen::Self()->clockInfo->setValue( clockString.str() );
+
+	// Continue calling the clock timer
+	s3eTimerSetTimer( 60000, &MainScreen::clockTimer, NULL );
+
+	return 0;
+}
+
+
+/**
+ * <summary>	Startup and initialization routine. Waits for GPS fix if set by user. </summary>
+ *
+ * <remarks>	Wkoller, 23.03.2011. </remarks>
+ *
+ * <param name="systemData">	[in,out] system data. </param>
+ * <param name="userData">  	[in,out] user data. </param>
+ *
+ * <returns>	. </returns>
+ */
+int MainScreen::startupTimer( void *systemData, void *userData ) {
+	// Update timer display
+	MainScreen::Self()->displayTimer( (int) difftime( time(NULL), MainScreen::Self()->startTime ) );
+
+	// Check if we have to wait for the GPS fix
+	if( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) && !GPSHandler::Self()->updateLocation() ) {
+		s3eTimerSetTimer( 1000, &MainScreen::startupTimer, NULL );
+		return 0;
+	}
+
+	// Finally we can start, set new start time
+	MainScreen::Self()->startTime = time( NULL );
+
+	// Create the fileName
+	std::ostringstream fileName;
+	fileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << MainScreen::Self()->startTime << ".gsc";
+	TrackHandler::Self()->startTracking( fileName.str() );
+
+	// Finally start the GPS tracking
+	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+
+	return 0;
 }
 
 // Main timer, called once a second to update all infos
@@ -141,17 +177,8 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		MainScreen::Self()->statusInfo->setValue( (CIwTexture*)IwGetResManager()->GetResNamed( "wireless_full", IW_GX_RESTYPE_TEXTURE ) );
 	}
 
-
-	// Calculate hours, mins and seconds
-	int hours = timeDiff / 3600;
-	int mins = (timeDiff % 3600) / 60;
-	int secs = ((timeDiff % 3600) % 60);
-
-	// Create formatted time-stamp & display it
-	std::ostringstream formatBuffer;
-	formatBuffer.fill( '0' );
-	formatBuffer << right << setw(2) << hours << ":" << setw(2) << mins << ":" << setw(2) << secs;
-	MainScreen::Self()->timeInfo->setValue( formatBuffer.str().c_str() );
+	// Update display timer
+	MainScreen::Self()->displayTimer( timeDiff );
 
 	// Call main-timer again
 	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
@@ -159,22 +186,11 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	return 0;
 }
 
-// Called once a minute to update the clock
-int MainScreen::clockTimer( void *systemData, void *userData ) {
-	std::ostringstream clockString;
-
-	// Get current time
-	time_t now = time(NULL);
-	// Convert to tm-struct
-	struct tm* local_tm = localtime(&now);
-	// Create formatted time string
-	clockString << std::setfill('0') << std::setw(2) << local_tm->tm_hour << ":" << std::setfill('0') << std::setw(2) << local_tm->tm_min;
-
-	// Update display-label
-	MainScreen::Self()->clockInfo->setValue( clockString.str() );
-
-	// Continue calling the clock timer
-	s3eTimerSetTimer( 60000, &MainScreen::clockTimer, NULL );
+/**
+* Called to prevent device from going to suspend, only used if tracking is active
+*/
+int32 MainScreen::CB_Suspend( void *systemData, void *userData ) {
+	s3eDeviceBacklightOn();
 
 	return 0;
 }
@@ -266,13 +282,26 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	//this->statusInfo->setValue( "0000.00" );
 
 	//MsgBox::Self();
+	//s3eOSExecExecute( "https://www.facebook.com/dialog/oauth?client_id=144229302291327&redirect_uri=www.gofg.at", false );
 }
 
-/**
-* Called to prevent device from going to suspend, only used if tracking is active
-*/
-int32 MainScreen::CB_Suspend( void *systemData, void *userData ) {
-	s3eDeviceBacklightOn();
 
-	return 0;
+/**
+ * <summary>	Update the display timer for the passed time. </summary>
+ *
+ * <remarks>	Wkoller, 23.03.2011. </remarks>
+ *
+ * <param name="timeDiff">	The time difference. </param>
+ */
+void MainScreen::displayTimer( int timeDiff ) {
+	// Calculate hours, mins and seconds
+	int hours = timeDiff / 3600;
+	int mins = (timeDiff % 3600) / 60;
+	int secs = ((timeDiff % 3600) % 60);
+
+	// Create formatted time-stamp & display it
+	std::ostringstream formatBuffer;
+	formatBuffer.fill( '0' );
+	formatBuffer << right << setw(2) << hours << ":" << setw(2) << mins << ":" << setw(2) << secs;
+	this->timeInfo->setValue( formatBuffer.str().c_str() );
 }

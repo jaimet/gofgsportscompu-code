@@ -20,6 +20,8 @@
 #ifndef SETTINGSSCREEN
 #define SETTINGSSCREEN
 
+#include "IwUICheckbox.h"
+
 #include "../lib/SettingsHandler.h"
 
 #include "../displayHandler/Screen.h"
@@ -45,6 +47,7 @@ private:
 	CIwUITextField *MinLocationAccuracy_Value;
 	CIwUITextField *TrackFolder_Value;
 	CIwUITextField *ExportFolder_Value;
+	CIwUICheckbox *WaitForGPSFix_Value;
 };
 
 #endif

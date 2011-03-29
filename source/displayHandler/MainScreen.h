@@ -25,6 +25,8 @@
 #include <sstream>
 #include <iomanip>
 
+//#include <s3eExt_OSExec.h>
+
 #include "Screen.h"
 #include "../lib/Singleton.h"
 #include "../lib/GPSHandler.h"
@@ -45,12 +47,15 @@ public:
 	void MA_MenuButtonClick(CIwUIElement*);
 
 	static int clockTimer( void *systemData, void *userData );
+	static int startupTimer( void *systemData, void *userData );
 	static int mainTimer( void *systemData, void *userData );
 
 	static int32 CB_Suspend( void *systemData, void *userData );
 
 protected:
 	MainScreen();
+
+	void displayTimer( int timeDiff );
 
 	CIwUIButton *ExitButton;
 	CIwUIButton *StartButton;

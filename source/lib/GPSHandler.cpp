@@ -46,7 +46,7 @@ bool GPSHandler::updateLocation() {
 		// Calculate new accuracy
 		double newAccuracy = (newLocation->m_HorizontalAccuracy + newLocation->m_VerticalAccuracy) / 2.0;
 		// Check if accuracy is high enough, if not just update the current accuracy and return an invalid point
-		if( this->minAccuracy > 0.0 && newAccuracy > this->minAccuracy ) {
+		if( (this->minAccuracy > 0.0 && newAccuracy > this->minAccuracy) || newAccuracy <= 0.0 ) {
 			this->currAccuracy = newAccuracy;
 
 			return false;

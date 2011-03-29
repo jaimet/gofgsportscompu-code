@@ -181,6 +181,12 @@ CIwUIElement
 				}
 			}
 
+			CIwUICheckbox {
+				name "WaitForGPSFix_Value"
+				style <checkbox>
+				caption "Wait for GPS fix"
+			}
+
 			CIwUILayoutVertical {
 				element {
 					name "MinLocationAccuracy_Pane"
@@ -190,6 +196,9 @@ CIwUIElement
 				}
 				element {
 					name "ExportFolder_Pane"
+				}
+				element {
+					name "WaitForGPSFix_Value"
 				}
 			}
 		}

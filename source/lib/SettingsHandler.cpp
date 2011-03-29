@@ -33,7 +33,25 @@ void SettingsHandler::Set( std::string name, int value ) {
 	sprintf( myBuf, "%d", value );	// Convert into to string
 
 	// Call actual set function
-	this->Set( name, myBuf );
+	this->Set( name, (std::string) myBuf );
+}
+
+
+/**
+ * <summary>	Sets a given setting to a boolean value </summary>
+ *
+ * <remarks>	Wkoller, 23.03.2011. </remarks>
+ *
+ * <param name="name"> 	Name of setting. </param>
+ * <param name="value">	Value of setting. </param>
+ */
+void SettingsHandler::Set( std::string name, bool value ) {
+	if( value ) {
+		this->Set( name, 1 );
+	}
+	else {
+		this->Set( name, 0 );
+	}
 }
 
 int SettingsHandler::GetInt( std::string name ) {
@@ -58,6 +76,24 @@ std::string SettingsHandler::GetString( std::string name ) {
 	}
 
 	return NULL;
+}
+
+
+/**
+ * <summary>	Gets a boolean setting. </summary>
+ *
+ * <remarks>	Wkoller, 23.03.2011. </remarks>
+ *
+ * <param name="name">	The name of the setting. </param>
+ *
+ * <returns>	value of setting. </returns>
+ */
+bool SettingsHandler::GetBool( std::string name ) {
+	if( this->settingsStore.find( name ) != this->settingsStore.end() ) {
+		if( this->GetInt( name ) ) return true;
+	}
+
+	return false;
 }
 
 bool SettingsHandler::Load() {
@@ -107,6 +143,7 @@ SettingsHandler::SettingsHandler() {
 	this->settingsStore["DefaultExportType"] = "0";
 	this->settingsStore["MinLocationAccuracy"] = "25";
 	this->settingsStore["SelectFolderPath"] = "/";
+	this->settingsStore["WaitForGPSFix"] = "1";
 
 	this->Load();
 }

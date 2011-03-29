@@ -29,8 +29,9 @@ void SettingsScreen::CB_SSExitButtonClick(CIwUIElement*) {
 void SettingsScreen::CB_SSSaveButtonClick(CIwUIElement*) {
 	// Store all settings and save them
 	SettingsHandler::Self()->Set( "MinLocationAccuracy", strtol(this->MinLocationAccuracy_Value->GetCaption(), NULL, 10) );
-	SettingsHandler::Self()->Set( "TrackFolder", this->TrackFolder_Value->GetCaption() );
-	SettingsHandler::Self()->Set( "ExportFolder", this->ExportFolder_Value->GetCaption() );
+	SettingsHandler::Self()->Set( "TrackFolder", (std::string) this->TrackFolder_Value->GetCaption() );
+	SettingsHandler::Self()->Set( "ExportFolder", (std::string) this->ExportFolder_Value->GetCaption() );
+	SettingsHandler::Self()->Set( "WaitForGPSFix", this->WaitForGPSFix_Value->GetChecked() );
 	SettingsHandler::Self()->Save();
 
 	this->SetVisible(false);
@@ -57,6 +58,7 @@ void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	this->MinLocationAccuracy_Value->SetCaption( SettingsHandler::Self()->GetString( "MinLocationAccuracy" ).c_str() );
 	this->TrackFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "TrackFolder" ).c_str() );
 	this->ExportFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportFolder" ).c_str() );
+	this->WaitForGPSFix_Value->SetChecked( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) );
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
 }
@@ -71,6 +73,7 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	this->MinLocationAccuracy_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "MinLocationAccuracy_Value" );
 	this->TrackFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "TrackFolder_Value" );
 	this->ExportFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportFolder_Value" );
+	this->WaitForGPSFix_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "WaitForGPSFix_Value" );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }

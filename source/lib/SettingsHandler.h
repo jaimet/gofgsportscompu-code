@@ -33,11 +33,13 @@ public:
 	// Setter functions
 	void Set( std::string name, std::string value );
 	void Set( std::string name, int value );
+	void Set( std::string name, bool value );
 
 	// Getter functions
 	int GetInt( std::string name );
 	double GetDouble( std::string name );
 	std::string GetString( std::string name );
+	bool GetBool( std::string name );
 
 	bool Load();	// Load from disk
 	bool Save();	// Save to disk

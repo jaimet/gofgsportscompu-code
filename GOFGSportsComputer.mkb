@@ -121,7 +121,11 @@ deployments
 	symbian-icon1-mask=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x044-mask.bmp
 	symbian-icon2=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x029.bmp
 	symbian-icon2-mask=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-044x029-mask.bmp
-	symbian-locationsupport='0'
-	symbian-platsecflags='LocalServices+ReadUserData+WriteUserData+NetworkServices+Location'
+	symbian-locationsupport='1'
 	uid=0x20040763
+	pkguid-as-uid='0'
+	symbian-cert='E:/Resources/SymbianCert/gofgsc.cer'
+	symbian-key='E:/Resources/SymbianCert/gofgsc.key'
+	bada-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-096x096.png
+	bada-splash=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-096x096.png
 }
