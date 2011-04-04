@@ -34,6 +34,15 @@ files
 	TaskFitlogExport.cpp
 	TaskSelectFolderRefresh.h
 	TaskSelectFolderRefresh.cpp
+	HxMHandler.h
+	HxMHandler.cpp
+	
+	[Lib/HxMHandler]
+	(source/lib/HxMHandler)
+	HxMHandler_Win32.h
+	HxMHandler_Win32.cpp
+	HxMHandler_WinMobile.h
+	HxMHandler_WinMobile.cpp
 
   [UiLib]
   (source/uiLib)
@@ -128,4 +137,11 @@ deployments
 	symbian-key='E:/Resources/SymbianCert/gofgsc.key'
 	bada-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-096x096.png
 	bada-splash=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-096x096.png
+}
+#### AUTO GENERATED deployment settings from DeployTool.exe. Do not edit below this line ####
+deployments
+{
+	["Default"]
+	iphone-nosign='1'
+	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 }

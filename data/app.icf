@@ -1,5 +1,6 @@
 [S3E] 
 MemSize=12000000
+MemSizeDebugDevice=12000000
 
 # These lines specify a splash screen to display while the s3e file is loaded
 SplashscreenBkR=255

@@ -107,6 +107,8 @@ int MainScreen::clockTimer( void *systemData, void *userData ) {
  * <returns>	. </returns>
  */
 int MainScreen::startupTimer( void *systemData, void *userData ) {
+	if( MainScreen::Self()->bStopPending ) return 1;
+
 	// Update timer display
 	MainScreen::Self()->displayTimer( (int) difftime( time(NULL), MainScreen::Self()->startTime ) );
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -28,6 +28,7 @@
 #include "displayHandler/MainScreen.h"
 
 #include "lib/TaskHandler.h"
+#include "lib/HxMHandler.h"
 
 /**
 * Initialize our system
@@ -58,6 +59,8 @@ void GOFGInit() {
 
 	// Instantiate our main screen and show it
 	MainScreen::Self()->SetVisible( true, true );
+
+	HxMHandler::Self();
 }
 
 /**
