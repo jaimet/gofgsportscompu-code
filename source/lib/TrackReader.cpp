@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -19,12 +19,9 @@
 
 #include "TrackReader.h"
 
-//template<>
-//TrackReader *Singleton<TrackReader>::mySelf = NULL;
-
 DataPoint *TrackReader::ReadNextPoint() {
 	// Check if the file is open
-	if( this->inFile == NULL || this->dataPoint == NULL ) return NULL;
+	if( this->inFile == NULL || this->dataPoint == NULL || s3eFileEOF( this->inFile ) ) return NULL;
 
 	// Reset the current dataPoint
 	this->dataPoint->reset();
@@ -57,7 +54,7 @@ DataPoint *TrackReader::ReadNextPoint() {
 			if( token == NULL ) {
 				return NULL;
 			}
-			// First entry is the GUID
+			// First entry is the UUID
 			this->trackUUID = token;
 			token = strtok( NULL, ":" );
 			if( token == NULL ) {
@@ -108,7 +105,7 @@ DataPoint *TrackReader::ReadNextPoint() {
 		}
 	}
 
-	return NULL;
+	return this->dataPoint;
 }
 
 bool TrackReader::SetFile( char *p_fileName ) {

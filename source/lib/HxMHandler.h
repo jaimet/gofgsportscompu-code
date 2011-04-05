@@ -43,6 +43,9 @@ public:
  */
 class HxMHandler : public Singleton<HxMHandler> {
 	friend class Singleton<HxMHandler>;
+public:
+	bool IsAvailable();
+
 protected:
 	HxMHandler();
 

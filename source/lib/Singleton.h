@@ -33,6 +33,13 @@ public:
 		return S::mySelf;
 	}
 
+	static void Delete() {
+		if( S::mySelf != NULL ) {
+			delete S::mySelf;
+			S::mySelf = NULL;
+		}
+	}
+
 private:
 	static S* mySelf;
 };

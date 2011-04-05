@@ -26,6 +26,10 @@
 template<>
 HxMHandler *Singleton<HxMHandler>::mySelf = NULL;
 
+bool HxMHandler::IsAvailable() {
+	return (this->deviceInterface != NULL);
+}
+
 HxMHandler::HxMHandler() {
 	this->deviceInterface = NULL;
 
@@ -38,21 +42,4 @@ HxMHandler::HxMHandler() {
 		this->deviceInterface = new HxMHandler_WinMobile();
 		break;
 	}
-
-/*	void *cfReturnHandle;
-	char readBuffer[100];
-	unsigned long bytesRead;
-	int readResult = -1;
-
-	this->windowsDll = NULL;
-	this->cfHandle = NULL;
-
-	this->windowsDll = s3eExtLibraryOpen( WINDOWS_LIBRARY );
-	this->cfHandle = (win_createFile) s3eExtLibraryGetSymbol( this->windowsDll, "CreateFileA" );
-	this->rfHandle = (win_readFile) s3eExtLibraryGetSymbol( this->windowsDll, "ReadFile" );
-	this->chHandle = (win_closeHandle) s3eExtLibraryGetSymbol( this->windowsDll, "CloseHandle" );
-
-	cfReturnHandle = (int*) this->cfHandle( "test.txt", 0x80000000, 0, NULL, 3, 128, NULL );
-	readResult = this->rfHandle( cfReturnHandle, readBuffer, 50, &bytesRead, NULL );
-	readResult = this->chHandle( cfReturnHandle );*/
 }

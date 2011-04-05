@@ -32,7 +32,12 @@ void SettingsScreen::CB_SSSaveButtonClick(CIwUIElement*) {
 	SettingsHandler::Self()->Set( "TrackFolder", (std::string) this->TrackFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Set( "ExportFolder", (std::string) this->ExportFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Set( "WaitForGPSFix", (bool) this->WaitForGPSFix_Value->GetChecked() );
+	SettingsHandler::Self()->Set( "UseZephyrHxM", (bool) this->UseZephyrHxM_Value->GetChecked() );
 	SettingsHandler::Self()->Save();
+
+	// Refresh main display
+	MainScreen::Delete();
+	MainScreen::Self()->SetVisible( true, true );
 
 	this->SetVisible(false);
 }
@@ -59,6 +64,7 @@ void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	this->TrackFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "TrackFolder" ).c_str() );
 	this->ExportFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportFolder" ).c_str() );
 	this->WaitForGPSFix_Value->SetChecked( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) );
+	this->UseZephyrHxM_Value->SetChecked( SettingsHandler::Self()->GetBool( "UseZephyrHxM" ) );
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
 }
@@ -74,6 +80,7 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	this->TrackFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "TrackFolder_Value" );
 	this->ExportFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportFolder_Value" );
 	this->WaitForGPSFix_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "WaitForGPSFix_Value" );
+	this->UseZephyrHxM_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "UseZephyrHxM_Value" );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }

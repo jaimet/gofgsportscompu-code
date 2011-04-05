@@ -67,11 +67,13 @@ void GOFGInit() {
 * Cleanup and exit
 */
 void GOFGShutDown() {
+	IwGetUIAnimManager()->StopAllAnims();
+
+	Screen::DeleteScreens();
+
 	delete IwGetUITextInput();
 	delete IwGetUIView();
 	delete IwGetUIController();
-
-	Screen::DeleteScreens();
 
 	IwUITerminate();
 //	IwGxTerminate();

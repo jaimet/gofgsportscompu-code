@@ -111,12 +111,28 @@ CIwUIElement
 			}
 		}
 
+		CIwUIElement {
+			name "DistanceAltitudeElement"
+
+			CIwUILayoutGrid {
+				numColumns 1
+				numRows 1
+				sizeToSpace true
+			}
+		}
+
 		CIwUILayoutGrid 
 		{
 			name "Grid"
 			numColumns 2
 			numRows 4
 			sizeToSpace true
+
+			element {
+				name "DistanceAltitudeElement"
+				row 1
+				column 0
+			}
 
 			element {
 				name "TimeStatusElement"

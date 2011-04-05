@@ -38,6 +38,15 @@ Screen::Screen( const char *screenName ) {
 Screen::~Screen() {
 //	if( this->background != NULL ) delete this->background;
 //	if( this->myScreen != NULL ) delete this->myScreen;
+	IW_UI_DESTROY_VIEW_SLOTS(this)
+
+	IwGetUIView()->RemoveElement( this->myScreen );
+	delete this->myScreen;
+
+	Screen::screens.remove( this );
+
+//	if( this->myScreen->GetParent() != NULL ) this->myScreen->GetParent()->RemoveChild( this->myScreen );
+//	delete this->myScreen;
 }
 
 void Screen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {

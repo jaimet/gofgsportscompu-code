@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -19,34 +19,28 @@
 
 #include "TrackHandler.h"
 
-TrackHandler *TrackHandler::mySelf = NULL;
-
-TrackHandler *TrackHandler::Self() {
-	if( TrackHandler::mySelf == NULL ) {
-		TrackHandler::mySelf = new TrackHandler();
-	}
-
-	return TrackHandler::mySelf;
-}
+template<>
+TrackHandler *Singleton<TrackHandler>::mySelf = NULL;
 
 bool TrackHandler::startTracking( std::string fileName ) {
-	this->fileHandler = s3eFileOpen( fileName.c_str(), "w" );
+	// Open the given file for writing
+	this->trackFile.open( fileName.c_str() );
 
-	if( this->fileHandler != NULL ) {
+	if( this->trackFile.is_open() ) {
 		// Reset track handler
-		this->dataFlags->Reset();
+		this->dataFlags->Reset( true );
 
-		// Write header information
-		char headerBuffer[49];
-		IwRandSeed( (int32) s3eTimerGetUTC() );
-		// Generate Type-4 UUID here
-		sprintf( headerBuffer, "%04X%04X-%04X-4%03X-%X%03X-%04X%04X%04X", IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFF ), IwRandMinMax( 0x8, 0xB ), IwRandMinMax( 0, 0xFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ), IwRandMinMax( 0, 0xFFFF ) );
-		s3eFileWrite( "00;", 3, 1, this->fileHandler );
-		s3eFileWrite( headerBuffer, strlen( headerBuffer ), 1, this->fileHandler );
-		sprintf( headerBuffer, ":%d\n", (int)((double) s3eTimerGetUTC() / 1000.0) );
-		s3eFileWrite( headerBuffer, strlen( headerBuffer ), 1, this->fileHandler );
-		//sprintf( headerBuffer, "00;%s:%d", 
-		//s3eFileWrite( "00;", 3, 1, this->fileHandler );
+		// Setup fixed number-format for output file
+		this->trackFile << std::fixed;
+
+		// Initialize the random number generator
+		IwRandSeed( (int32) time(NULL) );
+
+		// Generate header information (which means a Type-4 UUID and start-timestamp)
+		this->trackFile << "00;" << std::hex << IwRandMinMax( 0, 0xFFFF ) << IwRandMinMax( 0, 0xFFFF ) << "-" << IwRandMinMax( 0, 0xFFFF );
+		this->trackFile << "-4" << IwRandMinMax( 0, 0xFFF ) << "-" << IwRandMinMax( 0x8, 0xB ) << IwRandMinMax( 0, 0xFFF );
+		this->trackFile << "-" << IwRandMinMax( 0, 0xFFFF ) << IwRandMinMax( 0, 0xFFFF ) << IwRandMinMax( 0, 0xFFFF );
+		this->trackFile << ":" << std::dec << time(NULL) << "\n";
 
 		return true;
 	}
@@ -55,53 +49,40 @@ bool TrackHandler::startTracking( std::string fileName ) {
 }
 
 void TrackHandler::stopTracking() {
-	if( this->fileHandler != NULL ) {
-		s3eFileClose( this->fileHandler );
-		this->fileHandler = NULL;
-	}
+	if( this->trackFile.is_open() ) this->trackFile.close();
 }
 
 void TrackHandler::addGPSData( double lon, double lat, double alt ) {
 	// Check for new data point first
 	this->checkData( 2 );
-
-	// Add a new data entry with code 02 (GPS data)
-	s3eFileWrite( "02;", 3, 1, this->fileHandler );
-
-	// Format & write position info
-	char myBuf[15];
-	sprintf( myBuf, "%.9f:", lon );
-	s3eFileWrite( myBuf, strlen( myBuf ), 1, this->fileHandler );
-
-	sprintf( myBuf, "%.9f:", lat );
-	s3eFileWrite( myBuf, strlen( myBuf ), 1, this->fileHandler );
-
-	sprintf( myBuf, "%.2f\n", alt );
-	s3eFileWrite( myBuf, strlen( myBuf ), 1, this->fileHandler );
+	this->trackFile << "02;" << std::setprecision( 9 ) << lon << ":" << lat << ":" << std::setprecision( 2 ) << alt << "\n";
 }
 
 void TrackHandler::addDistanceData( double distance ) {
 	// Check for new data point first
 	this->checkData( 4 );
+	this->trackFile << "04;" << std::setprecision( 2 ) << distance << "\n";
+}
 
-	// Format distance & write to file
-	char myBuf[15];
-	sprintf( myBuf, "04;%.2f\n", distance );
-	s3eFileWrite( myBuf, strlen( myBuf ), 1, this->fileHandler );
+/**
+ * <summary>	Adds heartrate (pulse) data.  </summary>
+ *
+ * <remarks>	Wkoller, 05.04.2011. </remarks>
+ *
+ * <param name="bpm">	Current bpm (beats per minutes). </param>
+ */
+void TrackHandler::addHRData( int bpm ) {
+	this->checkData( 3 );
+	this->trackFile << "03;" << bpm << "\n";
 }
 
 TrackHandler::TrackHandler() {
-	this->fileHandler = NULL;
 	this->dataFlags = new DataFlags();
 	this->dataFlags->Reset( true );
 }
 
 void TrackHandler::addTimeData() {
-	char timeBuf[15];
-
-	// Write current time to file
-	sprintf( timeBuf, "01;%d\n", time(NULL) );
-	s3eFileWrite( timeBuf, strlen(timeBuf), 1, this->fileHandler );
+	this->trackFile << "01;" << time(NULL) << "\n";
 }
 
 // Called to check if a data information already exists in the current data record
@@ -113,6 +94,13 @@ void TrackHandler::checkData( int type ) {
 				this->dataFlags->Reset();
 			}
 			this->dataFlags->bGPS = true;
+			break;
+		case 3:
+			if( this->dataFlags->bHR ) {
+				this->addTimeData();
+				this->dataFlags->Reset();
+			}
+			this->dataFlags->bHR = true;
 			break;
 		case 4:
 			if( this->dataFlags->bDistance ) {

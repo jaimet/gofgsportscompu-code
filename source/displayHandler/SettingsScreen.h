@@ -27,6 +27,7 @@
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 
+#include "MainScreen.h"
 #include "FolderSelectScreen.h"
 
 class SettingsScreen : public Screen, public Singleton<SettingsScreen>
@@ -49,6 +50,7 @@ private:
 	CIwUITextField *TrackFolder_Value;
 	CIwUITextField *ExportFolder_Value;
 	CIwUICheckbox *WaitForGPSFix_Value;
+	CIwUICheckbox *UseZephyrHxM_Value;
 };
 
 #endif

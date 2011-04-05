@@ -69,6 +69,7 @@ protected:
 	InfoPanel *timeInfo;
 	InfoPanel *clockInfo;
 	InfoPanel *statusInfo;
+	InfoPanel *pulseInfo;
 
 	bool bStopPending;
 	double totalDistance;

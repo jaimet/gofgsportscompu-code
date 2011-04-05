@@ -138,12 +138,14 @@ bool SettingsHandler::Save() {
 
 SettingsHandler::SettingsHandler() {
 	// Define default settings here
-	this->settingsStore["TrackFolder"] = "./";
-	this->settingsStore["ExportFolder"] = "./";
+	this->settingsStore["TrackFolder"] = "/";
+	this->settingsStore["ExportFolder"] = "/";
 	this->settingsStore["DefaultExportType"] = "0";
 	this->settingsStore["MinLocationAccuracy"] = "25";
 	this->settingsStore["SelectFolderPath"] = "/";
 	this->settingsStore["WaitForGPSFix"] = "1";
+	this->settingsStore["UseZephyrHxM"] = "0";
+	this->settingsStore["ZephyrHxMDevice"] = "COM1";
 
 	this->Load();
 }

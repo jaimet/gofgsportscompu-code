@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -20,17 +20,20 @@
 #ifndef TRACKHANDLER
 #define TRACKHANDLER
 
-#include "s3eFile.h"
-#include "IwGx.h"
+#include "Singleton.h"
+
 #include "IwRandom.h"
 
 #include "time.h"
 
 #include <string>
+#include <fstream>
+#include <iomanip>
 
 struct DataFlags {
 	bool bGPS;
 	bool bDistance;
+	bool bHR;
 
 	DataFlags() {
 		this->Reset();
@@ -39,18 +42,19 @@ struct DataFlags {
 	void Reset( bool bValue = false ) {
 		this->bGPS = bValue;
 		this->bDistance = bValue;
+		this->bHR = bValue;
 	}
 };
 
-class TrackHandler {
+class TrackHandler : public Singleton<TrackHandler> {
+	friend class Singleton<TrackHandler>;
 public:
-	static TrackHandler *Self();
-
 	bool startTracking( std::string fileName );
 	void stopTracking();
 
 	void addGPSData( double lon, double lat, double alt );
 	void addDistanceData( double distance );
+	void addHRData( int bpm );
 
 private:
 	TrackHandler();
@@ -58,10 +62,8 @@ private:
 	void addTimeData();
 	void checkData( int type );
 
-	s3eFile *fileHandler;
 	DataFlags *dataFlags;
-
-	static TrackHandler *mySelf;
+	std::ofstream trackFile;
 };
 
 #endif

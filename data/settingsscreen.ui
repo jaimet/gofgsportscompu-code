@@ -187,6 +187,12 @@ CIwUIElement
 				caption "Wait for GPS fix"
 			}
 
+			CIwUICheckbox {
+				name "UseZephyrHxM_Value"
+				style <checkbox>
+				caption "Use Zephyr HxM"
+			}
+
 			CIwUILayoutVertical {
 				element {
 					name "MinLocationAccuracy_Pane"
@@ -199,6 +205,11 @@ CIwUIElement
 				}
 				element {
 					name "WaitForGPSFix_Value"
+					alignH "left"
+				}
+				element {
+					name "UseZephyrHxM_Value"
+					alignH "left"
 				}
 			}
 		}
