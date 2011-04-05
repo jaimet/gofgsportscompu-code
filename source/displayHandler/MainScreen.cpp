@@ -23,10 +23,8 @@ template<>
 MainScreen *Singleton<MainScreen>::mySelf = NULL;
 
 void MainScreen::MA_StartButtonClick(CIwUIElement*) {
-	this->bStopPending = false;
-	this->totalDistance = 0.0;
-	this->totalAltitudeDiff = 0.0;
-	this->lastAltitude = -1000.0;
+	// Reset the mainscreen display
+	this->Reset();
 
 	// Check if Location API is available at all
 	if( !s3eLocationAvailable() ) {
@@ -34,6 +32,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 		return;
 	}
 
+	// Change visibility of the menu buttons
 	this->StartButton->SetVisible( false );
 	this->ExitButton->SetVisible( false );
 	this->MenuButton->SetVisible( false );
@@ -46,8 +45,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	GPSHandler::Self()->SetMinAccuracy( SettingsHandler::Self()->GetInt( "MinLocationAccuracy" ) );
 	GPSHandler::Self()->startGPS();
 
-	// Start main timer
-	//s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	// Start tracking by using the startup timer
 	MainScreen::startupTimer( NULL, NULL );
 }
 
@@ -157,10 +155,11 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		
 		// Update displays
 		MainScreen::Self()->speedInfo->setValue( GPSHandler::Self()->getSpeed() * 3.6 );
-		MainScreen::Self()->speedInfo->setAverage( (MainScreen::Self()->totalDistance / (double) timeDiff) * 3.6 );
 		MainScreen::Self()->distanceInfo->setValue( MainScreen::Self()->totalDistance / 1000.0 ); // /1000.0 to convert meters to km
 		MainScreen::Self()->altitudeInfo->setValue( MainScreen::Self()->totalAltitudeDiff );
 	}
+	// Update average value for speed
+	MainScreen::Self()->speedInfo->setAverage( (MainScreen::Self()->totalDistance / (double) timeDiff) * 3.6 );
 
 	// Update accuracy image based on minimum location accuracy
 	double currAccuracy = GPSHandler::Self()->getAccuracy();
@@ -291,17 +290,12 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 
-	// Set our labels once, so that scaling can take place
-	this->speedInfo->setValue( "0.00" );
-	this->distanceInfo->setValue( "0.00" );
-	this->altitudeInfo->setValue( "0.00" );
-	this->timeInfo->setValue( "00:00:00" );
-	if( this->pulseInfo != NULL ) this->pulseInfo->setValue( "0" );
+	// Reset the display to its default values
+	this->Reset();
 
-//	int renderSlot = this->myScreen->GetRenderSlot();
+	// Make sure we are always rendered before all others
 	this->myScreen->SetRenderSlot( -10 );
 
-	//MsgBox::Self();
 	//s3eOSExecExecute( "https://www.facebook.com/dialog/oauth?client_id=144229302291327&redirect_uri=www.gofg.at", false );
 }
 
@@ -313,13 +307,33 @@ MainScreen::~MainScreen() {
 	delete this->clockInfo;
 	delete this->statusInfo;
 	delete this->pulseInfo;
-
-	/*this->ExitButton = NULL;
-	this->StartButton = NULL;
-	this->StopButton = NULL;
-	this->MenuButton = NULL;*/
 }
 
+void MainScreen::Reset() {
+	// Reset the internal statistics variables
+	this->bStopPending = false;
+	this->totalDistance = 0.0;
+	this->totalAltitudeDiff = 0.0;
+	this->lastAltitude = -1000.0;
+
+	// Reset the panels (statistic reset)
+	this->speedInfo->Reset();
+	this->distanceInfo->Reset();
+	this->altitudeInfo->Reset();
+	this->timeInfo->Reset();
+
+	// Set our labels once, so that scaling can take place
+	this->speedInfo->setValue( "0.00" );
+	this->distanceInfo->setValue( "0.00" );
+	this->altitudeInfo->setValue( "0.00" );
+	this->timeInfo->setValue( "00:00:00" );
+
+	// Pulse info needs some special handling (since it's optional)
+	if( this->pulseInfo != NULL ) {
+		this->pulseInfo->setValue( "0" );
+		this->pulseInfo->Reset();
+	}
+}
 
 /**
  * <summary>	Update the display timer for the passed time. </summary>

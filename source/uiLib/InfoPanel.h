@@ -36,6 +36,7 @@ class InfoPanel {
 public:
 	InfoPanel( const char *name, bool bNoStatistics = false );
 	~InfoPanel();
+	void Reset();
 
 	void setUnit( const char *unit );
 	void setValue( double value );

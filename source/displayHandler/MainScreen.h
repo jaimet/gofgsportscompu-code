@@ -55,6 +55,7 @@ public:
 protected:
 	MainScreen();
 	~MainScreen();
+	void Reset();
 
 	void displayTimer( int timeDiff );
 

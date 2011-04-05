@@ -42,9 +42,7 @@ InfoPanel::InfoPanel( const char *name, bool p_bNoStatistics ) {
 	this->currentImage = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "CurrentImage" );
 
 	// Initialize statistics vars
-	this->maximum = 0.0;
-	this->average = 0.0;
-	this->numPoints = 0;
+	this->Reset();
 
 	// Check if we have no statistics, if yes remove any unused fields & resize
 	/*if( bNoStatistics ) {
@@ -77,6 +75,12 @@ InfoPanel::~InfoPanel() {
 
 	delete this->image;
 	delete this->currentImage;*/
+}
+
+void InfoPanel::Reset() {
+	this->maximum = 0.0;
+	this->average = 0.0;
+	this->numPoints = 0;
 }
 
 void InfoPanel::setUnit( const char *unit ) {
