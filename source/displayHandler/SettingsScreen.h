@@ -20,6 +20,8 @@
 #ifndef SETTINGSSCREEN
 #define SETTINGSSCREEN
 
+#include "s3eDevice.h"
+
 #include "IwUICheckbox.h"
 
 #include "../displayHandler/Screen.h"
@@ -52,6 +54,11 @@ private:
 	CIwUITextField *ExportFolder_Value;
 	CIwUICheckbox *WaitForGPSFix_Value;
 	CIwUICheckbox *UseZephyrHxM_Value;
+	CIwUITextField *ExportEmail_Value;
+
+	CIwUIElement *TrackFolder_Pane;
+	CIwUIElement *ExportFolder_Pane;
+	CIwUIElement *ExportEmail_Pane;
 };
 
 #endif

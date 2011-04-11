@@ -33,6 +33,7 @@ void SettingsScreen::CB_SSSaveButtonClick(CIwUIElement*) {
 	SettingsHandler::Self()->Set( "ExportFolder", (std::string) this->ExportFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Set( "WaitForGPSFix", (bool) this->WaitForGPSFix_Value->GetChecked() );
 	SettingsHandler::Self()->Set( "UseZephyrHxM", (bool) this->UseZephyrHxM_Value->GetChecked() );
+	SettingsHandler::Self()->Set( "ExportEmail", (std::string) this->ExportEmail_Value->GetCaption() );
 	SettingsHandler::Self()->Save();
 
 	// Refresh main display
@@ -63,6 +64,7 @@ void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	this->ExportFolder_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportFolder" ).c_str() );
 	this->WaitForGPSFix_Value->SetChecked( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) );
 	this->UseZephyrHxM_Value->SetChecked( SettingsHandler::Self()->GetBool( "UseZephyrHxM" ) );
+	this->ExportEmail_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportEmail" ).c_str() );
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
 }
@@ -79,6 +81,26 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	this->ExportFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportFolder_Value" );
 	this->WaitForGPSFix_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "WaitForGPSFix_Value" );
 	this->UseZephyrHxM_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "UseZephyrHxM_Value" );
+	this->ExportEmail_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportEmail_Value" );
+
+	// Find dynamic ui elements
+	this->TrackFolder_Pane = this->myScreen->GetChildNamed( "TrackFolder_Pane" );
+	this->ExportFolder_Pane = this->myScreen->GetChildNamed( "ExportFolder_Pane" );
+	this->ExportEmail_Pane = this->myScreen->GetChildNamed( "ExportEmail_Pane" );
+
+	// If this is an iPhone, do not display the folder select dialogs but rather a receiver email address
+	if( s3eDeviceGetInt( S3E_DEVICE_OS ) == S3E_OS_ID_IPHONE ) {
+		this->TrackFolder_Pane->SetVisible( false );
+		this->ExportFolder_Pane->SetVisible( false );
+
+		this->TrackFolder_Pane->GetParent()->RemoveChild( this->TrackFolder_Pane );
+		this->ExportFolder_Pane->GetParent()->RemoveChild( this->ExportFolder_Pane );
+	}
+	// ... on all other devices hide the email section
+	else {
+		this->ExportEmail_Pane->SetVisible( false );
+		this->ExportEmail_Pane->GetParent()->RemoveChild( this->ExportEmail_Pane );
+	}
 
 	// Check if the HxM is available (for this platform)
 	if( !HxMHandler::Self()->IsAvailable() ) this->UseZephyrHxM_Value->SetVisible( false );

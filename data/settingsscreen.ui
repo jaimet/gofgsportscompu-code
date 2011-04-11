@@ -181,6 +181,34 @@ CIwUIElement
 				}
 			}
 
+			CIwUIElement {
+				name "ExportEmail_Pane"
+
+				CIwUILabel {
+					name "ExportEmail_Label"
+					style <label_medium>
+					caption "Export E-Mail:"
+					sizeToContent true
+				}
+
+				CIwUITextField {
+					name "ExportEmail_Value"
+					style <label_medium>
+					caption "noreply@gofg.at"
+					sizeToContent false
+					enabled false
+				}
+
+				CIwUILayoutVertical {
+					element {
+						name "ExportEmail_Label"
+					}
+					element {
+						name "ExportEmail_Value"
+					}
+				}
+			}
+
 			CIwUICheckbox {
 				name "WaitForGPSFix_Value"
 				style <checkbox>
@@ -202,6 +230,9 @@ CIwUIElement
 				}
 				element {
 					name "ExportFolder_Pane"
+				}
+				element {
+					name "ExportEmail_Pane"
 				}
 				element {
 					name "WaitForGPSFix_Value"

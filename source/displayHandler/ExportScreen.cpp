@@ -195,6 +195,13 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 	// If progress is 100%, then we switch on controls again
 	if( *percent >= 100 ) {
 		ExportScreen::Self()->SetEnabled( true );
+
+		if( ExportScreen::Self()->exportFormat == GSC_LOAD ) {
+			MsgBox::Show( "File successfully loaded - go back to main screen to view it!" );
+		}
+		else {
+			MsgBox::Show( "File successfully exported!" );
+		}
 	}
 
 	// Manually call the drawing functions

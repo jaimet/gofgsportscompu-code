@@ -146,6 +146,7 @@ SettingsHandler::SettingsHandler() {
 	this->settingsStore["WaitForGPSFix"] = "1";
 	this->settingsStore["UseZephyrHxM"] = "0";
 	this->settingsStore["ZephyrHxMDevice"] = "COM1";
+	this->settingsStore["ExportEmail"] = "";
 
 	this->Load();
 }
