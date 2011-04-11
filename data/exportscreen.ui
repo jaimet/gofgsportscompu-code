@@ -69,7 +69,7 @@ CIwUIElement
 
 				CIwUIButton {
 					name "LeftButton"
-			
+
 					drawableType "image"
 					caption ""
 					texture "delete"
@@ -78,8 +78,18 @@ CIwUIElement
 				}
 
 				CIwUIButton {
+					name "MiddleButton"
+
+					drawableType "image"
+					caption ""
+					texture "filesearch"
+					sizeToContent true
+					OnButtonClick  { "CB_ESLoadButtonClick" }
+				}
+
+				CIwUIButton {
 					name "RightButton"
-				
+
 					drawableType "image"
 					caption ""
 					texture "foldermove"
@@ -95,6 +105,11 @@ CIwUIElement
 					element {
 						name "LeftButton"
 						column 0
+					}
+					element {
+						name "MiddleButton"
+						column 1
+						alignH "centre"
 					}
 					element {
 						name "RightButton"
@@ -122,7 +137,8 @@ CIwUIElement
 			radioButtonStyles {
 				{ caption "Fitlog" style <radio_left> } 
 				{ caption "TCX" style <radio_centre> } 
-				{ caption "GOFG" style <radio_right> visible false } 
+				{ caption "GPX" style <radio_right> } 
+				{ caption "GOFG" style <radio_centre> visible false } 
 			}
 		}
 

@@ -53,8 +53,6 @@ void SettingsScreen::CB_SSExportFolderButtonClick(CIwUIElement*) {
 int32 SettingsScreen::CB_SSSelectFolder( void *systemData, void *userData  ) {
 	((CIwUITextField*) userData)->SetCaption( (const char*) systemData );
 
-	//SettingsScreen::Self()->TrackFolder_Value->SetCaption( (char*) systemData );
-
 	return 0;
 }
 
@@ -81,6 +79,9 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	this->ExportFolder_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportFolder_Value" );
 	this->WaitForGPSFix_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "WaitForGPSFix_Value" );
 	this->UseZephyrHxM_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "UseZephyrHxM_Value" );
+
+	// Check if the HxM is available (for this platform)
+	if( !HxMHandler::Self()->IsAvailable() ) this->UseZephyrHxM_Value->SetVisible( false );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }

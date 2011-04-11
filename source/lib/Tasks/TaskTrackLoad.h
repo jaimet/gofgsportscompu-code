@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010-2011 Wolfgang Koller
+* Copyright (C) 2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -17,37 +17,29 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TASKHTTPEXPORT_C
-#define TASKHTTPEXPORT_C
+#ifndef TASKTRACKLOAD_C
+#define TASKTRACKLOAD_C
 
-#include <IwHTTP.h>
+#include "../Task.h"
+#include "../TrackReader.h"
+#include "../../displayHandler/MainScreen.h"
+
 #include <string>
-#include <sstream>
 
-#include "Task.h"
-#include "TrackReader.h"
-
-class TaskHTTPExport : public Task, public TrackReader {
-	friend class CIwHTTP;
+class TaskTrackLoad : public Task, public TrackReader {
 public:
-	TaskHTTPExport( std::string p_filename, std::string p_targetURL );
+	TaskTrackLoad( std::string p_fileName );
 
 	void Start();
 	int Next();
 	void Stop();
 
 protected:
-	static int32 CB_HeaderReceived( void *systemData, void *userData );
+	DataPoint *currentPoint;
 
-	void sendData();
-
-	CIwHTTP *http;
-	std::string filename;
-	std::string targetURL;
-
-	bool bRequestPending;
-	int sequence;
-	std::ostringstream sendBuffer;
+	int startTime;
+	double lastAltitude;
+	double totalAltitudeDiff;
 };
 
 #endif

@@ -44,6 +44,13 @@ CIwUIElement
 				caption "Software Developed by Wolfgang Koller: www.gofg.at"
 			}
 
+			CIwUILabel {
+				name "GOFG_Contributor"
+				style <label_medium>
+
+				caption "GOFG Contributors: Simone Lombardo"
+			}
+
 			CIwUILayoutVertical {
 				spacing 5
 
@@ -58,6 +65,9 @@ CIwUIElement
 				}
 				element {
 					name "GOFG_Copyright"
+				}
+				element {
+					name "GOFG_Contributor"
 				}
 			}
 		}

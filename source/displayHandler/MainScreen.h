@@ -32,14 +32,18 @@
 #include "../lib/GPSHandler.h"
 #include "../lib/TrackHandler.h"
 #include "../lib/SettingsHandler.h"
+#include "../lib/HxMHandler.h"
 
 #include "../uiLib/InfoPanel.h"
 
 #include "MenuScreen.h"
 #include "MsgBox.h"
 
+class TaskTrackLoad;
+
 class MainScreen : public Screen, public Singleton<MainScreen> {
 	friend class Singleton<MainScreen>;
+	friend class TaskTrackLoad;
 public:
 	void MA_StartButtonClick(CIwUIElement*);
 	void MA_StopButtonClick(CIwUIElement*);
@@ -57,13 +61,19 @@ protected:
 	~MainScreen();
 	void Reset();
 
-	void displayTimer( int timeDiff );
+	void UpdateTimerDisplay( int timeDiff );
+	void UpdateAccuracyDisplay( double accuracy );
+	void UpdateDisplay( double speed, double hr, double distance, double altitudeDiff, int timeDiff, double accuracy );
+
+	void SurfaceChanged( s3eSurfaceBlitDirection direction );
 
 	CIwUIButton *ExitButton;
 	CIwUIButton *StartButton;
 	CIwUIButton *StopButton;
 	CIwUIButton *MenuButton;
 
+	CIwUIElement *mainGrid;
+	CIwUIElement *timeStatusElement;
 	InfoPanel *speedInfo;
 	InfoPanel *distanceInfo;
 	InfoPanel *altitudeInfo;
@@ -77,6 +87,8 @@ protected:
 	double totalAltitudeDiff;
 	double lastAltitude;
 	time_t startTime;
+
+	unsigned int fixCount;
 };
 
 #endif

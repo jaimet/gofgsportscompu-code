@@ -17,31 +17,32 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TASKFITLOGEXPORT_C
-#define TASKFITLOGEXPORT_C
+#ifndef TASKTCXEXPORT_C
+#define TASKTCXEXPORT_C
 
 #include <string>
 #include <tinyxml.h>
 #include <math.h>
 
-#include "Task.h"
-#include "TrackReader.h"
+#include "../Task.h"
+#include "../TrackReader.h"
 
 
-class TaskFitlogExport : public Task, public TrackReader {
+class TaskTCXExport : public Task, public TrackReader {
 public:
-	TaskFitlogExport( std::string p_fileName, std::string p_exportFileName );
+	TaskTCXExport( std::string p_fileName, std::string p_exportFileName );
 
 	void Start();
 	int Next();
 	void Stop();
 
 protected:
-	TiXmlElement *CreateFitlogPoint();
+	TiXmlElement *CreateTCXPoint();
 
 	std::string exportFileName;	// Name of export file
 	TiXmlDocument doc;			// Reference to XML doc
 	TiXmlElement *trackNode;	// TrackNode is the master-noder for all data-points
+	TiXmlElement *lapNode;		// LapNode is the master node for all additional information
 
 	DataPoint *currentPoint;	// Current data point
 	int lastProgressUpdate;		// Percent value the progress was last updated

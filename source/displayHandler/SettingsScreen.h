@@ -22,10 +22,11 @@
 
 #include "IwUICheckbox.h"
 
-#include "../lib/SettingsHandler.h"
-
 #include "../displayHandler/Screen.h"
+
+#include "../lib/SettingsHandler.h"
 #include "../lib/Singleton.h"
+#include "../lib/HxMHandler.h"
 
 #include "MainScreen.h"
 #include "FolderSelectScreen.h"

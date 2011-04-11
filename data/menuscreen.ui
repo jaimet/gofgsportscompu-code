@@ -43,7 +43,7 @@ CIwUIElement {
 				CIwUILabel {
 					name "MB_T_ButtonLabel"
 					style <label_large>
-					caption "Export Tracks"
+					caption "Manage Tracks"
 					sizeMax { -1 32 }
 					sizeToContent false
 				}

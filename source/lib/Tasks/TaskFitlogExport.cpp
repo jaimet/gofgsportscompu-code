@@ -25,7 +25,7 @@ TaskFitlogExport::TaskFitlogExport( std::string p_fileName, std::string p_export
 	this->lastProgressUpdate = 0;
 
 	// Prepare the track reader part
-	this->SetFile( (char*) p_fileName.c_str() );
+	this->SetFile( p_fileName.c_str() );
 
 	this->exportFileName = p_exportFileName;
 }

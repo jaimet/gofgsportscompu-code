@@ -31,26 +31,30 @@
 #include "../lib/SettingsHandler.h"
 
 #include "../lib/TaskHandler.h"
-#include "../lib/TaskHTTPExport.h"
-#include "../lib/TaskTCXExport.h"
-#include "../lib/TaskFitlogExport.h"
+#include "../lib/Tasks/TaskHTTPExport.h"
+#include "../lib/Tasks/TaskTCXExport.h"
+#include "../lib/Tasks/TaskFitlogExport.h"
+#include "../lib/Tasks/TaskTrackLoad.h"
+#include "../lib/Tasks/TaskGPXExport.h"
 
 #include "MsgBox.h"
 
 enum ExportFormat {
 	FITLOG,
 	TCX,
-	GOFG
+	GOFG,
+	GSC_LOAD,
+	GPX
 };
 
-class ExportScreen : public Screen, public Singleton<ExportScreen>
-{
+class ExportScreen : public Screen, public Singleton<ExportScreen> {
 	friend class Singleton<ExportScreen>;
 public:
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 
 	void CB_ESExitButtonClick(CIwUIElement*);
 	void CB_ESExportButtonClick(CIwUIElement*);
+	void CB_ESLoadButtonClick(CIwUIElement*);
 	void ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void ES_ExportFormatChanged(CIwUIElement*, int16 selection);
 
@@ -61,7 +65,8 @@ public:
 private:
 	ExportScreen();
 
-	char es_currentFile[20];
+	//char es_currentFile[20];
+	std::string currentFile;
 	ExportFormat exportFormat;
 	CIwUIProgressBar *exportProgress;
 	CIwUILabel *exportStatus;

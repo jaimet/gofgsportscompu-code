@@ -50,6 +50,8 @@ public:
 
 	CIwUIElement *getInfoPanel();
 
+	void Detach();
+
 private:
 	//CIwGxFont *GetSizedFont( char *text, int sizeX );
 

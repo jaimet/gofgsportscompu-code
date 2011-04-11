@@ -108,7 +108,7 @@ DataPoint *TrackReader::ReadNextPoint() {
 	return this->dataPoint;
 }
 
-bool TrackReader::SetFile( char *p_fileName ) {
+bool TrackReader::SetFile( const char *p_fileName ) {
 	this->inFile = s3eFileOpen( p_fileName, "r" );
 	// Check if we have a valid file
 	if( inFile != NULL ) {
@@ -116,6 +116,10 @@ bool TrackReader::SetFile( char *p_fileName ) {
 	}
 
 	return false;
+}
+
+bool TrackReader::SetFile( std::string p_fileName ) {
+	return this->SetFile( p_fileName.c_str() );
 }
 
 void TrackReader::CloseFile() {

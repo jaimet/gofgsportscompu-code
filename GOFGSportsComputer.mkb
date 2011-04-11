@@ -24,16 +24,8 @@ files
 	TaskHandler.cpp
   Task.h
   Task.cpp 
-  TaskHTTPExport.h
-  TaskHTTPExport.cpp 
-  TaskTCXExport.h
-  TaskTCXExport.cpp 
 	TrackReader.h
 	TrackReader.cpp
-	TaskFitlogExport.h     
-	TaskFitlogExport.cpp
-	TaskSelectFolderRefresh.h
-	TaskSelectFolderRefresh.cpp
 	HxMHandler.h
 	HxMHandler.cpp
 	
@@ -43,6 +35,21 @@ files
 	HxMHandler_Win32.cpp
 	HxMHandler_WinMobile.h
 	HxMHandler_WinMobile.cpp
+	
+	[Lib/Tasks]
+  (source/lib/Tasks)
+  TaskHTTPExport.h
+  TaskHTTPExport.cpp 
+  TaskTCXExport.h
+  TaskTCXExport.cpp 
+	TaskFitlogExport.h     
+	TaskFitlogExport.cpp
+	TaskSelectFolderRefresh.h
+	TaskSelectFolderRefresh.cpp
+  TaskTrackLoad.h
+  TaskTrackLoad.cpp 
+  TaskGPXExport.h
+  TaskGPXExport.cpp 
 
   [UiLib]
   (source/uiLib)
@@ -100,7 +107,7 @@ subprojects
 
 assets
 {
-	(data-ram\data-sw)
+	(data-ram\data-gles1)
 	gofgui.group.bin
 	iwui_style/style.group.bin
 	(data)
@@ -142,6 +149,13 @@ deployments
 deployments
 {
 	["Default"]
-	iphone-nosign='1'
+	iphone-appid='at.gofg.sportscomputer'
+	iphone-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-057x057.png
+	iphone-icon-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-114x114.png
+	iphone-icon-ipad=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-072x072-iphone.png
+	iphone-icon-settings=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-029x029.png
+	iphone-icon-settings-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-058x058.png
+	iphone-splash=data/textures/appicons/splash-320x480.png
+	version-revision=1
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 }

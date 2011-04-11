@@ -33,6 +33,9 @@ Screen::Screen( const char *screenName ) {
 
 	// Add reference to ourselves
 	Screen::screens.push_back( this );
+
+	// Register us for surface change callback
+	s3eSurfaceRegister( S3E_SURFACE_SCREENSIZE, &Screen::CB_SurfaceChange, NULL );
 }
 
 Screen::~Screen() {
@@ -44,6 +47,8 @@ Screen::~Screen() {
 	delete this->myScreen;
 
 	Screen::screens.remove( this );
+
+
 
 //	if( this->myScreen->GetParent() != NULL ) this->myScreen->GetParent()->RemoveChild( this->myScreen );
 //	delete this->myScreen;
@@ -91,6 +96,29 @@ void Screen::NotifyStopped( CIwUIAnimator *pAnimator ) {
 
 
 /**
+ * <summary>	Called when the surface changes (like orientation change). </summary>
+ *
+ * <remarks>	Wkoller, 08.04.2011. </remarks>
+ *
+ * <param name="systemData">	[in,out] object of type s3eSurfaceOrientation. </param>
+ * <param name="userData">  	[in,out] NULL. </param>
+ *
+ * <returns>	. </returns>
+ */
+int32 Screen::CB_SurfaceChange(void *systemData, void *userData) {
+	s3eSurfaceOrientation *surface = (s3eSurfaceOrientation*) systemData;
+
+	// We only care about orientation changes
+	if( surface->m_OrientationChanged ) {
+		for( std::list<Screen*>::iterator it = Screen::screens.begin(); it != Screen::screens.end(); it++ ) {
+			(*it)->SurfaceChanged( surface->m_DeviceBlitDirection );
+		}
+	}
+
+	return 1;
+}
+
+/**
  * <summary>	Delete all created screens. </summary>
  *
  * <remarks>	Wkoller, 29.03.2011. </remarks>
@@ -119,4 +147,16 @@ void Screen::SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled ) {
 		// Disable the sub-childs
 		this->SetChildrenEnabled( currentChild, p_bEnabled );
 	}
+}
+
+
+/**
+ * <summary>	Called by the static Screen callback whenever the orientation changes. </summary>
+ *
+ * <remarks>	Wkoller, 08.04.2011. </remarks>
+ *
+ * <param name="direction">	New orientation of the screen. </param>
+ */
+void Screen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
+	return;	// By default do nothing (use auto-resize provided by airplay)
 }

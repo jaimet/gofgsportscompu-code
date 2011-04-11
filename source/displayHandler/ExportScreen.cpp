@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -34,11 +34,13 @@ void ExportScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESExportButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "ExportScreen", ExportScreen, CB_ESLoadButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_HandleTrackSelection, CIwUIElement*,bool)
 	IW_UI_CREATE_VIEW_SLOT2(this, "ExportScreen", ExportScreen, ES_ExportFormatChanged, CIwUIElement*,int16)
 	
 	// Initialize values
-	strcpy( this->es_currentFile, "" );
+	//strcpy( this->es_currentFile, "" );
+	this->currentFile.clear();
 	this->exportFormat = FITLOG;
 	this->exportTask = NULL;
 
@@ -69,7 +71,7 @@ void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 }
 
 void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
-	if( strlen( this->es_currentFile ) <= 0 ) {
+	if( this->currentFile.length() <= 0 ) {
 		MsgBox::Show( "Please select a file for export!" );
 		return;
 	}
@@ -78,7 +80,7 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	//char fullFileName[30];
 	//char exportName[30];
 	//char *extString;
-	std::string baseFileName( ExportScreen::Self()->es_currentFile );
+	std::string baseFileName( this->currentFile );
 
 	std::ostringstream inputFileName;
 	std::ostringstream exportFileName;
@@ -104,6 +106,13 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	case GOFG:
 		this->exportTask = new TaskHTTPExport( inputFileName.str(), "http://www.gofg.at/gofgst/index.php?mode=device_upload" );
 		break;
+	case GSC_LOAD:
+		this->exportTask = new TaskTrackLoad( inputFileName.str() );
+		break;
+	case GPX:
+		exportFileName << ".gpx";
+		this->exportTask = new TaskGPXExport( inputFileName.str(), exportFileName.str() );
+		break;
 	case TCX:
 	default:
 		exportFileName << ".tcx";
@@ -121,17 +130,25 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	this->SetEnabled( false );
 	// But keep exit button active
 	this->exitButton->SetEnabled( true );
+}
 
-	//this->mysc
+// Run a special loading task
+void ExportScreen::CB_ESLoadButtonClick(CIwUIElement*) {
+	ExportFormat oldExportFormat = this->exportFormat;
+
+	this->exportFormat = GSC_LOAD;
+	this->CB_ESExportButtonClick(NULL);
+	this->exportFormat = oldExportFormat;
 }
 
 void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected) {
 	if( bIsSelected ) {
 		CIwPropertyString fileName;
-		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", fileName))
-		{
+		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", fileName)) {
+			this->currentFile = fileName.c_str();
+			
 			//sprintf( this->es_currentFile, "tracks/%s", fileName.c_str() );
-			strcpy( this->es_currentFile, fileName.c_str() );
+			//strcpy( this->es_currentFile, fileName.c_str() );
 		}
 	}
 }
@@ -142,8 +159,12 @@ void ExportScreen::ES_ExportFormatChanged(CIwUIElement*, int16 selection) {
 		this->exportFormat = FITLOG;
 		break;
 	case 2:
+		this->exportFormat = GPX;
+		break;
+	case 3:
 		this->exportFormat = GOFG;
 		break;
+	case 1:
 	default:
 		this->exportFormat = TCX;
 		break;

@@ -31,7 +31,7 @@
 #include "../lib/SettingsHandler.h"
 
 #include "../lib/TaskHandler.h"
-#include "../lib/TaskSelectFolderRefresh.h"
+#include "../lib/Tasks/TaskSelectFolderRefresh.h"
 
 #include "../uiLib/FolderTVItemSource.h"
 

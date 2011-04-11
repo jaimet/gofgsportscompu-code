@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -26,7 +26,7 @@ TaskTCXExport::TaskTCXExport( std::string p_fileName, std::string p_exportFileNa
 	this->lastProgressUpdate = 0;
 
 	// Prepare the track reader part
-	this->SetFile( (char*) p_fileName.c_str() );
+	this->SetFile( p_fileName );
 
 	this->exportFileName = p_exportFileName;
 }

@@ -61,7 +61,8 @@ protected:
 	TrackReader();
 
 	DataPoint *ReadNextPoint();
-	bool SetFile( char *p_fileName );
+	bool SetFile( const char *p_fileName );
+	bool SetFile( std::string p_fileName );
 	void CloseFile();
 	int GetFileSize();
 	int GetBytesRead();

@@ -162,6 +162,13 @@ CIwUIElement *InfoPanel::getInfoPanel() {
 	return this->uiInfoPanel;
 }
 
+void InfoPanel::Detach() {
+	CIwUIElement *parent = this->uiInfoPanel->GetParent();
+	if( parent != NULL ) {
+		parent->RemoveChild( this->uiInfoPanel );
+	}
+}
+
 /*CIwGxFont *InfoPanel::GetSizedFont( char *text, int sizeX ) {
 	CIwGxFont *currentFont = this->currentLabel->GetFont();
 	CIwGxFontPreparedData currentData;

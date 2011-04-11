@@ -32,8 +32,6 @@
 class GPSHandler : public Singleton<GPSHandler> {
 	friend class Singleton<GPSHandler>;
 public:
-	//static GPSHandler *Self();
-
 	bool updateLocation();
 
 	double getAltitude();		// Get the current altitude (in m)

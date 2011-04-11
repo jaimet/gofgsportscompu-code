@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2011 Wolfgang Koller
+* Copyright (C) 2010 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -17,21 +17,34 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TASKSELECTFOLDERREFRESH
-#define TASKSELECTFOLDERREFRESH
+#ifndef TASKFITLOGEXPORT_C
+#define TASKFITLOGEXPORT_C
 
 #include <string>
 #include <tinyxml.h>
 #include <math.h>
 
-#include "Task.h"
-#include "../displayHandler/FolderSelectScreen.h"
+#include "../Task.h"
+#include "../TrackReader.h"
 
-class TaskSelectFolderRefresh : public Task {
+
+class TaskFitlogExport : public Task, public TrackReader {
 public:
+	TaskFitlogExport( std::string p_fileName, std::string p_exportFileName );
+
 	void Start();
 	int Next();
 	void Stop();
+
+protected:
+	TiXmlElement *CreateFitlogPoint();
+
+	std::string exportFileName;	// Name of export file
+	TiXmlDocument doc;			// Reference to XML doc
+	TiXmlElement *trackNode;	// TrackNode is the master-noder for all data-points
+
+	DataPoint *currentPoint;	// Current data point
+	int lastProgressUpdate;		// Percent value the progress was last updated
 };
 
 #endif

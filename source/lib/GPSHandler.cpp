@@ -19,18 +19,8 @@
 
 #include "GPSHandler.h"
 
-//GPSHandler *GPSHandler::mySelf = NULL;
 template<>
 GPSHandler *Singleton<GPSHandler>::mySelf = NULL;
-
-// Singleton function
-/*GPSHandler *GPSHandler::Self() {
-	if( GPSHandler::mySelf == NULL ) {
-		GPSHandler::mySelf = new GPSHandler();
-	}
-
-	return GPSHandler::mySelf;
-}*/
 
 // Get a new location statement and update all values
 bool GPSHandler::updateLocation() {
@@ -72,21 +62,6 @@ bool GPSHandler::updateLocation() {
 				//this->distance = this->haversineDistance( this->currLocation, newLocation );
 				this->distance = newDistance;
 				this->currSpeed = this->distance / ((double)( currTime - this->lastTime ) / 1000.0);
-
-				// Update tracking history
-				this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
-				this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime) / 1000.0;
-				this->historyCount++;
-
-				// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
-				double totalDistance = 0.0;
-				double totalTime = 0.0;
-				for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
-					totalDistance += this->distanceHistory[i];
-					totalTime += this->timeHistory[i];
-				}
-				this->speed = totalDistance / totalTime;
-
 				// Save altitude
 				this->altitude = this->newLocation->m_Altitude;
 
@@ -97,17 +72,29 @@ bool GPSHandler::updateLocation() {
 			}
 			// New location is within old accuracy
 			else {
-				return false;
+				//return false;
 
-				/*this->distance = 0.0;
-				this->speed = 0.0;
+				this->distance = 0.0;
+				this->currSpeed = 0.0;
 
 				// We keep the old data point
-				//delete newLocation;
+				delete this->newLocation;
 				this->newLocation = this->currLocation;
-				newAccuracy = this->currAccuracy;*/
 			}
 		
+			// Update tracking history
+			this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
+			this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime) / 1000.0;
+			this->historyCount++;
+
+			// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
+			double totalDistance = 0.0;
+			double totalTime = 0.0;
+			for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
+				totalDistance += this->distanceHistory[i];
+				totalTime += this->timeHistory[i];
+			}
+			this->speed = totalDistance / totalTime;
 		}
 
 		// Check if advanced location info is available (will use that for speed info then)

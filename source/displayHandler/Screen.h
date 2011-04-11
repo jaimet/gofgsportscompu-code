@@ -23,6 +23,8 @@
 #include <string>
 #include <list>
 
+#include "s3eSurface.h"
+
 #include "IwUI.h"
 #include "IwUIAnimManager.h"
 
@@ -38,10 +40,14 @@ public:
 	void NotifyProgress( CIwUIAnimator *pAnimator );
 	void NotifyStopped( CIwUIAnimator *pAnimator );
 
+	// Static control functions for singleton
 	static void DeleteScreens();
+	static int32 CB_SurfaceChange(void *systemData, void *userData);
 
 protected:
 	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
+
+	virtual void SurfaceChanged( s3eSurfaceBlitDirection direction );
 
 	CIwUIElement *myScreen;
 	CIwUIButton *background;
