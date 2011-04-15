@@ -44,11 +44,13 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	this->exportFormat = FITLOG;
 	this->exportTask = NULL;
 
-	((CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" ))->SetSelected( SettingsHandler::Self()->GetInt( "DefaultExportType" ) );
+	this->exportFormatTabBar = (CIwUITabBar*) this->myScreen->GetChildNamed( "exportFormat" );
 	this->exportProgress = (CIwUIProgressBar*) this->myScreen->GetChildNamed( "exportProgress" );
 	this->exportStatus = (CIwUILabel*) this->myScreen->GetChildNamed( "exportStatus" );
 	this->trackList = (CIwUITableView*) this->myScreen->GetChildNamed( "TrackList" );
 	this->exitButton = (CIwUIButton*) this->myScreen->GetChildNamed( "LeftButton" );
+
+	this->exportFormatTabBar->SetSelected( SettingsHandler::Self()->GetInt( "DefaultExportType" ) );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
@@ -134,11 +136,11 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 
 // Run a special loading task
 void ExportScreen::CB_ESLoadButtonClick(CIwUIElement*) {
-	ExportFormat oldExportFormat = this->exportFormat;
+//	ExportFormat oldExportFormat = this->exportFormat;
 
 	this->exportFormat = GSC_LOAD;
 	this->CB_ESExportButtonClick(NULL);
-	this->exportFormat = oldExportFormat;
+//	this->exportFormat = oldExportFormat;
 }
 
 void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected) {
@@ -197,10 +199,35 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 		ExportScreen::Self()->SetEnabled( true );
 
 		if( ExportScreen::Self()->exportFormat == GSC_LOAD ) {
+			ExportScreen::Self()->ES_ExportFormatChanged( NULL, ExportScreen::Self()->exportFormatTabBar->GetSelected() );
 			MsgBox::Show( "File successfully loaded - go back to main screen to view it!" );
 		}
 		else {
-			MsgBox::Show( "File successfully exported!" );
+			// Check if we are on an iphone, if yes we have to send the file per mail
+			if( s3eDeviceGetInt( S3E_DEVICE_OS ) == S3E_OS_ID_IPHONE ) {
+				std::string exportEmail = SettingsHandler::Self()->GetString( "ExportEmail" );
+				if( exportEmail.length() <= 0 ) {
+					MsgBox::Show( "Please specify an email address in the settings dialog first!" );
+				}
+				else {
+					s3eEMail *email = new s3eEMail();
+					email->m_subject = "[GOFG Sports Computer] Export Email";
+					email->m_messageBody = "Please find attached the exported track file.";
+					email->m_isHTML = false;
+					const char *recipient = exportEmail.c_str();
+					email->m_toRecipients = &recipient;
+					email->m_numToRecipients = 1;
+					email->m_numCcRecipients = 0;
+					email->m_numBccRecipients = 0;
+					email->m_numAttachments = 1;
+
+					s3eEMailAttachment *attachment = new s3eEMailAttachment();
+					//attachment->m_fileName
+				}
+			}
+			else {
+				MsgBox::Show( "File successfully exported!" );
+			}
 		}
 	}
 

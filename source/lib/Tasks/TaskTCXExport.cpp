@@ -19,16 +19,9 @@
 
 #include "TaskTCXExport.h"
 
-TaskTCXExport::TaskTCXExport( std::string p_fileName, std::string p_exportFileName ) : Task(), TrackReader() {
-	this->currentPoint = NULL;
+TaskTCXExport::TaskTCXExport( std::string p_fileName, std::string p_exportFileName ) : TaskFileExport( p_fileName, p_exportFileName ) {
 	this->trackNode = NULL;
 	this->lapNode = NULL;
-	this->lastProgressUpdate = 0;
-
-	// Prepare the track reader part
-	this->SetFile( p_fileName );
-
-	this->exportFileName = p_exportFileName;
 }
 
 void TaskTCXExport::Start() {
@@ -82,12 +75,13 @@ int TaskTCXExport::Next() {
 
 	this->trackNode->LinkEndChild( this->CreateTCXPoint() );
 
-	// Check if we have to anounce the progress
-	int newProgress = (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() );
+	// Update progress
+	this->UpdateProgress( (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() ) );
+	/*int newProgress = ;
 	if( newProgress > this->lastProgressUpdate ) {
 		this->UpdateProgress( newProgress );
 		this->lastProgressUpdate = newProgress;
-	}
+	}*/
 
 	// Read the next point
 	// We need the check here because Stop() also references currentPoint so it MUST NOT be NULL

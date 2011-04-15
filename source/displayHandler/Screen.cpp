@@ -108,8 +108,11 @@ void Screen::NotifyStopped( CIwUIAnimator *pAnimator ) {
 int32 Screen::CB_SurfaceChange(void *systemData, void *userData) {
 	s3eSurfaceOrientation *surface = (s3eSurfaceOrientation*) systemData;
 
+	IwTrace( SCREEN, ( "Surface Change event!" ) );
+
 	// We only care about orientation changes
 	if( surface->m_OrientationChanged ) {
+		IwTrace( SCREEN, ( "Surface orientation changed!" ) );
 		for( std::list<Screen*>::iterator it = Screen::screens.begin(); it != Screen::screens.end(); it++ ) {
 			(*it)->SurfaceChanged( surface->m_DeviceBlitDirection );
 		}

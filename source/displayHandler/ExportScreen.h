@@ -26,6 +26,9 @@
 
 #include "IwUI.h"
 
+#include "s3eDevice.h"
+#include "s3eEMail.h"
+
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 #include "../lib/SettingsHandler.h"
@@ -72,6 +75,7 @@ private:
 	CIwUILabel *exportStatus;
 	CIwUITableView *trackList;
 	CIwUIButton *exitButton;
+	CIwUITabBar *exportFormatTabBar;
 
 	Task *exportTask;
 };

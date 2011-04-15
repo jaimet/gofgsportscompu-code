@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -24,11 +24,9 @@
 #include <tinyxml.h>
 #include <math.h>
 
-#include "../Task.h"
-#include "../TrackReader.h"
+#include "TaskFileExport.h"
 
-
-class TaskTCXExport : public Task, public TrackReader {
+class TaskTCXExport : public TaskFileExport {
 public:
 	TaskTCXExport( std::string p_fileName, std::string p_exportFileName );
 
@@ -39,13 +37,9 @@ public:
 protected:
 	TiXmlElement *CreateTCXPoint();
 
-	std::string exportFileName;	// Name of export file
 	TiXmlDocument doc;			// Reference to XML doc
 	TiXmlElement *trackNode;	// TrackNode is the master-noder for all data-points
 	TiXmlElement *lapNode;		// LapNode is the master node for all additional information
-
-	DataPoint *currentPoint;	// Current data point
-	int lastProgressUpdate;		// Percent value the progress was last updated
 };
 
 #endif

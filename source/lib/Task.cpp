@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -22,6 +22,10 @@
 Task::Task() {
 	this->processID = 0;
 	this->progressCallback = NULL;
+	this->lastProgress = -1;
+}
+
+Task::~Task() {
 }
 
 void Task::SetProgressCallback( s3eCallback p_progressCallback ) {
@@ -37,9 +41,15 @@ int Task::GetProcessID() {
 }
 
 void Task::UpdateProgress( int p_percent, char *message ) {
+	// Check if this is a new percent, if not ignore (for performance reasons)
+	if( this->lastProgress == p_percent ) return;
+
 	int *percent = &p_percent;
 
 	if( this->progressCallback != NULL ) {
 		(*progressCallback)( percent, message );
 	}
+
+	// Store new progress
+	this->lastProgress = p_percent;
 }

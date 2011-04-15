@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010-2011 Wolfgang Koller
+* Copyright (C) 2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -17,39 +17,27 @@
 * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TASK_C
-#define TASK_C
+#ifndef TASKFILEEXPORT_C
+#define TASKFILEEXPORT_C
 
-#include "s3eTypes.h"
+#include <string>
 
-/**
-* Implements a basic iterative task
-* Call Sequence is:
-* - Start
-* - Next, Next, Next, .... (until Next returns <= 0)
-* - Stop
-*/
-class Task {
+#include "s3eEMail.h"
+#include "s3eDevice.h"
+#include "s3eFile.h"
+
+#include "../Task.h"
+#include "../TrackReader.h"
+#include "../SettingsHandler.h"
+
+class TaskFileExport : public Task, public TrackReader {
 public:
-	Task();
-	virtual ~Task();
-
-	virtual void Start() = 0;
-	virtual int Next() = 0;
-	virtual void Stop() = 0;
-
-	void SetProgressCallback( s3eCallback p_progressCallback );
-
-	void SetProcessID( int p_processID );
-	int GetProcessID();
+	TaskFileExport( std::string p_fileName, std::string p_exportFileName );
+	virtual ~TaskFileExport();
 
 protected:
-	void UpdateProgress( int p_percent, char *message = NULL );
-
-private:
-	int processID;
-	s3eCallback progressCallback;
-	int lastProgress;	// Percent value the progress was last updated
+	std::string exportFileName;	// Name of export file
+	DataPoint *currentPoint;	// Current data point
 };
 
 #endif

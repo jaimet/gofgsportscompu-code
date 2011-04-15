@@ -90,6 +90,7 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 
 	// If this is an iPhone, do not display the folder select dialogs but rather a receiver email address
 	if( s3eDeviceGetInt( S3E_DEVICE_OS ) == S3E_OS_ID_IPHONE ) {
+	//if( 1 ) {
 		this->TrackFolder_Pane->SetVisible( false );
 		this->ExportFolder_Pane->SetVisible( false );
 

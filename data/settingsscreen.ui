@@ -193,10 +193,9 @@ CIwUIElement
 
 				CIwUITextField {
 					name "ExportEmail_Value"
-					style <label_medium>
+					style <textField>
 					caption "noreply@gofg.at"
 					sizeToContent false
-					enabled false
 				}
 
 				CIwUILayoutVertical {

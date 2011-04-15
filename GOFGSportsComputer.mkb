@@ -38,6 +38,8 @@ files
 	
 	[Lib/Tasks]
   (source/lib/Tasks)
+  TaskFileExport.h
+  TaskFileExport.cpp
   TaskHTTPExport.h
   TaskHTTPExport.cpp 
   TaskTCXExport.h
@@ -96,6 +98,11 @@ files
 	aboutscreen.ui
 	settingsscreen.ui
 	folderselectscreen.ui
+	GOFGi18n.group
+	
+	[Data/i18n]
+	(data/i18n)
+  german.itx
 }
 
 subprojects
@@ -107,12 +114,13 @@ subprojects
 
 assets
 {
-	(data-ram\data-gles1)
+	(data-ram/data-gles1)
 	gofgui.group.bin
 	iwui_style/style.group.bin
 	(data)
 	splash.jpg
-
+	(data-ram/tracks)
+	1302505663.gsc
 }
 
 deployments
@@ -156,6 +164,7 @@ deployments
 	iphone-icon-settings=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-029x029.png
 	iphone-icon-settings-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-058x058.png
 	iphone-splash=data/textures/appicons/splash-320x480.png
-	version-revision=1
+	version-minor=2
+	version-revision=51
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 }

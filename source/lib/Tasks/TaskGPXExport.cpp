@@ -19,18 +19,10 @@
 
 #include "TaskGPXExport.h"
 
-TaskGPXExport::TaskGPXExport( std::string p_fileName, std::string p_exportFileName ) : Task(), TrackReader() {
-	this->currentPoint = NULL;
-	this->trackNode = NULL;
-	this->lapNode = NULL;
-	this->lastProgressUpdate = 0;
-
-	// Prepare the track reader part
-	this->SetFile( p_fileName );
-
-	this->exportFileName = p_exportFileName;
+TaskGPXExport::TaskGPXExport( std::string p_fileName, std::string p_exportFileName ) : TaskFileExport( p_fileName, p_exportFileName ) {
+	//this->lastProgressUpdate = 0;
+	this->trksegNode = NULL;
 }
-
 
 void TaskGPXExport::Start() {
 	// Start with the XML declaration
@@ -81,11 +73,12 @@ int TaskGPXExport::Next() {
 	this->trksegNode->LinkEndChild( this->CreateGPXPoint() );
 
 	// Check if we have to anounce the progress
-	int newProgress = (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() );
+	this->UpdateProgress( (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() ) );
+	/*int newProgress = (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() );
 	if( newProgress > this->lastProgressUpdate ) {
 		this->UpdateProgress( newProgress );
 		this->lastProgressUpdate = newProgress;
-	}
+	}*/
 
 	return 1;
 }

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -19,15 +19,9 @@
 
 #include "TaskFitlogExport.h"
 
-TaskFitlogExport::TaskFitlogExport( std::string p_fileName, std::string p_exportFileName ) : Task(), TrackReader() {
-	this->currentPoint = NULL;
+TaskFitlogExport::TaskFitlogExport( std::string p_fileName, std::string p_exportFileName ) : TaskFileExport( p_fileName, p_exportFileName ) {
 	this->trackNode = NULL;
-	this->lastProgressUpdate = 0;
-
-	// Prepare the track reader part
-	this->SetFile( p_fileName.c_str() );
-
-	this->exportFileName = p_exportFileName;
+	//this->lastProgressUpdate = 0;
 }
 
 void TaskFitlogExport::Start() {
@@ -72,11 +66,12 @@ int TaskFitlogExport::Next() {
 	this->trackNode->LinkEndChild( this->CreateFitlogPoint() );
 
 	// Check if we have to anounce the progress
-	int newProgress = (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() );
+	this->UpdateProgress( (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() ) );
+	/*int newProgress = (int) ( 100.0 / (float) this->GetFileSize() * (float) this->GetBytesRead() );
 	if( newProgress > this->lastProgressUpdate ) {
 		this->UpdateProgress( newProgress );
 		this->lastProgressUpdate = newProgress;
-	}
+	}*/
 
 	// Read the next point
 	DataPoint *newPoint = this->ReadNextPoint();
