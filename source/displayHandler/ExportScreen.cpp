@@ -178,11 +178,11 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 
 	//iwfixed *progress = (iwfixed *) systemData;
 	ExportScreen::Self()->exportProgress->SetProgress( IW_FIXED( (float) *percent / 100.0 ) );
-	char *status = NULL;
+	const char *status = NULL;
 
 	// Check if we have a custom message
 	if( userData != NULL ) {
-		status = (char *) userData;
+		status = (const char *) userData;
 	}
 	// if not just display the percent
 	else {
@@ -203,31 +203,7 @@ int32 ExportScreen::CB_UpdateProgress( void *systemData, void *userData  ) {
 			MsgBox::Show( "File successfully loaded - go back to main screen to view it!" );
 		}
 		else {
-			// Check if we are on an iphone, if yes we have to send the file per mail
-			if( s3eDeviceGetInt( S3E_DEVICE_OS ) == S3E_OS_ID_IPHONE ) {
-				std::string exportEmail = SettingsHandler::Self()->GetString( "ExportEmail" );
-				if( exportEmail.length() <= 0 ) {
-					MsgBox::Show( "Please specify an email address in the settings dialog first!" );
-				}
-				else {
-					s3eEMail *email = new s3eEMail();
-					email->m_subject = "[GOFG Sports Computer] Export Email";
-					email->m_messageBody = "Please find attached the exported track file.";
-					email->m_isHTML = false;
-					const char *recipient = exportEmail.c_str();
-					email->m_toRecipients = &recipient;
-					email->m_numToRecipients = 1;
-					email->m_numCcRecipients = 0;
-					email->m_numBccRecipients = 0;
-					email->m_numAttachments = 1;
-
-					s3eEMailAttachment *attachment = new s3eEMailAttachment();
-					//attachment->m_fileName
-				}
-			}
-			else {
-				MsgBox::Show( "File successfully exported!" );
-			}
+			MsgBox::Show( "File successfully exported!" );
 		}
 	}
 

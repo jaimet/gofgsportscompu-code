@@ -4,7 +4,7 @@ CIwUIElement
 
 	CIwUIElement {
 		name "menuBar"
-		sizeMax { -1 48 }
+		//sizeMax { -1 48 }
 
 		CIwUIButton {
 			name "menuBar_background"
@@ -16,7 +16,7 @@ CIwUIElement
 
 		CIwUIElement {
 			name "menuBar_buttons"
-			sizeMax { -1 -1 }
+			sizeMax { -1 48 }
 
 			CIwUIButton {
 				name "StopButton"
@@ -93,6 +93,7 @@ CIwUIElement
 			}
 			element {
 				name "menuBar_buttons"
+				alignV "middle"
 			}
 		}
 	}
@@ -153,7 +154,7 @@ CIwUIElement
 		element {
 			name "menuBar"
 			row 1
-			alignV "bottom"
+			alignV "top"
 		}
 	}
 }

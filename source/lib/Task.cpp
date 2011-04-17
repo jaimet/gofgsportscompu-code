@@ -40,14 +40,14 @@ int Task::GetProcessID() {
 	return this->processID;
 }
 
-void Task::UpdateProgress( int p_percent, char *message ) {
+void Task::UpdateProgress( int p_percent, const char *message ) {
 	// Check if this is a new percent, if not ignore (for performance reasons)
 	if( this->lastProgress == p_percent ) return;
 
 	int *percent = &p_percent;
 
 	if( this->progressCallback != NULL ) {
-		(*progressCallback)( percent, message );
+		(*progressCallback)( percent, (void*) message );
 	}
 
 	// Store new progress

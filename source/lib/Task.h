@@ -44,7 +44,7 @@ public:
 	int GetProcessID();
 
 protected:
-	void UpdateProgress( int p_percent, char *message = NULL );
+	void UpdateProgress( int p_percent, const char *message = NULL );
 
 private:
 	int processID;

@@ -35,36 +35,42 @@ TaskFileExport::~TaskFileExport() {
 			this->UpdateProgress( 0, "Please specify an email address in the settings dialog first!" );
 		}
 		else {
+			// Create new email object and set basic parameter
+			const char *recipient = exportEmail.c_str();
 			s3eEMail *email = new s3eEMail();
 			email->m_subject = "[GOFG Sports Computer] Export Email";
 			email->m_messageBody = "Please find attached the exported track file.";
 			email->m_isHTML = false;
-			const char *recipient = exportEmail.c_str();
 			email->m_toRecipients = &recipient;
 			email->m_numToRecipients = 1;
 			email->m_numCcRecipients = 0;
 			email->m_numBccRecipients = 0;
 			email->m_numAttachments = 1;
 	
-			s3eEMailAttachment *attachment = new s3eEMailAttachment();
-			attachment->m_fileName = this->exportFileName.c_str();
-			attachment->m_mimeType = "text/plain";
-			
 			// Open output file for reading
 			s3eFile *exportFile = s3eFileOpen( this->exportFileName.c_str(), "r" );
 			int32 fileSize = s3eFileGetSize( exportFile );
-
+			// Read the file content
 			char *fileContent = (char*) malloc( sizeof(char) * fileSize );
 			s3eFileRead( fileContent, sizeof(char), fileSize, exportFile );
 
+			// Prepare the attachment for sending
+			s3eEMailAttachment *attachment = new s3eEMailAttachment();
+			attachment->m_fileName = this->exportFileName.c_str();
+			attachment->m_mimeType = "text/plain";
 			attachment->m_dataSize = fileSize;
 			attachment->m_data = fileContent;
-
+			// Add attachment to mail
 			email->m_attachments = attachment;
 
+			// Finally send the mail
 			s3eEMailSendMail( email );
 
+			// Free up memory
 			free( fileContent );
+
+			// Announce the success!
+			this->UpdateProgress( 100, "File successfully exported and sent per e-mail!" );
 		}
 	}
 }
