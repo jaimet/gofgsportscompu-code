@@ -27,7 +27,8 @@ template<>
 HxMHandler *Singleton<HxMHandler>::mySelf = NULL;
 
 bool HxMHandler::IsAvailable() {
-	return (this->deviceInterface != NULL);
+	return false;
+	//return (this->deviceInterface != NULL);
 }
 
 HxMHandler::HxMHandler() {
