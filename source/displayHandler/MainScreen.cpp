@@ -59,6 +59,8 @@ void MainScreen::MA_StopButtonClick(CIwUIElement*) {
 	this->ExitButton->SetVisible( true );
 	this->MenuButton->SetVisible( true );
 	this->StopButton->SetVisible( false );
+	this->PauseButton->SetVisible( false );
+	this->ContinueButton->SetVisible( false );
 
 	// Notify timers that a stop is pending
 	this->bStopPending = true;
@@ -70,6 +72,24 @@ void MainScreen::MA_ExitButtonClick(CIwUIElement*) {
 
 void MainScreen::MA_MenuButtonClick(CIwUIElement*) {
 	MenuScreen::Self()->SetVisible( true );
+}
+
+void MainScreen::CB_MAPauseButtonClick(CIwUIElement*) {
+	GPSHandler::Self()->stopGPS();
+	this->bStopPending = true;
+
+	this->PauseButton->SetVisible( false );
+	this->ContinueButton->SetVisible( true );
+}
+
+void MainScreen::CB_MAContinueButtonClick(CIwUIElement*) {
+	GPSHandler::Self()->startGPS();
+	this->bStopPending = false;
+
+	this->ContinueButton->SetVisible( false );
+	this->PauseButton->SetVisible( true );
+
+	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
 }
 
 // Called once a minute to update the clock
@@ -140,6 +160,9 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 	fileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << MainScreen::Self()->startTime << ".gsc";
 	TrackHandler::Self()->startTracking( fileName.str() );
 
+	// Enable the pause button
+	MainScreen::Self()->PauseButton->SetVisible( true );
+
 	// Finally start the GPS tracking
 	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
 
@@ -199,12 +222,16 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	IW_UI_CREATE_VIEW_SLOT1(this, "MainScreen", MainScreen, MA_StopButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "MainScreen", MainScreen, MA_ExitButtonClick, CIwUIElement*)
 	IW_UI_CREATE_VIEW_SLOT1(this, "MainScreen", MainScreen, MA_MenuButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MainScreen", MainScreen, CB_MAPauseButtonClick, CIwUIElement*)
+	IW_UI_CREATE_VIEW_SLOT1(this, "MainScreen", MainScreen, CB_MAContinueButtonClick, CIwUIElement*)
 
 	// Find our buttons and save references to them
 	this->StartButton = (CIwUIButton*) this->myScreen->GetChildNamed("StartButton");
 	this->StopButton = (CIwUIButton*) this->myScreen->GetChildNamed("StopButton");
 	this->ExitButton = (CIwUIButton*) this->myScreen->GetChildNamed("ExitButton");
 	this->MenuButton = (CIwUIButton*) this->myScreen->GetChildNamed("MenuButton");
+	this->PauseButton = (CIwUIButton*) this->myScreen->GetChildNamed("PauseButton");
+	this->ContinueButton = (CIwUIButton*) this->myScreen->GetChildNamed("ContinueButton");
 
 	// Find our main grid and fill it
 	this->mainGrid = this->myScreen->GetChildNamed( "MainGrid" );

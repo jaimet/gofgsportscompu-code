@@ -59,6 +59,28 @@ CIwUIElement
 				OnButtonClick  { "MA_MenuButtonClick" }
 			}
 
+			CIwUIButton {
+				name "PauseButton"
+		
+				drawableType "image"
+				caption ""
+				texture "pause"
+				sizeToContent true
+				OnButtonClick  { "CB_MAPauseButtonClick" }
+				visible false
+			}
+
+			CIwUIButton {
+				name "ContinueButton"
+		
+				drawableType "image"
+				caption ""
+				texture "play"
+				sizeToContent true
+				OnButtonClick  { "CB_MAContinueButtonClick" }
+				visible false
+			}
+
 			CIwUILayoutGrid {
 				sizeToSpace true
 				numColumns 3
@@ -74,6 +96,16 @@ CIwUIElement
 				}
 				element {
 					name "MenuButton"
+					alignH "centre"
+					column 1
+				}
+				element {
+					name "PauseButton"
+					alignH "centre"
+					column 1
+				}
+				element {
+					name "ContinueButton"
 					alignH "centre"
 					column 1
 				}

@@ -49,6 +49,8 @@ public:
 	void MA_StopButtonClick(CIwUIElement*);
 	void MA_ExitButtonClick(CIwUIElement*);
 	void MA_MenuButtonClick(CIwUIElement*);
+	void CB_MAPauseButtonClick(CIwUIElement*);
+	void CB_MAContinueButtonClick(CIwUIElement*);
 
 	static int clockTimer( void *systemData, void *userData );
 	static int startupTimer( void *systemData, void *userData );
@@ -71,6 +73,8 @@ protected:
 	CIwUIButton *StartButton;
 	CIwUIButton *StopButton;
 	CIwUIButton *MenuButton;
+	CIwUIButton *PauseButton;
+	CIwUIButton *ContinueButton;
 
 	CIwUIElement *mainGrid;
 	CIwUIElement *timeStatusElement;
