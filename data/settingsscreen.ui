@@ -220,6 +220,40 @@ CIwUIElement
 				caption "Use Zephyr HxM"
 			}
 
+			CIwUIElement {
+				name "UpdateInterval_Pane"
+
+				CIwUILabel {
+					name "UpdateInterval_Label"
+					style <label_medium>
+					caption "Location update interval (s):"
+					sizeToContent true
+				}
+
+				CIwUITextField {
+					name "UpdateInterval_Value"
+					style <textField>
+					caption "1"
+					sizeToContent false
+				}
+
+				CIwUILayoutGrid {
+					numColumns 2
+					numRows 1
+					sizeToSpace true
+
+					element {
+						name "UpdateInterval_Label"
+						column 0
+					}
+					element {
+						name "UpdateInterval_Value"
+						alignH "centre"
+						column 1
+					}
+				}
+			}
+
 			CIwUILayoutVertical {
 				element {
 					name "MinLocationAccuracy_Pane"
@@ -240,6 +274,9 @@ CIwUIElement
 				element {
 					name "UseZephyrHxM_Value"
 					alignH "left"
+				}
+				element {
+					name "UpdateInterval_Pane"
 				}
 			}
 		}

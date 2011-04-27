@@ -27,13 +27,21 @@ void SettingsScreen::CB_SSExitButtonClick(CIwUIElement*) {
 }
 
 void SettingsScreen::CB_SSSaveButtonClick(CIwUIElement*) {
+	// Check the update interval for validity
+	int updateInterval = (int) strtol(this->UpdateInterval_Value->GetCaption(), NULL, 10 );
+	if( updateInterval <= 0 ) updateInterval = 1;
+	// Check the minimum location accuracy for validity
+	int minLocationAccuracy = (int) strtol(this->MinLocationAccuracy_Value->GetCaption(), NULL, 10);
+	if( minLocationAccuracy <= 0 ) minLocationAccuracy = 10;
+
 	// Store all settings and save them
-	SettingsHandler::Self()->Set( "MinLocationAccuracy", (int) strtol(this->MinLocationAccuracy_Value->GetCaption(), NULL, 10) );
+	SettingsHandler::Self()->Set( "MinLocationAccuracy", (int) minLocationAccuracy );
 	SettingsHandler::Self()->Set( "TrackFolder", (std::string) this->TrackFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Set( "ExportFolder", (std::string) this->ExportFolder_Value->GetCaption() );
 	SettingsHandler::Self()->Set( "WaitForGPSFix", (bool) this->WaitForGPSFix_Value->GetChecked() );
 	SettingsHandler::Self()->Set( "UseZephyrHxM", (bool) this->UseZephyrHxM_Value->GetChecked() );
 	SettingsHandler::Self()->Set( "ExportEmail", (std::string) this->ExportEmail_Value->GetCaption() );
+	SettingsHandler::Self()->Set( "UpdateInterval", (int) updateInterval );
 	SettingsHandler::Self()->Save();
 
 	// Refresh main display
@@ -65,6 +73,7 @@ void SettingsScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
 	this->WaitForGPSFix_Value->SetChecked( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) );
 	this->UseZephyrHxM_Value->SetChecked( SettingsHandler::Self()->GetBool( "UseZephyrHxM" ) );
 	this->ExportEmail_Value->SetCaption( SettingsHandler::Self()->GetString( "ExportEmail" ).c_str() );
+	this->UpdateInterval_Value->SetCaption( SettingsHandler::Self()->GetString( "UpdateInterval" ).c_str() );
 
 	Screen::SetVisible( p_bVisible, p_bNoAnim );
 }
@@ -82,6 +91,7 @@ SettingsScreen::SettingsScreen() : Screen( "SettingsScreen" ) {
 	this->WaitForGPSFix_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "WaitForGPSFix_Value" );
 	this->UseZephyrHxM_Value = (CIwUICheckbox*) this->myScreen->GetChildNamed( "UseZephyrHxM_Value" );
 	this->ExportEmail_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "ExportEmail_Value" );
+	this->UpdateInterval_Value = (CIwUITextField*) this->myScreen->GetChildNamed( "UpdateInterval_Value" );
 
 	// Find dynamic ui elements
 	this->TrackFolder_Pane = this->myScreen->GetChildNamed( "TrackFolder_Pane" );

@@ -55,6 +55,7 @@ private:
 	CIwUICheckbox *WaitForGPSFix_Value;
 	CIwUICheckbox *UseZephyrHxM_Value;
 	CIwUITextField *ExportEmail_Value;
+	CIwUITextField *UpdateInterval_Value;
 
 	CIwUIElement *TrackFolder_Pane;
 	CIwUIElement *ExportFolder_Pane;

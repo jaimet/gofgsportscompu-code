@@ -147,6 +147,7 @@ SettingsHandler::SettingsHandler() {
 	this->settingsStore["UseZephyrHxM"] = "0";
 	this->settingsStore["ZephyrHxMDevice"] = "COM1";
 	this->settingsStore["ExportEmail"] = "";
+	this->settingsStore["UpdateInterval"] = "1";
 
 	this->Load();
 }

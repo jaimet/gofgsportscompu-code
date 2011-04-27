@@ -20,6 +20,8 @@
 #ifndef MAINSCREEN
 #define MAINSCREEN
 
+#define LOCATION_STARTUP_DELAY 3
+
 #include <string>
 #include <iostream>
 #include <sstream>

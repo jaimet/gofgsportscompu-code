@@ -28,7 +28,7 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 
 	// Check if Location API is available at all
 	if( !s3eLocationAvailable() ) {
-		MsgBox::Self()->SetVisible( true, true );
+		MsgBox::Show( "No location API (GPS) is available on your system." );
 		return;
 	}
 
@@ -89,7 +89,7 @@ void MainScreen::CB_MAContinueButtonClick(CIwUIElement*) {
 	this->ContinueButton->SetVisible( false );
 	this->PauseButton->SetVisible( true );
 
-	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	MainScreen::mainTimer( NULL, NULL );
 }
 
 // Called once a minute to update the clock
@@ -144,8 +144,8 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 			s3eTimerSetTimer( 1000, &MainScreen::startupTimer, NULL );
 			return 0;
 		}
-		// Wait at least 2 fixes before starting with the track
-		else if( MainScreen::Self()->fixCount < 2 ) {
+		// Wait at least LOCATION_STARTUP_DELAY fixes before starting with the track
+		else if( MainScreen::Self()->fixCount < LOCATION_STARTUP_DELAY ) {
 			MainScreen::Self()->fixCount += 1;
 			s3eTimerSetTimer( 1000, &MainScreen::startupTimer, NULL );
 			return 0;
@@ -164,7 +164,7 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 	MainScreen::Self()->PauseButton->SetVisible( true );
 
 	// Finally start the GPS tracking
-	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	MainScreen::mainTimer( NULL, NULL );
 
 	return 0;
 }
@@ -202,7 +202,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	}
 
 	// Call main-timer again
-	s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	s3eTimerSetTimer( (uint32) SettingsHandler::Self()->GetInt( "UpdateInterval" ) * 1000, &MainScreen::mainTimer, NULL );
 
 	return 0;
 }
