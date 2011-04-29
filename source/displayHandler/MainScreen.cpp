@@ -45,11 +45,17 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	GPSHandler::Self()->startGPS();
 	GPSHandler::Self()->SetMinAccuracy( SettingsHandler::Self()->GetInt( "MinLocationAccuracy" ) );
 
+	// Register the unpause callback (enable GPS on device resume)
+	s3eDeviceRegister( S3E_DEVICE_UNPAUSE, &MainScreen::CB_DeviceUnPause, NULL );
+
 	// Start tracking by using the startup timer
 	MainScreen::startupTimer( NULL, NULL );
 }
 
 void MainScreen::MA_StopButtonClick(CIwUIElement*) {
+	// UnRegister the unpause callback
+	s3eDeviceUnRegister( S3E_DEVICE_UNPAUSE, &MainScreen::CB_DeviceUnPause );
+
 	// Stop GPS Tracking & File recording
 	GPSHandler::Self()->stopGPS();
 	TrackHandler::Self()->stopTracking();
@@ -208,10 +214,33 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 }
 
 /**
-* Called to prevent device from going to suspend, only used if tracking is active
-*/
-int32 MainScreen::CB_Suspend( void *systemData, void *userData ) {
-	s3eDeviceBacklightOn();
+ * <summary>	Callback for the device pause event. </summary>
+ *
+ * <remarks>	Wkoller, 28.04.2011. </remarks>
+ *
+ * <param name="systemData">	[in,out] system data. </param>
+ * <param name="userData">  	[in,out] user data. </param>
+ *
+ * <returns>	always 0 </returns>
+ */
+int32 MainScreen::CB_DevicePause(void *systemData, void *userData) {
+	GPSHandler::Self()->stopGPS();
+
+	return 0;
+}
+
+/**
+ * <summary>	Callback for the device unpause event. </summary>
+ *
+ * <remarks>	Wkoller, 28.04.2011. </remarks>
+ *
+ * <param name="systemData">	[in,out] system data. </param>
+ * <param name="userData">  	[in,out] user data. </param>
+ *
+ * <returns>	always 0 </returns>
+ */
+int32 MainScreen::CB_DeviceUnPause(void *systemData, void *userData) {
+	GPSHandler::Self()->startGPS();
 
 	return 0;
 }
@@ -233,89 +262,66 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	this->PauseButton = (CIwUIButton*) this->myScreen->GetChildNamed("PauseButton");
 	this->ContinueButton = (CIwUIButton*) this->myScreen->GetChildNamed("ContinueButton");
 
-	// Find our main grid and fill it
+	// Find our main grid element
 	this->mainGrid = this->myScreen->GetChildNamed( "MainGrid" );
-	//CIwUILayoutGrid* gridLayout =(CIwUILayoutGrid*) this->mainGrid->GetLayout();
 
-	// Add speed infopanel to grid
+	// Create speed infopanel
 	CIwTexture *texture = (CIwTexture*)IwGetResManager()->GetResNamed( "gowebsite24", IW_GX_RESTYPE_TEXTURE );
 	this->speedInfo = new InfoPanel( "speedInfo" );
 	this->speedInfo->setUnit( "km/h" );
 	this->speedInfo->setImage( texture );
-	//gridLayout->AddElement( this->speedInfo->getInfoPanel(), 0, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-	// Add distance infopanel to grid
+	// Create distance infopanel
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "web24", IW_GX_RESTYPE_TEXTURE );
 	this->distanceInfo = new InfoPanel( "distanceInfo", true );
 	this->distanceInfo->setUnit ( "km" );
 	this->distanceInfo->setImage( texture );
-	//gridLayout->AddElement( this->distanceInfo->getInfoPanel(), 1, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-	// Get the distance / altitude container element
-	//CIwUIElement *distanceAltitudeElement = this->myScreen->GetChildNamed( "DistanceAltitudeElement" );
-	//CIwUILayoutGrid *distanceAltitudeLayout = (CIwUILayoutGrid*) distanceAltitudeElement->GetLayout();
-
-	// Add altitude infopanel to grid
+	// Create altitude infopanel
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "mountain24", IW_GX_RESTYPE_TEXTURE );
 	this->altitudeInfo = new InfoPanel( "altitudeInfo", true );
 	this->altitudeInfo->setUnit( "m" );
 	this->altitudeInfo->setImage( texture );
-	//distanceAltitudeLayout->AddElement( this->altitudeInfo->getInfoPanel(), 0, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-	// Check if we use the zephyr hxm, if yes we  will move the distance info and display a pulse info instead
+	// Check if we use the zephyr hxm, if yes we need to create the pulse infopanel
 	if( HxMHandler::Self()->IsAvailable() && SettingsHandler::Self()->GetBool( "UseZephyrHxM" ) ) {
-		// Change size of distance / altitude info
-		//this->distanceInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
-		//this->altitudeInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
-
-		// Reposition the distance info
-		//distanceAltitudeLayout->AddRow();
-		//gridLayout->RemoveElement( this->distanceInfo->getInfoPanel() );
-		//distanceAltitudeLayout->AddElement( this->distanceInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
-
 		// Add pulse infopanel to grid
 		texture = (CIwTexture*)IwGetResManager()->GetResNamed( "fav24", IW_GX_RESTYPE_TEXTURE );
 		this->pulseInfo = new InfoPanel( "pulseInfo" );
 		this->pulseInfo->setUnit ( "b/min" );
 		this->pulseInfo->setImage( texture );
-		//gridLayout->AddElement( this->pulseInfo->getInfoPanel(), 1, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 	}
 	else {
 		this->pulseInfo = NULL;
 	}
 
-	// Find timer/status grid
-	//CIwUIElement *timeStatusElement = this->myScreen->GetChildNamed( "TimeStatusElement" );
-	//CIwUILayoutGrid *timeStatusLayout = (CIwUILayoutGrid*) timeStatusElement->GetLayout();
-
-	// Add time infopanel to grid
+	// Create time infopanel
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "timer24", IW_GX_RESTYPE_TEXTURE );
 	this->timeInfo = new InfoPanel( "timeInfo", true );
 	this->timeInfo->setUnit( "hh:mm:ss" );
 	this->timeInfo->setImage( texture );
 	this->timeInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
-	//timeStatusLayout->AddElement( this->timeInfo->getInfoPanel(), 0, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-	// Add time infopanel to grid
+	// Create time infopanel
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "Satellite", IW_GX_RESTYPE_TEXTURE );
 	this->statusInfo = new InfoPanel( "statusInfo", true );
 	this->statusInfo->setUnit( "Status" );
 	this->statusInfo->setImage( texture );
 	this->statusInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
-	//timeStatusLayout->AddElement( this->statusInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-	// Add clock infopanel to grid
+	// Create clock infopanel
 	texture = (CIwTexture*)IwGetResManager()->GetResNamed( "clock24", IW_GX_RESTYPE_TEXTURE );
 	this->clockInfo = new InfoPanel( "clockInfo", true );
 	this->clockInfo->setUnit( "hh:mm" );
 	this->clockInfo->setImage( texture );
 	this->clockInfo->getInfoPanel()->SetSizeHint( CIwVec2( -1, -1 ) );
-	//gridLayout->AddElement( this->clockInfo->getInfoPanel(), 0, 2, 2, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
-	s3eTimerSetTimer( 100, &MainScreen::clockTimer, NULL ); // Start calling the timer to display the current time
+	// Start calling the timer to display the current time (100ms on first call to do it right now)
+	s3eTimerSetTimer( 100, &MainScreen::clockTimer, NULL );
 
-	// Apply the layout S3E_SURFACE_BLIT_DIR_ROT90
+	// Apply the layout to the current rotation
 	this->SurfaceChanged( (s3eSurfaceBlitDirection) s3eSurfaceGetInt( S3E_SURFACE_BLIT_DIRECTION ) );
 
+	// Finally add the main-screen to the ui-view
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 
 	// Reset the display to its default values
@@ -324,7 +330,19 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	// Make sure we are always rendered before all others
 	this->myScreen->SetRenderSlot( -10 );
 
+	// Register the pause callback (disables GPS on device pause)
+	s3eDeviceRegister( S3E_DEVICE_PAUSE, &MainScreen::CB_DevicePause, NULL );
+
+	// TESTING AREA
 	//s3eOSExecExecute( "https://www.facebook.com/dialog/oauth?client_id=144229302291327&redirect_uri=www.gofg.at", false );
+	/*CIw2DSurface *surface = Iw2DCreateSurface( 16, 16 );
+	CIw2DSurface *orig = Iw2DGetSurface();
+	Iw2DSetSurface( surface );
+	Iw2DSetColour(0xff0000ff);
+	Iw2DDrawLine( CIwSVec2( 0, 0 ), CIwSVec2( 10, 10 ) );
+	CIw2DImage *s_image = Iw2DCreateImage( surface );
+	this->clockInfo->setImage( s_image->GetMaterial()->GetTexture() );
+	Iw2DSetSurface( orig );*/
 }
 
 MainScreen::~MainScreen() {

@@ -208,7 +208,7 @@ double GPSHandler::haversineDistance( s3eLocation *start, s3eLocation *end ) {
 	double longitudeDiff = start->m_Longitude - end->m_Longitude;
 
 	double h = pow( sin( this->degreeToRad(latitudeDiff) / 2.0 ), 2 ) + cos( this->degreeToRad(start->m_Latitude) ) * cos( this->degreeToRad(end->m_Latitude) ) * pow( sin( this->degreeToRad(longitudeDiff) / 2.0 ), 2 );
-	double distance = 2.0 * 6371.009 * 1000.0 * asin(sqrt(h));	// Earth Radius in km * 1000.0 for meters
+	double distance = 2.0 * EARTH_RADIUS * asin(sqrt(h));	// Earth Radius in km * 1000.0 for meters
 
 	return distance;
 }

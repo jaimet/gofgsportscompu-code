@@ -51,8 +51,8 @@ files
   TaskTrackLoad.h
   TaskTrackLoad.cpp 
   TaskGPXExport.h
-  TaskGPXExport.cpp 
-
+  TaskGPXExport.cpp
+  
   [UiLib]
   (source/uiLib)
 	InfoPanel.h 
@@ -84,7 +84,7 @@ files
   SettingsScreen.cpp
 	FolderSelectScreen.h 
 	FolderSelectScreen.cpp
-
+	
 	[Data]
 	(data)
 	GOFGUI.group
@@ -110,6 +110,7 @@ subprojects
 	iwui
 	iwhttp
 	third_party/tinyxml
+	iw2d
 }
 
 assets

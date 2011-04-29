@@ -28,6 +28,7 @@
 #include <iomanip>
 
 //#include <s3eExt_OSExec.h>
+#include <Iw2D.h>
 
 #include "Screen.h"
 #include "../lib/Singleton.h"
@@ -58,7 +59,9 @@ public:
 	static int startupTimer( void *systemData, void *userData );
 	static int mainTimer( void *systemData, void *userData );
 
-	static int32 CB_Suspend( void *systemData, void *userData );
+	// Callbacks for implementing power-save functions (disable gps on suspend)
+	static int32 CB_DevicePause(void *systemData, void *userData);
+	static int32 CB_DeviceUnPause(void *systemData, void *userData);
 
 protected:
 	MainScreen();

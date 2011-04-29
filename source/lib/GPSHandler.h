@@ -20,7 +20,8 @@
 #ifndef GPSHANDLER
 #define GPSHANDLER
 
-#define AVERAGE_LENGTH 5
+#define AVERAGE_LENGTH 5		// Buffer length for average value measuring
+#define EARTH_RADIUS 6371009	// Earth radius in meters
 
 #include "Singleton.h"
 
@@ -56,8 +57,6 @@ private:
 
 	double degreeToRad( double degree );
 	double haversineDistance( s3eLocation *start, s3eLocation *end );
-
-	//static GPSHandler *mySelf;
 
 	s3eLocation *currLocation;
 	s3eLocation *newLocation;
