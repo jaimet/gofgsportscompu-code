@@ -46,8 +46,9 @@ public:
 
 	void SetMinAccuracy( double p_minAccuracy );	// Set the minimum accuracy a fix must have to be used by the GPSHandler
 
-	void startGPS();
+	void startGPS( bool p_bReset = true );
 	void stopGPS();
+	bool IsActive();
 
 protected:
 	GPSHandler();

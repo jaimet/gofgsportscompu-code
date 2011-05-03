@@ -154,22 +154,26 @@ void GPSHandler::SetMinAccuracy( double p_minAccuracy ) {
 }
 
 // Start GPS tracking
-void GPSHandler::startGPS() {
+void GPSHandler::startGPS( bool p_bReset ) {
 	if( !this->bGPSActive ) {
-		this->reset();
+		if( p_bReset ) this->reset();
 
 		s3eLocationStart();
 		this->bGPSActive = true;
 	}
 }
 
-// TODO: Reset GPS handler on new track
 // Stop GPS tracking
 void GPSHandler::stopGPS() {
 	if( this->bGPSActive ) {
 		s3eLocationStop();
 		this->bGPSActive = false;
 	}
+}
+
+// Returns true if GPS is currently active
+bool GPSHandler::IsActive() {
+	return this->bGPSActive;
 }
 
 // Initialize the gps handler

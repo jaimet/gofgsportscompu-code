@@ -179,6 +179,9 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 int MainScreen::mainTimer( void *systemData, void *userData ) {
 	if( MainScreen::Self()->bStopPending ) return 1;
 
+	// Check if GPS is active, if not we need to start it
+	if( !GPSHandler::Self()->IsActive() ) GPSHandler::Self()->startGPS( false );
+
 	// Calculate current time difference
 	time_t timeNow = time( NULL );
 	int timeDiff = (int) difftime( timeNow, MainScreen::Self()->startTime );
@@ -186,6 +189,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	// As long as the main timer is running, keep the device awake
 	s3eDeviceBacklightOn();
 
+	// Check if we have a valid location info
 	if( GPSHandler::Self()->updateLocation() ) {
 		// Update Altitude difference (only if positive, so upwards)
 		double currAltitudeDiff = GPSHandler::Self()->getAltitude() - MainScreen::Self()->lastAltitude;
@@ -201,14 +205,23 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 
 		// Update display
 		MainScreen::Self()->UpdateDisplay( GPSHandler::Self()->getSpeed(), 0.0, MainScreen::Self()->totalDistance, MainScreen::Self()->totalAltitudeDiff, timeDiff, GPSHandler::Self()->getAccuracy() );
+
+		// Call main-timer again (regular interval)
+		uint32 updateInterval = (uint32) SettingsHandler::Self()->GetInt( "UpdateInterval" );
+		s3eTimerSetTimer( updateInterval * 1000, &MainScreen::mainTimer, NULL );
+
+		// If the update interval is longer than 30 seconds, we disable GPS in the meantime
+		if( updateInterval > 30 ) {
+			GPSHandler::Self()->stopGPS();
+		}
 	}
 	else {
 		// Update display
 		MainScreen::Self()->UpdateDisplay( 0.0, 0.0, MainScreen::Self()->totalDistance, MainScreen::Self()->totalAltitudeDiff, timeDiff, GPSHandler::Self()->getAccuracy() );
-	}
 
-	// Call main-timer again
-	s3eTimerSetTimer( (uint32) SettingsHandler::Self()->GetInt( "UpdateInterval" ) * 1000, &MainScreen::mainTimer, NULL );
+		// Call main-timer again (fast polling, since we want a valid location)
+		s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
+	}
 
 	return 0;
 }
