@@ -20,7 +20,7 @@
 #ifndef GPSHANDLER
 #define GPSHANDLER
 
-#define AVERAGE_LENGTH 5		// Buffer length for average value measuring
+#define AVERAGE_DURATION 5		// Duration (in seconds) for average calculation
 #define EARTH_RADIUS 6371009	// Earth radius in meters
 
 #include "Singleton.h"
@@ -28,6 +28,7 @@
 #include "s3eLocation.h"
 #include "s3eTimer.h"
 
+#include <list>
 #include <math.h>
 
 class GPSHandler : public Singleton<GPSHandler> {
@@ -71,9 +72,12 @@ private:
 	double minAccuracy;		// Minimum accuracy for the GPSHandler
 	int64 lastTime;
 
-	double distanceHistory[AVERAGE_LENGTH];
-	double timeHistory[AVERAGE_LENGTH];
+	//double distanceHistory[AVERAGE_DURATION];
+	//double timeHistory[AVERAGE_DURATION];
 	int historyCount;
+
+	std::list<double> distanceHistory;
+	std::list<double> timeDiffHistory;
 };
 
 #endif

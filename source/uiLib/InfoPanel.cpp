@@ -81,6 +81,10 @@ void InfoPanel::Reset() {
 	this->maximum = 0.0;
 	this->average = 0.0;
 	this->numPoints = 0;
+
+	this->currentLabel->SetCaption( "0.0" );
+	if( this->maximumLabel != NULL ) this->maximumLabel->SetCaption( "0.0" );
+	if( this->averageLabel != NULL ) this->averageLabel->SetCaption( "0.0" );
 }
 
 void InfoPanel::setUnit( const char *unit ) {

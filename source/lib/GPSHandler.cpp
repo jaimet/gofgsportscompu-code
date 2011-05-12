@@ -83,23 +83,39 @@ bool GPSHandler::updateLocation() {
 			}
 		
 			// Update tracking history
-			this->distanceHistory[this->historyCount % AVERAGE_LENGTH] = this->distance;
-			this->timeHistory[this->historyCount % AVERAGE_LENGTH] = (currTime - this->lastTime) / 1000.0;
+			this->distanceHistory.push_back( this->distance );
+			this->distanceHistory.pop_front();
+			this->timeDiffHistory.push_back( (currTime - this->lastTime) / 1000.0 );
+			this->timeDiffHistory.pop_front();
+
+			//this->distanceHistory[this->historyCount % AVERAGE_DURATION] = this->distance;
+			//this->timeHistory[this->historyCount % AVERAGE_DURATION] = (currTime - this->lastTime) / 1000.0;
 			this->historyCount++;
 
-			// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
+			// Calculate average speed for the last AVERAGE_DURATION seconds
 			double totalDistance = 0.0;
 			double totalTime = 0.0;
-			for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
+			std::list<double>::reverse_iterator time_it = this->timeDiffHistory.rbegin();
+			for( std::list<double>::reverse_iterator distance_it = this->distanceHistory.rbegin(); distance_it != this->distanceHistory.rend(); ++distance_it ) {
+				totalDistance += *distance_it;
+				totalTime += *time_it;
+
+				if( totalTime >= AVERAGE_DURATION ) break;
+			}
+			this->speed = totalDistance / totalTime;
+
+			// Calculate the speed (as average out of the last AVERAGE_LENGTH points)
+			/*double totalDistance = 0.0;
+			double totalTime = 0.0;
+			for( int i = 0; i < AVERAGE_DURATION; i++ ) {
 				totalDistance += this->distanceHistory[i];
 				totalTime += this->timeHistory[i];
 			}
-			this->speed = totalDistance / totalTime;
+			this->speed = totalDistance / totalTime;*/
 		}
 
 		// Check if advanced location info is available (will use that for speed info then)
 		if( s3eLocationGetCourse(this->courseData) == S3E_RESULT_SUCCESS ) {
-			this->speed = this->courseData->m_Speed;
 			this->currSpeed = this->courseData->m_Speed;
 		}
 
@@ -195,10 +211,19 @@ void GPSHandler::reset() {
 	this->minAccuracy = -1.0;
 
 	this->historyCount = 0;
-	for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
+	this->distanceHistory.clear();
+	this->timeDiffHistory.clear();
+
+	// Fill lists with empty nodes
+	for( int i = 0; i < AVERAGE_DURATION; i++ ) {
+		this->distanceHistory.push_front( 0.0 );
+		this->timeDiffHistory.push_front( 0.0 );
+	}
+
+	/*for( int i = 0; i < AVERAGE_LENGTH; i++ ) {
 		this->distanceHistory[i] = 0.0;
 		this->timeHistory[i] = 0.0;
-	}
+	}*/
 }
 
 // Convert an angle in degree to rad

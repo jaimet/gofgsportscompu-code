@@ -48,6 +48,9 @@ void MainScreen::MA_StartButtonClick(CIwUIElement*) {
 	// Register the unpause callback (enable GPS on device resume)
 	s3eDeviceRegister( S3E_DEVICE_UNPAUSE, &MainScreen::CB_DeviceUnPause, NULL );
 
+	// Keep device alive
+	MainScreen::CB_AwakeTimer( NULL, NULL );
+
 	// Start tracking by using the startup timer
 	MainScreen::startupTimer( NULL, NULL );
 }
@@ -67,6 +70,9 @@ void MainScreen::MA_StopButtonClick(CIwUIElement*) {
 	this->StopButton->SetVisible( false );
 	this->PauseButton->SetVisible( false );
 	this->ContinueButton->SetVisible( false );
+
+	// Cancel all timers
+	s3eTimerCancelTimer( &MainScreen::CB_AwakeTimer, NULL );
 
 	// Notify timers that a stop is pending
 	this->bStopPending = true;
@@ -95,6 +101,8 @@ void MainScreen::CB_MAContinueButtonClick(CIwUIElement*) {
 	this->ContinueButton->SetVisible( false );
 	this->PauseButton->SetVisible( true );
 
+	// Start running again
+	MainScreen::CB_AwakeTimer( NULL, NULL );
 	MainScreen::mainTimer( NULL, NULL );
 }
 
@@ -132,17 +140,11 @@ int MainScreen::clockTimer( void *systemData, void *userData ) {
 int MainScreen::startupTimer( void *systemData, void *userData ) {
 	if( MainScreen::Self()->bStopPending ) return 1;
 
-	// As long as the startup timer is running, keep the device awake
-	s3eDeviceBacklightOn();
-
 	// Check if we have a fix
 	bool bFixFound = GPSHandler::Self()->updateLocation();
 
 	// Update display
 	MainScreen::Self()->UpdateDisplay( 0.0, 0.0, 0.0, 0.0, (int) difftime( time(NULL), MainScreen::Self()->startTime ), GPSHandler::Self()->getAccuracy() );
-
-	// Update timer display
-	//MainScreen::Self()->UpdateTimerDisplay( (int) difftime( time(NULL), MainScreen::Self()->startTime ) );
 
 	// Check if we have to wait for the GPS fix
 	if( SettingsHandler::Self()->GetBool( "WaitForGPSFix" ) ) { // && !GPSHandler::Self()->updateLocation() ) {
@@ -179,7 +181,7 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 int MainScreen::mainTimer( void *systemData, void *userData ) {
 	if( MainScreen::Self()->bStopPending ) return 1;
 
-	// Check if GPS is active, if not we need to start it
+	// Check if GPS is active, if not we need to start it (may be turned off due to power-saving functions)
 	if( !GPSHandler::Self()->IsActive() ) GPSHandler::Self()->startGPS( false );
 
 	// Calculate current time difference
@@ -187,7 +189,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 	int timeDiff = (int) difftime( timeNow, MainScreen::Self()->startTime );
 
 	// As long as the main timer is running, keep the device awake
-	s3eDeviceBacklightOn();
+	//s3eDeviceBacklightOn();
 
 	// Check if we have a valid location info
 	if( GPSHandler::Self()->updateLocation() ) {
@@ -210,8 +212,8 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		uint32 updateInterval = (uint32) SettingsHandler::Self()->GetInt( "UpdateInterval" );
 		s3eTimerSetTimer( updateInterval * 1000, &MainScreen::mainTimer, NULL );
 
-		// If the update interval is longer than 30 seconds, we disable GPS in the meantime
-		if( updateInterval > 30 ) {
+		// If the update interval is equal or greater than POWER_SAVE_INTERVAL seconds, we disable GPS in the meantime
+		if( updateInterval >= POWER_SAVE_INTERVAL ) {
 			GPSHandler::Self()->stopGPS();
 		}
 	}
@@ -222,6 +224,20 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 		// Call main-timer again (fast polling, since we want a valid location)
 		s3eTimerSetTimer( 1000, &MainScreen::mainTimer, NULL );
 	}
+
+	return 0;
+}
+
+// Timer which is called once a second to keep the device awake (only during active recording of tracks)
+int32 MainScreen::CB_AwakeTimer( void *systemData, void *userData ) {
+	// Check if we have to exit
+	if( MainScreen::Self()->bStopPending ) return 1;
+
+	// Keep device awake
+	s3eDeviceBacklightOn();
+
+	// Call timer again
+	s3eTimerSetTimer( 1000, &MainScreen::CB_AwakeTimer, NULL );
 
 	return 0;
 }
@@ -387,6 +403,7 @@ void MainScreen::Reset() {
 	this->distanceInfo->setValue( "0.00" );
 	this->altitudeInfo->setValue( "0.00" );
 	this->timeInfo->setValue( "00:00:00" );
+	this->statusInfo->setValue( "" );
 
 	// Pulse info needs some special handling (since it's optional)
 	if( this->pulseInfo != NULL ) {
@@ -453,6 +470,8 @@ void MainScreen::UpdateAccuracyDisplay( double accuracy ) {
  * <param name="accuracy">	  	The accuracy (in m). </param>
  */
 void MainScreen::UpdateDisplay( double speed, double hr, double distance, double altitudeDiff, int timeDiff, double accuracy ) {
+	if( timeDiff == 0.0 ) return;
+
 	// Update speed information
 	this->speedInfo->setValue( speed * 3.6 );
 	// Update average value for speed

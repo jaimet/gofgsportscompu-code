@@ -21,6 +21,7 @@
 #define MAINSCREEN
 
 #define LOCATION_STARTUP_DELAY 3
+#define POWER_SAVE_INTERVAL 10
 
 #include <string>
 #include <iostream>
@@ -58,6 +59,7 @@ public:
 	static int clockTimer( void *systemData, void *userData );
 	static int startupTimer( void *systemData, void *userData );
 	static int mainTimer( void *systemData, void *userData );
+	static int32 CB_AwakeTimer( void *systemData, void *userData );	// Timer which is called once a second to keep the device awake (only during active recording of tracks)
 
 	// Callbacks for implementing power-save functions (disable gps on suspend)
 	static int32 CB_DevicePause(void *systemData, void *userData);
