@@ -97,22 +97,42 @@ bool SettingsHandler::GetBool( std::string name ) {
 }
 
 bool SettingsHandler::Load() {
+	//IwTrace( GOFGDEBUG, ( "Loading Settings..." ) );
+
 	TiXmlDocument settingsDoc( "gsc_settings.xml" );
 
 	// Check if settings file exists
 	if( settingsDoc.LoadFile() ) {
+		//IwTrace( GOFGDEBUG, ( "Parsing Settings..." ) );
+
 		// Get the top-level node
 		TiXmlElement *topNode = settingsDoc.FirstChildElement();
 
+		//IwTrace( GOFGDEBUG, ( "Top level node loaded..." ) );
+
 		// Cycle through our simple settings file and load all entries
 		for( TiXmlElement *currElement = topNode->FirstChildElement(); currElement != NULL; currElement = currElement->NextSiblingElement() ) {
+			//IwTrace( GOFGDEBUG, ( "Loading Element..." ) );
+
+			//IwTrace( GOFGDEBUG, ( currElement->Value() ) );
+			//IwTrace( GOFGDEBUG, ( currElement->GetText() ) );
+			//IwTrace( GOFGDEBUG, ( "Element dump done..." ) );
+
 			if( this->settingsStore.find( currElement->Value() ) != this->settingsStore.end() ) {
+				//IwTrace( GOFGDEBUG, ( "Found element & assigning..." ) );
+				if( currElement->GetText() == NULL ) {
+					//IwTrace( GOFGDEBUG, ( "Value is NULL - ignoring!" ) );
+					continue;
+				}
 				this->settingsStore[currElement->Value()] = currElement->GetText();
 			}
 		}
+		//IwTrace( GOFGDEBUG, ( "Done loading elements (and settings)..." ) );
 
 		return true;
 	}
+
+	//IwTrace( GOFGDEBUG, ( "Error while loading settings" ) );
 
 	return false;
 }

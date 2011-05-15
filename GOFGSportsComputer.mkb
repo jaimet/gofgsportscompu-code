@@ -166,6 +166,6 @@ deployments
 	iphone-icon-settings-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-058x058.png
 	iphone-splash=data/textures/appicons/splash-320x480.png
 	version-minor=3
-	version-revision=3
+	version-revision=6
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 }

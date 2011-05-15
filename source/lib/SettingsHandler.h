@@ -23,6 +23,8 @@
 #include <map>
 #include <string>
 
+#include "IwDebug.h"
+
 #include "tinyxml.h"
 
 #include "../lib/Singleton.h"
