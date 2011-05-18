@@ -35,7 +35,7 @@
 */
 void GOFGInit() {
 //	IwGxInit();
-	Iw2DInit();
+//	Iw2DInit();
 	IwUIInit();
 	IW_CLASS_REGISTER(TrackTVItemSource);
 	IW_CLASS_REGISTER(FolderTVItemSource);
@@ -77,7 +77,7 @@ void GOFGShutDown() {
 	delete IwGetUIController();
 
 	IwUITerminate();
-	Iw2DTerminate();
+//	Iw2DTerminate();
 //	IwGxTerminate();
 }
 

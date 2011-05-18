@@ -17,6 +17,20 @@ CIwUIElement
 			name "AboutScreen_Text"
 
 			CIwUILabel {
+				name "GOFG_Version"
+				style <label_medium>
+
+				caption "Dynamically filled"
+			}
+
+			CIwUILabel {
+				name "GOFG_Copyright"
+				style <label_medium>
+
+				caption "Software Developed by Wolfgang Koller: www.gofg.at"
+			}
+
+			CIwUILabel {
 				name "Image_Copyright"
 				style <label_medium>
 
@@ -38,13 +52,6 @@ CIwUIElement
 			}
 
 			CIwUILabel {
-				name "GOFG_Copyright"
-				style <label_medium>
-
-				caption "Software Developed by Wolfgang Koller: www.gofg.at"
-			}
-
-			CIwUILabel {
 				name "GOFG_Contributor"
 				style <label_medium>
 
@@ -55,6 +62,12 @@ CIwUIElement
 				spacing 5
 
 				element {
+					name "GOFG_Version"
+				}
+				element {
+					name "GOFG_Copyright"
+				}
+				element {
 					name "Image_Copyright"
 				}
 				element {
@@ -62,9 +75,6 @@ CIwUIElement
 				}
 				element {
 					name "MBP_Copyright"
-				}
-				element {
-					name "GOFG_Copyright"
 				}
 				element {
 					name "GOFG_Contributor"

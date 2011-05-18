@@ -372,6 +372,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	CIw2DImage *s_image = Iw2DCreateImage( surface );
 	this->clockInfo->setImage( s_image->GetMaterial()->GetTexture() );
 	Iw2DSetSurface( orig );*/
+
 }
 
 MainScreen::~MainScreen() {

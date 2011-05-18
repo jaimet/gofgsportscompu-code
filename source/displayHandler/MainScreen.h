@@ -29,7 +29,8 @@
 #include <iomanip>
 
 //#include <s3eExt_OSExec.h>
-#include <Iw2D.h>
+//#include <Iw2D.h>
+//#include <s3eConfig.h>
 
 #include "Screen.h"
 #include "../lib/Singleton.h"

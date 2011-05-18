@@ -168,4 +168,11 @@ deployments
 	version-minor=3
 	version-revision=6
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
+	["Release"]
+	iphone-appid='87QQS524HB.at.gofg.gofgsportscomputer'
+	iphone-provisioning-profile=GOFG_Sports_Computer_Distribution.mobileprovision
+	iphone-sign-for-distribution='1'
+	itunes-artwork=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-512x512-itunes.png
+	provider='Senegate Programming'
+	version-minor=4
 }

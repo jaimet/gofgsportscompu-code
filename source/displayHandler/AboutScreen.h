@@ -20,6 +20,10 @@
 #ifndef ABOUTSCREEN
 #define ABOUTSCREEN
 
+#include <sstream>
+
+#include <s3eConfig.h>
+
 #include "../displayHandler/Screen.h"
 #include "../lib/Singleton.h"
 
