@@ -64,7 +64,9 @@ files
   CIwUIMenuButton.h
   CIwUIMenuButton.cpp
 	FolderTVItemSource.h 
-	FolderTVItemSource.cpp 
+	FolderTVItemSource.cpp
+  CIwUIDynamicImage.h
+  CIwUIDynamicImage.cpp 
 
   [DisplayHandler]
   (source/displayHandler)
