@@ -45,6 +45,8 @@ public:
 
 	double getAccuracy();		// Get the current accuracy of the fix (in m)
 
+	double GetBearing();		// Returns the current bearing (in rad)
+
 	void SetMinAccuracy( double p_minAccuracy );	// Set the minimum accuracy a fix must have to be used by the GPSHandler
 
 	void startGPS( bool p_bReset = true );
@@ -59,6 +61,7 @@ private:
 
 	double degreeToRad( double degree );
 	double haversineDistance( s3eLocation *start, s3eLocation *end );
+	double bearing( s3eLocation *start, s3eLocation *end );
 
 	s3eLocation *currLocation;
 	s3eLocation *newLocation;
@@ -70,6 +73,7 @@ private:
 	double currSpeed;		// Current speed in meters / second
 	double currAccuracy;	// Current accuracy of the position
 	double minAccuracy;		// Minimum accuracy for the GPSHandler
+	double currBearing;		// Current bearing
 	int64 lastTime;
 
 	//double distanceHistory[AVERAGE_DURATION];

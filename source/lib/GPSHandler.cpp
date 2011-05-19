@@ -64,6 +64,8 @@ bool GPSHandler::updateLocation() {
 				this->currSpeed = this->distance / ((double)( currTime - this->lastTime ) / 1000.0);
 				// Save altitude
 				this->altitude = this->newLocation->m_Altitude;
+				// Calculate the bearing
+				this->currBearing = this->bearing( this->currLocation, this->newLocation );
 
 				// Set status to true (we have an update)
 				//bLocationUpdated = true;
@@ -164,6 +166,11 @@ double GPSHandler::getAccuracy() {
 	return this->currAccuracy;
 }
 
+// Returns the current bearing (in rad)
+double GPSHandler::GetBearing() {
+	return this->currBearing;
+}
+
 // Set the minimum accuracy a fix must have to be used by the GPSHandler
 void GPSHandler::SetMinAccuracy( double p_minAccuracy ) {
 	this->minAccuracy = p_minAccuracy;
@@ -233,11 +240,21 @@ double GPSHandler::degreeToRad( double degree ) {
 
 // Calculate the distance between two points using the haversine formula (in km)
 double GPSHandler::haversineDistance( s3eLocation *start, s3eLocation *end ) {
-	double latitudeDiff = start->m_Latitude - end->m_Latitude;
-	double longitudeDiff = start->m_Longitude - end->m_Longitude;
+	double latitudeDiff = end->m_Latitude - start->m_Latitude;
+	double longitudeDiff = end->m_Longitude - start->m_Longitude;
 
 	double h = pow( sin( this->degreeToRad(latitudeDiff) / 2.0 ), 2 ) + cos( this->degreeToRad(start->m_Latitude) ) * cos( this->degreeToRad(end->m_Latitude) ) * pow( sin( this->degreeToRad(longitudeDiff) / 2.0 ), 2 );
-	double distance = 2.0 * EARTH_RADIUS * asin(sqrt(h));	// Earth Radius in km * 1000.0 for meters
+	double distance = 2.0 * EARTH_RADIUS * asin(sqrt(h));	// Earth Radius in meters
 
 	return distance;
+}
+
+double GPSHandler::bearing( s3eLocation *start, s3eLocation *end ) {
+	double longitudeDiff = end->m_Longitude - start->m_Longitude;
+
+	double bearing = atan2( cos( this->degreeToRad(end->m_Latitude) ) * sin( this->degreeToRad(longitudeDiff) ), ( cos( this->degreeToRad(start->m_Latitude) ) * sin( this->degreeToRad(end->m_Latitude) ) - sin( this->degreeToRad(start->m_Latitude) ) * cos( this->degreeToRad(end->m_Latitude) ) * cos( this->degreeToRad(longitudeDiff) ) ) );
+
+	if( bearing < 0 ) bearing += 2.0 * M_PI;
+
+	return bearing;
 }

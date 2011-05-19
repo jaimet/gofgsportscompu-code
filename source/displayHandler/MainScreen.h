@@ -94,7 +94,7 @@ protected:
 	InfoPanel *statusInfo;
 	InfoPanel *pulseInfo;
 
-	bool bStopPending;
+	//bool bStopPending;
 	double totalDistance;
 	double totalAltitudeDiff;
 	double lastAltitude;

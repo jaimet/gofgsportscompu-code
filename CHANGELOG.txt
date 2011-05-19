@@ -4,4 +4,4 @@
 - GPS is now automatically turned off if duration between calls is longer than 10 seconds (in order to save power)
 - There is now a setting for the update interval (which allows power-saving by updating less frequently)
 - It's now possible to pause recording
-- Software is ready for Bada and iOs (available on the AppStore)
+- Software is ready for Bada and iOs

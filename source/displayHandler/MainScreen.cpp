@@ -73,9 +73,11 @@ void MainScreen::MA_StopButtonClick(CIwUIElement*) {
 
 	// Cancel all timers
 	s3eTimerCancelTimer( &MainScreen::CB_AwakeTimer, NULL );
+	s3eTimerCancelTimer( &MainScreen::startupTimer, NULL );
+	s3eTimerCancelTimer( &MainScreen::mainTimer, NULL );
 
 	// Notify timers that a stop is pending
-	this->bStopPending = true;
+	//this->bStopPending = true;
 }
 
 void MainScreen::MA_ExitButtonClick(CIwUIElement*) {
@@ -88,7 +90,12 @@ void MainScreen::MA_MenuButtonClick(CIwUIElement*) {
 
 void MainScreen::CB_MAPauseButtonClick(CIwUIElement*) {
 	GPSHandler::Self()->stopGPS();
-	this->bStopPending = true;
+	//this->bStopPending = true;
+
+	// Cancel all timers
+	s3eTimerCancelTimer( &MainScreen::CB_AwakeTimer, NULL );
+	s3eTimerCancelTimer( &MainScreen::startupTimer, NULL );
+	s3eTimerCancelTimer( &MainScreen::mainTimer, NULL );
 
 	this->PauseButton->SetVisible( false );
 	this->ContinueButton->SetVisible( true );
@@ -96,7 +103,7 @@ void MainScreen::CB_MAPauseButtonClick(CIwUIElement*) {
 
 void MainScreen::CB_MAContinueButtonClick(CIwUIElement*) {
 	GPSHandler::Self()->startGPS();
-	this->bStopPending = false;
+	//this->bStopPending = false;
 
 	this->ContinueButton->SetVisible( false );
 	this->PauseButton->SetVisible( true );
@@ -138,7 +145,7 @@ int MainScreen::clockTimer( void *systemData, void *userData ) {
  * <returns>	. </returns>
  */
 int MainScreen::startupTimer( void *systemData, void *userData ) {
-	if( MainScreen::Self()->bStopPending ) return 1;
+	//if( MainScreen::Self()->bStopPending ) return 1;
 
 	// Check if we have a fix
 	bool bFixFound = GPSHandler::Self()->updateLocation();
@@ -179,7 +186,7 @@ int MainScreen::startupTimer( void *systemData, void *userData ) {
 
 // Main timer, called once a second to update all infos
 int MainScreen::mainTimer( void *systemData, void *userData ) {
-	if( MainScreen::Self()->bStopPending ) return 1;
+	//if( MainScreen::Self()->bStopPending ) return 1;
 
 	// Check if GPS is active, if not we need to start it (may be turned off due to power-saving functions)
 	if( !GPSHandler::Self()->IsActive() ) GPSHandler::Self()->startGPS( false );
@@ -231,7 +238,7 @@ int MainScreen::mainTimer( void *systemData, void *userData ) {
 // Timer which is called once a second to keep the device awake (only during active recording of tracks)
 int32 MainScreen::CB_AwakeTimer( void *systemData, void *userData ) {
 	// Check if we have to exit
-	if( MainScreen::Self()->bStopPending ) return 1;
+	//if( MainScreen::Self()->bStopPending ) return 1;
 
 	// Keep device awake
 	s3eDeviceBacklightOn();
@@ -387,7 +394,7 @@ MainScreen::~MainScreen() {
 
 void MainScreen::Reset() {
 	// Reset the internal statistics variables
-	this->bStopPending = false;
+	//this->bStopPending = false;
 	this->totalDistance = 0.0;
 	this->totalAltitudeDiff = 0.0;
 	this->lastAltitude = -1000.0;
