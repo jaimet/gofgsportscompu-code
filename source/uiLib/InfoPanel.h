@@ -59,8 +59,8 @@ private:
 
 	CIwUILabel *unitLabel;
 	CIwUIAutoSizeLabel *currentLabel;
-	CIwUILabel *averageLabel;
-	CIwUILabel *maximumLabel;
+	CIwUIAutoSizeLabel *averageLabel;
+	CIwUIAutoSizeLabel *maximumLabel;
 
 	CIwUIImage *image;
 	CIwUIImage *currentImage;

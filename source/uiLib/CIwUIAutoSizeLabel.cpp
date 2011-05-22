@@ -36,6 +36,8 @@ CIwUIAutoSizeLabel::CIwUIAutoSizeLabel() : CIwUILabel() {
 }
 
 void CIwUIAutoSizeLabel::SetCaption( const char *pString ) {
+	this->SetFont( this->fontTypes[this->fontTypes.size() - 1] );
+
 	// Now check if the font of the label is in our managed list
 	if( this->fontTypes.contains( this->GetFont() ) ) {
 		int fontIndex = this->fontTypes.find( this->GetFont() );

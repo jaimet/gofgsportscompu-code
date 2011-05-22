@@ -62,7 +62,7 @@ void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 			TaskHandler::Self()->Remove( this->exportTask );
 		}
 
-		delete this->exportTask;
+		//delete this->exportTask;
 		this->exportTask = NULL;
 
 		// Enable all controls again

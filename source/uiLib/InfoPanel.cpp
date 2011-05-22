@@ -29,8 +29,8 @@ InfoPanel::InfoPanel( const char *name, bool p_bNoStatistics ) {
 	}
 	else {
 		this->uiInfoPanel = CIwUIElement::CreateFromResource("InfoPanel");
-		this->maximumLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "MaximumLabel" );
-		this->averageLabel = (CIwUILabel *)this->uiInfoPanel->GetChildNamed( "AverageLabel" );
+		this->maximumLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "MaximumLabel" );
+		this->averageLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "AverageLabel" );
 	}
 
 	// Rename element
@@ -83,8 +83,8 @@ void InfoPanel::Reset() {
 	this->numPoints = 0;
 
 	this->currentLabel->SetCaption( "0.0" );
-	if( this->maximumLabel != NULL ) this->maximumLabel->SetCaption( "0.0" );
-	if( this->averageLabel != NULL ) this->averageLabel->SetCaption( "0.0" );
+	if( this->maximumLabel != NULL ) this->maximumLabel->SetCaption( "0.00" );
+	if( this->averageLabel != NULL ) this->averageLabel->SetCaption( "0.00" );
 }
 
 void InfoPanel::setUnit( const char *unit ) {
