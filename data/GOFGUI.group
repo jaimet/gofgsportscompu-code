@@ -4,6 +4,8 @@ CIwResGroup
 	
 	iwui_style/iwui_style.group { inline true }
 
+  fonts/gofgui_fonts.group
+
 	.\textures\app.png
 	.\textures\play.png
 	.\textures\gowebsite24.png

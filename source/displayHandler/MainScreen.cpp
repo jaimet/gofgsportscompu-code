@@ -19,6 +19,8 @@
 
 #include "MainScreen.h"
 
+//#include "../uiLib/CIwUIComboBox.h"
+
 template<>
 MainScreen *Singleton<MainScreen>::mySelf = NULL;
 
@@ -379,6 +381,9 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	CIw2DImage *s_image = Iw2DCreateImage( surface );
 	this->clockInfo->setImage( s_image->GetMaterial()->GetTexture() );
 	Iw2DSetSurface( orig );*/
+
+	//CIwUIComboBox *combobox = new CIwUIComboBox();
+	//this->myScreen->AddChild( combobox );
 
 }
 

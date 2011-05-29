@@ -1,26 +1,8 @@
-//CIwUIPropertySet
-//{
-//	name	<tableViewItem>
-//
-//	background <radio_buttonUp>
-//
-//	itemDown <radio_buttonDown>
-//
-//	itemSelected
-//	{
-//		parent <radio_buttonUp>
-//		imageColour { 192 192 192 }
-//	}
-//
-//	focus <focus_centre>
-//}
-
-CIwUIElement
-{
+CIwUIElement {
 	name "FolderSelectScreen"
 
 	CIwUIButton {
-		name "BGButton"
+		name "Background"
 		drawableType "image"
 		caption ""
 		texture "background"
@@ -28,38 +10,60 @@ CIwUIElement
 	}
 
 	CIwUIElement {
-		name "innerLayout"
+		name "ContentContainer"
 
 		CIwUILabel {
-			name "SelectFolderLabel"
+			name "TitleLabel"
 			style <label_medium>
 			caption "Select Folder"
 			sizeMax { -1 24 }
+			sizeToContent false
+			alignV middle
+			alignH centre
 		}
 
-		CIwUILabel {
-			name "CurrentFolderLabel"
-			style <label_medium>
-			caption "/"
-			sizeMax { -1 24 }
-		}
+		CIwUIElement {
+			name "Content"
 
-		CIwUITableView
-		{
-			name "FolderList"
-			sizeMax { -1 -1 }
+			CIwUILabel {
+				name "CurrentFolderLabel"
+				style <label_medium>
+				caption "/"
+				sizeMax { -1 24 }
+			}
+	
+			CIwUITableView {
+				name "FolderList"
+				sizeMax { -1 -1 }
+	
+				sizeMin { -1 100 }
+				size { -1 100 }
+	
+				FolderTVItemSource { }
+			}
 
-			sizeMin { -1 100 }
-			size { -1 100 }
+			CIwUILayoutGrid {
+				sizeToSpace true
 
-			FolderTVItemSource
-			{
+				column { }
+				row { heightMin 24 heightMax 24 }
+				row { }
 
+				element {
+					name "CurrentFolderLabel"
+					row 0
+					alignH "centre"
+				}
+				element {
+					name "FolderList"
+					row 1
+					border { 0 4 }
+				}
 			}
 		}
 
 		CIwUIElement {
-			name "menuBar"
+			name "MenuBar"
 			sizeMax { -1 48 }
 
 			CIwUIButton {
@@ -70,45 +74,24 @@ CIwUIElement
 				sizeMax { -1 -1 }
 			}
 
-			CIwUIElement {
-				name "menuBar_buttons"
-				sizeMax { -1 -1 }
+			CIwUIButton {
+				name "LeftButton"
+		
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_FSSExitButtonClick" }
+			}
 
-				CIwUIButton {
-					name "LeftButton"
-			
-					drawableType "image"
-					caption ""
-					texture "delete"
-					sizeToContent true
-					OnButtonClick  { "CB_FSSExitButtonClick" }
-				}
-
-				CIwUIButton {
-					name "RightButton"
-			
-					drawableType "image"
-					caption ""
-					texture "foldermove"
-					sizeToContent true
-					OnButtonClick  { "CB_FSSSelectButtonClick" }
-				}
-
-				CIwUILayoutGrid {
-					sizeToSpace true
-					numColumns 3
-					numRows 1
-
-					element {
-						name "LeftButton"
-						column 0
-					}
-					element {
-						name "RightButton"
-						column 2
-						alignH "right"
-					}
-				}
+			CIwUIButton {
+				name "RightButton"
+		
+				drawableType "image"
+				caption ""
+				texture "foldermove"
+				sizeToContent true
+				OnButtonClick  { "CB_FSSSelectButtonClick" }
 			}
 
 			CIwUILayout {
@@ -118,53 +101,55 @@ CIwUIElement
 					name "menuBar_background"
 				}
 				element {
-					name "menuBar_buttons"
+					name "LeftButton"
+					alignH "left"
+				}
+				element {
+					name "RightButton"
+					alignH "right"
 				}
 			}
 		}
-		
+
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 4
-			numColumns 1
+
+			column { }
+
+			row { heightMin 24 heightMax 24	}
+			row { }
+			row { heightMin 48 heightMax 48 }
 
 			element {
-				name "SelectFolderLabel"
-				alignH "centre"
+				name "TitleLabel"
 				row 0
 			}
 			element {
-				name "CurrentFolderLabel"
-				alignH "centre"
+				name "Content"
+				border { 4 4 }
 				row 1
 			}
 			element {
-				name "FolderList"
+				name "MenuBar"
 				row 2
-				alignV "top"
-			}
-			element {
-				name "menuBar"
-				row 3
-				alignV "bottom"
 			}
 		}
-	}
 
+	}
+		
 	CIwUILayout {
 		sizeToSpace true
 
 		element {
-			name "BGButton"
+			name "Background"
 		}
 		element	{
-			name "innerLayout"
+			name "ContentContainer"
 		}
 	}
 }
 
-CIwUITableViewItem
-{
+CIwUITableViewItem {
 	name "folderItem"
 	style <tableViewItem>
 

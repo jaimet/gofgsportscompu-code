@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -29,6 +29,8 @@
 #include "dirent.h"
 #include <string>
 #include <vector>
+#include <sstream>
+#include <ctime>
 
 //-----------------------------------------------------------------------------
 

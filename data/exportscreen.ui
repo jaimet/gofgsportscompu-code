@@ -1,13 +1,10 @@
-CIwUIPropertySet
-{
+CIwUIPropertySet {
 	name	<tableViewItem>
 
 	background <radio_buttonUp>
-
 	itemDown <radio_buttonDown>
 
-	itemSelected
-	{
+	itemSelected {
 		parent <radio_buttonUp>
 		imageColour { 192 192 192 }
 	}
@@ -15,12 +12,12 @@ CIwUIPropertySet
 	focus <focus_centre>
 }
 
-CIwUIElement
-{
+
+CIwUIElement {
 	name "ExportScreen"
 
 	CIwUIButton {
-		name "BGButton"
+		name "Background"
 		drawableType "image"
 		caption ""
 		texture "background"
@@ -28,33 +25,103 @@ CIwUIElement
 	}
 
 	CIwUIElement {
-		name "innerLayout"
+		name "ContentContainer"
 
 		CIwUILabel {
-			name "ExportLabel"
+			name "TitleLabel"
 			style <label_medium>
 			caption "Export Track"
 			sizeMax { -1 24 }
+			sizeToContent false
+			alignV middle
+			alignH centre
 		}
 
-		CIwUITableView
-		{
-			name "TrackList"
-			sizeMax { -1 -1 }
+		CIwUIElement {
+			name "Content"
 
-			sizeMin { -1 100 }
-			size { -1 100 }
+			CIwUITableView {
+				name "TrackList"
+				sizeMax { -1 -1 }
+	
+				sizeMin { -1 100 }
+				size { -1 100 }
+	
+				TrackTVItemSource {
+				}
+			}
 
-			TrackTVItemSource
-			{
+			CIwUITabBar {
+				name "exportFormat"
+				OnTabBarSelected { ES_ExportFormatChanged }
+				radioButtonStyles {
+					{ caption "Fitlog" style <radio_left> } 
+					{ caption "TCX" style <radio_centre> } 
+					{ caption "GPX" style <radio_right> } 
+					{ caption "GOFG" style <radio_centre> visible false } 
+				}
 
+				sizeMax { -1 32 }
+			}
+
+			CIwUIProgressBar {
+				name "exportProgress"
+	
+				style <progressBar>
+				progress 0.0
+
+				sizeMax { -1 24 }
+			}
+
+			CIwUILabel {
+				name "exportStatus"
+	
+				caption ""
+	
+				style <label_small>
+				sizeMax { -1 16 }
+				sizeToContent false
+				alignH centre
+			}
+
+			CIwUILayoutGrid {
+				sizeToSpace true
+
+				column { }
+				row { }
+				row { heightMin 32 heightMax 32 }
+				row { heightMin 24 heightMax 24 }
+				row { heightMin 16 heightMax 16 }
+	
+				element {
+					name "TrackList"
+					row 0
+					alignV "top"
+					border { 0 4 }
+				}
+				element {
+					name "exportFormat"
+					row 1
+					alignH "centre"
+					alignV "bottom"
+				}
+				element {
+					name "exportProgress"
+					row 2
+					alignH "centre"
+					alignV "bottom"
+				}
+				element {
+					name "exportStatus"
+					row 3
+				}
 			}
 		}
 
 		CIwUIElement {
-			name "menuBar"
+			name "MenuBar"
 			sizeMax { -1 48 }
-
+	
 			CIwUIButton {
 				name "menuBar_background"
 				drawableType "image"
@@ -62,153 +129,101 @@ CIwUIElement
 				texture "menuBar_bg"
 				sizeMax { -1 -1 }
 			}
+	
+			CIwUIButton {
+				name "LeftButton"
 
-			CIwUIElement {
-				name "menuBar_buttons"
-				sizeMax { -1 -1 }
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_ESExitButtonClick" }
+			}
 
-				CIwUIButton {
-					name "LeftButton"
+			CIwUIButton {
+				name "MiddleButton"
 
-					drawableType "image"
-					caption ""
-					texture "delete"
-					sizeToContent true
-					OnButtonClick  { "CB_ESExitButtonClick" }
-				}
+				drawableType "image"
+				caption ""
+				texture "filesearch"
+				sizeToContent true
+				OnButtonClick  { "CB_ESLoadButtonClick" }
+			}
 
-				CIwUIButton {
-					name "MiddleButton"
+			CIwUIButton {
+				name "RightButton"
 
-					drawableType "image"
-					caption ""
-					texture "filesearch"
-					sizeToContent true
-					OnButtonClick  { "CB_ESLoadButtonClick" }
-				}
-
-				CIwUIButton {
-					name "RightButton"
-
-					drawableType "image"
-					caption ""
-					texture "foldermove"
-					sizeToContent true
-					OnButtonClick  { "CB_ESExportButtonClick" }
-				}
-
-				CIwUILayoutGrid {
-					sizeToSpace true
-					numColumns 3
-					numRows 1
-
-					element {
-						name "LeftButton"
-						column 0
-					}
-					element {
-						name "MiddleButton"
-						column 1
-						alignH "centre"
-					}
-					element {
-						name "RightButton"
-						column 2
-						alignH "right"
-					}
-				}
+				drawableType "image"
+				caption ""
+				texture "foldermove"
+				sizeToContent true
+				OnButtonClick  { "CB_ESExportButtonClick" }
 			}
 
 			CIwUILayout {
 				sizeToSpace true
-
+	
 				element {
 					name "menuBar_background"
 				}
 				element {
-					name "menuBar_buttons"
+					name "LeftButton"
+					alignV middle
+					alignH left
+				}
+				element {
+					name "MiddleButton"
+					alignV middle
+					alignH centre
+				}
+				element {
+					name "RightButton"
+					alignV middle
+					alignH right
 				}
 			}
-		}
-		
-		CIwUITabBar {
-			name "exportFormat"
-			OnTabBarSelected { ES_ExportFormatChanged }
-			radioButtonStyles {
-				{ caption "Fitlog" style <radio_left> } 
-				{ caption "TCX" style <radio_centre> } 
-				{ caption "GPX" style <radio_right> } 
-				{ caption "GOFG" style <radio_centre> visible false } 
-			}
-		}
-
-		CIwUIProgressBar {
-			name "exportProgress"
-
-			style <progressBar>
-			progress 0.0
-		}
-
-		CIwUILabel {
-			name "exportStatus"
-
-			caption ""
-
-			style <label_small>
-			sizeMax { -1 16 }
-			sizeToContent false
-			alignH centre
 		}
 
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 6
-			numColumns 1
+
+			column { }
+
+			row { heightMin 24 heightMax 24	}
+			row { }
+			row { heightMin 48 heightMax 48 }
 
 			element {
-				name "ExportLabel"
-				alignH "centre"
+				name "TitleLabel"
+				row 0
 			}
 			element {
-				name "TrackList"
+				name "Content"
+				border { 4 4 }
 				row 1
-				alignV "top"
 			}
 			element {
-				name "exportFormat"
+				name "MenuBar"
 				row 2
-				alignH "centre"
-				alignV "bottom"
-			}
-			element {
-				name "exportProgress"
-				row 3
-				alignH "centre"
-				alignV "bottom"
-			}
-			element {
-				name "exportStatus"
-				row 4
-			}
-			element {
-				name "menuBar"
-				row 5
-				alignV "bottom"
 			}
 		}
-	}
 
-	CIwUILayout
-	{
+	}
+		
+	CIwUILayout {
 		sizeToSpace true
 
 		element {
-			name "BGButton"
+			name "Background"
 		}
 		element	{
-			name "innerLayout"
+			name "ContentContainer"
 		}
 	}
+}
+
+CIwPropertyDefine {
+	CIwPropertyString trackName
 }
 
 CIwUITableViewItem
@@ -217,6 +232,7 @@ CIwUITableViewItem
 	style <tableViewItem>
 
 	OnTableViewItemSelected ES_HandleTrackSelection
+
 
 	CIwUILabel
 	{

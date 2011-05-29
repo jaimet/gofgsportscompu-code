@@ -1,10 +1,9 @@
-CIwUIElement 
-{
+CIwUIElement {
 	name "MainScreen"
 
 	CIwUIElement {
-		name "menuBar"
-		//sizeMax { -1 48 }
+		name "MenuBar"
+		sizeMax { -1 48 }
 
 		CIwUIButton {
 			name "menuBar_background"
@@ -14,107 +13,67 @@ CIwUIElement
 			sizeMax { -1 -1 }
 		}
 
-		CIwUIElement {
-			name "menuBar_buttons"
-			sizeMax { -1 48 }
+		CIwUIButton {
+			name "StopButton"
+	
+			drawableType "image"
+			caption ""
+			texture "stop"
+			sizeToContent true
+			OnButtonClick  { "MA_StopButtonClick" }
+			visible false
+		}
 
-			CIwUIButton {
-				name "StopButton"
-		
-				drawableType "image"
-				caption ""
-				texture "stop"
-				sizeToContent true
-				OnButtonClick  { "MA_StopButtonClick" }
-				visible false
-			}
+		CIwUIButton {
+			name "StartButton"
+	
+			drawableType "image"
+			caption ""
+			texture "play"
+			sizeToContent true
+			OnButtonClick  { "MA_StartButtonClick" }
+		}
 
-			CIwUIButton {
-				name "StartButton"
-		
-				drawableType "image"
-				caption ""
-				texture "play"
-				sizeToContent true
-				OnButtonClick  { "MA_StartButtonClick" }
-			}
+		CIwUIButton {
+			name "ExitButton"
+	
+			drawableType "image"
+			caption ""
+			texture "delete"
+			sizeToContent true
+			OnButtonClick  { "MA_ExitButtonClick" }
+		}
 
-			CIwUIButton {
-				name "ExitButton"
-		
-				drawableType "image"
-				caption ""
-				texture "delete"
-				sizeToContent true
-				OnButtonClick  { "MA_ExitButtonClick" }
-			}
+		CIwUIButton {
+			name "MenuButton"
+	
+			drawableType "image"
+			caption ""
+			texture "app"
+			sizeToContent true
+			OnButtonClick  { "MA_MenuButtonClick" }
+		}
 
-			CIwUIButton {
-				name "MenuButton"
-		
-				drawableType "image"
-				caption ""
-				texture "app"
-				sizeToContent true
-				OnButtonClick  { "MA_MenuButtonClick" }
-			}
+		CIwUIButton {
+			name "PauseButton"
+	
+			drawableType "image"
+			caption ""
+			texture "pause"
+			sizeToContent true
+			OnButtonClick  { "CB_MAPauseButtonClick" }
+			visible false
+		}
 
-			CIwUIButton {
-				name "PauseButton"
-		
-				drawableType "image"
-				caption ""
-				texture "pause"
-				sizeToContent true
-				OnButtonClick  { "CB_MAPauseButtonClick" }
-				visible false
-			}
-
-			CIwUIButton {
-				name "ContinueButton"
-		
-				drawableType "image"
-				caption ""
-				texture "play"
-				sizeToContent true
-				OnButtonClick  { "CB_MAContinueButtonClick" }
-				visible false
-			}
-
-			CIwUILayoutGrid {
-				sizeToSpace true
-				numColumns 3
-				numRows 1
-
-				element {
-					name "StopButton"
-					column 0
-				}
-				element {
-					name "ExitButton"
-					column 0
-				}
-				element {
-					name "MenuButton"
-					alignH "centre"
-					column 1
-				}
-				element {
-					name "PauseButton"
-					alignH "centre"
-					column 1
-				}
-				element {
-					name "ContinueButton"
-					alignH "centre"
-					column 1
-				}
-				element {
-					name "StartButton"
-					alignH "right"
-					column 2
-				}
-			}
+		CIwUIButton {
+			name "ContinueButton"
+	
+			drawableType "image"
+			caption ""
+			texture "play"
+			sizeToContent true
+			OnButtonClick  { "CB_MAContinueButtonClick" }
+			visible false
 		}
 
 		CIwUILayout {
@@ -124,69 +83,51 @@ CIwUIElement
 				name "menuBar_background"
 			}
 			element {
-				name "menuBar_buttons"
-				alignV "middle"
+				name "StopButton"
+				alignH "left"
+			}
+			element {
+				name "ExitButton"
+				alignH "left"
+			}
+			element {
+				name "MenuButton"
+				alignH "centre"
+			}
+			element {
+				name "PauseButton"
+				alignH "centre"
+			}
+			element {
+				name "ContinueButton"
+				alignH "centre"
+			}
+			element {
+				name "StartButton"
+				alignH "right"
 			}
 		}
 	}
 
 	CIwUIElement {
 		name "MainGrid"
-
-//		CIwUIElement {
-//			name "TimeStatusElement"
-//
-//			CIwUILayoutGrid {
-//				numColumns 1
-//				numRows 2
-//				sizeToSpace true
-//			}
-//		}
-//
-//		CIwUIElement {
-//			name "DistanceAltitudeElement"
-//
-//			CIwUILayoutGrid {
-//				numColumns 1
-//				numRows 1
-//				sizeToSpace true
-//			}
-//		}
-//
-//		CIwUILayoutGrid {
-//			name "Grid"
-//			numColumns 2
-//			numRows 3
-//			sizeToSpace true
-//
-//			element {
-//				name "DistanceAltitudeElement"
-//				row 1
-//				column 0
-//			}
-//
-//			element {
-//				name "TimeStatusElement"
-//				row 1
-//				column 1
-//			}
-//		}
 	}
 
 	CIwUILayoutGrid {
 		name "mainLayout"
 		sizeToSpace true
-		numColumns 1
-		numRows 2
+
+		column { }
+		row { }
+		row { heightMin 48 heightMax 48 }
 				
 		element {
 			name "MainGrid"
 			row 0
 		}
 		element {
-			name "menuBar"
+			name "MenuBar"
 			row 1
-			alignV "top"
 		}
 	}
 }

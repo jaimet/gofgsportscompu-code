@@ -27,53 +27,36 @@ CIwUIElement {
 			sizeMax { -1 48 }
 			sizeMin { -1 48 }
 
-			CIwUIElement {
-				name "MB_T_Grid"
+			CIwUIImage {
+				name "MB_T_ButtonIcon"
 
-				CIwUIImage {
-					name "MB_T_ButtonIcon"
+				texture "textfile32"
 
-					texture "textfile32"
+				size { 32 32 }
+				sizeMax { 32 32 }
+				sizeMin { 32 32 }
+			}
 
-					size { 32 32 }
-					sizeMax { 32 32 }
-					sizeMin { 32 32 }
-				}
-
-				CIwUILabel {
-					name "MB_T_ButtonLabel"
-					style <label_large>
-					caption "Manage Tracks"
-					sizeMax { -1 32 }
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "MB_T_ButtonIcon"
-						row 0
-						column 0
-						alignV middle
-						border { 8 8 }
-					}
-					element {
-						name "MB_T_ButtonLabel"
-						row 0
-						column 1
-						alignV middle
-					}
-				}
+			CIwUILabel {
+				name "MB_T_ButtonLabel"
+				style <label_large>
+				caption "Manage Tracks"
+				sizeMax { -1 32 }
+				sizeToContent true
 			}
 
 			CIwUILayout {
 				sizeToSpace true
 
 				element {
-					name "MB_T_Grid"
+					name "MB_T_ButtonIcon"
+					alignV middle
+					alignH left
+				}
+				element {
+					name "MB_T_ButtonLabel"
+					alignV middle
+					alignH centre
 				}
 			}
 		}
@@ -91,53 +74,36 @@ CIwUIElement {
 			sizeMax { -1 48 }
 			sizeMin { -1 48 }
 
-			CIwUIElement {
-				name "MB_A_Grid"
+			CIwUIImage {
+				name "MB_A_ButtonIcon"
 
-				CIwUIImage {
-					name "MB_A_ButtonIcon"
+				texture "infoabout32"
 
-					texture "infoabout32"
+				size { 32 32 }
+				sizeMax { 32 32 }
+				sizeMin { 32 32 }
+			}
 
-					size { 32 32 }
-					sizeMax { 32 32 }
-					sizeMin { 32 32 }
-				}
-
-				CIwUILabel {
-					name "MB_A_ButtonLabel"
-					style <label_large>
-					caption "About"
-					sizeMax { -1 32 }
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "MB_A_ButtonIcon"
-						row 0
-						column 0
-						alignV middle
-						border { 8 8 }
-					}
-					element {
-						name "MB_A_ButtonLabel"
-						row 0
-						column 1
-						alignV middle
-					}
-				}
+			CIwUILabel {
+				name "MB_A_ButtonLabel"
+				style <label_large>
+				caption "About"
+				sizeMax { -1 32 }
+				sizeToContent true
 			}
 
 			CIwUILayout {
 				sizeToSpace true
 
 				element {
-					name "MB_A_Grid"
+					name "MB_A_ButtonIcon"
+					alignV middle
+					alignH left
+				}
+				element {
+					name "MB_A_ButtonLabel"
+					alignV middle
+					alignH centre
 				}
 			}
 		}
@@ -155,53 +121,36 @@ CIwUIElement {
 			sizeMax { -1 48 }
 			sizeMin { -1 48 }
 
-			CIwUIElement {
-				name "MB_S_Grid"
+			CIwUIImage {
+				name "MB_S_ButtonIcon"
 
-				CIwUIImage {
-					name "MB_S_ButtonIcon"
+				texture "configure32"
 
-					texture "configure32"
+				size { 32 32 }
+				sizeMax { 32 32 }
+				sizeMin { 32 32 }
+			}
 
-					size { 32 32 }
-					sizeMax { 32 32 }
-					sizeMin { 32 32 }
-				}
-
-				CIwUILabel {
-					name "MB_S_ButtonLabel"
-					style <label_large>
-					caption "Settings"
-					sizeMax { -1 32 }
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "MB_S_ButtonIcon"
-						row 0
-						column 0
-						alignV middle
-						border { 8 8 }
-					}
-					element {
-						name "MB_S_ButtonLabel"
-						row 0
-						column 1
-						alignV middle
-					}
-				}
+			CIwUILabel {
+				name "MB_S_ButtonLabel"
+				style <label_large>
+				caption "Settings"
+				sizeMax { -1 32 }
+				sizeToContent true
 			}
 
 			CIwUILayout {
 				sizeToSpace true
 
 				element {
-					name "MB_S_Grid"
+					name "MB_S_ButtonIcon"
+					alignV middle
+					alignH left
+				}
+				element {
+					name "MB_S_ButtonLabel"
+					alignV middle
+					alignH centre
 				}
 			}
 		}
@@ -219,53 +168,36 @@ CIwUIElement {
 			sizeMax { -1 48 }
 			sizeMin { -1 48 }
 
-			CIwUIElement {
-				name "MB_C_Grid"
+			CIwUIImage {
+				name "MB_C_ButtonIcon"
 
-				CIwUIImage {
-					name "MB_C_ButtonIcon"
+				texture "close32"
 
-					texture "close32"
+				size { 32 32 }
+				sizeMax { 32 32 }
+				sizeMin { 32 32 }
+			}
 
-					size { 32 32 }
-					sizeMax { 32 32 }
-					sizeMin { 32 32 }
-				}
-
-				CIwUILabel {
-					name "MB_C_ButtonLabel"
-					style <label_large>
-					caption "Close"
-					sizeMax { -1 32 }
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "MB_C_ButtonIcon"
-						row 0
-						column 0
-						alignV middle
-						border { 8 8 }
-					}
-					element {
-						name "MB_C_ButtonLabel"
-						row 0
-						column 1
-						alignV middle
-					}
-				}
+			CIwUILabel {
+				name "MB_C_ButtonLabel"
+				style <label_large>
+				caption "Close"
+				sizeMax { -1 32 }
+				sizeToContent true
 			}
 
 			CIwUILayout {
 				sizeToSpace true
 
 				element {
-					name "MB_C_Grid"
+					name "MB_C_ButtonIcon"
+					alignV middle
+					alignH left
+				}
+				element {
+					name "MB_C_ButtonLabel"
+					alignV middle
+					alignH centre
 				}
 			}
 		}

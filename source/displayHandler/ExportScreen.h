@@ -68,8 +68,7 @@ public:
 private:
 	ExportScreen();
 
-	//char es_currentFile[20];
-	std::string currentFile;
+	std::string selectedTrackName;
 	ExportFormat exportFormat;
 	CIwUIProgressBar *exportProgress;
 	CIwUILabel *exportStatus;

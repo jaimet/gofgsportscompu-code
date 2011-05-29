@@ -30,6 +30,7 @@ CIwUIAutoSizeLabel::CIwUIAutoSizeLabel() : CIwUILabel() {
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_medium", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_large", "CIwGxFont" ) );
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "font_huge", "CIwGxFont" ) );
+	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "verdana_30", "CIwGxFont" ) );
 
 	// Initialize our available size
 	this->sizeAvailable = 0;

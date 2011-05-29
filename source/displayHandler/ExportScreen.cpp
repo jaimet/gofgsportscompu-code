@@ -40,7 +40,7 @@ ExportScreen::ExportScreen() : Screen( "ExportScreen" ) {
 	
 	// Initialize values
 	//strcpy( this->es_currentFile, "" );
-	this->currentFile.clear();
+	this->selectedTrackName.clear();
 	this->exportFormat = FITLOG;
 	this->exportTask = NULL;
 
@@ -73,7 +73,7 @@ void ExportScreen::CB_ESExitButtonClick(CIwUIElement*)
 }
 
 void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
-	if( this->currentFile.length() <= 0 ) {
+	if( this->selectedTrackName.length() <= 0 ) {
 		MsgBox::Show( "Please select a file for export!" );
 		return;
 	}
@@ -82,16 +82,17 @@ void ExportScreen::CB_ESExportButtonClick(CIwUIElement*) {
 	//char fullFileName[30];
 	//char exportName[30];
 	//char *extString;
-	std::string baseFileName( this->currentFile );
+	/*std::string baseFileName( this->currentFile );
 
-	std::ostringstream inputFileName;
-	std::ostringstream exportFileName;
 
-	baseFileName.replace( baseFileName.find_last_of( "." ), 4, "" );
+	baseFileName.replace( baseFileName.find_last_of( "." ), 4, "" );*/
 
 	// Create the fileNames
-	inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << baseFileName << ".gsc";
-	exportFileName << SettingsHandler::Self()->GetString( "ExportFolder" ) << baseFileName;
+	std::ostringstream inputFileName;
+	std::ostringstream exportFileName;
+	// Construct file-names from selected track
+	inputFileName << SettingsHandler::Self()->GetString( "TrackFolder" ) << this->selectedTrackName << ".gsc";
+	exportFileName << SettingsHandler::Self()->GetString( "ExportFolder" ) << this->selectedTrackName;
 
 	//sprintf( fullFileName, "tracks/%s", ExportScreen::Self()->es_currentFile );
 	//sprintf( exportName, "%s", ExportScreen::Self()->es_currentFile );
@@ -145,9 +146,9 @@ void ExportScreen::CB_ESLoadButtonClick(CIwUIElement*) {
 
 void ExportScreen::ES_HandleTrackSelection(CIwUIElement *pTrackEntry, bool bIsSelected) {
 	if( bIsSelected ) {
-		CIwPropertyString fileName;
-		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", fileName)) {
-			this->currentFile = fileName.c_str();
+		CIwPropertyString trackName;
+		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("trackName", trackName)) {
+			this->selectedTrackName = trackName.c_str();
 			
 			//sprintf( this->es_currentFile, "tracks/%s", fileName.c_str() );
 			//strcpy( this->es_currentFile, fileName.c_str() );

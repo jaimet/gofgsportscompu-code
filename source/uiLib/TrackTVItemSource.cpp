@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010 Wolfgang Koller
+* Copyright (C) 2010-2011 Wolfgang Koller
 * 
 * This file is part of GOFG Sports Computer.
 * 
@@ -40,7 +40,20 @@
 		const CIwPropertyString& fileName = m_Files[row];
 
 		pItem->SetName(fileName.c_str());
-		pItem->GetChildNamed("fileName")->SetProperty("caption", fileName);
+
+		// Extract the time part of the name
+		std::string trackName( fileName.c_str() );
+		trackName.replace( trackName.find_last_of( "." ), 4, "" );
+		std::stringstream trackNameStream( trackName );
+
+		// Convert time part to an integer / time_t value
+		int trackTimeValue = 0;
+		trackNameStream >> trackTimeValue;
+		time_t trackTime = trackTimeValue;
+
+		// Finally assign the display values
+		pItem->GetChildNamed("fileName")->SetProperty("trackName", CIwPropertyString( trackName.c_str() ));
+		pItem->GetChildNamed("fileName")->SetProperty("caption", CIwPropertyString( asctime( localtime( &trackTime ) ) ) );
 
 		return pItem;
 	}

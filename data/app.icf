@@ -16,3 +16,4 @@ AndroidUseSdcard=1
 [GX]
 DataCacheSize=256000
 NumTPages=32
+VertCacheSize=2560

@@ -31,12 +31,11 @@ AboutScreen::AboutScreen() : Screen( "AboutScreen" ) {
 
 	//int app_version = 0;
 	char app_caption[S3E_CONFIG_STRING_MAX];
-	//s3eConfigGetInt( "S3E", "app_version", &app_version );
-	s3eConfigGetString( "S3E", "app_caption", app_caption );
+	s3eConfigGetString( "S3E", "app_version", app_caption );
 
 	std::ostringstream app_name;
 	//app_name << app_caption << " " << (( app_version & 0x00FF0000 ) >> 16) << "." << (( app_version & 0x0000FF00 ) >> 8) << "." << ( app_version & 0x000000FF ) << ".";
-	app_name << app_caption;
+	app_name << "GOFG Sports Computer " << app_caption;
 
 	((CIwUILabel*) this->myScreen->GetChildNamed( "GOFG_Version" ))->SetCaption( app_name.str().c_str() );
 

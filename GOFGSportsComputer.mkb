@@ -66,7 +66,9 @@ files
 	FolderTVItemSource.h 
 	FolderTVItemSource.cpp
   CIwUIDynamicImage.h
-  CIwUIDynamicImage.cpp 
+  CIwUIDynamicImage.cpp
+  CIwUIComboBox.h
+  CIwUIComboBox.cpp 
 
   [DisplayHandler]
   (source/displayHandler)
@@ -122,8 +124,6 @@ assets
 	iwui_style/style.group.bin
 	(data)
 	splash.jpg
-	(data-ram/tracks)
-	1302505663.gsc
 }
 
 deployments
@@ -160,20 +160,27 @@ deployments
 deployments
 {
 	["Default"]
-	iphone-appid='at.gofg.sportscomputer'
+	bada-appid='2my29w5fuy'
+	bada-appsecret='E1FF9A6EBF4895272BA00AFEA9E08014'
+	bada-manifest=20110518_manifest.xml
+	caption='GOFG SC'
+	iphone-appid='87QQS524HB.at.gofg.gofgsportscomputer'
 	iphone-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-057x057.png
 	iphone-icon-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-114x114.png
 	iphone-icon-ipad=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-072x072-iphone.png
 	iphone-icon-settings=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-029x029.png
 	iphone-icon-settings-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-058x058.png
 	iphone-splash=data/textures/appicons/splash-320x480.png
+	itunes-artwork=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-512x512-itunes.png
 	provider='Senegate Programming'
-	version-minor=4
+	version-minor=3
+	version-revision=93
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 	["Release"]
 	bada-appid='2my29w5fuy'
 	bada-appsecret='E1FF9A6EBF4895272BA00AFEA9E08014'
 	bada-manifest=20110518_manifest.xml
+	caption='GOFG SC'
 	iphone-appid='87QQS524HB.at.gofg.gofgsportscomputer'
 	iphone-icon=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-057x057.png
 	iphone-icon-high-res=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-114x114.png

@@ -9,12 +9,11 @@ CIwUIPropertySet  {
 	focus <focus_textField>
 }
 
-CIwUIElement
-{
+CIwUIElement {
 	name "SettingsScreen"
 
 	CIwUIButton {
-		name "BGButton"
+		name "Background"
 		drawableType "image"
 		caption ""
 		texture "background"
@@ -22,10 +21,20 @@ CIwUIElement
 	}
 
 	CIwUIElement {
-		name "SettingsScreen_Content"
+		name "ContentContainer"
+
+		CIwUILabel {
+			name "TitleLabel"
+			style <label_medium>
+			caption "Settings"
+			sizeMax { -1 24 }
+			sizeToContent false
+			alignV middle
+			alignH centre
+		}
 
 		CIwUIElement {
-			name "SettingsScreen_Pane"
+			name "Content"
 
 			CIwUIElement {
 				name "MinLocationAccuracy_Pane"
@@ -282,9 +291,9 @@ CIwUIElement
 		}
 
 		CIwUIElement {
-			name "menuBar"
+			name "MenuBar"
 			sizeMax { -1 48 }
-
+	
 			CIwUIButton {
 				name "menuBar_background"
 				drawableType "image"
@@ -292,86 +301,78 @@ CIwUIElement
 				texture "menuBar_bg"
 				sizeMax { -1 -1 }
 			}
-
-			CIwUIElement {
-				name "menuBar_buttons"
-				sizeMax { -1 -1 }
-
-				CIwUIButton {
-					name "LeftButton"
-			
-					drawableType "image"
-					caption ""
-					texture "delete"
-					sizeToContent true
-					OnButtonClick  { "CB_SSExitButtonClick" }
-				}
-
-				CIwUIButton {
-					name "RightButton"
-				
-					drawableType "image"
-					caption ""
-					texture "floppy"
-					sizeToContent true
-					OnButtonClick  { "CB_SSSaveButtonClick" }
-				}
-
-				CIwUILayoutGrid {
-					sizeToSpace true
-					numColumns 3
-					numRows 1
-
-					element {
-						name "LeftButton"
-						column 0
-					}
-					element {
-						name "RightButton"
-						column 2
-						alignH "right"
-					}
-				}
+	
+			CIwUIButton {
+				name "LeftButton"
+		
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_SSExitButtonClick" }
 			}
-
+	
+			CIwUIButton {
+				name "RightButton"
+			
+				drawableType "image"
+				caption ""
+				texture "floppy"
+				sizeToContent true
+				OnButtonClick  { "CB_SSSaveButtonClick" }
+			}
+	
 			CIwUILayout {
 				sizeToSpace true
-
+	
 				element {
 					name "menuBar_background"
 				}
 				element {
-					name "menuBar_buttons"
+					name "LeftButton"
+					alignH "left"
+				}
+				element {
+					name "RightButton"
+					alignH "right"
 				}
 			}
 		}
 
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 2
-			numColumns 1
+
+			column { }
+
+			row { heightMin 24 heightMax 24	}
+			row { }
+			row { heightMin 48 heightMax 48 }
 
 			element {
-				name "SettingsScreen_Pane"
+				name "TitleLabel"
 				row 0
 			}
 			element {
-				name "menuBar"
+				name "Content"
+				border { 4 4 }
 				row 1
-				alignV "bottom"
+			}
+			element {
+				name "MenuBar"
+				row 2
 			}
 		}
-	}
 
+	}
+		
 	CIwUILayout {
 		sizeToSpace true
 
 		element {
-			name "BGButton"
+			name "Background"
 		}
-		element {
-			border { 5 5 }
-			name "SettingsScreen_Content"
+		element	{
+			name "ContentContainer"
 		}
 	}
 }

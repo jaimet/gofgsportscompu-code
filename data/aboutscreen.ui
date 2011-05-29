@@ -3,7 +3,7 @@ CIwUIElement
 	name "AboutScreen"
 
 	CIwUIButton {
-		name "BGButton"
+		name "Background"
 		drawableType "image"
 		caption ""
 		texture "background"
@@ -11,10 +11,20 @@ CIwUIElement
 	}
 
 	CIwUIElement {
-		name "AboutScreen_Content"
+		name "ContentContainer"
+
+		CIwUILabel {
+			name "TitleLabel"
+			style <label_medium>
+			caption "About"
+			sizeMax { -1 24 }
+			sizeToContent false
+			alignV middle
+			alignH centre
+		}
 
 		CIwUIElement {
-			name "AboutScreen_Text"
+			name "Content"
 
 			CIwUILabel {
 				name "GOFG_Version"
@@ -57,7 +67,7 @@ CIwUIElement
 
 				caption "GOFG Contributors: Simone Lombardo"
 			}
-
+	
 			CIwUILayoutVertical {
 				spacing 5
 
@@ -83,7 +93,7 @@ CIwUIElement
 		}
 
 		CIwUIElement {
-			name "menuBar"
+			name "MenuBar"
 			sizeMax { -1 48 }
 
 			CIwUIButton {
@@ -94,30 +104,14 @@ CIwUIElement
 				sizeMax { -1 -1 }
 			}
 
-			CIwUIElement {
-				name "menuBar_buttons"
-				sizeMax { -1 -1 }
-
-				CIwUIButton {
-					name "LeftButton"
-			
-					drawableType "image"
-					caption ""
-					texture "delete"
-					sizeToContent true
-					OnButtonClick  { "CB_ASExitButtonClick" }
-				}
-
-				CIwUILayoutGrid {
-					sizeToSpace true
-					numColumns 3
-					numRows 1
-
-					element {
-						name "LeftButton"
-						column 0
-					}
-				}
+			CIwUIButton {
+				name "LeftButton"
+		
+				drawableType "image"
+				caption ""
+				texture "delete"
+				sizeToContent true
+				OnButtonClick  { "CB_ASExitButtonClick" }
 			}
 
 			CIwUILayout {
@@ -127,35 +121,46 @@ CIwUIElement
 					name "menuBar_background"
 				}
 				element {
-					name "menuBar_buttons"
+					name "LeftButton"
+					alignH "left"
 				}
 			}
 		}
 
 		CIwUILayoutGrid {
 			sizeToSpace true
-			numRows 2
-			numColumns 1
+
+			column { }
+
+			row { heightMin 24 heightMax 24	}
+			row { }
+			row { heightMin 48 heightMax 48 }
 
 			element {
-				name "AboutScreen_Text"
+				name "TitleLabel"
+				row 0
 			}
 			element {
-				name "menuBar"
+				name "Content"
+				border { 4 4 }
 				row 1
-				alignV "bottom"
+			}
+			element {
+				name "MenuBar"
+				row 2
 			}
 		}
-	}
 
+	}
+		
 	CIwUILayout {
 		sizeToSpace true
 
 		element {
-			name "BGButton"
+			name "Background"
 		}
-		element {
-			name "AboutScreen_Content"
+		element	{
+			name "ContentContainer"
 		}
 	}
 }
