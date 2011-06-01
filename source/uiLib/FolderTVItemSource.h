@@ -39,6 +39,8 @@ public:
 
 	virtual ~FolderTVItemSource();
 
+	void Refresh();
+
 private:
 	// IwUITableViewItemSource virtuals
 	virtual bool IsRowAvailable(int32 row) const;
@@ -48,7 +50,7 @@ private:
 	virtual void Activate(bool val);
 	virtual void Clone(CIwUITableViewItemSource* pTarget) const;
 
-	std::vector<CIwPropertyString>	m_Files;
+	std::vector<std::string>	m_Files;
 };
 
 #endif

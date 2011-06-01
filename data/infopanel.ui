@@ -1,10 +1,7 @@
 CIwUIElement {
 	name "InfoPanel"
 	sizeHint { 120 120 }
-	//aspectRatio  { 1 1 }
-	//sizeMin { 120 120 }
-	//sizeMax { 120 120 }
-	//sizeToContent true
+
 	CIwUIImage {
 		name "Background"
 		texture "Background"
@@ -12,7 +9,7 @@ CIwUIElement {
 
 	CIwUIElement {
 		name "Grid_0"
-		
+
 		CIwUIElement {
 			name "UnitLayout"
 			
@@ -68,13 +65,13 @@ CIwUIElement {
 			sizeMax  { -1 -1 }
 			margin { 4 0 }
 		}
-
 		CIwUIAutoSizeLabel {
 			name "MaximumLabel"
 			style <label_large>
 			caption ""
 			sizeMax  { -1 -1 }
 		}
+
 		CIwUILabel {
 			name "AverageText"
 			style <label_small>
@@ -88,6 +85,7 @@ CIwUIElement {
 			caption ""
 			sizeMax  { -1 -1 }
 		}
+
 		CIwUILayoutGrid {
 			name "DisplayGrid"
 			numColumns 2
@@ -102,12 +100,15 @@ CIwUIElement {
 				name "CurrentLabel"
 				columnSpan 2
 				row 1
-				//alignH "centre"
+				alignH "centre"
+				alignV "middle"
 			}
 			element {
 				name "CurrentImage"
 				columnSpan 2
 				row 1
+				alignH "centre"
+				alignV "middle"
 			}
 			element {
 				name "MaximumText"

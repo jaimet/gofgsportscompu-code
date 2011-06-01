@@ -49,7 +49,7 @@ bool TaskHandler::Remove( Task *p_Task ) {
 	p_Task->SetProcessID( 0 );
 	this->tasks.remove( p_Task );
 
-	delete p_Task;
+	//delete p_Task;
 
 	return true;
 }

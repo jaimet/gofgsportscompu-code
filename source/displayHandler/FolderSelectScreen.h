@@ -35,11 +35,10 @@
 
 #include "../uiLib/FolderTVItemSource.h"
 
-class FolderSelectScreen : public Screen, public Singleton<FolderSelectScreen>
-{
+class FolderSelectScreen : public Screen, public Singleton<FolderSelectScreen> {
 	friend class Singleton<FolderSelectScreen>;
 public:
-	static void Show( s3eCallback p_selectCallback, void *userData = NULL );
+	static void Show( std::string path, s3eCallback p_selectCallback, void *userData = NULL );
 
 	void SetVisible( bool p_bVisible, bool p_bNoAnim = false );
 	void Refresh();
@@ -47,6 +46,9 @@ public:
 	void CB_FSSHandleFolderSelection(CIwUIElement *pTrackEntry, bool bIsSelected);
 	void CB_FSSExitButtonClick(CIwUIElement*);
 	void CB_FSSSelectButtonClick(CIwUIElement*);
+	void CB_FSSAddButtonClick(CIwUIElement*);
+
+	std::string GetCurrPath();
 private:
 	FolderSelectScreen();
 	~FolderSelectScreen();
@@ -57,6 +59,9 @@ private:
 	Task *refreshTask;
 	s3eCallback selectCallback;
 	void *selectCallbackUserData;
+	
+	std::string m_currPath;
+	FolderTVItemSource *itemSource;
 };
 
 #endif

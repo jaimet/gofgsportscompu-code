@@ -39,7 +39,9 @@ CIwUIElement {
 				sizeMin { -1 100 }
 				size { -1 100 }
 	
-				FolderTVItemSource { }
+				FolderTVItemSource {
+					name "FolderItemSource"
+				}
 			}
 
 			CIwUILayoutGrid {
@@ -85,6 +87,17 @@ CIwUIElement {
 			}
 
 			CIwUIButton {
+				name "MiddleButton"
+		
+				drawableType "image"
+				caption ""
+				texture "folderadd"
+				sizeToContent true
+				//OnButtonClick  { "CB_FSSAddButtonClick" }
+				visible false
+			}
+
+			CIwUIButton {
 				name "RightButton"
 		
 				drawableType "image"
@@ -103,6 +116,10 @@ CIwUIElement {
 				element {
 					name "LeftButton"
 					alignH "left"
+				}
+				element {
+					name "MiddleButton"
+					alignH "centre"
 				}
 				element {
 					name "RightButton"
@@ -157,7 +174,7 @@ CIwUITableViewItem {
 
 	CIwUILabel
 	{
-		name "fileName"
+		name "folderName"
 		style <label_medium>
 	}
 
@@ -165,7 +182,7 @@ CIwUITableViewItem {
 	{
 		element
 		{
-			name "fileName"
+			name "folderName"
 			alignH left
 			alignV middle
 		}

@@ -18,12 +18,33 @@
 */
 
 #include "FolderTVItemSource.h"
+#include "../displayHandler/FolderSelectScreen.h"
 //-----------------------------------------------------------------------------
 
 FolderTVItemSource::FolderTVItemSource() {
 }
 
 FolderTVItemSource::~FolderTVItemSource() {
+}
+
+void FolderTVItemSource::Refresh() {
+	this->m_Files.clear();
+
+	std::string currPath = FolderSelectScreen::Self()->GetCurrPath();
+	DIR *pDir = opendir( currPath.c_str() );
+	if(pDir) {
+		if( currPath != "/" ) {
+			m_Files.push_back( ".." );
+		}
+	
+		while(dirent* pDirEnt = readdir(pDir)) {
+			if (pDirEnt->d_type == DT_DIR) {
+				std::string fileName(pDirEnt->d_name);
+				m_Files.push_back( fileName );
+			}
+		}
+		closedir(pDir);
+	}
 }
 
 bool FolderTVItemSource::IsRowAvailable(int32 row) const {
@@ -33,10 +54,10 @@ bool FolderTVItemSource::IsRowAvailable(int32 row) const {
 CIwUIElement* FolderTVItemSource::CreateItem(int32 row) {
 	CIwUIElement* pItem = CIwUIElement::CreateFromResource("folderItem");
 
-	const CIwPropertyString& fileName = m_Files[row];
+	const CIwPropertyString fileName = CIwPropertyString( m_Files[row].c_str() );
 
 	pItem->SetName(fileName.c_str());
-	pItem->GetChildNamed("fileName")->SetProperty("caption", fileName);
+	pItem->GetChildNamed("folderName")->SetProperty("caption", fileName);
 
 	return pItem;
 }
@@ -53,14 +74,16 @@ void FolderTVItemSource::Activate(bool val) {
 	CIwUITableViewItemSource::Activate(val);
 
 	if (val) {
-		std::string currPath = SettingsHandler::Self()->GetString( "SelectFolderPath" );
+		//std::string currPath = FolderSelectScreen::Self()->GetCurrPath();
+		//std::string currPath = FolderSelectScreen::GetCurrPath();
+		//std::string currPath = SettingsHandler::Self()->GetString( "SelectFolderPath" );
 
-		DIR* pDir = opendir( currPath.c_str() );
+		//DIR* pDir = opendir( currPath.c_str() );
 		//IwAssertMsg(UI, pDir, ("Failed to open track folder"));
 
 		// Always add the ".." as element
 		
-		if( currPath != "/" ) {
+		/*if( currPath != "/" ) {
 			m_Files.push_back( ".." );
 		}
 		
@@ -76,15 +99,15 @@ void FolderTVItemSource::Activate(bool val) {
 						m_Files.push_back( fileName.c_str() );
 					//}
 
-					/*if(!stricmp(fileName.substr(fileName.rfind('.')).c_str(), ".gsc"))
-					{
-						m_Files.push_back(fileName.c_str());
-					}*/
+					//if(!stricmp(fileName.substr(fileName.rfind('.')).c_str(), ".gsc"))
+					//{
+					//	m_Files.push_back(fileName.c_str());
+					//}
 				}
 			}
 			
 			closedir(pDir);
-		}
+		}*/
 	}
 	else
 	{

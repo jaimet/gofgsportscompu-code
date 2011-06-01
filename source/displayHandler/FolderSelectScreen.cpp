@@ -22,29 +22,26 @@
 template<>
 FolderSelectScreen *Singleton<FolderSelectScreen>::mySelf = NULL;
 
-void FolderSelectScreen::Show( s3eCallback p_selectCallback, void *userData ) {
+void FolderSelectScreen::Show( std::string path, s3eCallback p_selectCallback, void *userData ) {
 	FolderSelectScreen::Self()->selectCallback = p_selectCallback;
 	FolderSelectScreen::Self()->selectCallbackUserData = userData;
+	FolderSelectScreen::Self()->m_currPath = path;
+
+	FolderSelectScreen::Self()->Refresh();
 
 	// Call parent setvisible function (required to actually show the screen)
 	((Screen*)FolderSelectScreen::Self())->SetVisible( true );
 }
 
 void FolderSelectScreen::SetVisible( bool p_bVisible, bool p_bNoAnim ) {
-/*	if( p_bVisible ) {
-		this->Refresh();
-	}
-
-	Screen::SetVisible( p_bVisible, p_bNoAnim );*/
-
 	return;	// NOTE: You should use the static members function Show() instead!
 }
 
 void FolderSelectScreen::Refresh() {
-	CIwUITableViewItemSource *newSource = new FolderTVItemSource();
+	this->CurrentFolderLabel->SetCaption( this->m_currPath.c_str() );
 
+	this->itemSource->Refresh();
 	this->folderList->SetSelection( -1 );
-	this->folderList->SetItemSource( newSource );
 	this->folderList->RecreateItemsFromSource();
 }
 
@@ -52,9 +49,8 @@ void FolderSelectScreen::CB_FSSHandleFolderSelection(CIwUIElement *pTrackEntry, 
 	if( bIsSelected ) {
 		CIwPropertyString folderName;
 
-		if (pTrackEntry->GetChildNamed("fileName")->GetProperty("caption", folderName))
-		{
-			std::string currentPath = SettingsHandler::Self()->GetString( "SelectFolderPath" );
+		if (pTrackEntry->GetChildNamed("folderName")->GetProperty("caption", folderName)) {
+			std::string currentPath = this->m_currPath;
 
 			if( folderName == ".." ) {
 				currentPath.replace( currentPath.length() - 1, 1, "" );
@@ -65,15 +61,13 @@ void FolderSelectScreen::CB_FSSHandleFolderSelection(CIwUIElement *pTrackEntry, 
 				currentPath += "/";
 			}
 
-			SettingsHandler::Self()->Set( "SelectFolderPath", currentPath );
-			this->CurrentFolderLabel->SetCaption( currentPath.c_str() );
+			this->m_currPath = currentPath;
 		}
 
 		// Create new refresh task
 		if( this->refreshTask != NULL ) {
 			delete this->refreshTask;
 		}
-
 		this->refreshTask = new TaskSelectFolderRefresh();
 		TaskHandler::Self()->Add( this->refreshTask );
 	}
@@ -84,9 +78,18 @@ void FolderSelectScreen::CB_FSSExitButtonClick(CIwUIElement*) {
 }
 
 void FolderSelectScreen::CB_FSSSelectButtonClick(CIwUIElement*) {
-	this->selectCallback( (void*) SettingsHandler::Self()->GetString( "SelectFolderPath" ).c_str(), this->selectCallbackUserData );
+	//this->selectCallback( (void*) SettingsHandler::Self()->GetString( "SelectFolderPath" ).c_str(), this->selectCallbackUserData );
+	this->selectCallback( (void*) FolderSelectScreen::Self()->m_currPath.c_str(), this->selectCallbackUserData );
 
 	Screen::SetVisible( false );
+}
+
+// !!! TODO: Create Folder functionality !!!
+void FolderSelectScreen::CB_FSSAddButtonClick(CIwUIElement*) {
+}
+
+std::string FolderSelectScreen::GetCurrPath() {
+	return this->m_currPath;
 }
 
 FolderSelectScreen::FolderSelectScreen() : Screen( "FolderSelectScreen" ) {
@@ -96,9 +99,10 @@ FolderSelectScreen::FolderSelectScreen() : Screen( "FolderSelectScreen" ) {
 
 	this->folderList = (CIwUITableView*) this->myScreen->GetChildNamed( "FolderList" );
 	this->CurrentFolderLabel = (CIwUILabel*) this->myScreen->GetChildNamed( "CurrentFolderLabel" );
+	this->itemSource = (FolderTVItemSource*) this->folderList->GetItemSource();
 	this->refreshTask = NULL;
 
-	this->CurrentFolderLabel->SetCaption( SettingsHandler::Self()->GetString( "SelectFolderPath" ).c_str() );
+	//this->CurrentFolderLabel->SetCaption( SettingsHandler::Self()->GetString( "SelectFolderPath" ).c_str() );
 
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }

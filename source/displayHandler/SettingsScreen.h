@@ -23,6 +23,7 @@
 #include "s3eDevice.h"
 
 #include "IwUICheckbox.h"
+#include "IwUITabBar.h"
 
 #include "../displayHandler/Screen.h"
 
@@ -49,13 +50,13 @@ private:
 	SettingsScreen();
 	~SettingsScreen();
 
-	CIwUITextField *MinLocationAccuracy_Value;
+	CIwUITabBar *MinLocationAccuracy_Select;
 	CIwUITextField *TrackFolder_Value;
 	CIwUITextField *ExportFolder_Value;
 	CIwUICheckbox *WaitForGPSFix_Value;
 	CIwUICheckbox *UseZephyrHxM_Value;
 	CIwUITextField *ExportEmail_Value;
-	CIwUITextField *UpdateInterval_Value;
+	CIwUITabBar *UpdateInterval_Select;
 
 	CIwUIElement *TrackFolder_Pane;
 	CIwUIElement *ExportFolder_Pane;

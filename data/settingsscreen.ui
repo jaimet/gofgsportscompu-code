@@ -36,38 +36,21 @@ CIwUIElement {
 		CIwUIElement {
 			name "Content"
 
-			CIwUIElement {
-				name "MinLocationAccuracy_Pane"
-
-				CIwUILabel {
-					name "MinLocationAccuracy_Label"
-					style <label_medium>
-					caption "Min. Location Accuracy (m):"
-					sizeToContent true
+			CIwUILabel {
+				name "MinLocationAccuracy_Label"
+				style <label_medium>
+				caption "Min. Location Accuracy (m):"
+				sizeToContent true
+			}
+			CIwUITabBar {
+				name "MinLocationAccuracy_Select"
+				radioButtonStyles {
+					{ caption "5" style <radio_left> } 
+					{ caption "10" style <radio_centre> } 
+					{ caption "20" style <radio_centre> } 
+					{ caption "40" style <radio_right> } 
 				}
-
-				CIwUITextField {
-					name "MinLocationAccuracy_Value"
-					style <textField>
-					caption "0"
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "MinLocationAccuracy_Label"
-						column 0
-					}
-					element {
-						name "MinLocationAccuracy_Value"
-						alignH "centre"
-						column 1
-					}
-				}
+				sizeMax { -1 32 }
 			}
 
 			CIwUIElement {
@@ -205,6 +188,7 @@ CIwUIElement {
 					style <textField>
 					caption "noreply@gofg.at"
 					sizeToContent false
+					keyboardLayout EmailAddress
 				}
 
 				CIwUILayoutVertical {
@@ -229,43 +213,36 @@ CIwUIElement {
 				caption "Use Zephyr HxM"
 			}
 
-			CIwUIElement {
-				name "UpdateInterval_Pane"
-
-				CIwUILabel {
-					name "UpdateInterval_Label"
-					style <label_medium>
-					caption "Location update interval (s):"
-					sizeToContent true
+			CIwUILabel {
+				name "UpdateInterval_Label"
+				style <label_medium>
+				caption "Location update interval (s):"
+				sizeToContent true
+			}
+			CIwUITabBar {
+				name "UpdateInterval_Select"
+				radioButtonStyles {
+					{ caption "1" style <radio_left> } 
+					{ caption "5" style <radio_centre> } 
+					{ caption "15" style <radio_centre> } 
+					{ caption "30" style <radio_centre> } 
+					{ caption "60" style <radio_right> } 
 				}
-
-				CIwUITextField {
-					name "UpdateInterval_Value"
-					style <textField>
-					caption "1"
-					sizeToContent false
-				}
-
-				CIwUILayoutGrid {
-					numColumns 2
-					numRows 1
-					sizeToSpace true
-
-					element {
-						name "UpdateInterval_Label"
-						column 0
-					}
-					element {
-						name "UpdateInterval_Value"
-						alignH "centre"
-						column 1
-					}
-				}
+				sizeMax { -1 32 }
 			}
 
 			CIwUILayoutVertical {
 				element {
-					name "MinLocationAccuracy_Pane"
+					name "MinLocationAccuracy_Label"
+				}
+				element {
+					name "MinLocationAccuracy_Select"
+				}
+				element {
+					name "UpdateInterval_Label"
+				}
+				element {
+					name "UpdateInterval_Select"
 				}
 				element {
 					name "TrackFolder_Pane"
@@ -283,9 +260,6 @@ CIwUIElement {
 				element {
 					name "UseZephyrHxM_Value"
 					alignH "left"
-				}
-				element {
-					name "UpdateInterval_Pane"
 				}
 			}
 		}

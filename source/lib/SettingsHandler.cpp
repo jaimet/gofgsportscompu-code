@@ -161,13 +161,13 @@ SettingsHandler::SettingsHandler() {
 	this->settingsStore["TrackFolder"] = "/";
 	this->settingsStore["ExportFolder"] = "/";
 	this->settingsStore["DefaultExportType"] = "0";
-	this->settingsStore["MinLocationAccuracy"] = "25";
+	this->settingsStore["MinLocationAccuracy"] = "0";
 	this->settingsStore["SelectFolderPath"] = "/";
 	this->settingsStore["WaitForGPSFix"] = "1";
 	this->settingsStore["UseZephyrHxM"] = "0";
 	this->settingsStore["ZephyrHxMDevice"] = "COM1";
 	this->settingsStore["ExportEmail"] = "";
-	this->settingsStore["UpdateInterval"] = "1";
+	this->settingsStore["UpdateInterval"] = "0";
 
 	this->Load();
 }
