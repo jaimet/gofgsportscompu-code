@@ -32,12 +32,15 @@ public:
 
 protected:
 	virtual void Clone( CIwUIElement *pTarget ) const;
+	virtual void OnSizeChanged();
 
 private:
-	CIwGxFont *GetSizedFont( int fontIndex, const char *measureString, int lastFontIndex = -1 );
+	CIwVec2 GetStringSize( const char *pString, CIwGxFont *font ) const;
+
+	CIwGxFont *GetSizedFont( int fontIndex, const char *measureString, CIwVec2 availableSize, int lastFontIndex = -1 );
 	CIwArray<CIwGxFont*> fontTypes;
 
-	int32 sizeAvailable;
+	//int32 sizeAvailable;
 };
 
 #endif

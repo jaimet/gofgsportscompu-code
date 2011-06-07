@@ -19,6 +19,8 @@ CIwUIElement {
 				sizeMin { 24 24 }
 				sizeMax { 24 24 }
 				sizeHint { 24 24 }
+				//drawableType autoSizeText
+				//caption "blah"
 			}
 
 			CIwUILabel {
@@ -43,13 +45,15 @@ CIwUIElement {
 			}
 		}
 		
-		CIwUIAutoSizeLabel {
+		CIwUILabel {
 			name "CurrentLabel"
 			style <label_large>
 			font "font_huge"
 			caption ""
 			sizeMax  { -1 -1 }
 			alignH centre
+			drawableType autoSizeText
+			sizeToContent false
 		}
 
 		CIwUIImage {
@@ -65,11 +69,14 @@ CIwUIElement {
 			sizeMax  { -1 -1 }
 			margin { 4 0 }
 		}
-		CIwUIAutoSizeLabel {
+		CIwUILabel {
 			name "MaximumLabel"
 			style <label_large>
-			caption ""
+			font "font_huge"
+			caption "0.0"
+			drawableType autoSizeText
 			sizeMax  { -1 -1 }
+			sizeToContent false
 		}
 
 		CIwUILabel {
@@ -79,11 +86,14 @@ CIwUIElement {
 			sizeMax  { -1 -1 }
 			margin { 4 0 }
 		}
-		CIwUIAutoSizeLabel {
+		CIwUILabel {
 			name "AverageLabel"
 			style <label_large>
-			caption ""
+			font "font_huge"
+			caption "0.0"
+			drawableType autoSizeText
 			sizeMax  { -1 -1 }
+			sizeToContent false
 		}
 
 		CIwUILayoutGrid {

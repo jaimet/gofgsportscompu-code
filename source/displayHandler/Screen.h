@@ -47,7 +47,7 @@ public:
 protected:
 	void SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled = false );
 
-	virtual void SurfaceChanged( s3eSurfaceBlitDirection direction );
+	virtual void SurfaceChanged( s3eSurfaceOrientation *surfaceOrientation );
 
 	CIwUIElement *myScreen;
 	CIwUIButton *background;

@@ -356,8 +356,11 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	// Start calling the timer to display the current time (100ms on first call to do it right now)
 	s3eTimerSetTimer( 100, &MainScreen::clockTimer, NULL );
 
-	// Apply the layout to the current rotation
-	this->SurfaceChanged( (s3eSurfaceBlitDirection) s3eSurfaceGetInt( S3E_SURFACE_BLIT_DIRECTION ) );
+	// Apply the layout to the current screen (create artificial surfaceOrientation info)
+	s3eSurfaceOrientation *surfaceOrientation = new s3eSurfaceOrientation();
+	surfaceOrientation->m_DeviceBlitDirection = (s3eSurfaceBlitDirection) s3eSurfaceGetInt( S3E_SURFACE_BLIT_DIRECTION );
+	surfaceOrientation->m_Height = s3eSurfaceGetInt( S3E_SURFACE_HEIGHT );
+	this->SurfaceChanged( surfaceOrientation );
 
 	// Finally add the main-screen to the ui-view
 	IwGetUIView()->AddElementToLayout( this->myScreen );
@@ -513,8 +516,10 @@ void MainScreen::UpdateDisplay( double speed, double hr, double distance, double
  *
  * <param name="direction">	New orientation of the screen. </param>
  */
-void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
-	// Remove any elements from their original layout
+void MainScreen::SurfaceChanged( s3eSurfaceOrientation *surfaceOrientation ) {
+	int rowHeight = 0;
+
+	// Remove any elements from their original layout (this also resets the layout-size)
 	this->speedInfo->Detach();
 	this->distanceInfo->Detach();
 	this->altitudeInfo->Detach();
@@ -526,15 +531,19 @@ void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
 	// Create basic grid layout
 	CIwUILayoutGrid *gridLayout = new CIwUILayoutGrid();
 	gridLayout->SetSizeToSpace( true );
+	//this->mainGrid->ReplaceLayout( gridLayout );
 	this->mainGrid->SetLayout( gridLayout );
 
 	// Check new orientation
-	switch( direction ) {
+	switch( surfaceOrientation->m_DeviceBlitDirection ) {
 	// Landscape
 	case S3E_SURFACE_BLIT_DIR_ROT90:
 	case S3E_SURFACE_BLIT_DIR_ROT270:
+		rowHeight = ( surfaceOrientation->m_Width - 48 ) / 2;
+
 		// We need two rows
-		gridLayout->AddRow();
+		gridLayout->AddRow( rowHeight, rowHeight );
+		//gridLayout->AddRow();
 		gridLayout->AddRow();
 		// ... and three columns
 		gridLayout->AddColumn();
@@ -550,17 +559,21 @@ void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
 		if( this->pulseInfo != NULL ) {
 			gridLayout->AddElement( this->pulseInfo->getInfoPanel(), 2, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
+			// Add timer & status as tiny panels in one grid field
+			this->timeInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
+			this->statusInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
+			// Create grid for tiny panels
 			this->timeStatusElement = new CIwUIElement();
 			CIwUILayoutGrid *timeStatusLayout = new CIwUILayoutGrid();
 			timeStatusLayout->SetSizeToSpace( true );
 			timeStatusLayout->AddRow();
 			timeStatusLayout->AddRow();
 			timeStatusLayout->AddColumn();
-
+			// Add info panels to grid for tiny panels
 			timeStatusLayout->AddElement( this->timeInfo->getInfoPanel(), 0, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 			timeStatusLayout->AddElement( this->statusInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 			this->timeStatusElement->SetLayout( timeStatusLayout );
-
+			// Finally add the sub-grid to the global grid-layout
 			gridLayout->AddElement( this->timeStatusElement, 1, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE );
 		}
 		else {
@@ -570,9 +583,13 @@ void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
 		break;
 	// Portrait
 	default:
+		rowHeight = (double)( surfaceOrientation->m_Height - 48 ) / 2.5;
+
 		// We need three rows
-		gridLayout->AddRow();
-		gridLayout->AddRow();
+		gridLayout->AddRow( rowHeight, rowHeight );
+		gridLayout->AddRow( rowHeight, rowHeight );
+//		gridLayout->AddRow();
+//		gridLayout->AddRow();
 		gridLayout->AddRow();
 		// ... and two columns
 		gridLayout->AddColumn();
@@ -587,9 +604,9 @@ void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
 			// Add pulse info to layout
 			gridLayout->AddElement( this->pulseInfo->getInfoPanel(), 1, 0, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 
-			// Change size of distance / altitude info
-			this->distanceInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
-			this->altitudeInfo->getInfoPanel()->SetSizeHint( CIwVec2( 120, 60 ) );
+			// Distance and altitude info are now tiny ones
+			this->distanceInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
+			this->altitudeInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
 
 			// Prepare helper element for distance / altitude info
 			CIwUIElement *distAltElement = new CIwUIElement();
@@ -609,6 +626,9 @@ void MainScreen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
 			gridLayout->AddElement( this->altitudeInfo->getInfoPanel(), 0, 1, 1, 1, IW_UI_ALIGN_CENTRE, IW_UI_ALIGN_MIDDLE, CIwSVec2( 1, 1 ) );
 		}
 
+		// Timer and status info are tiny panels in portrait mode
+		this->timeInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
+		this->statusInfo->SetLayout( INFOPANEL_LAYOUT_TINY );
 		// Insert timer / status panels (using a helper layout)
 		this->timeStatusElement = new CIwUIElement();
 		CIwUILayoutGrid *timeStatusLayout = new CIwUILayoutGrid();

@@ -14,6 +14,6 @@ SplashscreenHeight=160
 AndroidUseSdcard=1
 
 [GX]
-DataCacheSize=256000
+DataCacheSize=2048000
 NumTPages=32
 VertCacheSize=2560

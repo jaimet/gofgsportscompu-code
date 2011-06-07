@@ -1,75 +1,62 @@
 CIwUIElement {
 	name "InfoPanel_Small"
 	sizeHint { 120 120 }
-	//aspectRatio  { 2 1 }
-	//sizeMin { 120 120 }
-	//sizeMax { 120 120 }
-	//sizeToContent true
+
 	CIwUIImage {
 		name "Background"
 		texture "Background"
 	}
 
 	CIwUIElement {
-		name "Grid_0"
+		name "UnitLayout"
+		size { -1 24 }
+		sizeMax { -1 24 }
 		
-		CIwUIElement {
-			name "UnitLayout"
-			
-			CIwUIImage {
-				name "Image"
-				size { 24 24 }
-				sizeMin { 24 24 }
-				sizeMax { 24 24 }
-				sizeHint { 24 24 }
-			}
+		CIwUIImage {
+			name "Image"
+			size { 24 24 }
+			sizeMax { 24 24 }
+		}
 
-			CIwUILabel {
+		CIwUILabel {
+			name "UnitLabel"
+			style <label_medium>
+			caption "Unit"
+			size { -1 24 }
+			sizeMax  { -1 24 }
+			sizeToContent true
+			alignV top
+		}
+
+		CIwUILayout {
+			sizeToSpace true
+
+			element {
+				name "Image"
+			}
+			element {
 				name "UnitLabel"
-				style <label_medium>
-				caption "Unit"
-				sizeMax  { -1 24 }
-				sizeToContent false
 				alignH centre
 				alignV top
 			}
-
-			CIwUILayout {
-				sizeToSpace true
-
-				element {
-					name "Image"
-				}
-				element {
-					name "UnitLabel"
-				}
-			}
-			
-//			CIwUILayoutHorizontal 
-//			{
-//				//sizeToSpace true
-				sizeMax { -1 24 }
-//			
-//				element {
-//					name "Image"
-//				}
-//				element {
-//					name "UnitLabel"
-//				}
-//			}
 		}
-		
+	}
+	
+	CIwUIElement {
+		name "CurrentLayout"
+
 		CIwUIAutoSizeLabel {
 			name "CurrentLabel"
 			style <label_large>
 			font "font_huge"
 			caption ""
 			sizeMax  { -1 -1 }
-			//sizeToContent false
 			alignH centre
-			alignV top
+			alignV middle
+			drawableType autoSizeText
+			sizeToContent false
 		}
-
+	
 		CIwUIImage {
 			name "CurrentImage"
 			texture "delete"
@@ -77,38 +64,47 @@ CIwUIElement {
 		}
 
 		CIwUILayoutGrid {
-			name "DisplayGrid"
-			numColumns 1
 			numRows 2
+			numColumns 1
 			sizeToSpace true
-			
-			element {
-				name "UnitLayout"
-				//columnSpan 2
-			}
+
+			//CIwUILayoutSpacer {
+			//	row 0
+			//	column 0
+			//	sizeMin { 0 16 }
+			//	sizeMax { 0 16 }
+			//}
+
 			element {
 				name "CurrentLabel"
-				//columnSpan 2
 				row 1
-				//alignH "centre"
-				alignV top
+				column 0
 			}
 			element {
 				name "CurrentImage"
 				row 1
+				column 0
 			}
 		}
 	}
 
 	CIwUILayout {
-		name "innerLayout"
 		sizeToSpace true
-				
+
 		element {
 			name "Background"
 		}
+
 		element {
-			name "Grid_0"
+			name "UnitLayout"
+			alignH centre
+			alignV top
+		}
+
+		element {
+			name "CurrentLayout"
+			alignH centre
+			alignV middle
 		}
 	}
 }

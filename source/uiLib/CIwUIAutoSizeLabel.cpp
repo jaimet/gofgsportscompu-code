@@ -33,7 +33,7 @@ CIwUIAutoSizeLabel::CIwUIAutoSizeLabel() : CIwUILabel() {
 	this->fontTypes.append( (CIwGxFont*) IwGetResManager()->GetResNamed( "verdana_30", "CIwGxFont" ) );
 
 	// Initialize our available size
-	this->sizeAvailable = 0;
+	//this->sizeAvailable = 0;
 }
 
 void CIwUIAutoSizeLabel::SetCaption( const char *pString ) {
@@ -46,29 +46,30 @@ void CIwUIAutoSizeLabel::SetCaption( const char *pString ) {
 		// Re-calculate available size
 		CIwSVec2 labelMargin;
 		this->GetProperty( "margin", labelMargin );
-		this->sizeAvailable = this->GetSize().x - labelMargin.x;
+		//this->sizeAvailable = this->GetSize().x - labelMargin.x;
 
 		// Setup IwGxFont API to be ready for our measurements...
-		IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
-		IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_CENTRE );
+		/*IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
+		IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_CENTRE );*/
 		// Find & set our fitting font
-		this->SetFont( this->GetSizedFont( fontIndex, pString ) );
+		this->SetFont( this->GetSizedFont( fontIndex, pString, this->GetSize() - labelMargin ) );
 	}
 
 	CIwUILabel::SetCaption( pString );
 }
 
-CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureString, int lastFontIndex ) {
+CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureString, CIwVec2 availableSize, int lastFontIndex ) {
 	// Measure the size of the measure string
-	CIwGxFontPreparedData measureData;
+	/*CIwGxFontPreparedData measureData;
 	IwGxFontSetFont( this->fontTypes[fontIndex] );
-	IwGxFontPrepareText( measureData, measureString );
+	IwGxFontPrepareText( measureData, measureString );*/
+	CIwVec2 stringSize = this->GetStringSize( measureString, this->fontTypes[fontIndex] );
 
 	// Check if size is bigger or smaller than our label
-	if( measureData.GetWidth() > this->sizeAvailable ) {
+	if( stringSize.x > availableSize.x || stringSize.y > availableSize.y ) {
 		// If size is to big, check if we have a smaller one available
 		if( fontIndex > 0 ) {
-			return this->GetSizedFont( fontIndex - 1, measureString, fontIndex );
+			return this->GetSizedFont( fontIndex - 1, measureString, availableSize, fontIndex );
 		}
 		// If not return the current one
 		else {
@@ -82,7 +83,7 @@ CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureS
 
 		// Check if a bigger font is available at all
 		if( (uint32)(fontIndex + 1) < this->fontTypes.size() ) {
-			return this->GetSizedFont( fontIndex + 1, measureString, fontIndex );
+			return this->GetSizedFont( fontIndex + 1, measureString, availableSize, fontIndex );
 		}
 		else {
 			return this->fontTypes[fontIndex];
@@ -95,6 +96,26 @@ CIwGxFont *CIwUIAutoSizeLabel::GetSizedFont( int fontIndex, const char *measureS
 
 void CIwUIAutoSizeLabel::Clone( CIwUIElement *pTarget ) const {
 	IW_UI_CLONE_SUPERCLASS(pTarget, CIwUIAutoSizeLabel, CIwUILabel);
+}
+
+void CIwUIAutoSizeLabel::OnSizeChanged() {
+//	this->SetCaption( this->GetCaption() );
+}
+
+CIwVec2 CIwUIAutoSizeLabel::GetStringSize( const char *pString, CIwGxFont *font ) const {
+	CIwVec2 stringSize = CIwVec2();
+
+	// Setup IwGxFont API to be ready for our measurements...
+	IwGxFontSetRect( CIwRect( 0, 0, 10000, 10000 ) );
+	IwGxFontSetAlignmentHor( IW_GX_FONT_ALIGN_CENTRE );
+	CIwGxFontPreparedData measureData;
+	IwGxFontSetFont( font );
+	IwGxFontPrepareText( measureData, pString );
+
+	stringSize.x = measureData.GetWidth();
+	stringSize.y = measureData.GetHeight();
+
+	return stringSize;
 }
 
 IW_MANAGED_IMPLEMENT_FACTORY(CIwUIAutoSizeLabel);

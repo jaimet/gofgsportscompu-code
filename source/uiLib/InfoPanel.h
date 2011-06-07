@@ -29,8 +29,14 @@
 #include <IwUIElement.h>
 #include <IwUILabel.h>
 #include <IwUILayoutGrid.h>
+#include <IwUILayoutSpacer.h>
 
 #include "CIwUIAutoSizeLabel.h"
+
+enum InfoPanelLayout {
+	INFOPANEL_LAYOUT_TINY,
+	INFOPANEL_LAYOUT_SMALL
+};
 
 class InfoPanel {
 public:
@@ -48,6 +54,8 @@ public:
 
 	void setImage( CIwTexture *texture );
 
+	void SetLayout( InfoPanelLayout layout = INFOPANEL_LAYOUT_SMALL );		// Set the layout for the infopanel (tiny / small)
+
 	CIwUIElement *getInfoPanel();
 
 	void Detach();
@@ -58,12 +66,14 @@ private:
 	CIwUIElement *uiInfoPanel;
 
 	CIwUILabel *unitLabel;
-	CIwUIAutoSizeLabel *currentLabel;
-	CIwUIAutoSizeLabel *averageLabel;
-	CIwUIAutoSizeLabel *maximumLabel;
+	CIwUILabel *currentLabel;
+	CIwUILabel *averageLabel;
+	CIwUILabel *maximumLabel;
 
 	CIwUIImage *image;
 	CIwUIImage *currentImage;
+
+	CIwUILayoutSpacer *topSpacer;
 
 	bool bNoStatistics;
 	double maximum;

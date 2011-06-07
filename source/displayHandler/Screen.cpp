@@ -114,7 +114,7 @@ int32 Screen::CB_SurfaceChange(void *systemData, void *userData) {
 	if( surface->m_OrientationChanged ) {
 		IwTrace( GOFGSC, ( "Surface orientation changed!" ) );
 		for( std::list<Screen*>::iterator it = Screen::screens.begin(); it != Screen::screens.end(); it++ ) {
-			(*it)->SurfaceChanged( surface->m_DeviceBlitDirection );
+			(*it)->SurfaceChanged( surface );
 		}
 	}
 
@@ -160,6 +160,6 @@ void Screen::SetChildrenEnabled( CIwUIElement *p_parent, bool p_bEnabled ) {
  *
  * <param name="direction">	New orientation of the screen. </param>
  */
-void Screen::SurfaceChanged( s3eSurfaceBlitDirection direction ) {
+void Screen::SurfaceChanged( s3eSurfaceOrientation *surfaceOrientation ) {
 	return;	// By default do nothing (use auto-resize provided by airplay)
 }

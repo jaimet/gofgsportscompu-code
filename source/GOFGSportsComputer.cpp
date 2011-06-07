@@ -40,6 +40,7 @@ void GOFGInit() {
 	IW_CLASS_REGISTER(TrackTVItemSource);
 	IW_CLASS_REGISTER(FolderTVItemSource);
 	IW_CLASS_REGISTER(CIwUIAutoSizeLabel);
+	IWUI_DRAWABLE_REGISTER(autoSizeText, CIwUIDrawableAutoSizeText);
 
 	//Instantiate the view and controller singletons.
 	new CIwUIController;

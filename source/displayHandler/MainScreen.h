@@ -75,7 +75,7 @@ protected:
 	void UpdateAccuracyDisplay( double accuracy );
 	void UpdateDisplay( double speed, double hr, double distance, double altitudeDiff, int timeDiff, double accuracy );
 
-	void SurfaceChanged( s3eSurfaceBlitDirection direction );
+	void SurfaceChanged( s3eSurfaceOrientation *surfaceOrientation );
 
 	CIwUIButton *ExitButton;
 	CIwUIButton *StartButton;

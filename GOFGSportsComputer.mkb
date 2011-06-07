@@ -68,7 +68,9 @@ files
   CIwUIDynamicImage.h
   CIwUIDynamicImage.cpp
   CIwUIComboBox.h
-  CIwUIComboBox.cpp 
+  CIwUIComboBox.cpp
+  IwUIDrawableAutoSizeText.h
+  IwUIDrawableAutoSizeText.cpp 
 
   [DisplayHandler]
   (source/displayHandler)
@@ -122,6 +124,7 @@ assets
 	(data-ram/data-gles1)
 	gofgui.group.bin
 	iwui_style/style.group.bin
+	fonts/gofgui_fonts.group.bin
 	(data)
 	splash.jpg
 }
@@ -174,7 +177,7 @@ deployments
 	itunes-artwork=data/textures/appicons/icontexto-mountain-bike-rear-derailleur-512x512-itunes.png
 	provider='Senegate Programming'
 	version-minor=3
-	version-revision=93
+	version-revision=94
 	winmobile-icon=data/textures/appicons/gofgst_multipage.ico
 	["Release"]
 	bada-appid='2my29w5fuy'

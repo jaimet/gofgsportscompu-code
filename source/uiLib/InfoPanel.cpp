@@ -26,18 +26,25 @@ InfoPanel::InfoPanel( const char *name, bool p_bNoStatistics ) {
 		this->uiInfoPanel = CIwUIElement::CreateFromResource("InfoPanel_Small");
 		this->maximumLabel = NULL;
 		this->averageLabel = NULL;
+
+		this->topSpacer = new CIwUILayoutSpacer();
+		((CIwUILayoutGrid*) this->uiInfoPanel->GetChildNamed( "CurrentLayout" )->GetLayout())->AddLayoutItem( this->topSpacer, 0, 0 );
+		this->topSpacer->SetMin( CIwVec2( 0, 0 ) );
+		this->topSpacer->SetMax( CIwVec2( 0, 0 ) );
 	}
 	else {
 		this->uiInfoPanel = CIwUIElement::CreateFromResource("InfoPanel");
-		this->maximumLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "MaximumLabel" );
-		this->averageLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "AverageLabel" );
+		this->maximumLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "MaximumLabel" );
+		this->averageLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "AverageLabel" );
+
+		this->topSpacer = NULL;
 	}
 
 	// Rename element
 	this->uiInfoPanel->SetName( name );
 
 	this->unitLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "UnitLabel" );
-	this->currentLabel = (CIwUIAutoSizeLabel*) this->uiInfoPanel->GetChildNamed( "CurrentLabel" );
+	this->currentLabel = (CIwUILabel*) this->uiInfoPanel->GetChildNamed( "CurrentLabel" );
 	this->image = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "Image" );
 	this->currentImage = (CIwUIImage*) this->uiInfoPanel->GetChildNamed( "CurrentImage" );
 
@@ -162,6 +169,25 @@ void InfoPanel::setImage( CIwTexture *texture ) {
 	this->image->SetTexture( texture );
 }
 
+// Set the layout for the infopanel (tiny / small)
+void InfoPanel::SetLayout( InfoPanelLayout layout ) {
+	if( this->topSpacer != NULL ) {
+		switch( layout ) {
+		case INFOPANEL_LAYOUT_TINY:
+			this->topSpacer->SetMax( CIwVec2( 0, 16 ) );
+			this->topSpacer->SetMin( CIwVec2( 0, 16 ) );
+			this->uiInfoPanel->SetSizeHint( CIwVec2( 120, 60 ) );
+			break;
+		case INFOPANEL_LAYOUT_SMALL:
+		default:
+			this->topSpacer->SetMax( CIwVec2::g_Zero );
+			this->topSpacer->SetMin( CIwVec2::g_Zero );
+			this->uiInfoPanel->SetSizeHint( CIwVec2( 120, 120 ) );
+			break;
+		}
+	}
+}
+
 CIwUIElement *InfoPanel::getInfoPanel() {
 	return this->uiInfoPanel;
 }
@@ -171,6 +197,9 @@ void InfoPanel::Detach() {
 	if( parent != NULL ) {
 		parent->RemoveChild( this->uiInfoPanel );
 	}
+
+	// Reset back to default layout
+	this->SetLayout();
 }
 
 /*CIwGxFont *InfoPanel::GetSizedFont( char *text, int sizeX ) {

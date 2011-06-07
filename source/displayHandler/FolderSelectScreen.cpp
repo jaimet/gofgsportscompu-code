@@ -102,8 +102,6 @@ FolderSelectScreen::FolderSelectScreen() : Screen( "FolderSelectScreen" ) {
 	this->itemSource = (FolderTVItemSource*) this->folderList->GetItemSource();
 	this->refreshTask = NULL;
 
-	//this->CurrentFolderLabel->SetCaption( SettingsHandler::Self()->GetString( "SelectFolderPath" ).c_str() );
-
 	IwGetUIView()->AddElementToLayout( this->myScreen );
 }
 
