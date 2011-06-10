@@ -59,10 +59,9 @@ public:
 	CIwUIElement *getInfoPanel();
 
 	void Detach();
+	void Update();		// Should be called when the infopanel should be forced to re-update all information to the UI
 
 private:
-	//CIwGxFont *GetSizedFont( char *text, int sizeX );
-
 	CIwUIElement *uiInfoPanel;
 
 	CIwUILabel *unitLabel;
@@ -79,9 +78,6 @@ private:
 	double maximum;
 	double average;
 	int numPoints;
-
-
-	//CIwArray<char*> fontTypes;
 };
 
 #endif

@@ -202,6 +202,13 @@ void InfoPanel::Detach() {
 	this->SetLayout();
 }
 
+// Should be called when the infopanel should be forced to re-update all information to the UI
+void InfoPanel::Update() {
+	if( !this->currentImage->IsVisible() ) {
+		this->currentLabel->SetCaption( this->currentLabel->GetCaption() );
+	}
+}
+
 /*CIwGxFont *InfoPanel::GetSizedFont( char *text, int sizeX ) {
 	CIwGxFont *currentFont = this->currentLabel->GetFont();
 	CIwGxFontPreparedData currentData;

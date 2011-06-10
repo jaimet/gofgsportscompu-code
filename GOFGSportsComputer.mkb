@@ -70,7 +70,9 @@ files
   CIwUIComboBox.h
   CIwUIComboBox.cpp
   IwUIDrawableAutoSizeText.h
-  IwUIDrawableAutoSizeText.cpp 
+  IwUIDrawableAutoSizeText.cpp
+  IwUIInfoPanel.h
+  IwUIInfoPanel.cpp 
 
   [DisplayHandler]
   (source/displayHandler)

@@ -84,6 +84,8 @@ CIwUIElement {
 				name "CurrentImage"
 				row 1
 				column 0
+				alignH centre
+				alignV middle
 			}
 		}
 	}
