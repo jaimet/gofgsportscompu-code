@@ -19,14 +19,34 @@
 
 #ifndef CIWUIINFOPANEL
 #define CIWUIINFOPANEL
-/*
+
+enum CIwUIInfoPanel_Type {
+	INFOPANEL_TYPE_NORMAL,
+	INFOPANEL_TYPE_SMALL,
+	INFOPANEL_TYPE_TINY
+};
+
 #include <IwUIElement.h>
+#include <IwUILayout.h>
+#include <IwUILayoutGrid.h>
+#include <IwUIImage.h>
 
 class CIwUIInfoPanel : public CIwUIElement {
 public:
 	IW_MANAGED_DECLARE(CIwUIInfoPanel);
 
 	CIwUIInfoPanel();
+
+	void SetType( CIwUIInfoPanel_Type type = INFOPANEL_TYPE_NORMAL );
+
+protected:
+	void Clone( CIwUIElement *pTarget ) const;
+
+private:
+	CIwUIInfoPanel_Type m_Type;
+	CIwUIElement *m_Grid;
+	CIwUILayoutGrid *m_LayoutGrid;
+	CIwUIImage *m_Background;
 };
-*/
+
 #endif

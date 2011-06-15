@@ -18,7 +18,34 @@
 */
 
 #include "IwUIInfoPanel.h"
-/*
+
 CIwUIInfoPanel::CIwUIInfoPanel() {
+	// Setup main layout
+	this->SetLayout( new CIwUILayout() );
+	this->GetLayout()->SetSizeToSpace( true );
+
+	// Create our main components
+	this->m_Grid = new CIwUIElement();
+	this->m_Background = new CIwUIImage();
+
+	// Add main components to our layout
+	this->GetLayout()->AddElement( this->m_Background );
+	this->GetLayout()->AddElement( this->m_Grid );
+
+	// Set default type
+	this->SetType();
 }
-*/
+
+void CIwUIInfoPanel::SetType( CIwUIInfoPanel_Type type ) {
+	this->m_Type = type;
+
+	// Create new base layout
+	this->m_LayoutGrid = new CIwUILayoutGrid();
+	this->m_Grid->SetLayout( this->m_LayoutGrid );
+}
+
+void CIwUIInfoPanel::Clone( CIwUIElement *pTarget ) const {
+	IW_UI_CLONE_SUPERCLASS( pTarget, CIwUIInfoPanel, CIwUIElement );
+}
+
+IW_MANAGED_IMPLEMENT_FACTORY( CIwUIInfoPanel );
