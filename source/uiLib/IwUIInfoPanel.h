@@ -30,6 +30,7 @@ enum CIwUIInfoPanel_Type {
 #include <IwUILayout.h>
 #include <IwUILayoutGrid.h>
 #include <IwUIImage.h>
+#include <IwUILabel.h>
 
 class CIwUIInfoPanel : public CIwUIElement {
 public:
@@ -44,9 +45,14 @@ protected:
 
 private:
 	CIwUIInfoPanel_Type m_Type;
+
 	CIwUIElement *m_Grid;
 	CIwUILayoutGrid *m_LayoutGrid;
 	CIwUIImage *m_Background;
+
+	CIwUIElement *m_Unit;
+	CIwUIImage *m_UnitImage;
+	CIwUILabel *m_UnitText;
 };
 
 #endif

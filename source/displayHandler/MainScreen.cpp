@@ -18,6 +18,7 @@
 */
 
 #include "MainScreen.h"
+#include "../uiLib/IwUIInfoPanel.h"
 
 //#include "../uiLib/CIwUIComboBox.h"
 
@@ -360,7 +361,7 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 	s3eSurfaceOrientation *surfaceOrientation = new s3eSurfaceOrientation();
 	surfaceOrientation->m_DeviceBlitDirection = (s3eSurfaceBlitDirection) s3eSurfaceGetInt( S3E_SURFACE_BLIT_DIRECTION );
 	surfaceOrientation->m_Height = s3eSurfaceGetInt( S3E_SURFACE_HEIGHT );
-	this->SurfaceChanged( surfaceOrientation );
+	//this->SurfaceChanged( surfaceOrientation );
 
 	// Finally add the main-screen to the ui-view
 	IwGetUIView()->AddElementToLayout( this->myScreen );
@@ -387,7 +388,12 @@ MainScreen::MainScreen() : Screen( "MainScreen" ) {
 
 	//CIwUIComboBox *combobox = new CIwUIComboBox();
 	//this->myScreen->AddChild( combobox );
+	// 
+	CIwUIInfoPanel *testPanel = new CIwUIInfoPanel();
 
+	this->mainGrid->SetLayout( new CIwUILayout() );
+	this->mainGrid->GetLayout()->SetSizeToSpace( true );
+	this->mainGrid->GetLayout()->AddElement( testPanel );
 }
 
 MainScreen::~MainScreen() {
