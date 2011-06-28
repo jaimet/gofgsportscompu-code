@@ -1,0 +1,204 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>GOFG Sports Computer</title> 
+	<!-- phoneGap 0.9.5.1. -->
+	<script type="text/javascript" charset="utf-8" src="js/lib/phonegap/phonegap.js"></script>
+
+	<!-- jQuery 1.6.1  -->
+	<script type="text/javascript" src="js/lib/jquery/jquery.js"></script>
+
+	<!-- jQueryMobile 1.0b1 -->
+	<link rel="stylesheet" href="js/lib/jqueryMobile/jqueryMobile.css" />
+	<script type="text/javascript" src="js/lib/jqueryMobile/jqueryMobile.js"></script>
+
+	<!-- GOFG Sports Computer JS -->
+	<script type="text/javascript" src="js/continuousfilewriter.js"></script>
+	<script type="text/javascript" src="js/infopanel.js"></script>
+	<script type="text/javascript" src="js/gpshandler.js"></script>
+	<script type="text/javascript" src="js/trackhandler.js"></script>
+
+	<script type="text/javascript">
+		function formatDate( p_date ) {
+			var hours = p_date.getHours();
+			var minutes = p_date.getMinutes();
+			var formattedDate = hours;
+			
+			if( hours < 10 ) formattedDate = "0" + hours;
+			
+			if( minutes < 10 ) {
+				formattedDate += ":0" + minutes;
+			}
+			else {
+				formattedDate += ":" + minutes;
+			}
+			
+			return formattedDate;
+		}
+		
+		function updateClock() {
+			$( '#clock-infopanel' ).infopanel( 'setValue', formatDate( new Date() ) );
+			
+			setTimeout( "updateClock()", 60000 );
+		}
+		
+		function updatePosition() {
+			console.log( "updatePosition" );
+			TrackHandler.addDistance( GPSHandler.getDistance() );
+			TrackHandler.addSpeed( GPSHandler.getSpeed() );
+			TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
+			
+			$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
+			$( '#speed-infopanel' ).infopanel( 'setValue', (GPSHandler.getSpeed() * 3.6).toFixed(2) );
+		}
+	
+		function systemReady() {
+			//alert('up and running');
+			console.log( "Startup code running..." );
+			
+			// Call init code for TrackHandler
+			TrackHandler._init();
+
+			// Apply layout to all info-panels
+			var availableHeight = $( '#home-page' ).height();
+			availableHeight -= $( '#home-page > [data-role="header"]' ).outerHeight();
+			availableHeight -= $( '#home-page > [data-role="footer"]' ).outerHeight();
+			availableHeight -= ($( '#home-page > [data-role="content"]' ).outerHeight() - $( '#home-page > [data-role="content"]' ).height());
+			//availableHeight = availableHeight;
+			var rowHeight = (availableHeight / 3).toFixed(0);
+			
+			// Distance infopanel
+			$( '#distance-infopanel' ).infopanel( {
+				'value' : '0.00',
+				'size' : { 'width' : 'auto', 'height' : rowHeight },
+				'image' : 'images/web24.png',
+				'unit' : 'km'
+			} );
+			
+			// Clock infopanel
+			$( '#clock-infopanel' ).infopanel( {
+				'value' : formatDate( new Date() ),
+				'size' : { 'width' : 'auto', 'height' : (availableHeight - 2 * rowHeight) },
+				'image' : 'images/clock24.png',
+				'unit' : 'hh:mm'
+			} );
+			// Add clock timer
+			updateClock();
+			
+			// Timer infopanel
+			$( '#timer-infopanel' ).infopanel( {
+				'value' : '00:00:00',
+				'size' : { 'width' : 'auto', 'height' : (availableHeight - 2 * rowHeight) },
+				'image' : 'images/timer24.png',
+				'unit' : 'hh:mm:ss'
+			} );
+
+			// Speed infopanel
+			$( '#speed-infopanel' ).infopanel( {
+				'value' : '0.00',
+				'size' : { 'width' : 'auto', 'height' : rowHeight },
+				'image' : 'images/gowebsite24.png',
+				'unit' : 'km/h'
+			} );
+
+			// Altitude infopanel
+			$( '#altitude-infopanel' ).infopanel( {
+				'value' : '0.00',
+				'size' : { 'width' : 'auto', 'height' : rowHeight },
+				'image' : 'images/pictures24.png',
+				'unit' : 'm'
+			} );
+
+			// Status infopanel
+			$( '#status-infopanel' ).infopanel( {
+				'value' : '-',
+				'size' : { 'width' : 'auto', 'height' : rowHeight },
+				'image' : 'images/find24.png',
+				'unit' : 'Status'
+			} );
+
+			// Setup top toolbar
+			$( '#stop-button' ).hide();
+			$( '#stop-button' ).live( 'tap', stopGPS );
+			$( '#start-button' ).live( 'tap', startGPS );
+
+			console.log( "Up and running!" );
+		}
+
+		function startGPS() {
+			console.log( "Start-GPS called" );
+			
+			$( '#stop-button' ).show();
+			$( '#start-button' ).hide();
+			
+			TrackHandler.startTrack();
+			GPSHandler.startGPS( 5, updatePosition );
+		}
+
+		function stopGPS() {
+			console.log( "Stop-GPS called" );
+			
+			$( '#start-button' ).show();
+			$( '#stop-button' ).hide();
+			
+			GPSHandler.stopGPS();
+			TrackHandler.stopTrack();
+		}
+
+		$(document).ready( function() {
+			document.addEventListener("deviceready", systemReady, true);
+			
+			<!-- Added for debugging in the browser (for "normal" JS calls) -->
+			//TrackHandler.addSpeed( 10 );
+			//updateDistance();
+			//systemReady();
+		} );
+	</script>
+</head> 
+<body>
+
+<!-- /page -->
+<div data-role="page" style="min-height: 100%;" id="home-page">
+	<!-- /header -->
+	<div data-role="header">
+		<h1>GOFG Sports Computer</h1>
+		<a id="start-button" href="#" data-icon="check" class="ui-btn-right">Start</a>
+		<a id="stop-button" href="#" data-icon="check" class="ui-btn-right">Stop</a>
+	</div>
+
+	<!-- /content -->
+	<div data-role="content">
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<div id="speed-infopanel" name="infopanel-div">Speed</div>
+			</div>
+			<div class="ui-block-b">
+				<div id="distance-infopanel" name="infopanel-div">Distance</div>
+			</div>
+			<div class="ui-block-a">
+				<div id="altitude-infopanel" name="infopanel-div">Altitude Difference</div>
+			</div>
+			<div class="ui-block-b">
+				<div id="status-infopanel" name="infopanel-div">Status</div>
+			</div>
+			<div class="ui-block-a">
+				<div id="timer-infopanel" name="infopanel-div">Timer</div>
+			</div>
+			<div class="ui-block-b">
+				<div id="clock-infopanel" name="infopanel-div">Clock</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- /footer -->
+	<div data-role="footer">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#" class="ui-btn-active" data-icon="home">Summary</a></li>
+				<li><a href="#" data-icon="gear">Settings</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>
