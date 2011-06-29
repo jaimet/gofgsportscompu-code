@@ -56,11 +56,34 @@
 	</div>
 
 	<!-- /footer -->
-	<div data-role="footer">
+	<div data-role="footer" data-id="footer-navbar">
 		<div data-role="navbar">
 			<ul>
-				<li><a href="#" class="ui-btn-active" data-icon="home">Summary</a></li>
-				<li><a href="#" data-icon="gear">Settings</a></li>
+				<li><a href="#home-page" class="ui-btn-active ui-state-persist" data-icon="home">Summary</a></li>
+				<li><a href="#settings-page" data-icon="gear">Settings</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" style="min-height: 100%;" id="settings-page">
+	<!-- /header -->
+	<div data-role="header">
+		<h1>Settings</h1>
+		<a id="save-button" href="#" data-icon="check" class="ui-btn-right">Save</a>
+	</div>
+
+	<!-- /content -->
+	<div data-role="content">
+	Settings
+	</div>
+
+	<!-- /footer -->
+	<div data-role="footer" data-id="footer-navbar">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#home-page" data-icon="home" data-direction="reverse">Summary</a></li>
+				<li><a href="#settings-page" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
 			</ul>
 		</div>
 	</div>
