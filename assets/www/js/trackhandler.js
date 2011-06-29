@@ -6,6 +6,8 @@ var TrackHandler = {
 		m_fileEntry : null,				// Reference to the track file
 		m_persistentFileSystem : null,	// Reference to the holding file-system
 		m_totalDistance : 0,			// Total distance for this track
+		m_elevationGain : 0,			// Total elevation gain for this track
+		m_startTimestamp : 0,			// Start time for this track
 		m_waypoint : {
 			timestamp : null,
 			gps : {
@@ -36,9 +38,11 @@ var TrackHandler = {
 
 			// Reset (initialization)
 			TrackHandler._reset();
+			// Save start time
+			TrackHandler.m_startTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			
 			// Construct new file-name
-			var fileName = ((new Date()).getTime() / 1000).toFixed(0) + ".gsc";
+			var fileName = TrackHandler.m_startTimestamp + ".gsc";
 			// Request file reference
 			TrackHandler.m_persistentFileSystem.root.getFile( fileName, {create: true, exclusive: true}, TrackHandler._fileEntry, TrackHandler._fileSystemError );
 		},
@@ -66,7 +70,11 @@ var TrackHandler = {
 		
 		addPosition : function( p_latitude, p_longitude, p_altitude ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.gps.lat != null );
-			
+
+			if( TrackHandler.m_waypoint.gps.alt < p_altitude ) {
+				TrackHandler.m_elevationGain += (p_altitude - TrackHandler.m_waypoint.gps.alt);
+			}
+
 			TrackHandler.m_waypoint.gps = {
 				lat : p_latitude,
 				lon : p_longitude,
@@ -77,6 +85,22 @@ var TrackHandler = {
 		// Returns the total distance for this track
 		getTotalDistance : function() {
 			return TrackHandler.m_totalDistance;
+		},
+		
+		/**
+		 * Returns the total elevation gain for this track
+		 */
+		getElevationGain : function() {
+			return TrackHandler.m_elevationGain;
+		},
+		
+		/**
+		 * Get duration for this track
+		 */
+		getDuration : function() {
+			var currentTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
+			
+			return (currentTimestamp - TrackHandler.m_startTimestamp);
 		},
 		
 		// Generic function for writing a data-line in the correct format
@@ -123,6 +147,8 @@ var TrackHandler = {
 		_reset : function() {
 			TrackHandler.m_fileEntry = null;
 			TrackHandler.m_totalDistance = 0;
+			TrackHandler.m_elevationGain = 0;
+			TrackHandler.m_startTimestamp = 0;
 			TrackHandler.m_waypoint._reset(); 
 		}
 };

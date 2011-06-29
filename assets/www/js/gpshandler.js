@@ -12,17 +12,23 @@ var GPSHandler = {
 	m_lastPosition : 0,
 	m_distance : 0,
 	m_timerReference : 0,
+	m_watchId : null,
 	
 	startGPS : function( p_interval, p_callback ) {
+		if( GPSHandler.m_watchId != null ) return;
+		
 		GPSHandler.m_settings['interval'] = p_interval;
 		if( p_callback ) GPSHandler.m_settings['positionUpdated'] = p_callback;
 		
-		GPSHandler._updatePosition();
+//		GPSHandler._updatePosition();
+		GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_settings['interval'] * 1000, maximumAge : GPSHandler.m_settings['interval'] * 1000 } );
 	},
 	
 	stopGPS : function() {
-		clearTimeout( GPSHandler.m_timerReference );
+		//clearTimeout( GPSHandler.m_timerReference );
+		navigator.geolocation.clearWatch( GPSHandler.m_watchId );
 		GPSHandler.m_settings['positionUpdated'] = function() {};
+		GPSHandler.m_watchId = null;
 	},
 	
 	getDistance : function() {
@@ -50,9 +56,11 @@ var GPSHandler = {
 	},
 	
 	_updatePosition : function() {
-		navigator.geolocation.getCurrentPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy: true } );
+		//GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, {} );
+		
+		//navigator.geolocation.getCurrentPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy: true } );
 
-		GPSHandler.m_timerReference = setTimeout( "GPSHandler._updatePosition()", GPSHandler.m_settings['interval'] * 1000 );
+		//GPSHandler.m_timerReference = setTimeout( "GPSHandler._updatePosition()", GPSHandler.m_settings['interval'] * 1000 );
 	},
 	
 	_positionUpdate : function( p_position ) {
