@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2011 Wolfgang Koller
+ * 
+ * This file is part of GOFG Sports Computer - http://www.gofg.at/.
+ * 
+ * GOFG Sports Computer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * GOFG Sports Computer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * jQuery plugin for setting up an infopanel on a given div
  */
@@ -53,6 +72,8 @@
     	return this.each(function() {
     		$(this).data('infopanel').settings['size'] = { 'width' : p_width, 'height' : p_height };
     		
+    		if( !$(this).is( ':visible' ) ) return;
+
     		// If width is auto, find it out ourselves
     		if( p_width == 'auto' ) p_width = $(this).width();
     		// Re-size the font (to make it fit)
@@ -82,6 +103,8 @@
     },
     _sizeFont : function( p_width, p_height ) {
     	return this.each(function() {
+    		if( !$(this).is( ':visible' ) ) return;
+    		
 			var maximumHeight = p_height - $(this).data('infopanel').image.outerHeight() - $(this).data('infopanel').settings['border'];
 			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
 			var fontSize = 20;

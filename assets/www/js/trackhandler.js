@@ -1,13 +1,33 @@
+/*
+ * Copyright (C) 2011 Wolfgang Koller
+ * 
+ * This file is part of GOFG Sports Computer - http://www.gofg.at/.
+ * 
+ * GOFG Sports Computer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * GOFG Sports Computer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * javascript object for handling a track (including writing to file and getting info)
  */
 
 var TrackHandler = {
 		m_fileEntry : null,				// Reference to the track file
-		m_persistentFileSystem : null,	// Reference to the holding file-system
+		m_trackDirectoryEntry : null,	// Reference to the track directory
 		m_totalDistance : 0,			// Total distance for this track
 		m_elevationGain : 0,			// Total elevation gain for this track
 		m_startTimestamp : 0,			// Start time for this track
+		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
 		m_waypoint : {
 			timestamp : null,
 			gps : {
@@ -18,6 +38,7 @@ var TrackHandler = {
 			hr : null,
 			distance : null,
 			speed : null,
+			accuracy : null,
 			
 			_reset : function() {
 				this.timestamp = null;
@@ -27,12 +48,13 @@ var TrackHandler = {
 				this.hr = null;
 				this.distance = null;
 				this.speed = null;
+				this.accuracy = null;
 			},
 		},
 		m_continuousFileWriter : null,
 		
 		startTrack : function() {
-			if( TrackHandler.m_persistentFileSystem == null ) return;
+			if( TrackHandler.m_trackDirectoryEntry == null ) return;
 
 //			console.log( "Starting-Track" );
 
@@ -40,17 +62,34 @@ var TrackHandler = {
 			TrackHandler._reset();
 			// Save start time
 			TrackHandler.m_startTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
+			TrackHandler.m_waypoint.timestamp = TrackHandler.m_startTimestamp;
 			
 			// Construct new file-name
 			var fileName = TrackHandler.m_startTimestamp + ".gsc";
 			// Request file reference
-			TrackHandler.m_persistentFileSystem.root.getFile( fileName, {create: true, exclusive: true}, TrackHandler._fileEntry, TrackHandler._fileSystemError );
+			TrackHandler.m_trackDirectoryEntry.getFile( fileName, {create: true, exclusive: true}, TrackHandler._fileEntry, TrackHandler._fileSystemError );
+			
+			TrackHandler.m_bTrackOpen = true;
 		},
 
 		stopTrack : function() {
+			TrackHandler.m_bTrackOpen = false;
 		},
 
-		loadTrack : function( p_fileName ) {
+		/**
+		 * Load a track
+		 * @param FileEntry FileEntry object for the file to load
+		 */
+		loadTrack : function( p_fileEntry ) {
+			
+		},
+		
+		/**
+		 * Set the directory for storing the tracks
+		 * @param DirectoryEntry DirectoryEntry object for storing the track-files in
+		 */
+		setDirectory : function( p_directoryEntry ) {
+			TrackHandler.m_trackDirectoryEntry = p_directoryEntry;
 		},
 
 		// Add distance info to waypoint
@@ -82,25 +121,34 @@ var TrackHandler = {
 			};
 		},
 		
+		addAccuracy : function( p_accuracy ) {
+			TrackHandler._checkWrite( TrackHandler.m_waypoint.accuracy != null );
+			
+			TrackHandler.m_waypoint.accuracy = p_accuracy;
+		},
+		
 		// Returns the total distance for this track
 		getTotalDistance : function() {
 			return TrackHandler.m_totalDistance;
 		},
 		
 		/**
-		 * Returns the total elevation gain for this track
+		 * Returns the total elevation gain for this track (in m)
 		 */
 		getElevationGain : function() {
 			return TrackHandler.m_elevationGain;
 		},
 		
 		/**
-		 * Get duration for this track
+		 * Get duration for this track (in seconds)
 		 */
 		getDuration : function() {
-			var currentTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
-			
-			return (currentTimestamp - TrackHandler.m_startTimestamp);
+			if( TrackHandler.m_bTrackOpen ) {
+				return (((new Date()).getTime() / 1000).toFixed(0) - TrackHandler.m_startTimestamp);
+			}
+			else {
+				return (TrackHandler.m_waypoint.timestamp - TrackHandler.m_startTimestamp);
+			}
 		},
 		
 		// Generic function for writing a data-line in the correct format
@@ -108,10 +156,10 @@ var TrackHandler = {
 //			console.log( "Check write" );
 			
 			if( p_status ) {
-				TrackHandler.m_waypoint.timestamp = ((new Date()).getTime() / 1000).toFixed(0);
 				TrackHandler._writeWayPoint();
 				
 				TrackHandler.m_waypoint._reset();
+				TrackHandler.m_waypoint.timestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			}
 		},
 		
@@ -121,6 +169,7 @@ var TrackHandler = {
 			if( TrackHandler.m_waypoint.hr != null ) TrackHandler.m_continuousFileWriter.writeLine( "03;" + TrackHandler.m_waypoint.hr );
 			if( TrackHandler.m_waypoint.distance != null ) TrackHandler.m_continuousFileWriter.writeLine( "04;" + TrackHandler.m_waypoint.distance );
 			if( TrackHandler.m_waypoint.speed != null ) TrackHandler.m_continuousFileWriter.writeLine( "05;" + TrackHandler.m_waypoint.speed );
+			if( TrackHandler.m_waypoint.accuracy != null ) TrackHandler.m_continuousFileWriter.writeLine( "06;" + TrackHandler.m_waypoint.accuracy );
 		},
 		
 		_fileEntry : function( p_fileEntry ) {
@@ -129,19 +178,8 @@ var TrackHandler = {
 			TrackHandler.m_continuousFileWriter = new ContinuousFileWriter( TrackHandler.m_fileEntry );
 		},
 		
-		_fileSystem : function( p_fileSystem ) {
-			TrackHandler.m_persistentFileSystem = p_fileSystem;
-			
-//			console.log( "FileSystem Name: " + TrackHandler.m_persistentFileSystem.name );
-//			console.log( "FileSystem Root Name: " + TrackHandler.m_persistentFileSystem.root.name );
-		},
-		
 		_fileSystemError : function( p_fileError ) {
 			console.log( "Error while operating on the file-system: " + p_fileError.code );
-		},
-		
-		_init : function() {
-			window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, TrackHandler._fileSystem, TrackHandler._fileSystemError );
 		},
 		
 		_reset : function() {
@@ -149,6 +187,7 @@ var TrackHandler = {
 			TrackHandler.m_totalDistance = 0;
 			TrackHandler.m_elevationGain = 0;
 			TrackHandler.m_startTimestamp = 0;
+			TrackHandler.m_bTrackOpen = false;
 			TrackHandler.m_waypoint._reset(); 
 		}
 };

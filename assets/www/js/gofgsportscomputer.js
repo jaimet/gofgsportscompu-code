@@ -1,5 +1,28 @@
+/*
+ * Copyright (C) 2011 Wolfgang Koller
+ * 
+ * This file is part of GOFG Sports Computer - http://www.gofg.at/.
+ * 
+ * GOFG Sports Computer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * GOFG Sports Computer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var GOFGSportsComputer = {
 	m_mainTimer : 0,	// Reference for the main timer
+	m_persistentFileSystem : null,	// Reference to the persistent file-system
+	m_appDirectoryEntry : null,		// Reference to the app directory entry
+	m_trackDirectoryEntry : null,	// Reference to the track directory entry
+	m_contentHeight : 0,			// Calculated maximum height for content
 		
 	/**
 	 * Updates the clock (called once a minute)
@@ -17,10 +40,12 @@ var GOFGSportsComputer = {
 		TrackHandler.addDistance( GPSHandler.getDistance() );
 		TrackHandler.addSpeed( GPSHandler.getSpeed() );
 		TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
+		TrackHandler.addAccuracy( GPSHandler.getAccuracy() );
 		
 		$( '#speed-infopanel' ).infopanel( 'setValue', (GPSHandler.getSpeed() * 3.6).toFixed(2) );
 		$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
 		$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
+		$( '#status-infopanel' ).infopanel( 'setValue', GPSHandler.getAccuracy() );
 	},
 	
 	/**
@@ -78,23 +103,45 @@ var GOFGSportsComputer = {
 		GOFGSportsComputer.m_mainTimer = 0;
 	},
 	
-	/**
-	 * Startup function which setups the sports computer software (init, interface, etc.)
-	 */
-	_systemReady : function() {
-		console.log( "Startup code running..." );
+	_refreshTracks : function() {
+		//alert( 'Refreshing!' );
+		$( '#tracks-list' ).html('');
 		
-		// Call init code for TrackHandler
-		TrackHandler._init();
-
+		var trackDirectoryReader = GOFGSportsComputer.m_trackDirectoryEntry.createReader();
+		
+		trackDirectoryReader.readEntries( GOFGSportsComputer._refreshTracksEntries, GOFGSportsComputer._fileSystemError );
+	},
+	
+	_refreshTracksEntries : function( entries ) {
+		console.log( 'Refreshing!' );
+		
+//		<div data-role="fieldcontain">
+//		<fieldset data-role="controlgroup" id="tracks-list">
+//		</fieldset>
+//	</div>
+		var containerdiv = $( '<div data-role="fieldcontain">' );
+		var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
+		
+		for( var i = 0; i < entries.length; i++ ) {
+			console.log('Got entry: ' + entries[i].name);
+			
+			controlgroup.append( $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' ) );
+			controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + entries[i].name + '</label>' ) );
+		}
+		
+		//$( "input[type='radio']" ).checkboxradio();
+		containerdiv.append(controlgroup);
+		containerdiv.page();
+		
+		$( '#tracks-list' ).append( containerdiv );
+	},
+	
+	_summaryInit : function() {
 		// Apply layout to all info-panels
-		var availableHeight = $( '#home-page' ).height();
-		availableHeight -= $( '#home-page > [data-role="header"]' ).outerHeight();
-		availableHeight -= $( '#home-page > [data-role="footer"]' ).outerHeight();
-		availableHeight -= ($( '#home-page > [data-role="content"]' ).outerHeight() - $( '#home-page > [data-role="content"]' ).height());
-		//availableHeight = availableHeight;
-		var rowHeight = (availableHeight / 3).toFixed(0);
-		
+		//var rowHeight = (availableHeight / 3).toFixed(0);
+		var rowHeight = (GOFGSportsComputer.m_contentHeight / 3).toFixed(0);
+		console.log( "Row height: " + rowHeight );
+
 		// Distance infopanel
 		$( '#distance-infopanel' ).infopanel( {
 			'value' : '0.00',
@@ -106,7 +153,7 @@ var GOFGSportsComputer = {
 		// Clock infopanel
 		$( '#clock-infopanel' ).infopanel( {
 			'value' : formatDate( new Date() ),
-			'size' : { 'width' : 'auto', 'height' : (availableHeight - 2 * rowHeight) },
+			'size' : { 'width' : 'auto', 'height' : (GOFGSportsComputer.m_contentHeight - 2 * rowHeight) },
 			'image' : 'images/clock24.png',
 			'unit' : 'hh:mm'
 		} );
@@ -116,7 +163,7 @@ var GOFGSportsComputer = {
 		// Timer infopanel
 		$( '#timer-infopanel' ).infopanel( {
 			'value' : '00:00:00',
-			'size' : { 'width' : 'auto', 'height' : (availableHeight - 2 * rowHeight) },
+			'size' : { 'width' : 'auto', 'height' : (GOFGSportsComputer.m_contentHeight - 2 * rowHeight) },
 			'image' : 'images/timer24.png',
 			'unit' : 'hh:mm:ss'
 		} );
@@ -142,15 +189,100 @@ var GOFGSportsComputer = {
 			'value' : '-',
 			'size' : { 'width' : 'auto', 'height' : rowHeight },
 			'image' : 'images/find24.png',
-			'unit' : 'Status'
+			'unit' : 'Accuracy (m)'
 		} );
 
 		// Setup top toolbar
 		$( '#stop-button' ).hide();
 		$( '#stop-button' ).live( 'tap', GOFGSportsComputer.stopGPS );
 		$( '#start-button' ).live( 'tap', GOFGSportsComputer.startGPS );
+		
+		// Remove init handler
+		$( '#summary-page' ).die( 'pageshow', GOFGSportsComputer._summaryInit );
+	},
+
+	/**
+	 * Startup function which setups the sports computer software (init, interface, etc.)
+	 */
+	_systemReady : function() {
+		console.log( "Startup code running..." );
+
+		// Calculate available heigh based on empty loading page
+		var availableHeight = $( '#empty-page' ).height();
+		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight();
+		availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
+		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight() - $( '#summary-page > [data-role="content"]' ).height());
+		// Save available height as internal variable
+		GOFGSportsComputer.m_contentHeight = availableHeight;
+		
+		// Add our page events
+		$( '#tracks-page' ).live( 'pagebeforeshow', GOFGSportsComputer._refreshTracks );
+		$( '#summary-page' ).live( 'pageshow', GOFGSportsComputer._summaryInit );
+		
+		// Change to summary page
+		$.mobile.changePage( 'summary.html', { transition : 'pop' } );
+		
+		// Find our file storage
+		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );
 
 		console.log( "Up and running!" );
+	},
+	
+	_fileSystem : function( p_fileSystem ) {
+		GOFGSportsComputer.m_persistentFileSystem = p_fileSystem;
+		
+		// Make sure our app data folder exist
+		GOFGSportsComputer.m_persistentFileSystem.root.getDirectory( "at.gofg.sportscomputer", { create : true, exclusive : false }, GOFGSportsComputer._appDirectory, GOFGSportsComputer._appDirectoryError );
+		
+//		console.log( "FileSystem Name: " + TrackHandler.m_persistentFileSystem.name );
+//		console.log( "FileSystem Root Name: " + TrackHandler.m_persistentFileSystem.root.name );
+	},
+
+	/**
+	 * Called when the app directory was successfully accessed and is ready for use
+	 */
+	_appDirectory : function( p_directoryEntry ) {
+		GOFGSportsComputer.m_appDirectoryEntry = p_directoryEntry;
+		
+		// Get the track folder entry
+		GOFGSportsComputer.m_appDirectoryEntry.getDirectory( "tracks", { create : true, exclusive : false }, GOFGSportsComputer._trackDirectory, GOFGSportsComputer._trackDirectoryError );
+	},
+	
+	/**
+	 * Called when the application directory could now be accessed, will fall back to default directory then
+	 */
+	_appDirectoryError : function( p_fileError ) {
+		GOFGSportsComputer._fileSystemError(p_fileError);
+		
+		// Fallback to default root directory
+		GOFGSportsComputer._appDirectory(GOFGSportsComputer.m_persistentFileSystem.root);
+	},
+	
+	/**
+	 * Called when the track directory was successfully accessed and is ready for use
+	 */
+	_trackDirectory : function( p_directoryEntry ) {
+		GOFGSportsComputer.m_trackDirectoryEntry = p_directoryEntry;
+		
+		// Initialize our track-handler with the dir
+		TrackHandler.setDirectory(GOFGSportsComputer.m_trackDirectoryEntry);
+	},
+	
+	/**
+	 * Called when the track directory could now be accessed, will fall back to app directory then
+	 */
+	_trackDirectoryError : function( p_fileError ) {
+		GOFGSportsComputer._fileSystemError(p_fileError);
+		
+		// Fallback to the app directory
+		GOFGSportsComputer._trackDirectory(GOFGSportsComputer.m_appDirectoryEntry);
+	},
+	
+	/**
+	 * Simple error handler for any FileErrors that might occur
+	 */
+	_fileSystemError : function( p_fileError ) {
+		console.log( "Error while operating on the file-system: " + p_fileError.code );
 	}
 };
 
@@ -199,14 +331,95 @@ function getFormattedTimeDiff( p_timeDiff ) {
 	return getFormattedTime( hours, minutes, seconds, true );
 }
 
+//function prepareNavbar( p_activeTarget ) {
+//	
+//	// Bind the load page function for each navbar button
+//	$( '#navbar-buttons-' + p_activeTarget + ' > li > a' ).each( function(index, Element) {
+//		var target = $(this).attr( 'data-navbar' );
+//		
+//		// Ignore links to ourself
+//		if( target == p_activeTarget ) return;
+//		
+//		console.log( "Found target: " + target );
+//		
+//		if( target == "summary" ) {
+//			$(this).bind( 'click', function() {
+//				$.mobile.changePage( $( '#summary-page' ) );
+//
+////				$( '#navbar-buttons-summary > li > a' ).removeClass( 'ui-btn-active' );
+////				$(this).addClass( 'ui-btn-active' );
+//			} );
+//		}
+//		else {
+//			$(this).bind( 'click', function() {
+//				$.mobile.showPageLoadingMsg();
+//				$.get( target + '.html', '', function(data, textStatus, jqXHR) {
+//					$( 'body' ).append( data );
+//					//alert( 'Loaded: ' + textStatus );
+//					
+//					$('#' + target + '-page').bind( 'pageshow', function() {
+//						console.log( 'pageshow of ' + $(this).attr( 'id' ) );
+//						
+//						$( 'body > div[data-role="page"][id!="summary-page"][id!="' + target + '-page"]' ).remove();
+//						prepareNavbar( target );
+//					} );
+//					
+//					$.mobile.changePage( $('#' + target + '-page') );
+//					// Remove any unused pages
+//					//$( 'body > div[data-role="page"][id!="home-page"]' ).remove();
+//				}, 'html' );
+//			} );
+//		}
+//	} );
+//}
+
 /**
  * Application starts here
  */
 $(document).ready( function() {
 	document.addEventListener("deviceready", GOFGSportsComputer._systemReady, true);
+	
+	// Before showing the tracks-page, we want to refresh the list of tracks
+	//$( '#tracks-page' ).bind( 'pagebeforeshow', GOFGSportsComputer._refreshTracks );
+	
+	
+//	$( '#test-button' ).bind( 'click', function() {
+//		$.mobile.changePage( 'test.html', {
+//			pageContainer : $( '#home-content' )
+//		} );
+//	} );
+
+
+
+	/**
+	 * WARNING: TESTING AREA AHEAD
+	 */
+//	// Prepare our summary page
+//	$( '#summary-page' ).bind( 'pagebeforeshow', function() {
+//		$( '#navbar-buttons-summary > li > a' ).removeClass( 'ui-btn-active' );
+//		$( '#navbar-buttons-summary > li > a[data-navbar="summary"]' ).addClass( 'ui-btn-active' );
+//	} );
+//	$( '#summary-page' ).bind( 'pageshow', function() {
+//		$( 'body > div[data-role="page"][id!="summary-page"]' ).remove();
+//	} );
+//	prepareNavbar( 'summary' );
+	
+	
+	
+//	$( '#navbar-settings' ).bind( 'click', function() {
+//		$( '#home-content' ).load( 'test.html', function(responseText, textStatus, XMLHttpRequest) {
+//			alert( "Request completed: " + responseText + " / " + textStatus );
+//		} );
+//	});
 			
-	<!-- Added for debugging in the browser (for "normal" JS calls) -->
 	//TrackHandler.addSpeed( 10 );
 	//updateDistance();
-	//systemReady();
+	//setTimeout( "GOFGSportsComputer._systemReady()", 1000 );
+	//GOFGSportsComputer._systemReady();
+//	var xmlRoot = $( '<customTag>should not be visible</customTag>' );
+//	var xmlSub = $( '<subCustomTag attribute="value">My Tag content</subCustomTag>' );
+//	xmlRoot.append( xmlSub );
+//	alert( xmlRoot.html() );
+//	var e = 1;
 } );
+

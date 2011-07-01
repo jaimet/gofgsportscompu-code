@@ -19,71 +19,28 @@
 	<script type="text/javascript" src="js/gpshandler.js"></script>
 	<script type="text/javascript" src="js/trackhandler.js"></script>
 	<script type="text/javascript" src="js/gofgsportscomputer.js"></script>
+	<script type="text/javascript" src="js/tracks.js"></script>
 </head> 
 <body>
-
-<!-- /page -->
-<div data-role="page" style="min-height: 100%;" id="home-page">
+<!-- Settings page -->
+<div data-role="page" id="empty-page">
 	<!-- /header -->
 	<div data-role="header">
-		<h1>GOFG Sports Computer</h1>
-		<a id="start-button" href="#" data-icon="check" class="ui-btn-right">Start</a>
-		<a id="stop-button" href="#" data-icon="check" class="ui-btn-right">Stop</a>
+		<h1>Loading</h1>
 	</div>
 
 	<!-- /content -->
 	<div data-role="content">
-		<div class="ui-grid-a">
-			<div class="ui-block-a">
-				<div id="speed-infopanel" name="infopanel-div">Speed</div>
-			</div>
-			<div class="ui-block-b">
-				<div id="distance-infopanel" name="infopanel-div">Distance</div>
-			</div>
-			<div class="ui-block-a">
-				<div id="altitude-infopanel" name="infopanel-div">Altitude Difference</div>
-			</div>
-			<div class="ui-block-b">
-				<div id="status-infopanel" name="infopanel-div">Status</div>
-			</div>
-			<div class="ui-block-a">
-				<div id="timer-infopanel" name="infopanel-div">Timer</div>
-			</div>
-			<div class="ui-block-b">
-				<div id="clock-infopanel" name="infopanel-div">Clock</div>
-			</div>
-		</div>
+	Loading
 	</div>
 
 	<!-- /footer -->
 	<div data-role="footer" data-id="footer-navbar">
 		<div data-role="navbar">
 			<ul>
-				<li><a href="#home-page" class="ui-btn-active ui-state-persist" data-icon="home">Summary</a></li>
-				<li><a href="#settings-page" data-icon="gear">Settings</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
-
-<div data-role="page" style="min-height: 100%;" id="settings-page">
-	<!-- /header -->
-	<div data-role="header">
-		<h1>Settings</h1>
-		<a id="save-button" href="#" data-icon="check" class="ui-btn-right">Save</a>
-	</div>
-
-	<!-- /content -->
-	<div data-role="content">
-	Settings
-	</div>
-
-	<!-- /footer -->
-	<div data-role="footer" data-id="footer-navbar">
-		<div data-role="navbar">
-			<ul>
-				<li><a href="#home-page" data-icon="home" data-direction="reverse">Summary</a></li>
-				<li><a href="#settings-page" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
+				<li><a href="#" data-icon="home" data-direction="reverse">Summary</a></li>
+				<li><a href="#" data-icon="gear">Settings</a></li>
+				<li><a href="#" data-icon="grid">Tracks</a></li>
 			</ul>
 		</div>
 	</div>
