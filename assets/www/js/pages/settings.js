@@ -17,11 +17,19 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Tracks = {
-	m_trackDirectoryEntry : null,
-	m_exportDirectoryEntry : null,
+// Check if the pages namespace exists
+if( pages == undefined ) {
+	var pages = {};
+}
+
+pages.settings = {
+		init : function() {
+			console.log( "settings-page loaded!" );
+			
+			$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
+		},
 		
-	_pageCreate : function() {
-		
-	}	
+		_pagebeforeshow : function( p_event, p_ui ) {
+			$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
+		}
 };

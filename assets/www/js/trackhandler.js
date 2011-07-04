@@ -17,6 +17,30 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+function TrackWaypoint() {
+	var timestamp = null;
+	var gps = {
+			lat : null,
+			lon : null,
+			alt : null
+	};
+	var hr = null;
+	var distance = null;
+	var speed = null;
+	var accuracy = null;
+	
+	function reset() {
+		timestamp = null;
+		gps.lat = null;
+		gps.lon = null;
+		gps.alt = null;
+		hr = null;
+		distance = null;
+		speed = null;
+		accuracy = null;
+	}
+}
+
 /**
  * javascript object for handling a track (including writing to file and getting info)
  */
@@ -26,6 +50,7 @@ var TrackHandler = {
 		m_trackDirectoryEntry : null,	// Reference to the track directory
 		m_totalDistance : 0,			// Total distance for this track
 		m_elevationGain : 0,			// Total elevation gain for this track
+		m_lastAltitude : -1000,				// Last altitude
 		m_startTimestamp : 0,			// Start time for this track
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
 		m_waypoint : {
@@ -81,7 +106,7 @@ var TrackHandler = {
 		 * @param FileEntry FileEntry object for the file to load
 		 */
 		loadTrack : function( p_fileEntry ) {
-			
+			// TODO: Continue here
 		},
 		
 		/**
@@ -90,6 +115,14 @@ var TrackHandler = {
 		 */
 		setDirectory : function( p_directoryEntry ) {
 			TrackHandler.m_trackDirectoryEntry = p_directoryEntry;
+		},
+		
+		/**
+		 * Return the directory for storing the tracks
+		 * @return DirectoryEntry Entry with tracks in it
+		 */
+		getDirectory : function() {
+			return TrackHandler.m_trackDirectoryEntry;
 		},
 
 		// Add distance info to waypoint
@@ -110,15 +143,17 @@ var TrackHandler = {
 		addPosition : function( p_latitude, p_longitude, p_altitude ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.gps.lat != null );
 
-			if( TrackHandler.m_waypoint.gps.alt < p_altitude ) {
-				TrackHandler.m_elevationGain += (p_altitude - TrackHandler.m_waypoint.gps.alt);
+			if( TrackHandler.m_lastAltitude > -1000 && TrackHandler.m_lastAltitude < p_altitude ) {
+				TrackHandler.m_elevationGain += p_altitude - TrackHandler.m_lastAltitude; 
 			}
-
+			
 			TrackHandler.m_waypoint.gps = {
 				lat : p_latitude,
 				lon : p_longitude,
 				alt : p_altitude
 			};
+			
+			TrackHandler.m_lastAltitude = p_altitude;
 		},
 		
 		addAccuracy : function( p_accuracy ) {
@@ -186,6 +221,7 @@ var TrackHandler = {
 			TrackHandler.m_fileEntry = null;
 			TrackHandler.m_totalDistance = 0;
 			TrackHandler.m_elevationGain = 0;
+			TrackHandler.m_lastAltitude = -1000;
 			TrackHandler.m_startTimestamp = 0;
 			TrackHandler.m_bTrackOpen = false;
 			TrackHandler.m_waypoint._reset(); 
