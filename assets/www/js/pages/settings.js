@@ -29,7 +29,24 @@ pages.settings = {
 			$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
 		},
 		
+		_save : function() {
+			console.log( "settings-page save!" );
+			
+			SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
+			SettingsHandler._save();
+
+			$( '#settings-page' ).find( '#settings-save-button' ).hide();
+		},
+		
+		_changed : function() {
+			$( '#settings-page' ).find( '#settings-save-button' ).show();
+		},
+		
 		_pagebeforeshow : function( p_event, p_ui ) {
 			$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
+			$( '#settings-page' ).find( '#settings-save-button' ).hide();
+			
+			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
+			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
 		}
 };

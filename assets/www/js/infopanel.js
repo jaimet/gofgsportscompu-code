@@ -21,7 +21,6 @@
  * jQuery plugin for setting up an infopanel on a given div
  */
 (function( $ ){
-
   var methods = {
     init : function( options ) {
     	var settings = {
@@ -53,19 +52,21 @@
         	$(this).data( 'infopanel', data );
         	
         	// Setup the infopanel
-        	methods.setValue.call($(this), settings['value'] );
-        	methods.setSize.call($(this), settings['size']['width'], settings['size']['height'] );
-        	methods.setImage.call($(this), settings['image'] );
-        	methods.setUnit.call($(this), settings['unit'] );
+        	methods.setValue.call( $(this), settings['value'] );
+    		methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] );
+        	methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
+        	methods.setImage.call( $(this), settings['image'] );
+        	methods.setUnit.call( $(this), settings['unit'] );
         });
     },
     setValue : function( p_value ) {
     	return this.each(function() {
+    		if( p_value == null || p_value == undefined ) p_value = "-";
+
     		$(this).data('infopanel').settings['value'] = p_value;
-    		
     		$(this).data('infopanel').currentSpan.html( p_value );
 
-    		methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
+   			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     	});
     },
     setSize : function( p_width, p_height ) {
@@ -74,11 +75,6 @@
     		
     		if( !$(this).is( ':visible' ) ) return;
 
-    		// If width is auto, find it out ourselves
-    		if( p_width == 'auto' ) p_width = $(this).width();
-    		// Re-size the font (to make it fit)
-    		methods._sizeFont.call($(this), p_width, p_height );
-    		
     		// Now calculate the remaining space for the margin
     		var marginSize = (p_height - 2 - $(this).data( 'infopanel' ).currentSpan.outerHeight() - $(this).data('infopanel').image.outerHeight() );
     		var marginTop = (marginSize / 2).toFixed(0);
@@ -104,17 +100,23 @@
     _sizeFont : function( p_width, p_height ) {
     	return this.each(function() {
     		if( !$(this).is( ':visible' ) ) return;
+    		if( p_width == 'auto' ) p_width = $(this).width();
     		
 			var maximumHeight = p_height - $(this).data('infopanel').image.outerHeight() - $(this).data('infopanel').settings['border'];
 			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
-			var fontSize = 20;
+			var fontSize = 40;
+			var fontSizeStep = $(this).data( 'infopanel' ).settings['fontSizeStep'];
 			
 			$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
 			// Auto-Size the font to a maximum
 			while( $(this).data( 'infopanel' ).currentSpan.height() < maximumHeight && $(this).data( 'infopanel' ).currentSpan.width() < maximumWidth ) {
-				fontSize = fontSize + $(this).data( 'infopanel' ).settings['fontSizeStep'];
+				fontSize += fontSizeStep;
 				$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
 			}
+			fontSize -= fontSizeStep;
+			$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
+			
+			console.log( "Final font-Size: " + fontSize );
     	});
     }
   };

@@ -27,25 +27,41 @@ pages.tracks = {
 			console.log( "tracks-page loaded!" );
 			
 			$( '#tracks-page' ).live( 'pagebeforeshow', pages.tracks._pagebeforeshow );
+			$( '#tracks-load-button' ).live( 'tap', pages.tracks._loadTrack );
+		},
+		
+		_loadTrackFinished : function() {
+			pages.summary._updateDisplay();
+			$.mobile.changePage( "summary.html" );
+		},
+		
+		_loadTrack : function() {
+			console.log( "Loading track!" );
+			$.mobile.showPageLoadingMsg();
+			
+			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
+				if( $(this).is(":checked") ) {
+					TrackHandler.loadTrack( $(this).data( 'fileEntry' ), pages.tracks._loadTrackFinished );
+				}
+			} );
 		},
 		
 		_refreshTracksEntries : function( entries ) {
-			console.log( 'Refreshing!' );
-			
 			var containerdiv = $( '<div data-role="fieldcontain">' );
 			var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
-			
+
 			for( var i = 0; i < entries.length; i++ ) {
-				console.log('Got entry: ' + entries[i].name);
-				
-				controlgroup.append( $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' ) );
+				var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
+				inputRadio.data( 'fileEntry', entries[i] );
+
+				controlgroup.append( inputRadio );
 				controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + entries[i].name + '</label>' ) );
 			}
-			
+
 			//$( "input[type='radio']" ).checkboxradio();
 			containerdiv.append(controlgroup);
 			containerdiv.page();
-			
+
 			$( '#tracks-list' ).append( containerdiv );
 		},
 
@@ -54,5 +70,5 @@ pages.tracks = {
 
 			var trackDirectoryReader = TrackHandler.getDirectory().createReader();
 			trackDirectoryReader.readEntries( pages.tracks._refreshTracksEntries, GOFGSportsComputer._fileSystemError );
-		}
+		},
 };

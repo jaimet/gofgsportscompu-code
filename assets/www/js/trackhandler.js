@@ -18,27 +18,27 @@
  */
 
 function TrackWaypoint() {
-	var timestamp = null;
-	var gps = {
+	this.timestamp = null;
+	this.gps = {
 			lat : null,
 			lon : null,
 			alt : null
 	};
-	var hr = null;
-	var distance = null;
-	var speed = null;
-	var accuracy = null;
-	
-	function reset() {
-		timestamp = null;
-		gps.lat = null;
-		gps.lon = null;
-		gps.alt = null;
-		hr = null;
-		distance = null;
-		speed = null;
-		accuracy = null;
-	}
+	this.hr = null;
+	this.distance = null;
+	this.speed = null;
+	this.accuracy = null;
+}
+
+TrackWaypoint.prototype.reset = function() {
+	this.timestamp = null;
+	this.gps.lat = null;
+	this.gps.lon = null;
+	this.gps.alt = null;
+	this.hr = null;
+	this.distance = null;
+	this.speed = null;
+	this.accuracy = null;
 }
 
 /**
@@ -103,15 +103,30 @@ var TrackHandler = {
 
 		/**
 		 * Load a track
-		 * @param FileEntry FileEntry object for the file to load
+		 * @param p_fileEntry FileEntry object for the file to load
+		 * @param p_completeCallback Function reference which is called once the track is loaded
 		 */
-		loadTrack : function( p_fileEntry ) {
-			// TODO: Continue here
+		loadTrack : function( p_fileEntry, p_completeCallback ) {
+			TrackHandler._reset();
+			
+			var trackReader = new TrackReader( p_fileEntry, TrackHandler._loadTrackWaypoint, p_completeCallback );
+		},
+		
+		_loadTrackWaypoint : function( p_waypoint ) {
+			if( TrackHandler.m_startTimestamp == 0 ) {
+				TrackHandler.m_startTimestamp = p_waypoint.timestamp;
+			}
+			
+			TrackHandler.m_waypoint.timestamp = p_waypoint.timestamp;
+			TrackHandler.addAccuracy(p_waypoint.accuracy);
+			TrackHandler.addDistance(p_waypoint.distance);
+			TrackHandler.addPosition(p_waypoint.gps.lat, p_waypoint.gps.lon, p_waypoint.gps.alt);
+			TrackHandler.addSpeed(p_waypoint.speed);
 		},
 		
 		/**
 		 * Set the directory for storing the tracks
-		 * @param DirectoryEntry DirectoryEntry object for storing the track-files in
+		 * @param p_directoryEntry DirectoryEntry object for storing the track-files in
 		 */
 		setDirectory : function( p_directoryEntry ) {
 			TrackHandler.m_trackDirectoryEntry = p_directoryEntry;
@@ -128,6 +143,7 @@ var TrackHandler = {
 		// Add distance info to waypoint
 		addDistance : function( p_distance ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.distance != null );
+			
 
 			TrackHandler.m_totalDistance += p_distance;
 			TrackHandler.m_waypoint.distance = p_distance;
@@ -186,9 +202,25 @@ var TrackHandler = {
 			}
 		},
 		
+		/**
+		 * Get current speed
+		 */
+		getSpeed : function() {
+			return TrackHandler.m_waypoint.speed;
+		},
+		
+		/**
+		 * Get the current accuracy
+		 */
+		getAccuracy : function() {
+			return TrackHandler.m_waypoint.accuracy;
+		},
+		
 		// Generic function for writing a data-line in the correct format
 		_checkWrite : function( p_status ) {
 //			console.log( "Check write" );
+			// Check if we have a valid file-entry (which won't be the case during loading)
+			if( TrackHandler.m_fileEntry == null ) return;
 			
 			if( p_status ) {
 				TrackHandler._writeWayPoint();
@@ -200,7 +232,7 @@ var TrackHandler = {
 		
 		_writeWayPoint : function() {
 			TrackHandler.m_continuousFileWriter.writeLine( "01;" + TrackHandler.m_waypoint.timestamp );
-			if( TrackHandler.m_waypoint.gps.lon != null ) TrackHandler.m_continuousFileWriter.writeLine( "02;" + TrackHandler.m_waypoint.gps.lon + ":" + TrackHandler.m_waypoint.gps.lat + ":" + TrackHandler.m_waypoint.gps.alt );
+			if( TrackHandler.m_waypoint.gps.lat != null ) TrackHandler.m_continuousFileWriter.writeLine( "02;" + TrackHandler.m_waypoint.gps.lat + ":" + TrackHandler.m_waypoint.gps.lon + ":" + TrackHandler.m_waypoint.gps.alt );
 			if( TrackHandler.m_waypoint.hr != null ) TrackHandler.m_continuousFileWriter.writeLine( "03;" + TrackHandler.m_waypoint.hr );
 			if( TrackHandler.m_waypoint.distance != null ) TrackHandler.m_continuousFileWriter.writeLine( "04;" + TrackHandler.m_waypoint.distance );
 			if( TrackHandler.m_waypoint.speed != null ) TrackHandler.m_continuousFileWriter.writeLine( "05;" + TrackHandler.m_waypoint.speed );

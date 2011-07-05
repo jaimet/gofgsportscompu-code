@@ -39,14 +39,21 @@ pages.summary = {
 			
 			$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 		},
+		
+		_mainTimer : function() {
+			pages.summary._updateDisplay();
+			pages.summary.m_mainTimer = setTimeout( "pages.summary._mainTimer()", 1000 );
+		},
 
 		/**
 		 * Update the display of the app (regular interval, once a second)
 		 */
 		_updateDisplay : function() {
 			$( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
-			
-			pages.summary.m_mainTimer = setTimeout( "pages.summary._updateDisplay()", 1000 );
+			$( '#speed-infopanel' ).infopanel( 'setValue', (TrackHandler.getSpeed() * 3.6).toFixed(2) );
+			$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
+			$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
+			$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() );
 		},
 
 		/**
@@ -66,7 +73,7 @@ pages.summary = {
 			);
 			
 			// Start updating our interface
-			pages.summary._updateDisplay();
+			pages.summary._mainTimer();
 		},
 
 		/**
@@ -99,11 +106,6 @@ pages.summary = {
 			TrackHandler.addSpeed( GPSHandler.getSpeed() );
 			TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
 			TrackHandler.addAccuracy( GPSHandler.getAccuracy() );
-			
-			$( '#speed-infopanel' ).infopanel( 'setValue', (GPSHandler.getSpeed() * 3.6).toFixed(2) );
-			$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
-			$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
-			$( '#status-infopanel' ).infopanel( 'setValue', GPSHandler.getAccuracy() );
 		},
 		
 		/**
@@ -124,7 +126,7 @@ pages.summary = {
 
 			// Distance infopanel
 			$( '#distance-infopanel' ).infopanel( {
-				'value' : '0.00',
+				'value' : '000.00',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/web24.png',
 				'unit' : 'km'
@@ -132,7 +134,7 @@ pages.summary = {
 			
 			// Clock infopanel
 			$( '#clock-infopanel' ).infopanel( {
-				'value' : formatDate( new Date() ),
+				'value' : '00:00',
 				'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 2 * rowHeight) },
 				'image' : 'images/clock24.png',
 				'unit' : 'hh:mm'
@@ -150,7 +152,7 @@ pages.summary = {
 
 			// Speed infopanel
 			$( '#speed-infopanel' ).infopanel( {
-				'value' : '0.00',
+				'value' : '00.00',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/gowebsite24.png',
 				'unit' : 'km/h'
@@ -158,7 +160,7 @@ pages.summary = {
 
 			// Altitude infopanel
 			$( '#altitude-infopanel' ).infopanel( {
-				'value' : '0.00',
+				'value' : '0000.0',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/pictures24.png',
 				'unit' : 'm'
@@ -166,12 +168,12 @@ pages.summary = {
 
 			// Status infopanel
 			$( '#status-infopanel' ).infopanel( {
-				'value' : '-',
+				'value' : '000',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/find24.png',
 				'unit' : 'Accuracy (m)'
 			} );
-
+			
 			// Setup top toolbar
 			$( '#stop-button' ).hide();
 			$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
