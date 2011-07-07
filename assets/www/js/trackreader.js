@@ -29,6 +29,7 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 	if( p_completeCallback == undefined ) p_completeCallback = function() {};
 	
 	var m_trackWaypoint = new TrackWaypoint();
+	m_trackWaypoint.reset(0);
 
 	this._file = _file;
 	this._loaded = _loaded;
@@ -55,16 +56,16 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 			
 			switch( type ) {
 			case 1:
-				if( m_trackWaypoint.timestamp != null ) {
+				if( m_trackWaypoint.timestamp != 0 ) {
 					p_progressCallback( m_trackWaypoint );
 					
-					m_trackWaypoint.reset();
+					m_trackWaypoint.reset(0);
 				}
 				m_trackWaypoint.timestamp = parseInt(data_parts[0]);
 				break;
 			case 2:
-				m_trackWaypoint.gps.lon = parseFloat(data_parts[0]);
-				m_trackWaypoint.gps.lat = parseFloat(data_parts[1]);
+				m_trackWaypoint.gps.lat = parseFloat(data_parts[0]);
+				m_trackWaypoint.gps.lon = parseFloat(data_parts[1]);
 				m_trackWaypoint.gps.alt = parseFloat(data_parts[2]);
 				break;
 			case 3:
@@ -78,6 +79,12 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 				break;
 			case 6:
 				m_trackWaypoint.accuracy = parseInt(data_parts[0]);
+				if( data_parts.length > 1 ) {
+					m_trackWaypoint.altitudeAccuracy = parseInt(data_parts[1]);
+				}
+				else {
+					m_trackWaypoint.altitudeAccuracy = 0;
+				}
 				break;
 			default:
 				console.log( "TrackReader: invalid data-point: '" + line + "'" );

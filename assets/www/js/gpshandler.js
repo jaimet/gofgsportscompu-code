@@ -78,12 +78,22 @@ var GPSHandler = {
 		return GPSHandler.m_lastPosition.coords.accuracy;
 	},
 	
+	getAltitudeAccuracy : function() {
+		return GPSHandler.m_lastPosition.coords.altitudeAccuracy;
+	},
+	
 	_positionUpdate : function( p_position ) {
 		if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
 		
 		if( GPSHandler.m_lastPosition == 0 ) {
 			GPSHandler.m_lastPosition = p_position;
 			return;
+		}
+		
+		// Check if altitude is accurate enough, if not, just use the previous one (so that there is no difference)
+		// TODO: Think about something better here
+		if( p_position.coords.altitudeAccuracy > SettingsHandler.get( 'minimumaltitudeaccuracy' ) ) {
+			p_position.coords.altitude = GPSHandler.m_lastPosition.coords.altitude;
 		}
 		
 		var distance = GPSHandler._haversineDistance( GPSHandler.m_lastPosition.coords, p_position.coords );
@@ -111,5 +121,9 @@ var GPSHandler = {
     
     _toRad : function( p_degree ) {
     	return p_degree / 180.0 * Math.PI;
+    },
+    
+    _toDegree : function( p_rad ) {
+    	return p_rad / Math.PI * 180.0;
     }
 };

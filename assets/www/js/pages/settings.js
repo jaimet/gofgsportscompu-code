@@ -33,6 +33,7 @@ pages.settings = {
 			console.log( "settings-page save!" );
 			
 			SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
+			SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
 			SettingsHandler._save();
 
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
@@ -44,8 +45,9 @@ pages.settings = {
 		
 		_pagebeforeshow : function( p_event, p_ui ) {
 			$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
+			$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
+
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
-			
 			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
 			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
 		}

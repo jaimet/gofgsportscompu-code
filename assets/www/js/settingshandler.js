@@ -20,7 +20,8 @@
 var SettingsHandler = {
 	m_appDirectoryEntry : null,
 	m_settingsStore : {
-		"minimumaccuracy" : 40
+		"minimumaccuracy" : 25,
+		"minimumaltitudeaccuracy" : 10,
 	},
 	m_settingsFileEntry : null,
 	

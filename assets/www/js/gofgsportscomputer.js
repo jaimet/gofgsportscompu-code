@@ -21,6 +21,7 @@ var GOFGSportsComputer = {
 	m_persistentFileSystem : null,	// Reference to the persistent file-system
 	m_appDirectoryEntry : null,		// Reference to the app directory entry
 	m_trackDirectoryEntry : null,	// Reference to the track directory entry
+	m_exportDirectoryEntry : null,	// Reference to the export directory entry
 		
 	/**
 	 * Startup function which setups the sports computer software (init, interface, etc.)
@@ -57,6 +58,8 @@ var GOFGSportsComputer = {
 		
 		// Get the track folder entry
 		GOFGSportsComputer.m_appDirectoryEntry.getDirectory( "tracks", { create : true, exclusive : false }, GOFGSportsComputer._trackDirectory, GOFGSportsComputer._trackDirectoryError );
+		// Get the export folder entry
+		GOFGSportsComputer.m_appDirectoryEntry.getDirectory( "exports", { create : true, exclusive : false }, GOFGSportsComputer._exportDirectory, GOFGSportsComputer._exportDirectoryError );
 		
 		// Initialize settings handler
 		SettingsHandler.init( GOFGSportsComputer.m_appDirectoryEntry );
@@ -90,6 +93,26 @@ var GOFGSportsComputer = {
 		
 		// Fallback to the app directory
 		GOFGSportsComputer._trackDirectory(GOFGSportsComputer.m_appDirectoryEntry);
+	},
+	
+	/**
+	 * Called when the export directory was successfully accessed and is ready for use
+	 */
+	_exportDirectory : function( p_directoryEntry ) {
+		GOFGSportsComputer.m_exportDirectoryEntry = p_directoryEntry;
+		
+		// Set the export directory
+		TrackHandler.setExportDirectory(GOFGSportsComputer.m_exportDirectoryEntry);
+	},
+	
+	/**
+	 * Called when the export directory could now be accessed, will fall back to app directory then
+	 */
+	_exportDirectoryError : function( p_fileError ) {
+		GOFGSportsComputer._fileSystemError(p_fileError);
+		
+		// Fallback to the app directory
+		GOFGSportsComputer._exportDirectory(GOFGSportsComputer.m_appDirectoryEntry);
 	},
 	
 	/**

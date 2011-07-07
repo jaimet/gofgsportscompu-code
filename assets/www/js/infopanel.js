@@ -25,6 +25,7 @@
     init : function( options ) {
     	var settings = {
     		'value' : 'Value',
+    		'maxSizeValue' : null,
     		'size' : { 'width' : 120, 'height' : 120 },
     		'image' : '',
     		'unit' : 'Unit',
@@ -34,6 +35,11 @@
     	
         return this.each(function() {
         	if( options ) $.extend( settings, options );
+        	
+        	// Check if there is a maximum size value
+        	if( settings['maxSizeValue'] == null ) settings['maxSizeValue'] = settings['value'];
+        	
+        	//console.log( settings['maxSizeValue'] + " / " + settings['value'] );
         	
         	var data = {
         		settings : settings,
@@ -52,8 +58,10 @@
         	$(this).data( 'infopanel', data );
         	
         	// Setup the infopanel
-        	methods.setValue.call( $(this), settings['value'] );
+        	var defaultVal = settings['value'];
+        	methods.setValue.call( $(this), settings['maxSizeValue'] );
     		methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] );
+        	methods.setValue.call( $(this), defaultVal );
         	methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
         	methods.setImage.call( $(this), settings['image'] );
         	methods.setUnit.call( $(this), settings['unit'] );
@@ -62,7 +70,7 @@
     setValue : function( p_value ) {
     	return this.each(function() {
     		if( p_value == null || p_value == undefined ) p_value = "-";
-
+    		
     		$(this).data('infopanel').settings['value'] = p_value;
     		$(this).data('infopanel').currentSpan.html( p_value );
 
@@ -116,7 +124,7 @@
 			fontSize -= fontSizeStep;
 			$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
 			
-			console.log( "Final font-Size: " + fontSize );
+			//console.log( "Final font-Size: " + fontSize );
     	});
     }
   };

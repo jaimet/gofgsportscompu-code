@@ -2,21 +2,24 @@
 <div data-role="page" id="tracks-page">
 	<!-- /header -->
 	<div data-role="header">
-		<h1>Settings</h1>
-		<div data-role="navbar">
+		<h1>Tracks</h1>
+		<a href="#" data-icon="reload" id="tracks-load-button">Load</a>
+		<a href="#" data-icon="arrow-r" id="tracks-export-button">Export</a>
+		<div data-role="navbar" id="tracks-export-navbar">
 			<ul>
-				<li><a href="#" data-icon="reload" id="tracks-load-button">Load</a></li>
-				<li><a href="#" data-icon="gear">Export</a></li>
+				<li><a href="#" id="tracks-export-gpx-button">GPX</a></li>
+				<li><a href="#" id="tracks-export-tcx-button">TCX</a></li>
+				<li><a href="#" id="tracks-export-fitlog-button">Fitlog</a></li>
 			</ul>
 		</div>
 	</div>
 
 	<!-- /content -->
-		<div data-role="content" id="tracks-list" style="overflow: scroll;">
-		</div>
+	<div data-role="content" id="tracks-list" style="overflow: scroll;">
+	</div>
 
 	<!-- /footer -->
-	<div data-role="footer" data-id="footer-navbar" data-position="fixed">
+	<div data-role="footer" data-id="footer-navbar" data-position="fixed" id="tracks-footer">
 		<div data-role="navbar">
 			<ul>
 				<li><a href="summary.html" data-icon="home" data-direction="reverse">Summary</a></li>

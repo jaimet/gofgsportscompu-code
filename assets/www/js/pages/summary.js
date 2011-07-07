@@ -53,7 +53,7 @@ pages.summary = {
 			$( '#speed-infopanel' ).infopanel( 'setValue', (TrackHandler.getSpeed() * 3.6).toFixed(2) );
 			$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
 			$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
-			$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() );
+			$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() + " / " + TrackHandler.getAltitudeAccuracy() );
 		},
 
 		/**
@@ -105,7 +105,7 @@ pages.summary = {
 			TrackHandler.addDistance( GPSHandler.getDistance() );
 			TrackHandler.addSpeed( GPSHandler.getSpeed() );
 			TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
-			TrackHandler.addAccuracy( GPSHandler.getAccuracy() );
+			TrackHandler.addAccuracy( GPSHandler.getAccuracy(), GPSHandler.getAltitudeAccuracy() );
 		},
 		
 		/**
@@ -122,11 +122,12 @@ pages.summary = {
 
 			// Apply layout to all info-panels
 			var rowHeight = (pages.summary.m_contentHeight / 3).toFixed(0);
-			console.log( "Row height: " + rowHeight );
+			//console.log( "Row height: " + rowHeight );
 
 			// Distance infopanel
 			$( '#distance-infopanel' ).infopanel( {
-				'value' : '000.00',
+				'value' : '0.00',
+				'maxSizeValue' : '000.00',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/web24.png',
 				'unit' : 'km'
@@ -145,6 +146,7 @@ pages.summary = {
 			// Timer infopanel
 			$( '#timer-infopanel' ).infopanel( {
 				'value' : '00:00:00',
+				'maxSizeValue' : '00:00:00',
 				'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 2 * rowHeight) },
 				'image' : 'images/timer24.png',
 				'unit' : 'hh:mm:ss'
@@ -152,7 +154,8 @@ pages.summary = {
 
 			// Speed infopanel
 			$( '#speed-infopanel' ).infopanel( {
-				'value' : '00.00',
+				'value' : '0.00',
+				'maxSizeValue' : '000.00',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/gowebsite24.png',
 				'unit' : 'km/h'
@@ -160,7 +163,8 @@ pages.summary = {
 
 			// Altitude infopanel
 			$( '#altitude-infopanel' ).infopanel( {
-				'value' : '0000.0',
+				'value' : '0.0',
+				'maxSizeValue' : '0000.0',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/pictures24.png',
 				'unit' : 'm'
@@ -168,7 +172,8 @@ pages.summary = {
 
 			// Status infopanel
 			$( '#status-infopanel' ).infopanel( {
-				'value' : '000',
+				'value' : '-',
+				'maxSizeValue' : '000_/_000',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/find24.png',
 				'unit' : 'Accuracy (m)'

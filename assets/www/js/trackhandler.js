@@ -28,17 +28,21 @@ function TrackWaypoint() {
 	this.distance = null;
 	this.speed = null;
 	this.accuracy = null;
+	this.altitudeAccuracy = null;
 }
 
-TrackWaypoint.prototype.reset = function() {
-	this.timestamp = null;
-	this.gps.lat = null;
-	this.gps.lon = null;
-	this.gps.alt = null;
-	this.hr = null;
-	this.distance = null;
-	this.speed = null;
-	this.accuracy = null;
+TrackWaypoint.prototype.reset = function( p_resetValue ) {
+	if( p_resetValue == undefined ) p_resetValue = null;
+	
+	this.timestamp = p_resetValue;
+	this.gps.lat = p_resetValue;
+	this.gps.lon = p_resetValue;
+	this.gps.alt = p_resetValue;
+	this.hr = p_resetValue;
+	this.distance = p_resetValue;
+	this.speed = p_resetValue;
+	this.accuracy = p_resetValue;
+	this.altitudeAccuracy = p_resetValue;
 }
 
 /**
@@ -48,34 +52,13 @@ TrackWaypoint.prototype.reset = function() {
 var TrackHandler = {
 		m_fileEntry : null,				// Reference to the track file
 		m_trackDirectoryEntry : null,	// Reference to the track directory
+		m_exportDirectoryEntry : null,	// Reference to the export directory
 		m_totalDistance : 0,			// Total distance for this track
 		m_elevationGain : 0,			// Total elevation gain for this track
 		m_lastAltitude : -1000,				// Last altitude
 		m_startTimestamp : 0,			// Start time for this track
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
-		m_waypoint : {
-			timestamp : null,
-			gps : {
-				lat : null,
-				lon : null,
-				alt : null
-			},
-			hr : null,
-			distance : null,
-			speed : null,
-			accuracy : null,
-			
-			_reset : function() {
-				this.timestamp = null;
-				this.gps.lat = null;
-				this.gps.lon = null;
-				this.gps.alt = null;
-				this.hr = null;
-				this.distance = null;
-				this.speed = null;
-				this.accuracy = null;
-			},
-		},
+		m_waypoint : null,
 		m_continuousFileWriter : null,
 		
 		startTrack : function() {
@@ -88,12 +71,12 @@ var TrackHandler = {
 			// Save start time
 			TrackHandler.m_startTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			TrackHandler.m_waypoint.timestamp = TrackHandler.m_startTimestamp;
-			
+
 			// Construct new file-name
 			var fileName = TrackHandler.m_startTimestamp + ".gsc";
 			// Request file reference
 			TrackHandler.m_trackDirectoryEntry.getFile( fileName, {create: true, exclusive: true}, TrackHandler._fileEntry, TrackHandler._fileSystemError );
-			
+
 			TrackHandler.m_bTrackOpen = true;
 		},
 
@@ -118,10 +101,10 @@ var TrackHandler = {
 			}
 			
 			TrackHandler.m_waypoint.timestamp = p_waypoint.timestamp;
-			TrackHandler.addAccuracy(p_waypoint.accuracy);
-			TrackHandler.addDistance(p_waypoint.distance);
-			TrackHandler.addPosition(p_waypoint.gps.lat, p_waypoint.gps.lon, p_waypoint.gps.alt);
-			TrackHandler.addSpeed(p_waypoint.speed);
+			TrackHandler.addAccuracy( p_waypoint.accuracy, p_waypoint.altitudeAccuracy );
+			TrackHandler.addDistance( p_waypoint.distance );
+			TrackHandler.addPosition( p_waypoint.gps.lat, p_waypoint.gps.lon, p_waypoint.gps.alt );
+			TrackHandler.addSpeed( p_waypoint.speed );
 		},
 		
 		/**
@@ -140,10 +123,25 @@ var TrackHandler = {
 			return TrackHandler.m_trackDirectoryEntry;
 		},
 
+		/**
+		 * Set the directory for exporting the tracks
+		 * @param p_directoryEntry DirectoryEntry object for storing the export-files in
+		 */
+		setExportDirectory : function( p_directoryEntry ) {
+			TrackHandler.m_exportDirectoryEntry = p_directoryEntry;
+		},
+		
+		/**
+		 * Return the directory for exporting the tracks
+		 * @return DirectoryEntry Entry with export files in it
+		 */
+		getExportDirectory : function() {
+			return TrackHandler.m_exportDirectoryEntry;
+		},
+
 		// Add distance info to waypoint
 		addDistance : function( p_distance ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.distance != null );
-			
 
 			TrackHandler.m_totalDistance += p_distance;
 			TrackHandler.m_waypoint.distance = p_distance;
@@ -172,13 +170,22 @@ var TrackHandler = {
 			TrackHandler.m_lastAltitude = p_altitude;
 		},
 		
-		addAccuracy : function( p_accuracy ) {
+		/**
+		 * Add accuracy information
+		 * @param p_accuracy Accuracy of location (in m)
+		 * @param p_altitudeAccuracy Accuracy of altitude (in m)
+		 */
+		addAccuracy : function( p_accuracy, p_altitudeAccuracy ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.accuracy != null );
 			
 			TrackHandler.m_waypoint.accuracy = p_accuracy;
+			TrackHandler.m_waypoint.altitudeAccuracy = p_altitudeAccuracy;
 		},
 		
-		// Returns the total distance for this track
+		/**
+		 * Returns the total distance for this track
+		 * @return Number Total distance (in m)
+		 */
 		getTotalDistance : function() {
 			return TrackHandler.m_totalDistance;
 		},
@@ -216,6 +223,13 @@ var TrackHandler = {
 			return TrackHandler.m_waypoint.accuracy;
 		},
 		
+		/**
+		 * Get the current altitude accuracy
+		 */
+		getAltitudeAccuracy : function() {
+			return TrackHandler.m_waypoint.altitudeAccuracy;
+		},
+		
 		// Generic function for writing a data-line in the correct format
 		_checkWrite : function( p_status ) {
 //			console.log( "Check write" );
@@ -236,7 +250,7 @@ var TrackHandler = {
 			if( TrackHandler.m_waypoint.hr != null ) TrackHandler.m_continuousFileWriter.writeLine( "03;" + TrackHandler.m_waypoint.hr );
 			if( TrackHandler.m_waypoint.distance != null ) TrackHandler.m_continuousFileWriter.writeLine( "04;" + TrackHandler.m_waypoint.distance );
 			if( TrackHandler.m_waypoint.speed != null ) TrackHandler.m_continuousFileWriter.writeLine( "05;" + TrackHandler.m_waypoint.speed );
-			if( TrackHandler.m_waypoint.accuracy != null ) TrackHandler.m_continuousFileWriter.writeLine( "06;" + TrackHandler.m_waypoint.accuracy );
+			if( TrackHandler.m_waypoint.accuracy != null ) TrackHandler.m_continuousFileWriter.writeLine( "06;" + TrackHandler.m_waypoint.accuracy + ":" + TrackHandler.m_waypoint.altitudeAccuracy );
 		},
 		
 		_fileEntry : function( p_fileEntry ) {
@@ -256,6 +270,6 @@ var TrackHandler = {
 			TrackHandler.m_lastAltitude = -1000;
 			TrackHandler.m_startTimestamp = 0;
 			TrackHandler.m_bTrackOpen = false;
-			TrackHandler.m_waypoint._reset(); 
+			TrackHandler.m_waypoint = new TrackWaypoint();
 		}
 };
