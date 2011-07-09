@@ -96,13 +96,13 @@ var GPSHandler = {
 		if( p_position.coords.altitudeAccuracy > SettingsHandler.get( 'minimumaltitudeaccuracy' ) ) {
 			p_position.coords.altitude = GPSHandler.m_lastPosition.coords.altitude;
 		}
-		
+
 		var distance = GPSHandler._haversineDistance( GPSHandler.m_lastPosition.coords, p_position.coords );
-		
+
 		if( distance > GPSHandler.m_lastPosition.coords.accuracy ) {
 			GPSHandler.m_distance = distance;
 			GPSHandler.m_lastPosition = p_position;
-			
+
 			GPSHandler.m_settings['positionUpdated']();
 		}
 	},
