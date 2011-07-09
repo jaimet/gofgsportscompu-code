@@ -25,7 +25,8 @@ var GPSHandler = {
 	m_settings : {
 		'minAccuracy' : 20,
 		'positionUpdated' : function() {},
-		'interval' : 1
+		'interval' : 10,
+		'maximumAge' : 1
 	},
 	
 	m_lastPosition : 0,
@@ -40,7 +41,7 @@ var GPSHandler = {
 		GPSHandler.m_settings['interval'] = p_interval;
 		if( p_callback ) GPSHandler.m_settings['positionUpdated'] = p_callback;
 		
-		GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_settings['interval'] * 1000, maximumAge : GPSHandler.m_settings['interval'] * 1000 } );
+		GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_settings['interval'] * 1000, maximumAge : GPSHandler.m_settings['maximumAge'] * 1000 } );
 	},
 	
 	stopGPS : function() {
@@ -107,6 +108,7 @@ var GPSHandler = {
 	},
 	
 	_positionError : function( p_error ) {
+		console.log( "GPSError: " + p_error.code + " / " + p_error.message );
 	},
 	
     _haversineDistance : function( p_start, p_end ) {

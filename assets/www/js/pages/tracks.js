@@ -32,6 +32,7 @@ pages.tracks = {
 			$( '#tracks-export-button' ).live( 'tap', pages.tracks._exportTrackNavbar );
 			$( '#tracks-export-fitlog-button' ).live( 'tap', pages.tracks._exportTrackFitlog );
 			$( '#tracks-export-gpx-button' ).live( 'tap', pages.tracks._exportTrackGPX );
+			$( '#tracks-export-tcx-button' ).live( 'tap', pages.tracks._exportTrackTCX );
 		},
 		
 		_loadTrackFinished : function() {
@@ -85,6 +86,19 @@ pages.tracks = {
 					// Show loading & start exporting
 					$.mobile.showPageLoadingMsg();
 					exporter.gpx.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
+				}
+			} );
+		},
+		
+		_exportTrackTCX : function() {
+			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
+				if( $(this).is(":checked") ) {
+					// Hide the export-format bar again
+					pages.tracks._exportTrackNavbar();
+					
+					// Show loading & start exporting
+					$.mobile.showPageLoadingMsg();
+					exporter.tcx.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
 				}
 			} );
 		},

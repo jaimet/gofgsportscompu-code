@@ -62,6 +62,8 @@ pages.summary = {
 		_startGPS : function() {
 			console.log( "Start-GPS called" );
 			
+//			window.open( "https://www.facebook.com/dialog/oauth?client_id=178026202259967&redirect_uri=http://www.gofg.at" );
+			
 			$( '#stop-button' ).show();
 			$( '#start-button' ).hide();
 			

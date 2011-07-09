@@ -213,21 +213,21 @@ var TrackHandler = {
 		 * Get current speed
 		 */
 		getSpeed : function() {
-			return TrackHandler.m_waypoint.speed;
+			return (TrackHandler.m_waypoint.speed + 0);
 		},
 		
 		/**
 		 * Get the current accuracy
 		 */
 		getAccuracy : function() {
-			return TrackHandler.m_waypoint.accuracy;
+			return (TrackHandler.m_waypoint.accuracy + 0);
 		},
 		
 		/**
 		 * Get the current altitude accuracy
 		 */
 		getAltitudeAccuracy : function() {
-			return TrackHandler.m_waypoint.altitudeAccuracy;
+			return (TrackHandler.m_waypoint.altitudeAccuracy + 0);
 		},
 		
 		// Generic function for writing a data-line in the correct format

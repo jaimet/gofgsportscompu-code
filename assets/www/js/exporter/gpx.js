@@ -92,10 +92,10 @@ exporter.gpx = {
 		wptNode.setAttribute( 'lat', GPSHandler._toDegree( p_trackWaypoint.gps.lat ) );
 		wptNode.setAttribute( 'lon', GPSHandler._toDegree( p_trackWaypoint.gps.lon ) );
 		var eleNode = exporter.gpx.m_xmlDoc.createElement( 'ele' );
-		eleNode.nodeValue = p_trackWaypoint.gps.alt;
+		$(eleNode).text(p_trackWaypoint.gps.alt);
 		wptNode.appendChild( eleNode );
 		var tNode = exporter.gpx.m_xmlDoc.createElement( 'time' );
-		tNode.nodeValue = dObj.format("isoUtcDateTime");
+		$(tNode).text( dObj.format("isoUtcDateTime") );
 		wptNode.appendChild( tNode );
 		
 		// Finally append the point to the track
