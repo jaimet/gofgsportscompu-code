@@ -8,12 +8,27 @@
 
 	<!-- /content -->
 	<div data-role="content">
+		<form action='#' method='get'>
 		<div data-role="fieldcontain">
 			<label for="minAccuracySlider">Min. location accuracy (m):</label>
 		 	<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="1" max="50"  />
+		</div>
+		<div data-role="fieldcontain">
 			<label for="minAltitudeAccuracySlider">Min. altitude accuracy (m):</label>
 		 	<input type="range" name="minAltitudeAccuracySlider" id="minAltitudeAccuracySlider" value="20" min="1" max="50"  />
 		</div>
+		<div data-role="fieldcontain">
+			<label for="minAltitudeChangeSlider">Min. altitude change (m):</label>
+		 	<input type="range" name="minAltitudeChangeSlider" id="minAltitudeChangeSlider" value="3" min="1" max="10"  />
+		</div>
+		<div data-role="fieldcontain">
+			<label for="showdidyouknowSlider">Show "Did you know?":</label>
+			<select name="showdidyouknowSlider" id="showdidyouknowSlider" data-role="slider">
+				<option value="hide">Hide</option>
+				<option value="show">Show</option>
+			</select>
+		</div>
+		</form>
 	</div>
 
 	<!-- /footer -->

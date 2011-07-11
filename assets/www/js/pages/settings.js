@@ -34,6 +34,8 @@ pages.settings = {
 			
 			SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
 			SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
+			SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
+			SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
 			SettingsHandler._save();
 
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
@@ -44,11 +46,17 @@ pages.settings = {
 		},
 		
 		_pagebeforeshow : function( p_event, p_ui ) {
+			// Read values from settings handler
 			$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
 			$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
-
+			$( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
+			$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
+			// Setup page layout
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
 			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
+			
+			// Bind change events
 			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
+			$( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
 		}
 };

@@ -239,7 +239,7 @@ var TrackHandler = {
 			if( p_status ) {
 				TrackHandler._writeWayPoint();
 				
-				TrackHandler.m_waypoint._reset();
+				TrackHandler.m_waypoint.reset();
 				TrackHandler.m_waypoint.timestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			}
 		},

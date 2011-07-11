@@ -22,6 +22,8 @@ var SettingsHandler = {
 	m_settingsStore : {
 		"minimumaccuracy" : 25,
 		"minimumaltitudeaccuracy" : 10,
+		"minimumaltitudechange" : 3,
+		"showdidyouknow" : 'show',
 	},
 	m_settingsFileEntry : null,
 	
