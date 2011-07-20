@@ -1,0 +1,14 @@
+.ui-icon-gofgsc-play {
+	background-image: url(icons/play.png);
+	background-position: 1px;
+}
+
+.ui-icon-gofgsc-pause {
+	background-image: url(icons/pause.png);
+	background-position: 1px;
+}
+
+.ui-icon-gofgsc-stop {
+	background-image: url(icons/stop.png);
+	background-position: 1px;
+}

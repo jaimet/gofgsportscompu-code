@@ -3,8 +3,14 @@
 	<!-- /header -->
 	<div data-role="header">
 		<h1>Summary</h1>
-		<a id="start-button" href="#" data-icon="check" class="ui-btn-right">Start</a>
-		<a id="stop-button" href="#" data-icon="check" class="ui-btn-right">Stop</a>
+		<a href="settings.html" data-icon="grid" class="ui-btn-right">Menu</a>
+		<!-- <div data-role="navbar">
+			<ul>
+				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home">Summary</a></li>
+				<li><a href="settings.html" data-icon="gear">Settings</a></li>
+				<li><a href="tracks.html" data-icon="grid">Tracks</a></li>
+			</ul>
+		</div> -->
 	</div>
 
 	<!-- /content -->
@@ -28,11 +34,18 @@
 			<div class="ui-block-b">
 				<div id="clock-infopanel">Clock</div>
 			</div>
+			<div class="ui-block-a">
+				<a id="stop-button" href="#" data-role="button" data-icon="gofgsc-stop">Stop</a>
+			</div>
+			<div class="ui-block-b">
+				<a id="start-button" href="#" data-role="button" data-icon="gofgsc-play">Start</a>
+				<a id="pause-button" href="#" data-role="button" data-icon="gofgsc-pause">Pause</a>
+			</div>
 		</div>
 	</div>
 
 	<!-- /footer -->
-	<div data-role="footer" data-id="footer-navbar" data-position="fixed">
+<!-- 	<div data-role="footer" data-id="footer-navbar" data-position="fixed">
 		<div data-role="navbar">
 			<ul>
 				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home">Summary</a></li>
@@ -41,4 +54,5 @@
 			</ul>
 		</div>
 	</div>
+ -->
 </div>

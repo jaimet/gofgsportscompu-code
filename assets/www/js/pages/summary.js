@@ -29,11 +29,12 @@ pages.summary = {
 		init : function() {
 			console.log( "summary-page loaded!" );
 			
-			// Calculate available heigh based on empty loading page
+			// Calculate available height based on empty loading page
 			var availableHeight = $( '#empty-page' ).height();
 			availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight();
-			availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
+			//availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
 			availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight() - $( '#empty-page > [data-role="content"]' ).height());
+			availableHeight -= $( '#empty-button' ).outerHeight();
 			// Save available height as internal variable
 			pages.summary.m_contentHeight = availableHeight;
 			
@@ -51,6 +52,7 @@ pages.summary = {
 		_updateDisplay : function() {
 			$( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
 			$( '#speed-infopanel' ).infopanel( 'setValue', (TrackHandler.getSpeed() * 3.6).toFixed(2) );
+			$( '#speed-infopanel' ).infopanel( 'setStatistics', (TrackHandler.getAverageSpeed() * 3.6).toFixed(2), (TrackHandler.getMaximumSpeed() * 3.6).toFixed(2) );
 			$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
 			$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
 			$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() + " / " + TrackHandler.getAltitudeAccuracy() );
@@ -160,8 +162,10 @@ pages.summary = {
 				'maxSizeValue' : '000.00',
 				'size' : { 'width' : 'auto', 'height' : rowHeight },
 				'image' : 'images/gowebsite24.png',
-				'unit' : 'km/h'
+				'unit' : 'km/h',
+				'showStatistics' : true
 			} );
+			$( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );
 
 			// Altitude infopanel
 			$( '#altitude-infopanel' ).infopanel( {
@@ -183,6 +187,7 @@ pages.summary = {
 			
 			// Setup top toolbar
 			$( '#stop-button' ).hide();
+			$( '#pause-button' ).hide();
 			$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
 			$( '#start-button' ).live( 'tap', pages.summary._startGPS );
 		}

@@ -30,7 +30,8 @@
     		'image' : '',
     		'unit' : 'Unit',
     		'fontSizeStep' : 5,
-    		'border' : 15
+    		'border' : 15,
+    		'showStatistics' : false
     	};
     	
         return this.each(function() {
@@ -39,17 +40,21 @@
         	// Check if there is a maximum size value
         	if( settings['maxSizeValue'] == null ) settings['maxSizeValue'] = settings['value'];
         	
-        	//console.log( settings['maxSizeValue'] + " / " + settings['value'] );
-        	
         	var data = {
         		settings : settings,
         		image : $('<img>').width(24).height(24).css( 'float', 'left' ),
         		unitDiv : $('<div>').height(24).css( 'text-align', 'center' ),
         		currentDiv : $('<div>').css( 'text-align', 'center' ),
-        		currentSpan : $('<span>')
+        		currentValue : $('<span>'),
+        		statsDiv : $('<div>').css( 'text-align', 'center' ),
+        		measureSpan : $( '<span>' ).css( 'visibility', 'hidden' ).css( 'display', 'none' )
         	};
-        	// Append span for measuring font to the div
-        	data.currentDiv.append( data.currentSpan );
+        	// Append currentValue span to currentDiv
+        	$(data.currentDiv).append(data.currentValue);
+        	// Append measure span to the body
+        	$('body').append(data.measureSpan);
+        	// Check if we have to show the stats
+        	if( settings['showStatistics'] ) $(data.currentDiv).append(data.statsDiv);
         	
         	// Create basic layout
         	$(this).html( '' );
@@ -60,9 +65,10 @@
         	// Setup the infopanel
         	var defaultVal = settings['value'];
         	methods.setValue.call( $(this), settings['maxSizeValue'] );
-    		methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] );
+    		methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] * ((settings['showStatistics']) ? 0.75 : 1.0) );
+        	//methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
         	methods.setValue.call( $(this), defaultVal );
-        	methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
+        	
         	methods.setImage.call( $(this), settings['image'] );
         	methods.setUnit.call( $(this), settings['unit'] );
         });
@@ -72,10 +78,17 @@
     		if( p_value == null || p_value == undefined ) p_value = "-";
     		
     		$(this).data('infopanel').settings['value'] = p_value;
-    		$(this).data('infopanel').currentSpan.html( p_value );
+    		$(this).data('infopanel').currentValue.html( p_value );
 
    			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     	});
+    },
+    setStatistics : function( p_averageValue, p_maximumValue ) {
+    	return this.each( function() {
+    		$(this).data('infopanel').statsDiv.html( "&Oslash; " + p_averageValue + " / max. " + p_maximumValue );
+    		
+   			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
+    	} );
     },
     setSize : function( p_width, p_height ) {
     	return this.each(function() {
@@ -84,7 +97,7 @@
     		if( !$(this).is( ':visible' ) ) return;
 
     		// Now calculate the remaining space for the margin
-    		var marginSize = (p_height - 2 - $(this).data( 'infopanel' ).currentSpan.outerHeight() - $(this).data('infopanel').image.outerHeight() );
+    		var marginSize = (p_height - 2 - $(this).data( 'infopanel' ).currentDiv.outerHeight() - 24 );
     		var marginTop = (marginSize / 2).toFixed(0);
     		var marginBottom = marginSize - marginTop;
     		// Finally apply the margin
@@ -110,20 +123,28 @@
     		if( !$(this).is( ':visible' ) ) return;
     		if( p_width == 'auto' ) p_width = $(this).width();
     		
-			var maximumHeight = p_height - $(this).data('infopanel').image.outerHeight() - $(this).data('infopanel').settings['border'];
+			var maximumHeight = p_height - 24 - $(this).data('infopanel').settings['border'];
 			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
 			var fontSize = 40;
 			var fontSizeStep = $(this).data( 'infopanel' ).settings['fontSizeStep'];
 			
-			$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
+			// Show the measure-span
+			$(this).data( 'infopanel' ).measureSpan.css( 'display', '' );
+			// Set initial font-size
+			$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
 			// Auto-Size the font to a maximum
-			while( $(this).data( 'infopanel' ).currentSpan.height() < maximumHeight && $(this).data( 'infopanel' ).currentSpan.width() < maximumWidth ) {
+			//$(this).data('infopanel').settings['value']
+			$(this).data( 'infopanel' ).measureSpan.html( $(this).data('infopanel').settings['value'] );
+			while( $(this).data( 'infopanel' ).measureSpan.height() < maximumHeight && $(this).data( 'infopanel' ).measureSpan.width() < maximumWidth ) {
 				fontSize += fontSizeStep;
-				$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
+				$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
 			}
 			fontSize -= fontSizeStep;
-			$(this).data( 'infopanel' ).currentSpan.css( 'font-size', fontSize + 'px' );
+			//$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
+			$(this).data( 'infopanel' ).currentValue.css( 'font-size', fontSize + 'px' );
 			
+			// Hide the measure-span
+			$(this).data( 'infopanel' ).measureSpan.css( 'display', 'none' );
 			//console.log( "Final font-Size: " + fontSize );
     	});
     }

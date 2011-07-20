@@ -103,16 +103,27 @@ pages.tracks = {
 			} );
 		},
 		
+		_trackSort : function( a, b ) {
+			return ( (a == b) ? 0 : (a > b) ? 1 : -1 );
+		},
+		
 		_refreshTracksEntries : function( entries ) {
+			entries.sort(pages.tracks._trackSort);
+			
 			var containerdiv = $( '<div data-role="fieldcontain">' );
 			var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
 
 			for( var i = 0; i < entries.length; i++ ) {
 				var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
 				inputRadio.data( 'fileEntry', entries[i] );
+				
+				// Format date-information
+				var timestamp = parseInt( entries[i].name.replace( '.gsc', '' ) );
+				var formatDate = new Date();
+				formatDate.setTime(timestamp * 1000);
 
 				controlgroup.append( inputRadio );
-				controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + entries[i].name + '</label>' ) );
+				controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
 			}
 
 			//$( "input[type='radio']" ).checkboxradio();

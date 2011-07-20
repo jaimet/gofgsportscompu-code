@@ -55,8 +55,9 @@ var TrackHandler = {
 		m_exportDirectoryEntry : null,	// Reference to the export directory
 		m_totalDistance : 0,			// Total distance for this track
 		m_elevationGain : 0,			// Total elevation gain for this track
-		m_lastAltitude : -1000,				// Last altitude
+		m_lastAltitude : -1000,			// Last altitude
 		m_startTimestamp : 0,			// Start time for this track
+		m_maximumSpeed : 0,				// Maximum speed
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
 		m_waypoint : null,
 		m_continuousFileWriter : null,
@@ -152,13 +153,23 @@ var TrackHandler = {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.speed != null );
 			
 			TrackHandler.m_waypoint.speed = p_speed;
+			
+			if( p_speed > TrackHandler.m_maximumSpeed ) TrackHandler.m_maximumSpeed = p_speed;
 		},
 		
+		/**
+		 * Add new position info to track
+		 */
 		addPosition : function( p_latitude, p_longitude, p_altitude ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.gps.lat != null );
-
-			if( TrackHandler.m_lastAltitude > -1000 && TrackHandler.m_lastAltitude < p_altitude ) {
-				TrackHandler.m_elevationGain += p_altitude - TrackHandler.m_lastAltitude; 
+			
+			// Check if altitude change was big enough
+			if( TrackHandler.m_lastAltitude < (p_altitude - parseInt(SettingsHandler.get("minimumaltitudechange")) ) ) {
+				if( TrackHandler.m_lastAltitude > -1000 ) {
+					TrackHandler.m_elevationGain += p_altitude - TrackHandler.m_lastAltitude; 
+				}
+				
+				TrackHandler.m_lastAltitude = p_altitude;
 			}
 			
 			TrackHandler.m_waypoint.gps = {
@@ -166,8 +177,6 @@ var TrackHandler = {
 				lon : p_longitude,
 				alt : p_altitude
 			};
-			
-			TrackHandler.m_lastAltitude = p_altitude;
 		},
 		
 		/**
@@ -217,6 +226,20 @@ var TrackHandler = {
 		},
 		
 		/**
+		 * Returns the maximum speed for this track
+		 */
+		getMaximumSpeed : function() {
+			return (TrackHandler.m_maximumSpeed + 0);
+		},
+		
+		/**
+		 * Returns the average speed for this track
+		 */
+		getAverageSpeed : function() {
+			return (TrackHandler.m_totalDistance / TrackHandler.getDuration() + 0);
+		},
+		
+		/**
 		 * Get the current accuracy
 		 */
 		getAccuracy : function() {
@@ -232,7 +255,6 @@ var TrackHandler = {
 		
 		// Generic function for writing a data-line in the correct format
 		_checkWrite : function( p_status ) {
-//			console.log( "Check write" );
 			// Check if we have a valid file-entry (which won't be the case during loading)
 			if( TrackHandler.m_fileEntry == null ) return;
 			
@@ -269,6 +291,7 @@ var TrackHandler = {
 			TrackHandler.m_elevationGain = 0;
 			TrackHandler.m_lastAltitude = -1000;
 			TrackHandler.m_startTimestamp = 0;
+			TrackHandler.m_maximumSpeed = 0;
 			TrackHandler.m_bTrackOpen = false;
 			TrackHandler.m_waypoint = new TrackWaypoint();
 		}

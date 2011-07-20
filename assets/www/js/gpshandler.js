@@ -33,7 +33,6 @@ var GPSHandler = {
 	m_distance : 0,
 	m_timerReference : 0,
 	m_watchId : null,
-	m_minAccuracy : 0,
 	
 	startGPS : function( p_interval, p_callback ) {
 		if( GPSHandler.m_watchId != null ) return;
@@ -85,6 +84,8 @@ var GPSHandler = {
 	
 	_positionUpdate : function( p_position ) {
 		if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
+		// iPhone hack
+		if( p_position.coords.speed < 0 ) return;
 		
 		if( GPSHandler.m_lastPosition == 0 ) {
 			GPSHandler.m_lastPosition = p_position;

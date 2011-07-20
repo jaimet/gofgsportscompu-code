@@ -3,20 +3,21 @@
 	<head> 
 	<title>GOFG Sports Computer</title> 
 	<!-- phoneGap 0.9.6 -->
-	<script type="text/javascript" charset="utf-8" src="js/lib/phonegap/phonegap.js"></script>
-	<script type="text/javascript" charset="utf-8" src="js/lib/phonegap/powermanagement.js"></script>
+	<script type="text/javascript" charset="utf-8" src="lib/phonegap/phonegap.js"></script>
+	<script type="text/javascript" charset="utf-8" src="lib/phonegap/powermanagement.js"></script>
 
 	<!-- jQuery 1.6.1  -->
-	<script type="text/javascript" src="js/lib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="lib/jquery/jquery.js"></script>
 
 	<!-- jQueryMobile 1.0b1 -->
-	<link rel="stylesheet" href="js/lib/jqueryMobile/jqueryMobile.css" />
-	<script type="text/javascript" src="js/lib/jqueryMobile/jqueryMobile.js"></script>
+	<link rel="stylesheet" href="lib/jqueryMobile/jqueryMobile.css" />
+	<script type="text/javascript" src="lib/jqueryMobile/jqueryMobile.js"></script>
 
 	<!-- http://blog.stevenlevithan.com/archives/date-time-format -->
-	<script type="text/javascript" src="js/lib/date.format.js"></script>
+	<script type="text/javascript" src="lib/date.format.js"></script>
 
 	<!-- GOFG Sports Computer JS -->
+	<link rel="stylesheet" href="css/gofgsc.jQueryMobile.css" />
 	<script type="text/javascript" src="js/continuousfilewriter.js"></script>
 	<script type="text/javascript" src="js/infopanel.js"></script>
 	<script type="text/javascript" src="js/gpshandler.js"></script>
@@ -45,18 +46,7 @@
 
 	<!-- /content -->
 	<div data-role="content">
-	Loading
-	</div>
-
-	<!-- /footer -->
-	<div data-role="footer" data-id="footer-navbar">
-		<div data-role="navbar">
-			<ul>
-				<li><a href="#" data-icon="home" data-direction="reverse">Summary</a></li>
-				<li><a href="#" data-icon="gear">Settings</a></li>
-				<li><a href="#" data-icon="grid">Tracks</a></li>
-			</ul>
-		</div>
+	<a id="empty-button" href="#" data-role="button" data-icon="check">Loading</a>
 	</div>
 </div>
 </body>

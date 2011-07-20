@@ -30,6 +30,7 @@ var GOFGSportsComputer = {
 		console.log( "Startup code running..." );
 
 		// Initialize the page handlers
+		// change me
 		$( '#summary-page' ).live( 'pagecreate', pages.summary.init );
 		$( '#settings-page' ).live( 'pagecreate', pages.settings.init );
 		$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
