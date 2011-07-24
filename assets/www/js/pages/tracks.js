@@ -104,7 +104,7 @@ pages.tracks = {
 		},
 		
 		_trackSort : function( a, b ) {
-			return ( (a == b) ? 0 : (a > b) ? 1 : -1 );
+			return ( (a.name == b.name) ? 0 : (a.name > b.name) ? 1 : -1 );
 		},
 		
 		_refreshTracksEntries : function( entries ) {

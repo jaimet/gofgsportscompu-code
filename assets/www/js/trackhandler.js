@@ -54,8 +54,10 @@ var TrackHandler = {
 		m_trackDirectoryEntry : null,	// Reference to the track directory
 		m_exportDirectoryEntry : null,	// Reference to the export directory
 		m_totalDistance : 0,			// Total distance for this track
+		m_lastDistance : 0,				// Last distance (between last two waypoints)
 		m_elevationGain : 0,			// Total elevation gain for this track
 		m_lastAltitude : -1000,			// Last altitude
+		m_lastAltitudeDiff : 0,			// Last altitude diff
 		m_startTimestamp : 0,			// Start time for this track
 		m_maximumSpeed : 0,				// Maximum speed
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
@@ -145,6 +147,7 @@ var TrackHandler = {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.distance != null );
 
 			TrackHandler.m_totalDistance += p_distance;
+			TrackHandler.m_lastDistance = p_distance;
 			TrackHandler.m_waypoint.distance = p_distance;
 		},
 		
@@ -163,10 +166,17 @@ var TrackHandler = {
 		addPosition : function( p_latitude, p_longitude, p_altitude ) {
 			TrackHandler._checkWrite( TrackHandler.m_waypoint.gps.lat != null );
 			
+			if( TrackHandler.m_lastAltitude <= -1000 ) TrackHandler.m_lastAltitude = p_altitude;
+			
 			// Check if altitude change was big enough
-			if( TrackHandler.m_lastAltitude < (p_altitude - parseInt(SettingsHandler.get("minimumaltitudechange")) ) ) {
-				if( TrackHandler.m_lastAltitude > -1000 ) {
-					TrackHandler.m_elevationGain += p_altitude - TrackHandler.m_lastAltitude; 
+			var altitudeDiff = p_altitude - TrackHandler.m_lastAltitude;
+			TrackHandler.m_lastAltitudeDiff = 0;
+			if( Math.abs(altitudeDiff) >= parseInt(SettingsHandler.get("minimumaltitudechange")) ) {
+				if( altitudeDiff > 0 ) {
+//					console.log( "Altitude-Change: " + altitudeDiff + " / " + TrackHandler.m_elevationGain );
+					TrackHandler.m_elevationGain += altitudeDiff;
+
+					TrackHandler.m_lastAltitudeDiff = altitudeDiff;
 				}
 				
 				TrackHandler.m_lastAltitude = p_altitude;
@@ -204,6 +214,20 @@ var TrackHandler = {
 		 */
 		getElevationGain : function() {
 			return TrackHandler.m_elevationGain;
+		},
+		
+		/**
+		 * Returns the elevation rise in percent
+		 */
+		getElevationRise : function() {
+			return (TrackHandler.m_lastAltitudeDiff / TrackHandler.m_lastDistance * 100);
+		},
+		
+		/**
+		 * Returns the average elevation rise in percent
+		 */
+		getAverageElevationRise : function() {
+			return (TrackHandler.m_elevationGain / TrackHandler.m_totalDistance * 100);
 		},
 		
 		/**
@@ -288,8 +312,10 @@ var TrackHandler = {
 		_reset : function() {
 			TrackHandler.m_fileEntry = null;
 			TrackHandler.m_totalDistance = 0;
+			TrackHandler.m_lastDistance = 0;
 			TrackHandler.m_elevationGain = 0;
 			TrackHandler.m_lastAltitude = -1000;
+			TrackHandler.m_lastAltitudeDiff = 0;
 			TrackHandler.m_startTimestamp = 0;
 			TrackHandler.m_maximumSpeed = 0;
 			TrackHandler.m_bTrackOpen = false;

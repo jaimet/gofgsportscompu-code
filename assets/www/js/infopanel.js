@@ -83,13 +83,30 @@
    			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     	});
     },
+    
+    /**
+     * Set the statistic values (auto-formatted by the function)
+     * @param p_averageValue Average value
+     * @param p_maximumValue Maximum value
+     */
     setStatistics : function( p_averageValue, p_maximumValue ) {
     	return this.each( function() {
-    		$(this).data('infopanel').statsDiv.html( "&Oslash; " + p_averageValue + " / max. " + p_maximumValue );
+    		methods.setInfo.call($(this), "&Oslash; " + p_averageValue + " / max. " + p_maximumValue );
+    	} );
+    },
+    
+    /**
+     * Uses the statistics div to display an arbitrary string
+     * @param p_infoValue String to display within the statistics div
+     */
+    setInfo : function( p_infoValue ) {
+    	return this.each( function() {
+    		$(this).data('infopanel').statsDiv.html( p_infoValue );
     		
    			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     	} );
     },
+    
     setSize : function( p_width, p_height ) {
     	return this.each(function() {
     		$(this).data('infopanel').settings['size'] = { 'width' : p_width, 'height' : p_height };
