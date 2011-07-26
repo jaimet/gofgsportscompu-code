@@ -5,10 +5,17 @@
 	<!-- phoneGap 1.0.0rc2 -->
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/phonegap.js"></script>
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/powermanagement.js"></script>
+	
 
 	<!-- jQuery 1.6.1  -->
 	<script type="text/javascript" src="lib/jquery/jquery.js"></script>
 
+	<!-- Pre-Configure jQueryMobile -->
+	<script type="text/javascript">
+	$(document).bind("mobileinit", function(){
+		$.mobile.defaultPageTransition = 'none';
+	});
+	</script>
 	<!-- jQueryMobile 1.0b1 -->
 	<link rel="stylesheet" href="lib/jqueryMobile/jqueryMobile.css" />
 	<script type="text/javascript" src="lib/jqueryMobile/jqueryMobile.js"></script>

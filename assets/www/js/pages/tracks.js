@@ -26,13 +26,14 @@ pages.tracks = {
 		init : function() {
 			console.log( "tracks-page loaded!" );
 			
-			$( '#tracks-export-navbar' ).hide();
+//			$( '#tracks-export-navbar' ).hide();
 			$( '#tracks-page' ).live( 'pagebeforeshow', pages.tracks._pagebeforeshow );
 			$( '#tracks-load-button' ).live( 'tap', pages.tracks._loadTrack );
-			$( '#tracks-export-button' ).live( 'tap', pages.tracks._exportTrackNavbar );
+//			$( '#tracks-export-button' ).live( 'tap', pages.tracks._exportTrackNavbar );
 			$( '#tracks-export-fitlog-button' ).live( 'tap', pages.tracks._exportTrackFitlog );
 			$( '#tracks-export-gpx-button' ).live( 'tap', pages.tracks._exportTrackGPX );
 			$( '#tracks-export-tcx-button' ).live( 'tap', pages.tracks._exportTrackTCX );
+			$( '#tracks-delete-button' ).live( 'tap', pages.tracks._deleteTrack );
 		},
 		
 		_loadTrackFinished : function() {
@@ -51,24 +52,24 @@ pages.tracks = {
 			} );
 		},
 		
-		_exportTrackNavbar : function() {
-			if( $( '#tracks-export-navbar' ).is( ':visible' ) ) {
-				// Re-arrange the footer (navbar) position
-				$( '#tracks-footer' ).css( 'top', ( parseInt($( '#tracks-footer' ).css( 'top' )) + $( '#tracks-export-navbar' ).height() ) + "px" );
-				$( '#tracks-export-navbar' ).hide();
-			}
-			else {
-				$( '#tracks-export-navbar' ).show();
-				// Re-arrange the footer (navbar) position
-				$( '#tracks-footer' ).css( 'top', ( parseInt($( '#tracks-footer' ).css( 'top' )) - $( '#tracks-export-navbar' ).height() ) + "px" );
-			}
-		},
+//		_exportTrackNavbar : function() {
+//			if( $( '#tracks-export-navbar' ).is( ':visible' ) ) {
+//				// Re-arrange the footer (navbar) position
+//				$( '#tracks-footer' ).css( 'top', ( parseInt($( '#tracks-footer' ).css( 'top' )) + $( '#tracks-export-navbar' ).height() ) + "px" );
+//				$( '#tracks-export-navbar' ).hide();
+//			}
+//			else {
+//				$( '#tracks-export-navbar' ).show();
+//				// Re-arrange the footer (navbar) position
+//				$( '#tracks-footer' ).css( 'top', ( parseInt($( '#tracks-footer' ).css( 'top' )) - $( '#tracks-export-navbar' ).height() ) + "px" );
+//			}
+//		},
 		
 		_exportTrackFitlog : function() {
 			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 				if( $(this).is(":checked") ) {
 					// Hide the export-format bar again
-					pages.tracks._exportTrackNavbar();
+//					pages.tracks._exportTrackNavbar();
 					
 					// Show loading & start exporting
 					$.mobile.showPageLoadingMsg();
@@ -81,7 +82,7 @@ pages.tracks = {
 			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 				if( $(this).is(":checked") ) {
 					// Hide the export-format bar again
-					pages.tracks._exportTrackNavbar();
+//					pages.tracks._exportTrackNavbar();
 					
 					// Show loading & start exporting
 					$.mobile.showPageLoadingMsg();
@@ -93,12 +94,17 @@ pages.tracks = {
 		_exportTrackTCX : function() {
 			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 				if( $(this).is(":checked") ) {
-					// Hide the export-format bar again
-					pages.tracks._exportTrackNavbar();
-					
 					// Show loading & start exporting
 					$.mobile.showPageLoadingMsg();
 					exporter.tcx.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
+				}
+			} );
+		},
+		
+		_deleteTrack : function() {
+			$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
+				if( $(this).is(":checked") ) {
+					$(this).data( 'fileEntry' ).remove( pages.tracks._pagebeforeshow );
 				}
 			} );
 		},
@@ -112,7 +118,7 @@ pages.tracks = {
 			
 			var containerdiv = $( '<div data-role="fieldcontain">' );
 			var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
-
+			
 			for( var i = 0; i < entries.length; i++ ) {
 				var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
 				inputRadio.data( 'fileEntry', entries[i] );
@@ -126,15 +132,14 @@ pages.tracks = {
 				controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
 			}
 
-			//$( "input[type='radio']" ).checkboxradio();
 			containerdiv.append(controlgroup);
 			containerdiv.page();
 
-			$( '#tracks-list' ).append( containerdiv );
+			$( '#tracks-list-container' ).append( containerdiv );
 		},
 
 		_pagebeforeshow : function( p_event, p_ui ) {
-			$( '#tracks-list' ).html('');
+			$( '#tracks-list-container' ).html('');
 
 			var trackDirectoryReader = TrackHandler.getDirectory().createReader();
 			trackDirectoryReader.readEntries( pages.tracks._refreshTracksEntries, GOFGSportsComputer._fileSystemError );
