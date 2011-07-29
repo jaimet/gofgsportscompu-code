@@ -220,14 +220,14 @@ var TrackHandler = {
 		 * Returns the elevation rise in percent
 		 */
 		getElevationRise : function() {
-			return (TrackHandler.m_lastAltitudeDiff / TrackHandler.m_lastDistance * 100);
+			return (TrackHandler.m_lastDistance > 0) ? (TrackHandler.m_lastAltitudeDiff / TrackHandler.m_lastDistance * 100) : 0;
 		},
 		
 		/**
 		 * Returns the average elevation rise in percent
 		 */
 		getAverageElevationRise : function() {
-			return (TrackHandler.m_elevationGain / TrackHandler.m_totalDistance * 100);
+			return (TrackHandler.m_totalDistance > 0) ? (TrackHandler.m_elevationGain / TrackHandler.m_totalDistance * 100) : 0;
 		},
 		
 		/**

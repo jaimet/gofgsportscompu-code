@@ -136,9 +136,15 @@ pages.tracks = {
 			containerdiv.page();
 
 			$( '#tracks-list-container' ).append( containerdiv );
+			
+			// Make sure the navbar is visible again
+			$( '#tracks-footer' ).show();
 		},
 
 		_pagebeforeshow : function( p_event, p_ui ) {
+			// Hide the navbar
+			$( '#tracks-footer' ).hide();
+			
 			$( '#tracks-list-container' ).html('');
 
 			var trackDirectoryReader = TrackHandler.getDirectory().createReader();
