@@ -29,14 +29,18 @@ pages.summary = {
 		init : function() {
 			console.log( "summary-page loaded!" );
 			
-			// Calculate available height based on empty loading page
-			var availableHeight = $( '#empty-page' ).height();
-			availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight();
-			//availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
-			availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight() - $( '#empty-page > [data-role="content"]' ).height());
-			availableHeight -= $( '#empty-button' ).outerHeight();
-			// Save available height as internal variable
-			pages.summary.m_contentHeight = availableHeight;
+//			// Calculate available height based on empty loading page
+//			var availableHeight = $( '#empty-page' ).height();
+//			console.log( availableHeight );
+//			availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight();
+//			console.log( availableHeight );
+//			//availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
+//			availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight() - $( '#empty-page > [data-role="content"]' ).height());
+//			console.log( availableHeight );
+//			availableHeight -= $( '#empty-button' ).outerHeight();
+//			console.log( availableHeight );
+//			// Save available height as internal variable
+//			pages.summary.m_contentHeight = availableHeight;
 			
 			$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 		},

@@ -35,8 +35,26 @@ var GOFGSportsComputer = {
 		$( '#settings-page' ).live( 'pagecreate', pages.settings.init );
 		$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
 		
-		// Change to summary page
-		$.mobile.changePage( 'summary.html' );
+		// Calculate available height based on empty loading page
+		var availableHeight = $( '#empty-page' ).height();
+		console.log( availableHeight );
+		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
+		console.log( availableHeight );
+		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
+		console.log( availableHeight );
+		availableHeight -= $( '#empty-button' ).outerHeight( true );
+		console.log( availableHeight );
+		// Save available height as internal variable
+		pages.summary.m_contentHeight = availableHeight;
+
+		if( SettingsHandler.get( "licenseagreed" ) == 0 ) {
+			$.mobile.changePage( 'license.html' );
+		}
+		else {
+			// Change to summary page
+			$.mobile.changePage( 'summary.html' );
+		}
+		
 		
 		// Find our file storage
 		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );
