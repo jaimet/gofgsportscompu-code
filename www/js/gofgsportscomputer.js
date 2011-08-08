@@ -36,7 +36,7 @@ var GOFGSportsComputer = {
 		$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
 		
 		// Change to summary page
-		$.mobile.changePage( 'summary.html', { transition : 'pop' } );
+		$.mobile.changePage( 'summary.html' );
 		
 		// Find our file storage
 		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );

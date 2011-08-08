@@ -24,6 +24,7 @@ var SettingsHandler = {
 		"minimumaltitudeaccuracy" : 10,
 		"minimumaltitudechange" : 3,
 		"showdidyouknow" : 'show',
+		"licenseagreed" : false,
 	},
 	m_settingsFileEntry : null,
 	
