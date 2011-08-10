@@ -99,8 +99,9 @@ exporter.fitlog = {
 		exporter.fitlog.m_trackNode.appendChild( ptNode );
 	},
 	
-	_trackComplete : function() {
+	_trackComplete : function( p_uuid ) {
 		//console.log( exporter.fitlog._toString() );
+		exporter.fitlog.m_activityNode.setAttribute( 'Id', p_uuid );
 		
 		exporter.fitlog.m_continuousWriter.write( exporter.fitlog._toString() );
 		

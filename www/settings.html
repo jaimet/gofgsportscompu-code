@@ -2,51 +2,47 @@
 <div data-role="page" id="settings-page">
 	<!-- /header -->
 	<div data-role="header">
-		<h1>Settings</h1>
-		<a href="summary.html" data-icon="arrow-l" data-direction="reverse">Summary</a>
-		<a id="settings-save-button" href="#" data-icon="check" class="ui-btn-right">Save</a>
+		<h1 data-i18n="settings"></h1>
+		<a href="summary.html" data-icon="arrow-l" data-direction="reverse" data-i18n="summary"></a>
+		<a id="settings-save-button" href="#" data-icon="check" class="ui-btn-right" data-i18n="save"></a>
 		<div data-role="navbar" data-id="menu-navbar">
 			<ul>
-				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
-				<li><a href="tracks.html" data-icon="grid">Tracks</a></li>
+				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="gear" data-i18n="settings"></a></li>
+				<li><a href="tracks.html" data-icon="grid" data-i18n="tracks"></a></li>
 			</ul>
 		</div>
 	</div>
 
 	<!-- /content -->
 	<div data-role="content">
-		<a href="about.html" data-role="button" data-icon="info" data-rel="dialog">About</a>
+		<a href="about.html" data-role="button" data-icon="info" data-rel="dialog" data-i18n="about"></a>
 		<form action='#' method='get'>
 		<div data-role="fieldcontain">
-			<label for="minAccuracySlider">Min. location accuracy (m):</label>
+			<label for="minAccuracySlider" data-i18n="min_loc_accuracy"></label>
 		 	<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="1" max="50"  />
 		</div>
 		<div data-role="fieldcontain">
-			<label for="minAltitudeAccuracySlider">Min. altitude accuracy (m):</label>
+			<label for="minAltitudeAccuracySlider" data-i18n="min_alt_accuracy"></label>
 		 	<input type="range" name="minAltitudeAccuracySlider" id="minAltitudeAccuracySlider" value="20" min="1" max="50"  />
 		</div>
 		<div data-role="fieldcontain">
-			<label for="minAltitudeChangeSlider">Min. altitude change (m):</label>
+			<label for="minAltitudeChangeSlider" data-i18n="min_alt_change"></label>
 		 	<input type="range" name="minAltitudeChangeSlider" id="minAltitudeChangeSlider" value="3" min="1" max="10"  />
 		</div>
+		<div data-role="fieldcontain">
+			<label for="languageSelect" data-i18n="language"></label>
+			<select name="languageSelect" id="languageSelect">
+				<option value="en" data-i18n="english"></option>
+				<option value="de" data-i18n="german"></option>
+			</select>
+		</div>
 		<div data-role="fieldcontain" style="display: none;">
-			<label for="showdidyouknowSlider">Show "Did you know?":</label>
+			<label for="showdidyouknowSlider" data-i18n="show_dyk"></label>
 			<select name="showdidyouknowSlider" id="showdidyouknowSlider" data-role="slider">
-				<option value="hide">Hide</option>
-				<option value="show">Show</option>
+				<option value="hide" data-i18n="hide"></option>
+				<option value="show" data-i18n="show"></option>
 			</select>
 		</div>
 		</form>
 	</div>
-
-	<!-- /footer -->
-<!-- 	<div data-role="footer" data-id="footer-navbar" data-position="fixed">
-		<div data-role="navbar">
-			<ul>
-				<li><a href="summary.html" data-icon="home" data-direction="reverse">Summary</a></li>
-				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="gear">Settings</a></li>
-				<li><a href="tracks.html" data-icon="grid">Tracks</a></li>
-			</ul>
-		</div>
-	</div> -->
 </div>

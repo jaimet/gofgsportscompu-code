@@ -1,14 +1,20 @@
 <!DOCTYPE html> 
 <html> 
 	<head> 
-	<title>GOFG Sports Computer</title> 
-	<!-- phoneGap 1.0.0rc2 -->
+	<title>GOFG Sports Computer</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	<!-- phoneGap 1.0.0 -->
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/phonegap.js"></script>
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/powermanagement.js"></script>
 	
 
 	<!-- jQuery 1.6.1  -->
 	<script type="text/javascript" src="lib/jquery/jquery.js"></script>
+	<!-- jquery.i18n.properties 1.0.9  -->
+	<script type="text/javascript" src="lib/jquery/plugins/jquery.i18n.properties.js"></script>
+	<!-- jquery.uuid 2.0.0  -->
+	<script type="text/javascript" src="lib/jquery/plugins/jquery.uuid.js"></script>
 
 	<!-- Pre-Configure jQueryMobile -->
 	<script type="text/javascript">
@@ -37,8 +43,9 @@
 	<script type="text/javascript" src="js/pages/settings.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/pages/summary.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/pages/tracks.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/pages/license.js" charset="utf-8"></script>
 
-	<!-- GOFG Sports Computer track exporter -->
+	<!-- GOFG Sports Computer track exporters -->
 	<script type="text/javascript" src="js/exporter/fitlog.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/exporter/gpx.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/exporter/tcx.js" charset="utf-8"></script>
@@ -48,12 +55,12 @@
 <div data-role="page" id="empty-page">
 	<!-- /header -->
 	<div data-role="header">
-		<h1>Loading</h1>
+		<h1 data-i18n="loading">Loading</h1>
 	</div>
 
 	<!-- /content -->
 	<div data-role="content">
-	<a id="empty-button" href="#" data-role="button" data-icon="check">Loading</a>
+	<a id="empty-button" href="#" data-role="button" data-icon="check" data-i18n="loading">Loading</a>
 	</div>
 </div>
 </body>

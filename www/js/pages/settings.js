@@ -25,6 +25,8 @@ if( pages == undefined ) {
 pages.settings = {
 		init : function() {
 			console.log( "settings-page loaded!" );
+			// Translate the page
+			GOFGSportsComputer._translate( $('#settings-page') );
 			
 			$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
 		},
@@ -36,6 +38,7 @@ pages.settings = {
 			SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
 			SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
 			SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
+			SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
 			SettingsHandler._save();
 
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
@@ -51,6 +54,7 @@ pages.settings = {
 			$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
 			$( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
 			$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
+			$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
 			// Setup page layout
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
 			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );

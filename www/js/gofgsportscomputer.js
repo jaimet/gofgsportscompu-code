@@ -22,44 +22,81 @@ var GOFGSportsComputer = {
 	m_appDirectoryEntry : null,		// Reference to the app directory entry
 	m_trackDirectoryEntry : null,	// Reference to the track directory entry
 	m_exportDirectoryEntry : null,	// Reference to the export directory entry
+	
+	/**
+	 * Apply translations to a given context
+	 * (called by the pagecreate events)
+	 */
+	_translate : function( p_context ) {
+		$(p_context).find( '*[data-i18n]' ).each( function() {
+			var trans = $.i18n.prop( $(this).attr( "data-i18n" ) );
+			findTextOnly.call( this );
+			
+			// Find the last children, required due to jQueryMobile adding elements
+			function findTextOnly() {
+				if( $(this).children().size() <= 0 ) {
+					$(this).text( trans );
+					return false;
+				}
+				else {
+					$(this).children().each( findTextOnly );
+				}
+			}
+		});
+	},
+	
+	/**
+	 * Settings have been loaded (called by SettingsHandler.onload)
+	 */
+	_settingsReady : function() {
+		// Load i18n module
+		$.i18n.properties( {
+			name: "gofgsc",
+			path: "i18n/",
+			mode: "map",
+			language: SettingsHandler.get( "language" ),
+			callback: function() {
+				GOFGSportsComputer._translate( $( '#empty-page' ) );
+
+				// Check if the user already agreed to our license
+				if( SettingsHandler.get( "licenseagreed" ) == 0 ) {
+					$.mobile.changePage( 'license.html' );
+				}
+				else {
+					// Change to summary page
+					$.mobile.changePage( 'summary.html' );
+				}
+
+				console.log( "Up and running!" );
+			}
+		} );
+	},
 		
 	/**
 	 * Startup function which setups the sports computer software (init, interface, etc.)
 	 */
-	_systemReady : function() {
+	_deviceReady : function() {
 		console.log( "Startup code running..." );
-
+		
+		console.log( "navigator.language: " + navigator.language );
+		
 		// Initialize the page handlers
 		// change me
 		$( '#summary-page' ).live( 'pagecreate', pages.summary.init );
 		$( '#settings-page' ).live( 'pagecreate', pages.settings.init );
 		$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
+		$( '#license-page' ).live( 'pagecreate', pages.license.init );
 		
 		// Calculate available height based on empty loading page
 		var availableHeight = $( '#empty-page' ).height();
-		console.log( availableHeight );
 		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
-		console.log( availableHeight );
 		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
-		console.log( availableHeight );
 		availableHeight -= $( '#empty-button' ).outerHeight( true );
-		console.log( availableHeight );
 		// Save available height as internal variable
 		pages.summary.m_contentHeight = availableHeight;
 
-		if( SettingsHandler.get( "licenseagreed" ) == 0 ) {
-			$.mobile.changePage( 'license.html' );
-		}
-		else {
-			// Change to summary page
-			$.mobile.changePage( 'summary.html' );
-		}
-		
-		
 		// Find our file storage
 		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );
-
-		console.log( "Up and running!" );
 	},
 	
 	_fileSystem : function( p_fileSystem ) {
@@ -81,6 +118,7 @@ var GOFGSportsComputer = {
 		GOFGSportsComputer.m_appDirectoryEntry.getDirectory( "exports", { create : true, exclusive : false }, GOFGSportsComputer._exportDirectory, GOFGSportsComputer._exportDirectoryError );
 		
 		// Initialize settings handler
+		SettingsHandler.onload = GOFGSportsComputer._settingsReady;
 		SettingsHandler.init( GOFGSportsComputer.m_appDirectoryEntry );
 	},
 	
@@ -191,7 +229,7 @@ function getFormattedTimeDiff( p_timeDiff ) {
  * Application starts here
  */
 $(document).ready( function() {
-	document.addEventListener("deviceready", GOFGSportsComputer._systemReady, true);
+	document.addEventListener("deviceready", GOFGSportsComputer._deviceReady, true);
 
 	/**
 	 * WARNING: TESTING AREA AHEAD
@@ -216,8 +254,8 @@ $(document).ready( function() {
 			
 	//TrackHandler.addSpeed( 10 );
 	//updateDistance();
-	//setTimeout( "GOFGSportsComputer._systemReady()", 1000 );
-	//GOFGSportsComputer._systemReady();
+	//setTimeout( "GOFGSportsComputer._deviceReady()", 1000 );
+	//GOFGSportsComputer._deviceReady();
 //	var xmlRoot = $( '<customTag>should not be visible</customTag>' );
 //	var xmlSub = $( '<subCustomTag attribute="value">My Tag content</subCustomTag>' );
 //	xmlRoot.append( xmlSub );

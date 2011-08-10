@@ -131,7 +131,7 @@ exporter.tcx = {
 		exporter.tcx.m_lastWaypoint = p_trackWaypoint;
 	},
 	
-	_trackComplete : function() {
+	_trackComplete : function( p_uuid ) {
 		// Finalize the lap node
 		if( exporter.tcx.m_lastWaypoint != null ) {
 			// Add total time

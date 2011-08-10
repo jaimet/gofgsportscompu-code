@@ -25,8 +25,10 @@ var SettingsHandler = {
 		"minimumaltitudechange" : 3,
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,
+		"language" : navigator.language,
 	},
 	m_settingsFileEntry : null,
+	onload : function() {},			// Called when the settings have been loaded
 	
 	init : function( p_appDirectoryEntry ) {
 		SettingsHandler.m_appDirectoryEntry = p_appDirectoryEntry;
@@ -81,6 +83,9 @@ var SettingsHandler = {
 					
 					SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
 				});
+				
+				// Notify others
+				if( typeof SettingsHandler.onload === "function" ) SettingsHandler.onload();
 			}
 			reader.readAsText( p_file );
 		}, this._fileError );

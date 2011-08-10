@@ -29,18 +29,12 @@ pages.summary = {
 		init : function() {
 			console.log( "summary-page loaded!" );
 			
-//			// Calculate available height based on empty loading page
-//			var availableHeight = $( '#empty-page' ).height();
-//			console.log( availableHeight );
-//			availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight();
-//			console.log( availableHeight );
-//			//availableHeight -= $( '#empty-page > [data-role="footer"]' ).outerHeight();
-//			availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight() - $( '#empty-page > [data-role="content"]' ).height());
-//			console.log( availableHeight );
-//			availableHeight -= $( '#empty-button' ).outerHeight();
-//			console.log( availableHeight );
-//			// Save available height as internal variable
-//			pages.summary.m_contentHeight = availableHeight;
+			// Translate page
+			GOFGSportsComputer._translate( $('#summary-page') );
+			// Setup top toolbar
+			$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
+			$( '#start-button' ).live( 'tap', pages.summary._startGPS );
+			$( '#pause-button' ).live( 'tap', pages.summary._pause );
 			
 			$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 		},
@@ -231,12 +225,7 @@ pages.summary = {
 			} );
 			// Add clock timer
 			pages.summary._updateClock();
-			
-			// Setup top toolbar
 			$( '#stop-button' ).hide();
 			$( '#pause-button' ).hide();
-			$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
-			$( '#start-button' ).live( 'tap', pages.summary._startGPS );
-			$( '#pause-button' ).live( 'tap', pages.summary._pause );
 		}
 };

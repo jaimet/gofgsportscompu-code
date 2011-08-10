@@ -17,4 +17,16 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// USE HTML5 "data" ATTRIBUTES FOR I18N
+// Check if the pages namespace exists
+if( pages == undefined ) {
+	var pages = {};
+}
+
+pages.about = {
+		init : function() {
+			console.log( "about-page loaded!" );
+			
+			// Translate page
+			GOFGSportsComputer._translate( $('#about-page') );
+		},
+};

@@ -60,6 +60,7 @@ var TrackHandler = {
 		m_lastAltitudeDiff : 0,			// Last altitude diff
 		m_startTimestamp : 0,			// Start time for this track
 		m_maximumSpeed : 0,				// Maximum speed
+		m_uuid : 0,						// UUID of this track
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
 		m_waypoint : null,
 		m_continuousFileWriter : null,
@@ -74,6 +75,8 @@ var TrackHandler = {
 			// Save start time
 			TrackHandler.m_startTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			TrackHandler.m_waypoint.timestamp = TrackHandler.m_startTimestamp;
+			// Generate new uuid
+			TrackHandler.m_uuid = $.uidGen( { mode: 'random' } );
 
 			// Construct new file-name
 			var fileName = TrackHandler.m_startTimestamp + ".gsc";
@@ -95,7 +98,7 @@ var TrackHandler = {
 		loadTrack : function( p_fileEntry, p_completeCallback ) {
 			TrackHandler._reset();
 			
-			var trackReader = new TrackReader( p_fileEntry, TrackHandler._loadTrackWaypoint, p_completeCallback );
+			var trackReader = new TrackReader( p_fileEntry, TrackHandler._loadTrackWaypoint, function( p_uuid ) { TrackHandler.m_uuid = p_uuid; p_completeCallback( p_uuid ) } );
 		},
 		
 		_loadTrackWaypoint : function( p_waypoint ) {
@@ -303,6 +306,7 @@ var TrackHandler = {
 			TrackHandler.m_fileEntry = p_fileEntry;
 			
 			TrackHandler.m_continuousFileWriter = new ContinuousFileWriter( TrackHandler.m_fileEntry );
+			TrackHandler.m_continuousFileWriter.writeLine( "00;" + TrackHandler.m_uuid );	// Write uuid to file
 		},
 		
 		_fileSystemError : function( p_fileError ) {

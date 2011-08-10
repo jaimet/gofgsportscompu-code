@@ -102,7 +102,7 @@ exporter.gpx = {
 		exporter.gpx.m_trackSegNode.appendChild( wptNode );
 	},
 	
-	_trackComplete : function() {
+	_trackComplete : function( p_uuid ) {
 		//console.log( exporter.fitlog._toString() );
 		
 		exporter.gpx.m_continuousWriter.write( exporter.gpx._toString() );

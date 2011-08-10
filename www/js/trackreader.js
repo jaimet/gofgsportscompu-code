@@ -44,6 +44,7 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 
 	function _loaded( p_evt ) {
 		var lines = p_evt.target.result.split( "\n" );
+		var uuid = 0;
 		
 		for( var i = 0; i < lines.length; i++ ) {
 			var line = lines[i];
@@ -55,6 +56,11 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 			var data_parts = parts[1].split( ":" );
 			
 			switch( type ) {
+			// UUID
+			case 0:
+				uuid = data_parts[0];
+				break;
+			// Timestamp
 			case 1:
 				if( m_trackWaypoint.timestamp != 0 ) {
 					p_progressCallback( m_trackWaypoint );
@@ -63,20 +69,25 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 				}
 				m_trackWaypoint.timestamp = parseInt(data_parts[0]);
 				break;
+			// Position
 			case 2:
 				m_trackWaypoint.gps.lat = parseFloat(data_parts[0]);
 				m_trackWaypoint.gps.lon = parseFloat(data_parts[1]);
 				m_trackWaypoint.gps.alt = parseFloat(data_parts[2]);
 				break;
+			// Heartrate
 			case 3:
 				m_trackWaypoint.hr = parseInt(data_parts[0]);
 				break;
+			// Distance
 			case 4:
 				m_trackWaypoint.distance = parseFloat(data_parts[0]);
 				break;
+			// Speed
 			case 5:
 				m_trackWaypoint.speed = parseFloat(data_parts[0]);
 				break;
+			// Accuracy
 			case 6:
 				m_trackWaypoint.accuracy = parseInt(data_parts[0]);
 				if( data_parts.length > 1 ) {
@@ -86,6 +97,7 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 					m_trackWaypoint.altitudeAccuracy = 0;
 				}
 				break;
+			// Unknown
 			default:
 				console.log( "TrackReader: invalid data-point: '" + line + "'" );
 				break;
@@ -93,6 +105,6 @@ function TrackReader( p_fileEntry, p_progressCallback, p_completeCallback ) {
 		}
 		
 		// Notify caller that the track has been loaded
-		p_completeCallback();
+		p_completeCallback( uuid );
 	}
 }

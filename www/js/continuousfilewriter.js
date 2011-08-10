@@ -64,6 +64,9 @@ function ContinuousFileWriter( p_fileEntry ) {
 		m_fileWriter = p_fileWriter;
 		m_fileWriter.onerror = _fileError;
 		m_fileWriter.onwriteend = _checkWrite;
+		
+		// Check for writing immediately
+		_checkWrite();
 	}
 	
 	// Called whenever an error occurs
