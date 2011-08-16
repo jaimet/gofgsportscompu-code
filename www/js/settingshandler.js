@@ -25,7 +25,7 @@ var SettingsHandler = {
 		"minimumaltitudechange" : 3,
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,
-		"language" : navigator.language,
+		"language" : navigator.language.substr(0, 2).toLowerCase(),
 	},
 	m_settingsFileEntry : null,
 	onload : function() {},			// Called when the settings have been loaded

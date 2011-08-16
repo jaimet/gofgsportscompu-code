@@ -24,6 +24,7 @@ if( pages == undefined ) {
 
 pages.map = {
 		olmap : null,
+		oloverlay : null,
 		
 		init : function() {
 			console.log( "map-page loaded!" );
@@ -47,8 +48,12 @@ pages.map = {
 				layers: [
 				    new OpenLayers.Layer.OSM( "OpenStreetMap", null, { transitionEffect: 'resize' } )
 				],
-				center: new OpenLayers.LonLat( 742000, 5861000 ),
+				center: new OpenLayers.LonLat( 48.26, 16.29 ).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913")),
 				zoom: 5
 			});
+			
+			pages.map.oloverlay = new OpenLayers.Layer.Vector( "gofgsctrack" );
+			pages.map.olmap.addLayer(pages.map.oloverlay);
+			
 		},
 };
