@@ -25,12 +25,19 @@ if( pages == undefined ) {
 pages.map = {
 		olmap : null,
 		oloverlay : null,
+		epsg4326 : new OpenLayers.Projection("EPSG:4326"),
+		epsg900913 : new OpenLayers.Projection("EPSG:900913"),
+		minCorner : new OpenLayers.LonLat(180,90),
+		maxCorner : new OpenLayers.LonLat(-180,-90),
 		
 		init : function() {
 			console.log( "map-page loaded!" );
 			
 			// Translate page
 			GOFGSportsComputer._translate( $('#map-page') );
+			
+			// Bind to new waypoint event (it is a global event)
+			$(document).bind( 'thwaypoint', pages.map.waypoint );
 			
 			// Create openlayers map
 			pages.map.olmap = new OpenLayers.Map({
@@ -48,12 +55,29 @@ pages.map = {
 				layers: [
 				    new OpenLayers.Layer.OSM( "OpenStreetMap", null, { transitionEffect: 'resize' } )
 				],
-				center: new OpenLayers.LonLat( 48.26, 16.29 ).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913")),
-				zoom: 5
+//				center: new OpenLayers.LonLat( 16.29, 48.26 ).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913")),
+//				zoom: 5
 			});
 			
 			pages.map.oloverlay = new OpenLayers.Layer.Vector( "gofgsctrack" );
 			pages.map.olmap.addLayer(pages.map.oloverlay);
 			
+			console.log( "Map units: " + pages.map.olmap.getUnits() );
+			console.log( "Map projection: " + pages.map.olmap.getProjection() );
+		},
+		
+		waypoint : function( evt, p_waypoint ) {
+			var lonDeg = GPSHandler._toDegree( p_waypoint.gps.lon );
+			var latDeg = GPSHandler._toDegree( p_waypoint.gps.lat );
+			
+			if( lonDeg < pages.map.minCorner.lon ) pages.map.minCorner.lon = lonDeg;
+			if( latDeg < pages.map.minCorner.lat ) pages.map.minCorner.lat = latDeg;
+			if( lonDeg > pages.map.maxCorner.lon ) pages.map.maxCorner.lon = lonDeg;
+			if( latDeg > pages.map.maxCorner.lat ) pages.map.maxCorner.lat = latDeg;
+
+//			var bounds = new OpenLayers.Bounds();
+//			bounds.extend(pages.map.minCorner);
+//			bounds.extend(pages.map.maxCorner);
+//			pages.map.olmap.zoomToExtent(bounds);
 		},
 };

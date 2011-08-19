@@ -19,6 +19,7 @@
 	<!-- Pre-Configure jQueryMobile -->
 	<script type="text/javascript">
 	$(document).bind("mobileinit", function(){
+		$.mobile.page.prototype.options.domCache = true;
 		$.mobile.defaultPageTransition = 'none';
 	});
 	</script>
@@ -29,6 +30,8 @@
 	<!-- http://blog.stevenlevithan.com/archives/date-time-format -->
 	<script type="text/javascript" src="lib/date.format.js"></script>
 	
+	<!-- proj4js 1.0.2 -->
+	<script type="text/javascript" src="lib/proj4js/proj4js.js"></script>
 	<!-- OpenLayers 2.10 -->
 	<script type="text/javascript" src="lib/openlayers/OpenLayers.mobile.js"></script>
 

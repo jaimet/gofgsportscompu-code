@@ -282,6 +282,11 @@ var TrackHandler = {
 		
 		// Generic function for writing a data-line in the correct format
 		_checkWrite : function( p_status ) {
+			// Trigger new waypoint event it status is true
+			if( p_status ) {
+				$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint );
+			}
+			
 			// Check if we have a valid file-entry (which won't be the case during loading)
 			if( TrackHandler.m_fileEntry == null ) return;
 			
