@@ -52,7 +52,7 @@ $.i18n.properties = function(settings) {
         language:       '',
         path:           '',  
         mode:           'vars',
-        cache:			false,
+        cache:			true,
         encoding:       'UTF-8',
         callback:       null
     };
@@ -66,19 +66,29 @@ $.i18n.properties = function(settings) {
 	var files = getFiles(settings.name);
 	for(i=0; i<files.length; i++) {
 		// 1. load base (eg, Messages.properties)
-		loadAndParseFile(settings.path + files[i] + '.properties', settings);
-        // 2. with language code (eg, Messages_pt.properties)
-		if(settings.language.length >= 2) {
-            loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 2) +'.properties', settings);
-		}
-		// 3. with language code and country code (eg, Messages_pt_PT.properties)
-        if(settings.language.length >= 5) {
-            loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 5) +'.properties', settings);
-        }
+		loadAndParseFile(settings.path + files[i] + '.properties', settings, function() {
+	        // 2. with language code (eg, Messages_pt.properties)
+			if(settings.language.length >= 2) {
+	            loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 2) +'.properties', settings, function() {
+	        		// 3. with language code and country code (eg, Messages_pt_PT.properties)
+	                if(settings.language.length >= 5) {
+	                    loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 5) +'.properties', settings, function() {
+	                    	// call callback
+	                    	if(settings.callback){ settings.callback(); }
+	                    });
+	                }
+	                else {
+                    	// call callback
+                    	if(settings.callback){ settings.callback(); }
+	                }
+	            });
+			}
+			else {
+            	// call callback
+            	if(settings.callback){ settings.callback(); }
+			}
+		} );
 	}
-	
-	// call callback
-	if(settings.callback){ settings.callback(); }
 };
 
 
@@ -239,16 +249,21 @@ $.i18n.browserLang = function() {
 
 
 /** Load and parse .properties files */
-function loadAndParseFile(filename, settings) {
+function loadAndParseFile(filename, settings, p_successCallback) {
 	$.ajax({
         url:        filename,
-        async:      false,
+        async:      true,
         cache:		settings.cache,
         contentType:'text/plain;charset='+ settings.encoding,
         dataType:   'text',
         success:    function(data, status) {
-        				parseData(data, settings.mode); 
-					}
+        				parseData(data, settings.mode);
+        				
+        				if( typeof p_successCallback === "function" ) p_successCallback();
+					},
+		error:		function(jqXHR, textStatus, errorThrown) {
+						if( typeof p_successCallback === "function" ) p_successCallback();
+					},
     });
 }
 
