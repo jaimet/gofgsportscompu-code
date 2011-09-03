@@ -64,15 +64,18 @@ $.i18n.properties = function(settings) {
 	
 	// load and parse bundle files
 	var files = getFiles(settings.name);
-	for(i=0; i<files.length; i++) {
+	for(var i=0; i<files.length; i++) {
+		var fileName = files[i];
+		
 		// 1. load base (eg, Messages.properties)
-		loadAndParseFile(settings.path + files[i] + '.properties', settings, function() {
+		loadAndParseFile(settings.path + fileName + '.properties', settings, function() {
 	        // 2. with language code (eg, Messages_pt.properties)
 			if(settings.language.length >= 2) {
-	            loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 2) +'.properties', settings, function() {
+	            loadAndParseFile(settings.path + fileName + '_' + settings.language.substring(0, 2) +'.properties', settings, function() {
 	        		// 3. with language code and country code (eg, Messages_pt_PT.properties)
 	                if(settings.language.length >= 5) {
-	                    loadAndParseFile(settings.path + files[i] + '_' + settings.language.substring(0, 5) +'.properties', settings, function() {
+	        			console.log( "File: " + i + " / " + fileName );
+	                    loadAndParseFile(settings.path + fileName + '_' + settings.language.substring(0, 5) +'.properties', settings, function() {
 	                    	// call callback
 	                    	if(settings.callback){ settings.callback(); }
 	                    });
