@@ -26,9 +26,14 @@ pages.settings = {
 		init : function() {
 			console.log( "settings-page loaded!" );
 			// Translate the page
-			GOFGSportsComputer._translate( $('#settings-page') );
+			Translator.register( $('#settings-page') );
 			
 			$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
+			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
+			
+			// Bind change events
+			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
+			$( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
 		},
 		
 		_save : function() {
@@ -40,6 +45,9 @@ pages.settings = {
 			SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
 			SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
 			SettingsHandler._save();
+			
+			// Init re-translation
+			Translator.changeLanguage(SettingsHandler.get( 'language' ));
 
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
 		},
@@ -57,10 +65,5 @@ pages.settings = {
 			$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
 			// Setup page layout
 			$( '#settings-page' ).find( '#settings-save-button' ).hide();
-			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
-			
-			// Bind change events
-			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
-			$( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
 		}
 };

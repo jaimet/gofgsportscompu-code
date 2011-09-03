@@ -25,12 +25,13 @@ if( pages == undefined ) {
 pages.summary = {
 		m_mainTimer : 0,		// Reference for the main timer
 		m_contentHeight : 0,	// Calculated height for one infopanel row
+		m_speedCounter : 0,		// Countdown until speed is set to zero (required because if GPS does not report a new position we do not update)
 		
 		init : function() {
 			console.log( "summary-page loaded!" );
 			
 			// Translate page
-			GOFGSportsComputer._translate( $('#summary-page') );
+			Translator.register($('#summary-page'));
 			// Setup top toolbar
 			$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
 			$( '#start-button' ).live( 'tap', pages.summary._startGPS );
@@ -40,6 +41,13 @@ pages.summary = {
 		},
 		
 		_mainTimer : function() {
+			// Update speed counter
+			pages.summary.m_speedCounter--;
+			if( pages.summary.m_speedCounter <= 0 ) {
+				pages.summary.m_speedCounter = SettingsHandler.get( 'speedCounter' );
+				$( '#speed-infopanel' ).infopanel( 'setValue', 0.0 );
+			}
+			
 			pages.summary._updateDisplay();
 			pages.summary.m_mainTimer = setTimeout( "pages.summary._mainTimer()", 1000 );
 		},
@@ -77,6 +85,8 @@ pages.summary = {
 		 */
 		_startGPS : function() {
 			console.log( "Start-GPS called" );
+			
+			pages.summary.m_speedCounter = 0;	// Reset speed counter
 			
 //			window.open( "https://www.facebook.com/dialog/oauth?client_id=178026202259967&redirect_uri=http://www.gofg.at" );
 			

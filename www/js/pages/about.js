@@ -27,6 +27,6 @@ pages.about = {
 			console.log( "about-page loaded!" );
 			
 			// Translate page
-			GOFGSportsComputer._translate( $('#about-page') );
+			Translator.register( $('#about-page') );
 		},
 };

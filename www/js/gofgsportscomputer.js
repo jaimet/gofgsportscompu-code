@@ -24,52 +24,26 @@ var GOFGSportsComputer = {
 	m_exportDirectoryEntry : null,	// Reference to the export directory entry
 	
 	/**
-	 * Apply translations to a given context
-	 * (called by the pagecreate events)
-	 */
-	_translate : function( p_context ) {
-		$(p_context).find( '*[data-i18n]' ).each( function() {
-			var trans = $.i18n.prop( $(this).attr( "data-i18n" ) );
-			findTextOnly.call( this );
-			
-			// Find the last children, required due to jQueryMobile adding elements
-			function findTextOnly() {
-				if( $(this).children().size() <= 0 ) {
-					$(this).text( trans );
-					return false;
-				}
-				else {
-					$(this).children().each( findTextOnly );
-				}
-			}
-		});
-	},
-	
-	/**
 	 * Settings have been loaded (called by SettingsHandler.onload)
 	 */
 	_settingsReady : function() {
-		// Load i18n module
-		$.i18n.properties( {
-			name: "gofgsc",
-			path: "i18n/",
-			mode: "map",
-			language: SettingsHandler.get( "language" ),
-			callback: function() {
-				GOFGSportsComputer._translate( $( '#empty-page' ) );
-
-				// Check if the user already agreed to our license
-				if( SettingsHandler.get( "licenseagreed" ) == 0 ) {
-					$.mobile.changePage( 'license.html' );
-				}
-				else {
-					// Change to summary page
-					$.mobile.changePage( 'summary.html' );
-				}
-
-				console.log( "Up and running!" );
+		Translator.register( $('#empty-page') );
+		
+		Translator.ontranslate = function() {
+			// Check if the user already agreed to our license
+			if( SettingsHandler.get( "licenseagreed" ) == 0 ) {
+				$.mobile.changePage( 'license.html' );
 			}
-		} );
+			else {
+				// Change to summary page
+				$.mobile.changePage( 'summary.html' );
+			}
+
+			console.log( "Up and running!" );
+			Translator.ontranslate = null;
+		}
+		
+		Translator.changeLanguage(SettingsHandler.get( 'language' ));
 	},
 		
 	/**
@@ -78,7 +52,7 @@ var GOFGSportsComputer = {
 	_deviceReady : function() {
 		console.log( "Startup code running..." );
 		
-		console.log( "navigator.language: " + navigator.language );
+		//console.log( "navigator.language: " + navigator.language );
 		
 		// Initialize the page handlers
 		// change me

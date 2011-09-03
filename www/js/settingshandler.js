@@ -26,6 +26,7 @@ var SettingsHandler = {
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,
 		"language" : navigator.language.substr(0, 2).toLowerCase(),
+		"speedCounter" : 4,		// Number of seconds until speed display is set to zero (if no position update is received)
 	},
 	m_settingsFileEntry : null,
 	onload : function() {},			// Called when the settings have been loaded

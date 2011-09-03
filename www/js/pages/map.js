@@ -36,7 +36,7 @@ pages.map = {
 			console.log( "map-page loaded!" );
 			
 			// Translate page
-			GOFGSportsComputer._translate( $('#map-page') );
+			Translator.register( $('#map-page') );
 			
 			// Bind to new waypoint event (it is a global event)
 			$(document).bind( 'thwaypoint', pages.map.waypoint );

@@ -30,7 +30,7 @@ pages.tracks = {
 			console.log( "tracks-page loaded!" );
 			
 			// Translate page
-			GOFGSportsComputer._translate( $('#tracks-page') );
+			Translator.register($('#tracks-page'));
 
 			// Bind to all events
 			$( '#tracks-page' ).live( 'pagebeforeshow', pages.tracks._pagebeforeshow );

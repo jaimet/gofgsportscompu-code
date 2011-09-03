@@ -27,7 +27,7 @@ pages.license = {
 			console.log( "license-page loaded!" );
 			
 			// Translate page
-			GOFGSportsComputer._translate( $('#license-page') );
+			Translator.register( $('#license-page') );
 			// Bind accept button event
 			$( '#license-accept-button' ).live( 'tap', pages.license._accept );
 		},
