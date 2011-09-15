@@ -17,16 +17,7 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Check if the pages namespace exists
-if( pages == undefined ) {
-	var pages = {};
+function About() {	
 }
-
-pages.about = {
-		init : function() {
-			console.log( "about-page loaded!" );
-			
-			// Translate page
-			Translator.register( $('#about-page') );
-		},
-};
+About.prototype = new Page( "about" );
+new About();

@@ -7,7 +7,6 @@
 	<!-- phoneGap 1.0.0 -->
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/phonegap.js"></script>
 	<script type="text/javascript" charset="utf-8" src="lib/phonegap/powermanagement.js"></script>
-	
 
 	<!-- jQuery 1.6.1  -->
 	<script type="text/javascript" src="lib/jquery/jquery.js"></script>
@@ -21,9 +20,10 @@
 	$(document).bind("mobileinit", function(){
 		$.mobile.page.prototype.options.domCache = true;
 		$.mobile.defaultPageTransition = 'none';
+		$.mobile.hashListeningEnabled = false;		// Disable history tracking as we don't need it in our app
 	});
 	</script>
-	<!-- jQueryMobile 1.0b2 -->
+	<!-- jQueryMobile 1.0b3 -->
 	<link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.css" />
 	<script type="text/javascript" src="lib/jquery.mobile/jquery.mobile.js"></script>
 
@@ -47,6 +47,7 @@
 	<script type="text/javascript" src="js/gofgsportscomputer.js"></script>
 
 	<!-- GOFG Sports Computer page(s) logic -->
+	<script type="text/javascript" src="js/pages/page.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/pages/settings.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/pages/summary.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/pages/tracks.js" charset="utf-8"></script>

@@ -17,25 +17,25 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Check if the pages namespace exists
-if( pages == undefined ) {
-	var pages = {};
+function License() {
+}
+License.prototype = new Page( "license" );
+
+/**
+ * Handler for accepting the license
+ */
+License.prototype._accept = function() {
+	SettingsHandler.set( "licenseagreed", 1 );
+	SettingsHandler._save();
+	
+	$.mobile.changePage( 'summary.html' );
 }
 
-pages.license = {
-		init : function() {
-			console.log( "license-page loaded!" );
-			
-			// Translate page
-			Translator.register( $('#license-page') );
-			// Bind accept button event
-			$( '#license-accept-button' ).live( 'tap', pages.license._accept );
-		},
+// Register button event
+License.prototype.oncreate = function() {
+	var me = this;
+	//$( '#license-accept-button' ).live( 'tap',  function() { me._accept.call(me) } );
+	$( '#license-accept-button' ).live( 'tap', this.getEvtHandler(this._accept) );
+}
 
-		_accept : function() {
-			SettingsHandler.set( "licenseagreed", 1 );
-			SettingsHandler._save();
-			
-			$.mobile.changePage( 'summary.html' );
-		},
-};
+new License();	// Create single instance

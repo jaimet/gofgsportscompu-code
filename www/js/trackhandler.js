@@ -205,6 +205,15 @@ var TrackHandler = {
 		},
 		
 		/**
+		 * Add a pause to the track
+		 * @param p_start Start of pause (unixtimestamp)
+		 * @param p_end Start of pause (unixtimestamp)
+		 */
+		addPause : function( p_start, p_end ) {
+			// TODO: Add pause handling
+		},
+		
+		/**
 		 * Returns the total distance for this track
 		 * @return Number Total distance (in m)
 		 */
