@@ -23,15 +23,26 @@ Settings.prototype = new Page( "settings" );
 Settings.prototype.leftPage = "summary.html";
 Settings.prototype.rightPage = "tracks.html";
 
+/**
+ * Called when the page is created
+ */
 Settings.prototype.oncreate = function() {
-	$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
+	$( '#settings-page' ).bind( 'pagebeforeshow', pages.settings._pagebeforeshow );
 	$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
 	
 	// Bind change events
 	$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
 	$( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
+	
+	// Bind button events
+	$( '#settings-page' ).find( '#settings-odoReset-button' ).bind( 'tap', pages.settings._odoReset );
+	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).bind( 'tap', pages.settings._odoConfirm );
 };
 
+/**
+ * Called when the user clicks the save-button
+ * Updates all settings and forces a save to disk
+ */
 Settings.prototype._save = function() {
 	console.log( "settings-page save!" );
 	
@@ -48,10 +59,32 @@ Settings.prototype._save = function() {
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
 };
 
+/**
+ * Called whenever a setting changes (displays save button for settings)
+ */
 Settings.prototype._changed = function() {
 	$( '#settings-page' ).find( '#settings-save-button' ).show();
 };
 
+/**
+ * Called when the user clicks on the reset odo-meter button
+ */
+Settings.prototype._odoReset = function() {
+	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).show();
+};
+
+/**
+ * Called when the user confirms the reset of the odo-meter
+ */
+Settings.prototype._odoConfirm = function() {
+	window.localStorage.setItem( "odo", 0.0 );
+	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
+	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();
+};
+
+/**
+ * Called short before the page is displayed
+ */
 Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	// Read values from settings handler
 	$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
@@ -61,57 +94,7 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
 	// Setup page layout
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
+	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
 };
 
 new Settings();
-
-//// Check if the pages namespace exists
-//if( pages == undefined ) {
-//	var pages = {};
-//}
-//
-//pages.settings = {
-//		init : function() {
-//			console.log( "settings-page loaded!" );
-//			// Translate the page
-//			Translator.register( $('#settings-page') );
-//			
-//			$( '#settings-page' ).live( 'pagebeforeshow', pages.settings._pagebeforeshow );
-//			$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
-//			
-//			// Bind change events
-//			$( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
-//			$( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
-//		},
-//		
-//		_save : function() {
-//			console.log( "settings-page save!" );
-//			
-//			SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
-//			SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
-//			SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
-//			SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
-//			SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
-//			SettingsHandler._save();
-//			
-//			// Init re-translation
-//			Translator.changeLanguage(SettingsHandler.get( 'language' ));
-//
-//			$( '#settings-page' ).find( '#settings-save-button' ).hide();
-//		},
-//		
-//		_changed : function() {
-//			$( '#settings-page' ).find( '#settings-save-button' ).show();
-//		},
-//		
-//		_pagebeforeshow : function( p_event, p_ui ) {
-//			// Read values from settings handler
-//			$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
-//			$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
-//			$( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
-//			$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
-//			$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
-//			// Setup page layout
-//			$( '#settings-page' ).find( '#settings-save-button' ).hide();
-//		}
-//};
