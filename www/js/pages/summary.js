@@ -38,14 +38,18 @@ Summary.prototype.oncreate = function() {
 };
 
 Summary.prototype._mainTimer = function() {
+	//console.log( "Speed counter: " + pages.summary.m_speedCounter );
+
+	// Update display
+	pages.summary._updateDisplay();
+	
 	// Update speed counter
 	pages.summary.m_speedCounter--;
 	if( pages.summary.m_speedCounter <= 0 ) {
 		pages.summary.m_speedCounter = SettingsHandler.get( 'speedCounter' );
-		$( '#speed-infopanel' ).infopanel( 'setValue', 0.0 );
+		$( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
 	}
 	
-	pages.summary._updateDisplay();
 	pages.summary.m_mainTimer = setTimeout( "pages.summary._mainTimer()", 1000 );
 };
 
@@ -179,6 +183,8 @@ Summary.prototype._resume = function() {
  * Callback for the GPSHandler which is called whenever the GPS position is updated
  */
 Summary.prototype._updatePosition = function() {
+	// Reset speed-reset timer
+	pages.summary.m_speedCounter = SettingsHandler.get( 'speedCounter' );
 	//console.log( "updatePosition" );
 	// Update odo (total distance - see odometer)
 	pages.summary._updateOdo( GPSHandler.getDistance() );
