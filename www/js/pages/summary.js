@@ -83,9 +83,9 @@ Summary.prototype._updateOdo = function( p_distance ) {
 Summary.prototype._startGPS = function() {
 	console.log( "Start-GPS called" );
 	
-	$( '#stop-button' ).show();
 	$( '#start-button' ).hide();
-	$( '#pause-button' ).show();
+	$( '#stop-button' ).show();
+	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 	
 	pages.summary.m_speedCounter = 0;	// Reset speed counter
 	
@@ -171,8 +171,8 @@ Summary.prototype._resume = function() {
 
 	// Hide / Show the buttons
 	$( '#resume-button' ).hide();
-	$( '#stop-button' ).show();
 	$( '#pause-button' ).show();
+	setTimeout( "$( '#stop-button' ).fadeIn()", 500 );
 };
 
 /**
