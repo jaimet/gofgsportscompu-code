@@ -36,7 +36,7 @@ Settings.prototype.oncreate = function() {
 	
 	// Bind button events
 	$( '#settings-page' ).find( '#settings-odoReset-button' ).bind( 'tap', pages.settings._odoReset );
-	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).bind( 'tap', pages.settings._odoConfirm );
+	//$( '#settings-page' ).find( '#settings-odoConfirm-button' ).bind( 'tap', pages.settings._odoConfirm );
 };
 
 /**
@@ -70,17 +70,17 @@ Settings.prototype._changed = function() {
  * Called when the user clicks on the reset odo-meter button
  */
 Settings.prototype._odoReset = function() {
-	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).show();
+	window.localStorage.setItem( "odo", 0.0 );
+	//setTimeout( "$( '#settings-page' ).find( '#settings-odoConfirm-button' ).show(); $( '#settings-page' ).find( '#settings-odoReset-button' ).hide();", 100 );
 };
 
 /**
  * Called when the user confirms the reset of the odo-meter
  */
-Settings.prototype._odoConfirm = function() {
+/*Settings.prototype._odoConfirm = function() {
 	window.localStorage.setItem( "odo", 0.0 );
-	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
-	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();
-};
+	setTimeout( "$( '#settings-page' ).find( '#settings-odoReset-button' ).show(); $( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();", 100 );
+};*/
 
 /**
  * Called short before the page is displayed
@@ -94,7 +94,8 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
 	// Setup page layout
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
-	$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
+	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();
+	//$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
 };
 
 new Settings();

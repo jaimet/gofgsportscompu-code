@@ -271,6 +271,17 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	$( '#stop-button' ).hide();
 	$( '#pause-button' ).hide();
 	$( '#resume-button' ).hide();
+	
+	// Bind pagebeforeshow event
+	$( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );
+};
+
+/**
+ * Called just before the page is shown, used to update global values
+ */
+Summary.prototype._pagebeforeshow = function() {
+	// Refresh ODO display
+	pages.summary._updateOdo( 0.0 );
 };
 
 new Summary();
