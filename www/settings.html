@@ -19,6 +19,10 @@
 		<a href="about.html" data-role="button" data-icon="info" data-rel="dialog" data-i18n="about"></a>
 		<form action='#' method='get'>
 		<div data-role="fieldcontain">
+			<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
+		 	<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30"  />
+		</div>
+		<div data-role="fieldcontain">
 			<label for="minAccuracySlider" data-i18n="min_loc_accuracy"></label>
 		 	<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="1" max="50"  />
 		</div>

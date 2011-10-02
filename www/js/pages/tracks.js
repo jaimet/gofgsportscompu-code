@@ -61,8 +61,12 @@ Tracks.prototype._exportTrackFitlog = function() {
 	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 		if( $(this).is(":checked") ) {
 			// Show loading & start exporting
+			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
 			$.mobile.showPageLoadingMsg();
-			exporter.fitlog.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
+			exporter.fitlog.run( $(this).data( 'fileEntry' ), function() {
+				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+				$.mobile.hidePageLoadingMsg();
+			} );
 		}
 	} );
 };
@@ -74,8 +78,12 @@ Tracks.prototype._exportTrackGPX = function() {
 	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 		if( $(this).is(":checked") ) {
 			// Show loading & start exporting
+			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
 			$.mobile.showPageLoadingMsg();
-			exporter.gpx.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
+			exporter.gpx.run( $(this).data( 'fileEntry' ), function() {
+				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+				$.mobile.hidePageLoadingMsg();
+			} );
 		}
 	} );
 };
@@ -87,8 +95,12 @@ Tracks.prototype._exportTrackTCX = function() {
 	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
 		if( $(this).is(":checked") ) {
 			// Show loading & start exporting
+			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
 			$.mobile.showPageLoadingMsg();
-			exporter.tcx.run( $(this).data( 'fileEntry' ), function() { $.mobile.hidePageLoadingMsg(); } );
+			exporter.tcx.run( $(this).data( 'fileEntry' ), function() {
+				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+				$.mobile.hidePageLoadingMsg();
+			} );
 		}
 	} );
 };

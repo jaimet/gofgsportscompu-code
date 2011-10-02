@@ -39,6 +39,9 @@ var Translator = {
 						Translator._translate( Translator.m_contexts[i] );
 					}
 					
+					// Setup jQuery mobile values
+					$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+					
 					if( typeof Translator.ontranslate === "function" ) Translator.ontranslate();
 				}
 			} );

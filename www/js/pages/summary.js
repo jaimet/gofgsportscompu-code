@@ -46,7 +46,7 @@ Summary.prototype._mainTimer = function() {
 	// Update speed counter
 	pages.summary.m_speedCounter--;
 	if( pages.summary.m_speedCounter <= 0 ) {
-		pages.summary.m_speedCounter = SettingsHandler.get( 'speedCounter' );
+		pages.summary.m_speedCounter = SettingsHandler.get( 'gpsInterval' ) * 3;
 		$( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
 	}
 	
@@ -91,16 +91,15 @@ Summary.prototype._startGPS = function() {
 	$( '#stop-button' ).show();
 	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 	
-	pages.summary.m_speedCounter = 0;	// Reset speed counter
-	
 	TrackHandler.startTrack();
-	GPSHandler.startGPS( 5, pages.summary._updatePosition );
+	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ), pages.summary._updatePosition );
 	window.plugins.PowerManagement.acquire(
     	function(){ console.log( "Success!" ) },
 		function(e){ console.log( "Error: " + e ) }
 	);
 	
 	// Start updating our interface
+	pages.summary.m_speedCounter = 0;	// Initialize speed counter
 	pages.summary._mainTimer();
 };
 
@@ -159,7 +158,7 @@ Summary.prototype._resume = function() {
 	var pauseEnd = ((new Date()).getTime() / 1000).toFixed(0);
 	
 	// Start GPS again
-	GPSHandler.startGPS( 5, pages.summary._updatePosition );
+	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ), pages.summary._updatePosition );
 	// Disable suspend
 	window.plugins.PowerManagement.acquire(
     	function(){ console.log( "Success!" ) },
@@ -184,7 +183,7 @@ Summary.prototype._resume = function() {
  */
 Summary.prototype._updatePosition = function() {
 	// Reset speed-reset timer
-	pages.summary.m_speedCounter = SettingsHandler.get( 'speedCounter' );
+	pages.summary.m_speedCounter = SettingsHandler.get( 'gpsInterval' ) * 3;
 	//console.log( "updatePosition" );
 	// Update odo (total distance - see odometer)
 	pages.summary._updateOdo( GPSHandler.getDistance() );
