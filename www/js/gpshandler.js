@@ -38,7 +38,7 @@ var GPSHandler = {
 		if( GPSHandler.m_watchId != null ) return;
 		
 		GPSHandler.m_settings['interval'] = p_interval;
-		if( p_callback ) GPSHandler.m_settings['positionUpdated'] = p_callback;
+		if( typeof p_callback == "function" ) GPSHandler.m_settings['positionUpdated'] = p_callback;
 		
 		GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_settings['interval'] * 1000, maximumAge : GPSHandler.m_settings['maximumAge'] * 1000 } );
 	},
@@ -48,6 +48,10 @@ var GPSHandler = {
 		navigator.geolocation.clearWatch( GPSHandler.m_watchId );
 		GPSHandler.m_settings['positionUpdated'] = function() {};
 		GPSHandler.m_watchId = null;
+	},
+	
+	setCallback : function( p_callback ) {
+		if( typeof p_callback == "function" ) GPSHandler.m_settings['positionUpdated'] = p_callback;
 	},
 	
 	getDistance : function() {

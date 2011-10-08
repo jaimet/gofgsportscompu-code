@@ -18,6 +18,13 @@
 	<div data-role="content">
 		<a href="about.html" data-role="button" data-icon="info" data-rel="dialog" data-i18n="about"></a>
 		<form action='#' method='get'>
+		<div data-role="fieldcontain" style="display: none;">
+			<label for="waitForGPSFixSlider" data-i18n="wait_for_gps_fix"></label>
+			<select name="waitForGPSFixSlider" id="waitForGPSFixSlider" data-role="slider">
+				<option value="yes" data-i18n="yes"></option>
+				<option value="no" data-i18n="no"></option>
+			</select>
+		</div>
 		<div data-role="fieldcontain">
 			<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
 		 	<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30"  />

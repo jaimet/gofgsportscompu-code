@@ -91,8 +91,28 @@ Summary.prototype._startGPS = function() {
 	$( '#stop-button' ).show();
 	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 	
+	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
+	if( SettingsHandler.get( 'waitForGPSFix' ) == 'yes' ) {
+		GPSHandler.setCallback( pages.summary._gpsFixWait );
+	}
+	else {
+		pages.summary._startTracking();
+	}
+};
+
+/**
+ * Simple helper function which waits for the first GPS fix and starts the track once called
+ */
+Summary.prototype._gpsFixWait = function() {
+	pages.summary._startTracking();
+};
+
+/**
+ * Start the real tracking
+ */
+Summary.prototype._startTracking = function() {
 	TrackHandler.startTrack();
-	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ), pages.summary._updatePosition );
+	GPSHandler.setCallback( pages.summary._updatePosition );
 	window.plugins.PowerManagement.acquire(
     	function(){ console.log( "Success!" ) },
 		function(e){ console.log( "Error: " + e ) }
