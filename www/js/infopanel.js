@@ -46,11 +46,13 @@
         		unitDiv : $('<div>').height(24).css( 'text-align', 'center' ),
         		currentDiv : $('<div>').css( 'text-align', 'center' ),
         		currentValue : $('<span>'),
+        		currentValueImage : $('<img>').css( 'display', 'none' ),
         		statsDiv : $('<div>').css( 'text-align', 'center' ),
         		measureSpan : $( '<span>' ).css( 'visibility', 'hidden' ).css( 'display', 'none' )
         	};
         	// Append currentValue span to currentDiv
         	$(data.currentDiv).append(data.currentValue);
+        	$(data.currentDiv).append(data.currentValueImage);
         	// Append measure span to the body
         	$('body').append(data.measureSpan);
         	// Check if we have to show the stats
@@ -82,6 +84,20 @@
 
    			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     	});
+    },
+    
+    /**
+     * Set an image as value
+     */
+    setValueImage : function( p_imgUrl, p_imgHeight, p_imgWidth ) {
+    	$(this).data('infopanel').currentValue.css( 'display', 'none' );
+    	$(this).data('infopanel').currentValueImage.css( 'display', '' );
+    	$(this).data('infopanel').currentValueImage.attr( 'src', p_imgUrl );
+    	$(this).data('infopanel').currentValueImage.attr( 'width', p_imgHeight + 'px' );
+    	$(this).data('infopanel').currentValueImage.attr( 'height', p_imgWidth + 'px' );
+
+		// Now calculate the remaining space for the margin
+    	methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
     },
     
     /**

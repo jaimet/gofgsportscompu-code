@@ -21,7 +21,7 @@ var SettingsHandler = {
 	m_appDirectoryEntry : null,
 	m_settingsStore : {
 		"minimumaccuracy" : 25,
-		"minimumaltitudeaccuracy" : 10,
+		//"minimumaltitudeaccuracy" : 10,
 		"minimumaltitudechange" : 3,
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,

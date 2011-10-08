@@ -47,7 +47,7 @@ Settings.prototype._save = function() {
 	console.log( "settings-page save!" );
 	
 	SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
-	SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
+	//SettingsHandler.set( 'minimumaltitudeaccuracy', $( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val() );
 	SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
 	SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
 	SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
@@ -90,7 +90,7 @@ Settings.prototype._odoReset = function() {
 Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	// Read values from settings handler
 	$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
-	$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
+	//$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
 	$( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
 	$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );

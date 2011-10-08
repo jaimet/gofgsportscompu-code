@@ -62,7 +62,21 @@ Summary.prototype._updateDisplay = function() {
 	$( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
 	$( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
 	$( '#altitude-infopanel' ).infopanel( 'setInfo', TrackHandler.getElevationRise().toFixed(2) + "% / &Oslash; " + TrackHandler.getAverageElevationRise().toFixed(2) + "%" );
-	$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() + " / " + TrackHandler.getAltitudeAccuracy() );
+	
+	var averageAccuracy = (TrackHandler.getAccuracy() + TrackHandler.getAltitudeAccuracy()) / 2.0;
+	var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
+	
+	if( averageAccuracy <= (minimumAccuracy / 2.0) ) {
+		$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalExcellent48.png', 48, 48 );
+	}
+	else if( averageAccuracy <= minimumAccuracy ) {
+		$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalGood48.png', 48, 48 );
+	}
+	else {
+		$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
+	}
+	
+	//$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() + " / " + TrackHandler.getAltitudeAccuracy() );
 	$( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
 };
 
@@ -91,7 +105,11 @@ Summary.prototype._startGPS = function() {
 	$( '#stop-button' ).show();
 	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 	
+	// Update accuracy status image
+	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
+	
 	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
+	// Check if we have to wait for a GPS fix first
 	if( SettingsHandler.get( 'waitForGPSFix' ) == 'yes' ) {
 		GPSHandler.setCallback( pages.summary._gpsFixWait );
 	}
@@ -143,6 +161,9 @@ Summary.prototype._stopGPS = function() {
 	// Disable interface timer
 	if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
 	pages.summary.m_mainTimer = 0;
+	
+	// Update accuracy status image
+	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
 };
 
 /**
@@ -271,8 +292,9 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 		'maxSizeValue' : '000_/_000',
 		'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
 		'image' : 'images/find24.png',
-		'unit' : 'Accuracy (m)'
+		'unit' : 'Accuracy'
 	} );
+	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
 	
 	// Timer infopanel
 	$( '#timer-infopanel' ).infopanel( {
