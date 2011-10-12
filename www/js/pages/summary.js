@@ -107,8 +107,15 @@ Summary.prototype._startGPS = function() {
 	
 	// Update accuracy status image
 	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-	
+
+	// Start GPS
 	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
+	// Disable idle mode
+	window.plugins.PowerManagement.acquire(
+	    	function(){ console.log( "Success!" ) },
+			function(e){ console.log( "Error: " + e ) }
+	);
+		
 	// Check if we have to wait for a GPS fix first
 	if( SettingsHandler.get( 'waitForGPSFix' ) == 'yes' ) {
 		GPSHandler.setCallback( pages.summary._gpsFixWait );
@@ -131,11 +138,6 @@ Summary.prototype._gpsFixWait = function() {
 Summary.prototype._startTracking = function() {
 	TrackHandler.startTrack();
 	GPSHandler.setCallback( pages.summary._updatePosition );
-	window.plugins.PowerManagement.acquire(
-    	function(){ console.log( "Success!" ) },
-		function(e){ console.log( "Error: " + e ) }
-	);
-	
 	// Start updating our interface
 	pages.summary.m_speedCounter = 0;	// Initialize speed counter
 	pages.summary._mainTimer();
