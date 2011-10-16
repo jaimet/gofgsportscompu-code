@@ -61,7 +61,7 @@ var GOFGSportsComputer = {
 		//$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
 		//$( '#license-page' ).live( 'pagecreate', pages.license.init );
 		//$( '#about-page' ).live( 'pagecreate', pages.about.init );
-		$( '#map-page' ).live( 'pagecreate', pages.map.init );
+		//$( '#map-page' ).live( 'pagecreate', pages.map.init );
 		
 		// Calculate available height based on empty loading page
 		var availableHeight = $( '#empty-page' ).height();
