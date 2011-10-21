@@ -77,15 +77,15 @@ var SettingsHandler = {
 			reader.onload = function( p_evt ) {
 //				console.log( "Settings-File loaded" );
 //				console.log( p_evt.target.result );
+				if( p_evt.target.result.length > 0 ) {
+					var xmlDoc = $.parseXML( p_evt.target.result );
 				
-				var xmlDoc = $.parseXML( p_evt.target.result );
-				
-				$(xmlDoc).find( "settings > *" ).each( function(p_index, p_element) {
-//					console.log( "Found setting '" + this.nodeName.toLowerCase() + "' with value '" + $(this).text() + "'" );
+					$(xmlDoc).find( "settings > *" ).each( function(p_index, p_element) {
+	//					console.log( "Found setting '" + this.nodeName.toLowerCase() + "' with value '" + $(this).text() + "'" );
 					
-					SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
-				});
-				
+						SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
+					});
+				}
 				// Notify others
 				if( typeof SettingsHandler.onload === "function" ) SettingsHandler.onload();
 			}
