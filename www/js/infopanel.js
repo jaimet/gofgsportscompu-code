@@ -67,12 +67,12 @@
         	// Setup the infopanel
         	var defaultVal = settings['value'];
         	methods.setValue.call( $(this), settings['maxSizeValue'] );
-    		methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] * ((settings['showStatistics']) ? 0.75 : 1.0) );
-        	//methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
-        	methods.setValue.call( $(this), defaultVal );
-        	
         	methods.setImage.call( $(this), settings['image'] );
         	methods.setUnit.call( $(this), settings['unit'] );
+
+        	methods._sizeFont.call($(this), settings['size']['width'], settings['size']['height'] * ((settings['showStatistics']) ? 0.75 : 1.0) );
+        	//methods.setSize.call( $(this), settings['size']['width'], settings['size']['height'] );
+        	methods.setValue.call( $(this), defaultVal );
         });
     },
     setValue : function( p_value ) {
@@ -156,8 +156,13 @@
     		if( !$(this).is( ':visible' ) ) return;
     		if( p_width == 'auto' ) p_width = $(this).width();
     		
-			var maximumHeight = p_height - 24 - $(this).data('infopanel').settings['border'];
-			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
+    		var maximumHeight = p_height - $($(this).data('infopanel').image).outerHeight(true);
+    		var maximumWidth = p_width - ($(this).outerHeight(true) - $(this).height());
+    		
+    		console.log( "MaxSize: " + p_height + " / " + maximumHeight + " / " + maximumWidth );
+    		
+//			var maximumHeight = p_height - 24 - $(this).data('infopanel').settings['border'];
+//			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
 			var fontSize = 40;
 			var fontSizeStep = $(this).data( 'infopanel' ).settings['fontSizeStep'];
 			

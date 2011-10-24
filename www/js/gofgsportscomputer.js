@@ -65,6 +65,7 @@ var GOFGSportsComputer = {
 		
 		// Calculate available height based on empty loading page
 		var availableHeight = $( '#empty-page' ).height();
+		console.log( availableHeight + " / " + $(window).height() + " / " + screen.availHeight );
 		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
 		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
 		availableHeight -= $( '#empty-button' ).outerHeight( true );
