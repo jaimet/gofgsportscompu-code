@@ -23,7 +23,7 @@ Summary.prototype = new Page( "summary" );
 
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
-Summary.prototype.m_speedCounter = 0;
+Summary.prototype.m_speedTimer = 0;
 Summary.prototype.m_pauseStart = 0;
 Summary.prototype.rightPage = "settings.html";
 
@@ -38,20 +38,19 @@ Summary.prototype.oncreate = function() {
 };
 
 Summary.prototype._mainTimer = function() {
-	//console.log( "Speed counter: " + pages.summary.m_speedCounter );
-
 	// Update display
 	pages.summary._updateDisplay();
 	
-	// Update speed counter
-	pages.summary.m_speedCounter--;
-	if( pages.summary.m_speedCounter <= 0 ) {
-		pages.summary.m_speedCounter = SettingsHandler.get( 'gpsInterval' ) * 3;
-		$( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
-	}
-	
+	// Start our timers
 	pages.summary.m_mainTimer = setTimeout( "pages.summary._mainTimer()", 1000 );
 };
+
+/**
+ * Called when the speed timeout is reached (resets speed display)
+ */
+Summary.prototype._speedTimer = function() {
+	$( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
+}
 
 /**
  * Update the display of the app (regular interval, once a second)
@@ -139,7 +138,6 @@ Summary.prototype._startTracking = function() {
 	TrackHandler.startTrack();
 	GPSHandler.setCallback( pages.summary._updatePosition );
 	// Start updating our interface
-	pages.summary.m_speedCounter = 0;	// Initialize speed counter
 	pages.summary._mainTimer();
 };
 
@@ -225,9 +223,12 @@ Summary.prototype._resume = function() {
  * Callback for the GPSHandler which is called whenever the GPS position is updated
  */
 Summary.prototype._updatePosition = function() {
-	// Reset speed-reset timer
-	pages.summary.m_speedCounter = SettingsHandler.get( 'gpsInterval' ) * 3;
-	//console.log( "updatePosition" );
+	// Handle speed timeout
+	if( pages.summary.m_speedTimer != 0 ) {
+		clearTimeout( pages.summary.m_speedTimer );
+	}
+	pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsInterval' ) * 3 * 1000 );
+	
 	// Update odo (total distance - see odometer)
 	pages.summary._updateOdo( GPSHandler.getDistance() );
 	
