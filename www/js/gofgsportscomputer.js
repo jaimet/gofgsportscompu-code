@@ -52,6 +52,9 @@ var GOFGSportsComputer = {
 	_deviceReady : function() {
 		console.log( "Startup code running..." );
 		
+		// Bind swipe event to lock-overlay
+		$( '#lock-overlay' ).bind( 'swipe', function() { $(this).hide(); } );
+		
 		//console.log( "navigator.language: " + navigator.language );
 		
 		// Initialize the page handlers

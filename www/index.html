@@ -61,6 +61,15 @@
 	<script type="text/javascript" src="js/exporter/tcx.js" charset="utf-8"></script>
 </head>
 <body>
+<!-- Screen lock div -->
+<div id='lock-overlay' style='display: none;'>
+	<div id='lock-overlay-background' style="z-index: 10000; position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; opacity: 0.25; background-color: #000000; color: #FFFFFF;">
+	</div>
+	<div id='lock-overlay-message' style="z-index: 10000; position: absolute; bottom: 0; left: 0; width: 100%; background-color: #000000; color: #FFFFFF; text-align: center;">
+		<h1>Swipe to unlock</h1>
+	</div>
+</div>
+
 <!-- Settings page -->
 <div data-role="page" id="empty-page">
 	<!-- /header -->
