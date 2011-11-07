@@ -33,6 +33,7 @@ Summary.prototype.oncreate = function() {
 	$( '#start-button' ).live( 'tap', pages.summary._startGPS );
 	$( '#pause-button' ).live( 'tap', pages.summary._pause );
 	$( '#resume-button' ).live( 'tap', pages.summary._resume );
+	$( '#lock-button' ).live( 'tap', pages.summary._lock );
 	
 	$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 };
@@ -217,6 +218,13 @@ Summary.prototype._resume = function() {
 	$( '#resume-button' ).hide();
 	$( '#pause-button' ).show();
 	setTimeout( "$( '#stop-button' ).fadeIn()", 500 );
+};
+
+/**
+ * Callback when the lock button is tapped
+ */
+Summary.prototype._lock = function() {
+	$( '#lock-overlay' ).show();
 };
 
 /**
