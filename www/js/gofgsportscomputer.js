@@ -55,20 +55,8 @@ var GOFGSportsComputer = {
 		// Bind swipe event to lock-overlay
 		$( '#lock-overlay' ).bind( 'swipe', function() { $(this).hide(); } );
 		
-		//console.log( "navigator.language: " + navigator.language );
-		
-		// Initialize the page handlers
-		// change me
-		//$( '#summary-page' ).live( 'pagecreate', pages.summary.init );
-		//$( '#settings-page' ).live( 'pagecreate', pages.settings.init );
-		//$( '#tracks-page' ).live( 'pagecreate', pages.tracks.init );
-		//$( '#license-page' ).live( 'pagecreate', pages.license.init );
-		//$( '#about-page' ).live( 'pagecreate', pages.about.init );
-		//$( '#map-page' ).live( 'pagecreate', pages.map.init );
-		
 		// Calculate available height based on empty loading page
 		var availableHeight = $( '#empty-page' ).height();
-		console.log( availableHeight + " / " + $(window).height() + " / " + screen.availHeight );
 		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
 		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
 		availableHeight -= $( '#empty-button' ).outerHeight( true );

@@ -25,7 +25,7 @@ Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
 Summary.prototype.m_pauseStart = 0;
-Summary.prototype.rightPage = "settings.html";
+//Summary.prototype.rightPage = "settings.html";
 
 Summary.prototype.oncreate = function() {
 	// Listen to events
@@ -101,9 +101,10 @@ Summary.prototype._updateOdo = function( p_distance ) {
 Summary.prototype._startGPS = function() {
 	console.log( "Start-GPS called" );
 	
+	// Switch button display
 	$( '#start-button' ).hide();
 	$( '#stop-button' ).show();
-	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
+	$( '#settings-button' ).hide();
 	
 	// Update accuracy status image
 	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
@@ -138,6 +139,10 @@ Summary.prototype._gpsFixWait = function() {
 Summary.prototype._startTracking = function() {
 	TrackHandler.startTrack();
 	GPSHandler.setCallback( pages.summary._updatePosition );
+	
+	// Display pause button
+	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
+	
 	// Start updating our interface
 	pages.summary._mainTimer();
 };
@@ -148,9 +153,11 @@ Summary.prototype._startTracking = function() {
 Summary.prototype._stopGPS = function() {
 	console.log( "Stop-GPS called" );
 	
+	// Switch button display
 	$( '#start-button' ).show();
 	$( '#stop-button' ).hide();
 	$( '#pause-button' ).hide();
+	$( '#settings-button' ).show();
 	
 	GPSHandler.stopGPS();
 	TrackHandler.stopTrack();
@@ -310,7 +317,6 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	// Timer infopanel
 	$( '#timer-infopanel' ).infopanel( {
 		'value' : '00:00:00',
-		'maxSizeValue' : '00:00:00',
 		'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 5 * rowHeight) },
 		'image' : 'images/timer24.png',
 		'unit' : 'hh:mm:ss'

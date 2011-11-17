@@ -30,7 +30,7 @@
     		'image' : '',
     		'unit' : 'Unit',
     		'fontSizeStep' : 5,
-    		'border' : 15,
+    		'border' : 5,
     		'showStatistics' : false
     	};
     	
@@ -156,10 +156,10 @@
     		if( !$(this).is( ':visible' ) ) return;
     		if( p_width == 'auto' ) p_width = $(this).width();
     		
-    		var maximumHeight = p_height - $($(this).data('infopanel').image).outerHeight(true);
-    		var maximumWidth = p_width - ($(this).outerHeight(true) - $(this).height());
+    		var maximumHeight = p_height - $($(this).data('infopanel').image).outerHeight(true) - 2 * $(this).data('infopanel').settings['border'];
+    		var maximumWidth = p_width - ($(this).outerWidth(true) - $(this).width()) - 2 * $(this).data('infopanel').settings['border'];
     		
-    		console.log( "MaxSize: " + p_height + " / " + maximumHeight + " / " + maximumWidth );
+    		//console.log( "MaxSize: " + p_height + " / " + maximumHeight + " / " + maximumWidth );
     		
 //			var maximumHeight = p_height - 24 - $(this).data('infopanel').settings['border'];
 //			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];

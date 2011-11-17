@@ -17,6 +17,53 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+function Map() {
+	$(document).bind( 'thwaypoint', pages.map.waypoint );
+}
+Map.prototype = new Page( 'map' );
+
+Map.prototype.track_map = null;
+Map.prototype.track_points = [];
+Map.prototype.track_line = null;
+
+Map.prototype.oncreate = function() {
+	$( '#map-page' ).live( 'pageshow', pages.map.getEvtHandler(pages.map.initMap) );
+}
+
+Map.prototype.initMap = function() {
+	if( pages.map.track_map == null ) {
+		pages.map.track_map = new L.Map( 'track_map' );
+
+		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+	    osmAttrib = 'Map data &copy; 2011 OpenStreetMap contributors',
+	    osm = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
+		
+		var vienna = new L.LatLng(48.208889, 16.3725);
+		pages.map.track_map.addLayer( osm );
+		pages.map.track_map.setView(vienna, 13);
+	}
+
+	if( pages.map.track_line != null ) {
+		pages.map.track_map.removeLayer( pages.map.track_line );
+	}
+	
+	// Check if we have at least two track_points
+	if( pages.map.track_points.length < 2 ) return;
+	
+	pages.map.track_line = new L.Polyline( pages.map.track_points, {color: 'red'} );
+	pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_points) );
+	pages.map.track_map.addLayer( pages.map.track_line );
+}
+
+Map.prototype.waypoint = function( evt, p_waypoint ) {
+	console.log( 'Map.prototype.waypoint' );
+	
+	pages.map.track_points.push( new L.LatLng( GPSHandler._toDegree(p_waypoint.gps.lat), GPSHandler._toDegree(p_waypoint.gps.lon) ) );
+}
+
+new Map();		// Create single instance
+
+/*
 // Check if the pages namespace exists
 if( pages == undefined ) {
 	var pages = {};
@@ -101,3 +148,4 @@ pages.map = {
 			pages.map.olmap.zoomToExtent(bounds);
 		},
 };
+*/

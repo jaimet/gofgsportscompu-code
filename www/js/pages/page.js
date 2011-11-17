@@ -29,8 +29,9 @@ function Page( p_name ) {
 	this.name = p_name;
 	
 	// Listen for the create event
-	$( '#' + p_name + '-page' ).live( 'pagecreate', this.getEvtHandler(this.create) );
+	$( '#' + p_name + '-page' ).live( 'pageinit', this.getEvtHandler(this.create) );
 
+	// Listen to gesture events
 	$( '#' + p_name + '-page' ).live( 'swipeleft', this.getEvtHandler(this.swipeleft) );
 	$( '#' + p_name + '-page' ).live( 'swiperight', this.getEvtHandler(this.swiperight) );
 }
@@ -60,7 +61,7 @@ Page.prototype.swipeleft = function() {
 	
 	// No this is not an error, but swiping to the left means making the right side visible
 	if( this.rightPage != null ) {
-		$.mobile.changePage( this.rightPage );
+		$.mobile.changePage( this.rightPage, { transition: 'slide' } );
 	}
 }
 
@@ -72,7 +73,7 @@ Page.prototype.swiperight = function() {
 
 	// No this is not an error, but swiping to the right means making the left side visible
 	if( this.leftPage != null ) {
-		$.mobile.changePage( this.leftPage );
+		$.mobile.changePage( this.leftPage, { transition: 'slide', reverse: true } );
 	}
 }
 
