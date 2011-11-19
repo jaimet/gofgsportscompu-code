@@ -4,7 +4,7 @@
 	<div data-role="header">
 		<img src="images/gofgEmblem85x30.png" style="position: absolute; left: 10px; top: 2px;">
 		<h1 data-i18n="summary"></h1>
-		<a id="settings-button" href="settings.html" data-icon="grid" class="ui-btn-right" data-transition="pop" data-i18n="menu"></a>
+		<a id="settings-button" href="settings.html" data-icon="grid" class="ui-btn-right" data-i18n="menu"></a>
 	</div>
 
 	<!-- /content -->
@@ -30,17 +30,24 @@
 			</div>
 		</div>
 		<div class="ui-grid-b">
-			<div class="ui-block-a">
-				<a id="stop-button" href="#" data-role="button" data-icon="gofgsc-stop" data-iconpos="top"></a>
+			<div data-role="controlgroup" data-type="horizontal" id="summary-page_control">
+				<input id="left-button" type="button" value="" data-icon="gofgsc-stop" data-iconpos="top">
+				<input id="middle-button" type="button" value="" data-icon="gofgsc-lock" data-iconpos="top">
+				<input id="right-button" type="button" value="" data-icon="gofgsc-play" data-iconpos="top">
+ 			</div>
+		
+<!-- 				<a id="stop-button" href="#" data-role="button" data-icon="gofgsc-stop">Stop</a>
+				<a id="lock-button" href="#" data-role="button" data-icon="gofgsc-lock">Lock</a>
+				<a id="start-button" href="#" data-role="button" data-icon="gofgsc-play">Start</a>
+ -->			
+<!-- 			<div class="ui-block-a">
 				<a id="resume-button" href="#" data-role="button" data-icon="gofgsc-play" data-iconpos="top"></a>
 			</div>
 			<div class="ui-block-b">
-				<a id="lock-button" href="#" data-role="button" data-icon="gofgsc-lock" data-iconpos="top"></a>
 			</div>
 			<div class="ui-block-c">
-				<a id="start-button" href="#" data-role="button" data-icon="gofgsc-play" data-iconpos="top"></a>
 				<a id="pause-button" href="#" data-role="button" data-icon="gofgsc-pause" data-iconpos="top"></a>
 			</div>
-		</div>
+ -->		</div>
 	</div>
 </div>

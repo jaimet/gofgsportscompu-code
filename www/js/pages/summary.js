@@ -25,17 +25,43 @@ Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
 Summary.prototype.m_pauseStart = 0;
+Summary.prototype.m_leftTapHandler = null;
+Summary.prototype.m_middleTapHandler = null;
+Summary.prototype.m_rightTapHandler = null;
 //Summary.prototype.rightPage = "settings.html";
 
 Summary.prototype.oncreate = function() {
+//	$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
+//	$( '#pause-button' ).live( 'tap', pages.summary._pause );
+//	$( '#resume-button' ).live( 'tap', pages.summary._resume );
+
 	// Listen to events
-	$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
-	$( '#start-button' ).live( 'tap', pages.summary._startGPS );
-	$( '#pause-button' ).live( 'tap', pages.summary._pause );
-	$( '#resume-button' ).live( 'tap', pages.summary._resume );
-	$( '#lock-button' ).live( 'tap', pages.summary._lock );
+//	$( '#left-button' ).live( 'tap', pages.summary._stopGPS );
+//	$( '#middle-button' ).live( 'tap', pages.summary._lock );
+//	$( '#right-button' ).live( 'tap', pages.summary._startGPS );
+	$( '#left-button' ).live( 'tap', pages.summary.leftTap );
+	$( '#middle-button' ).live( 'tap', pages.summary.middleTap );
+	$( '#right-button' ).live( 'tap', pages.summary.rightTap );
+	
+	// Setup default tap handler
+	pages.summary.m_middleTapHandler = pages.summary._lock;
+	pages.summary.m_rightTapHandler = pages.summary._startGPS;
+	
+	// Disable the lock & stop button by default
+	$( '#middle-button' ).button( 'disable' );
+	$( '#left-button' ).button( 'disable' );
 	
 	$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
+};
+
+Summary.prototype.leftTap = function() {
+	if( typeof pages.summary.m_leftTapHandler === "function" ) pages.summary.m_leftTapHandler();
+}
+Summary.prototype.middleTap = function() {
+	if( typeof pages.summary.m_middleTapHandler === "function" ) pages.summary.m_middleTapHandler();
+};
+Summary.prototype.rightTap = function() {
+	if( typeof pages.summary.m_rightTapHandler === "function" ) pages.summary.m_rightTapHandler();
 };
 
 Summary.prototype._mainTimer = function() {
@@ -102,9 +128,16 @@ Summary.prototype._startGPS = function() {
 	console.log( "Start-GPS called" );
 	
 	// Switch button display
-	$( '#start-button' ).hide();
-	$( '#stop-button' ).show();
+//	$( '#start-button' ).hide();
+//	$( '#stop-button' ).show();
 	$( '#settings-button' ).hide();
+	
+	// Enable / disable buttons
+	$( '#left-button' ).button( 'enable' );
+	$( '#middle-button' ).button( 'disable' );
+	$( '#right-button' ).button( 'disable' );
+	// Setup tap handlers
+	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 	
 	// Update accuracy status image
 	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
@@ -140,6 +173,14 @@ Summary.prototype._startTracking = function() {
 	TrackHandler.startTrack();
 	GPSHandler.setCallback( pages.summary._updatePosition );
 	
+	// Enable / disable buttons
+	$( '#left-button' ).button( 'enable' );
+	$( '#middle-button' ).button( 'enable' );
+	$( '#right-button' ).button( 'enable' );
+	// Setup tap handlers
+	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_rightTapHandler = pages.summary._pause;
+	
 	// Display pause button
 	setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 	
@@ -154,10 +195,17 @@ Summary.prototype._stopGPS = function() {
 	console.log( "Stop-GPS called" );
 	
 	// Switch button display
-	$( '#start-button' ).show();
-	$( '#stop-button' ).hide();
-	$( '#pause-button' ).hide();
+//	$( '#start-button' ).show();
+//	$( '#stop-button' ).hide();
+//	$( '#pause-button' ).hide();
 	$( '#settings-button' ).show();
+	
+	// Enable / disable buttons
+	$( '#left-button' ).button( 'disable' );
+	$( '#middle-button' ).button( 'disable' );
+	$( '#right-button' ).button( 'enable' );
+	// Setup tap handler
+	pages.summary.m_rightTapHandler = pages.summary._startGPS;
 	
 	GPSHandler.stopGPS();
 	TrackHandler.stopTrack();
@@ -180,6 +228,13 @@ Summary.prototype._stopGPS = function() {
 Summary.prototype._pause = function() {
 	console.log( "Pause called" );
 	
+	// Enable / disable buttons
+	$( '#left-button' ).button( 'enable' );
+	$( '#middle-button' ).button( 'disable' );
+	$( '#right-button' ).button( 'disable' );
+	// Setup tap handler
+	pages.summary.m_leftTapHandler = pages.summary._resume;
+	
 	pages.summary.m_pauseStart = ((new Date()).getTime() / 1000).toFixed(0);
 	// Stop GPS tracking
 	GPSHandler.stopGPS();
@@ -193,9 +248,9 @@ Summary.prototype._pause = function() {
 	);
 	
 	// Hide / Show the buttons
-	$( '#stop-button' ).hide();
-	$( '#pause-button' ).hide();
-	$( '#resume-button' ).show();
+//	$( '#stop-button' ).hide();
+//	$( '#pause-button' ).hide();
+//	$( '#resume-button' ).show();
 };
 
 /**
@@ -204,6 +259,14 @@ Summary.prototype._pause = function() {
 Summary.prototype._resume = function() {
 	console.log( "Resume called" );
 
+	// Enable / disable buttons
+	$( '#left-button' ).button( 'enable' );
+	$( '#middle-button' ).button( 'enable' );
+	$( '#right-button' ).button( 'enable' );
+	// Setup tap handler
+	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_rightTapHandler = pages.summary._pause;
+	
 	var pauseEnd = ((new Date()).getTime() / 1000).toFixed(0);
 	
 	// Start GPS again
@@ -222,9 +285,9 @@ Summary.prototype._resume = function() {
 	pages.summary._mainTimer();
 
 	// Hide / Show the buttons
-	$( '#resume-button' ).hide();
-	$( '#pause-button' ).show();
-	setTimeout( "$( '#stop-button' ).fadeIn()", 500 );
+//	$( '#resume-button' ).hide();
+//	$( '#pause-button' ).show();
+//	setTimeout( "$( '#stop-button' ).fadeIn()", 500 );
 };
 
 /**
@@ -305,34 +368,15 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	$( '#altitude-infopanel' ).infopanel( 'setInfo', "0.00% / &Oslash; 0.00%" );
 
 	// Status infopanel
-//	$( '#status-infopanel' ).infopanel( {
-//		'value' : '-',
-//		'maxSizeValue' : '000_/_000',
-//		'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-//		'image' : 'images/find24.png',
-//		'unit' : 'Accuracy'
-//	} );
-//	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
-	
-	$( '#status-infopanel' ).css( 'height', rowHeight * 2 );
-	var track_map = new L.Map( 'status-infopanel', {
-    	dragging: false,
-    	touchZoom: false,
-    	zoomControl: false,
-    	attributionControl: false,
-    	doubleClickZoom: false,
+	$( '#status-infopanel' ).infopanel( {
+		'value' : '-',
+		'maxSizeValue' : '000_/_000',
+		'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
+		'image' : 'images/find24.png',
+		'unit' : 'Accuracy'
 	} );
-	var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    osmAttrib = 'Map data &copy; 2011 OpenStreetMap contributors',
-    osm = new L.TileLayer(osmUrl, {
-    	maxZoom: 18,
-    	attribution: osmAttrib,
-    	tileSize = 32,
-    });
-	var vienna = new L.LatLng(48.208889, 16.3725);
-	track_map.addLayer( osm );
-	track_map.setView(vienna, 13);
-
+	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
+	
 	// Timer infopanel
 	$( '#timer-infopanel' ).infopanel( {
 		'value' : '00:00:00',
@@ -351,9 +395,10 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
 	// Add clock timer
 	pages.summary._updateClock();
-	$( '#stop-button' ).hide();
-	$( '#pause-button' ).hide();
-	$( '#resume-button' ).hide();
+	$( '#stop-button' ).button( 'disable' );
+
+//	$( '#pause-button' ).hide();
+//	$( '#resume-button' ).hide();
 	
 	// Bind pagebeforeshow event
 	$( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );

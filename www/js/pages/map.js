@@ -56,8 +56,6 @@ Map.prototype.initMap = function() {
 }
 
 Map.prototype.waypoint = function( evt, p_waypoint ) {
-	console.log( 'Map.prototype.waypoint' );
-	
 	pages.map.track_points.push( new L.LatLng( GPSHandler._toDegree(p_waypoint.gps.lat), GPSHandler._toDegree(p_waypoint.gps.lon) ) );
 }
 

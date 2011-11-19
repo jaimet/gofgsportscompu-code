@@ -61,7 +61,7 @@ Page.prototype.swipeleft = function() {
 	
 	// No this is not an error, but swiping to the left means making the right side visible
 	if( this.rightPage != null ) {
-		$.mobile.changePage( this.rightPage, { transition: 'slide' } );
+		$.mobile.changePage( this.rightPage );
 	}
 }
 
@@ -73,7 +73,7 @@ Page.prototype.swiperight = function() {
 
 	// No this is not an error, but swiping to the right means making the left side visible
 	if( this.leftPage != null ) {
-		$.mobile.changePage( this.leftPage, { transition: 'slide', reverse: true } );
+		$.mobile.changePage( this.leftPage );
 	}
 }
 
