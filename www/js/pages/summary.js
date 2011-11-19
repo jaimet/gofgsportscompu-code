@@ -305,15 +305,34 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	$( '#altitude-infopanel' ).infopanel( 'setInfo', "0.00% / &Oslash; 0.00%" );
 
 	// Status infopanel
-	$( '#status-infopanel' ).infopanel( {
-		'value' : '-',
-		'maxSizeValue' : '000_/_000',
-		'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-		'image' : 'images/find24.png',
-		'unit' : 'Accuracy'
-	} );
-	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
+//	$( '#status-infopanel' ).infopanel( {
+//		'value' : '-',
+//		'maxSizeValue' : '000_/_000',
+//		'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
+//		'image' : 'images/find24.png',
+//		'unit' : 'Accuracy'
+//	} );
+//	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
 	
+	$( '#status-infopanel' ).css( 'height', rowHeight * 2 );
+	var track_map = new L.Map( 'status-infopanel', {
+    	dragging: false,
+    	touchZoom: false,
+    	zoomControl: false,
+    	attributionControl: false,
+    	doubleClickZoom: false,
+	} );
+	var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    osmAttrib = 'Map data &copy; 2011 OpenStreetMap contributors',
+    osm = new L.TileLayer(osmUrl, {
+    	maxZoom: 18,
+    	attribution: osmAttrib,
+    	tileSize = 32,
+    });
+	var vienna = new L.LatLng(48.208889, 16.3725);
+	track_map.addLayer( osm );
+	track_map.setView(vienna, 13);
+
 	// Timer infopanel
 	$( '#timer-infopanel' ).infopanel( {
 		'value' : '00:00:00',
