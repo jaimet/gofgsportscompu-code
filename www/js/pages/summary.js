@@ -402,6 +402,13 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	
 	// Bind pagebeforeshow event
 	$( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );
+
+
+
+
+
+	$( '#pager-overlay' ).css( 'opacity', 0.5 );
+	$( '#pager-overlay' ).show();
 };
 
 /**
