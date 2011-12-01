@@ -328,6 +328,19 @@ Summary.prototype._updateClock = function() {
 Summary.prototype._pageshow = function( p_event, p_ui ) {
 	// Remove init handler
 	$( '#summary-page' ).die( 'pageshow', pages.summary._pageshow );
+	
+	pages.summary.m_contentHeight = $('#summary-page').height();
+	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
+	pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight( true );
+	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
+	pages.summary.m_contentHeight -= ($( '#summary-page > [data-role="content"]' ).outerHeight( true ) - $( '#summary-page > [data-role="content"]' ).height());
+	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
+	pages.summary.m_contentHeight -= $('#summary-page_control').height();
+	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
+
+//	availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
+//	availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
+//	availableHeight -= $( '#empty-button' ).outerHeight( true );
 
 	// Apply layout to all info-panels
 	var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
@@ -402,13 +415,6 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	
 	// Bind pagebeforeshow event
 	$( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );
-
-
-
-
-
-	$( '#pager-overlay' ).css( 'opacity', 0.5 );
-	$( '#pager-overlay' ).show();
 };
 
 /**
