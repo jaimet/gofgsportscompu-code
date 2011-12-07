@@ -28,17 +28,10 @@ Summary.prototype.m_pauseStart = 0;
 Summary.prototype.m_leftTapHandler = null;
 Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
-//Summary.prototype.rightPage = "settings.html";
+Summary.prototype.rightPage = "map.html";
 
 Summary.prototype.oncreate = function() {
-//	$( '#stop-button' ).live( 'tap', pages.summary._stopGPS );
-//	$( '#pause-button' ).live( 'tap', pages.summary._pause );
-//	$( '#resume-button' ).live( 'tap', pages.summary._resume );
-
-	// Listen to events
-//	$( '#left-button' ).live( 'tap', pages.summary._stopGPS );
-//	$( '#middle-button' ).live( 'tap', pages.summary._lock );
-//	$( '#right-button' ).live( 'tap', pages.summary._startGPS );
+	// Listen to button taps
 	$( '#left-button' ).live( 'tap', pages.summary.leftTap );
 	$( '#middle-button' ).live( 'tap', pages.summary.middleTap );
 	$( '#right-button' ).live( 'tap', pages.summary.rightTap );
@@ -54,6 +47,9 @@ Summary.prototype.oncreate = function() {
 	$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 };
 
+/**
+ * Wrapper function(s) for dynamic tap handling without having to call live / bind / die / unbind all the time
+ */
 Summary.prototype.leftTap = function() {
 	if( typeof pages.summary.m_leftTapHandler === "function" ) pages.summary.m_leftTapHandler();
 }
@@ -64,6 +60,9 @@ Summary.prototype.rightTap = function() {
 	if( typeof pages.summary.m_rightTapHandler === "function" ) pages.summary.m_rightTapHandler();
 };
 
+/**
+ * Main timer which updates the display once a second
+ */
 Summary.prototype._mainTimer = function() {
 	// Update display
 	pages.summary._updateDisplay();
@@ -102,7 +101,6 @@ Summary.prototype._updateDisplay = function() {
 		$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
 	}
 	
-	//$( '#status-infopanel' ).infopanel( 'setValue', TrackHandler.getAccuracy() + " / " + TrackHandler.getAltitudeAccuracy() );
 	$( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
 };
 
@@ -128,8 +126,6 @@ Summary.prototype._startGPS = function() {
 	console.log( "Start-GPS called" );
 	
 	// Switch button display
-//	$( '#start-button' ).hide();
-//	$( '#stop-button' ).show();
 	$( '#settings-button' ).hide();
 	
 	// Enable / disable buttons
@@ -195,9 +191,6 @@ Summary.prototype._stopGPS = function() {
 	console.log( "Stop-GPS called" );
 	
 	// Switch button display
-//	$( '#start-button' ).show();
-//	$( '#stop-button' ).hide();
-//	$( '#pause-button' ).hide();
 	$( '#settings-button' ).show();
 	
 	// Enable / disable buttons
@@ -246,11 +239,6 @@ Summary.prototype._pause = function() {
 		function(){ console.log( "Success!" ) },
 		function(e){ console.log( "Error: " + e ) }
 	);
-	
-	// Hide / Show the buttons
-//	$( '#stop-button' ).hide();
-//	$( '#pause-button' ).hide();
-//	$( '#resume-button' ).show();
 };
 
 /**
@@ -283,11 +271,6 @@ Summary.prototype._resume = function() {
 	
 	// Start updating our interface
 	pages.summary._mainTimer();
-
-	// Hide / Show the buttons
-//	$( '#resume-button' ).hide();
-//	$( '#pause-button' ).show();
-//	setTimeout( "$( '#stop-button' ).fadeIn()", 500 );
 };
 
 /**
@@ -329,23 +312,17 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	// Remove init handler
 	$( '#summary-page' ).die( 'pageshow', pages.summary._pageshow );
 	
-	pages.summary.m_contentHeight = $('#summary-page').height();
-	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
+	// Calculate available height for content
+	pages.summary.m_contentHeight = $(window).height();
 	pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight( true );
-	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
 	pages.summary.m_contentHeight -= ($( '#summary-page > [data-role="content"]' ).outerHeight( true ) - $( '#summary-page > [data-role="content"]' ).height());
-	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
-	pages.summary.m_contentHeight -= $('#summary-page_control').height();
-	console.log( "m_contentHeight: " + pages.summary.m_contentHeight );
-
-//	availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
-//	availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
-//	availableHeight -= $( '#empty-button' ).outerHeight( true );
+	pages.summary.m_contentHeight -= $('#summary-page_control').outerHeight( true );
+	pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
 	// Apply layout to all info-panels
 	var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
-	//console.log( "Row height: " + rowHeight );
-
+	console.log( "Row height: " + rowHeight );
+	
 	// Speed infopanel
 	$( '#speed-infopanel' ).infopanel( {
 		'value' : '0.00',
@@ -410,8 +387,8 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	pages.summary._updateClock();
 	$( '#stop-button' ).button( 'disable' );
 
-//	$( '#pause-button' ).hide();
-//	$( '#resume-button' ).hide();
+	// Fix page height
+	$( '#summary-page' ).height( $(window).height() );
 	
 	// Bind pagebeforeshow event
 	$( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );

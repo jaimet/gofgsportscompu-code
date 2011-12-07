@@ -2,19 +2,14 @@
 <div data-role="page" id="map-page">
 	<!-- /header -->
 	<div data-role="header">
-		<h1>Map</h1>
-		<a href="summary.html" data-icon="arrow-l" data-i18n="summary"></a>
-		<div data-role="navbar" data-id="menu-navbar">
-			<ul>
-				<li><a href="#" data-icon="gofgsc-map" class="ui-btn-active ui-state-persist" data-i18n="map"></a></li>
-				<li><a href="settings.html" data-icon="gear" data-transition="slide" data-i18n="settings"></a></li>
-				<li><a href="tracks.html" data-icon="grid" data-transition="slide" data-i18n="tracks"></a></li>
-			</ul>
-		</div>
+		<h1 data-i18n="map"></h1>
 	</div>
 
 	<!-- /content -->
 	<div data-role="content" id="map-page_content">
-	<div id="track_map" style="height: 300px;"></div>
+		<div id="track_map"></div>
+		<div id='map-page_pager' style="text-align: center;">
+			<span style="color: #AAAAAA;">&bull;</span> <span style="color: #FFFFFF; font-weight: bold;">&bull;</span>
+		</div>
 	</div>
 </div>

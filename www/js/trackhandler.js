@@ -62,32 +62,46 @@ var TrackHandler = {
 		m_maximumSpeed : 0,				// Maximum speed
 		m_uuid : 0,						// UUID of this track
 		m_bTrackOpen : false,			// Indicates if the track is still open (and running) or not
+		m_bTrackLoading : false,		// Indicates if a track is currently loaded
 		m_waypoint : null,
 		m_continuousFileWriter : null,
 		
 		startTrack : function() {
 			if( TrackHandler.m_trackDirectoryEntry == null ) return;
 
-//			console.log( "Starting-Track" );
+			// Only start a track if no track is currently loaded
+			if( TrackHandler.m_bTrackLoading ) return;
+
+			//console.log( "Starting-Track" );
 
 			// Reset (initialization)
 			TrackHandler._reset();
+			TrackHandler.m_bTrackOpen = true;
 			// Save start time
 			TrackHandler.m_startTimestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			TrackHandler.m_waypoint.timestamp = TrackHandler.m_startTimestamp;
 			// Generate new uuid
 			TrackHandler.m_uuid = $.uidGen( { mode: 'random' } );
+			
+			// Emit new track event
+			// Parameter is true if this is a load event
+			$.event.trigger( 'thnewtrack', false );
 
 			// Construct new file-name
 			var fileName = TrackHandler.m_startTimestamp + ".gsc";
 			// Request file reference
 			TrackHandler.m_trackDirectoryEntry.getFile( fileName, {create: true, exclusive: true}, TrackHandler._fileEntry, TrackHandler._fileSystemError );
-
-			TrackHandler.m_bTrackOpen = true;
 		},
 
+		/**
+		 * Stop recording a new track
+		 */
 		stopTrack : function() {
 			TrackHandler.m_bTrackOpen = false;
+
+			// Emit end track event
+			// Parameter is true if this is a load event
+			$.event.trigger( 'thendtrack', false );
 		},
 
 		/**
@@ -96,11 +110,38 @@ var TrackHandler = {
 		 * @param p_completeCallback Function reference which is called once the track is loaded
 		 */
 		loadTrack : function( p_fileEntry, p_completeCallback ) {
+			// Only load a track if no track is currently open
+			if( TrackHandler.m_bTrackOpen ) return;
+			// Reset our track status
 			TrackHandler._reset();
-			
-			var trackReader = new TrackReader( p_fileEntry, TrackHandler._loadTrackWaypoint, function( p_uuid ) { TrackHandler.m_uuid = p_uuid; p_completeCallback( p_uuid ) } );
+			TrackHandler.m_bTrackLoading = true;
+
+			// Emit new track event
+			// Parameter is true if this is a load event
+			$.event.trigger( 'thnewtrack', true );
+
+			// Read the track
+			var trackReader = new TrackReader(
+					p_fileEntry,
+					TrackHandler._loadTrackWaypoint,
+					function( p_uuid ) {
+						TrackHandler.m_uuid = p_uuid;
+						TrackHandler.m_bTrackLoading = false;
+
+						// Emit end track event
+						// Parameter is true if this is a load event
+						$.event.trigger( 'thendtrack', true );
+
+						// Call complete callback
+						p_completeCallback( p_uuid );
+					}
+			);
 		},
 		
+		/**
+		 * Called whenever a new waypoint was loaded from a saved track
+		 * @param p_waypoint Waypoint data
+		 */
 		_loadTrackWaypoint : function( p_waypoint ) {
 			if( TrackHandler.m_startTimestamp == 0 ) {
 				TrackHandler.m_startTimestamp = p_waypoint.timestamp;
@@ -111,6 +152,9 @@ var TrackHandler = {
 			TrackHandler.addDistance( p_waypoint.distance );
 			TrackHandler.addPosition( p_waypoint.gps.lat, p_waypoint.gps.lon, p_waypoint.gps.alt );
 			TrackHandler.addSpeed( p_waypoint.speed );
+			
+			// Trigger new waypoint event
+			$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint, true );
 		},
 		
 		/**
@@ -291,17 +335,18 @@ var TrackHandler = {
 		
 		// Generic function for writing a data-line in the correct format
 		_checkWrite : function( p_status ) {
-			// Trigger new waypoint event it status is true
-			if( p_status ) {
-				$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint );
-			}
-			
 			// Check if we have a valid file-entry (which won't be the case during loading)
 			if( TrackHandler.m_fileEntry == null ) return;
 			
+			// Check if status is true (which means the data-type already exists)
 			if( p_status ) {
+				// Trigger new waypoint event
+				$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint, false );
+
+				// Write the waypoint to disk
 				TrackHandler._writeWayPoint();
 				
+				// Reset waypoint and add new timestamp
 				TrackHandler.m_waypoint.reset();
 				TrackHandler.m_waypoint.timestamp = ((new Date()).getTime() / 1000).toFixed(0);
 			}
@@ -337,6 +382,7 @@ var TrackHandler = {
 			TrackHandler.m_startTimestamp = 0;
 			TrackHandler.m_maximumSpeed = 0;
 			TrackHandler.m_bTrackOpen = false;
+			TrackHandler.m_bTrackLoading = false;
 			TrackHandler.m_waypoint = new TrackWaypoint();
 		}
 };

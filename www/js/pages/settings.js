@@ -20,7 +20,6 @@
 function Settings() {
 }
 Settings.prototype = new Page( "settings" );
-Settings.prototype.leftPage = "summary.html";
 Settings.prototype.rightPage = "tracks.html";
 
 /**
