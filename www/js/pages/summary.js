@@ -130,7 +130,7 @@ Summary.prototype._startGPS = function() {
 	
 	// Enable / disable buttons
 	$( '#left-button' ).button( 'enable' );
-	$( '#middle-button' ).button( 'disable' );
+	$( '#middle-button' ).button( 'enable' );
 	$( '#right-button' ).button( 'disable' );
 	// Setup tap handlers
 	pages.summary.m_leftTapHandler = pages.summary._stopGPS;

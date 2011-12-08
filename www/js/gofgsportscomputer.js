@@ -27,7 +27,11 @@ var GOFGSportsComputer = {
 	 * Settings have been loaded (called by SettingsHandler.onload)
 	 */
 	_settingsReady : function() {
+		// Translate empty page
 		Translator.register( $('#empty-page') );
+		
+		// Translate lock-overlay
+		Translator.register( $('#lock-overlay') );
 		
 		Translator.ontranslate = function() {
 			// Check if the user already agreed to our license

@@ -57,7 +57,7 @@ Page.prototype.create = function() {
  * Called when the user swipes to the left
  */
 Page.prototype.swipeleft = function() {
-	//console.log( "'" + this.name + "' swipe left! (" + this.rightPage + ")" );
+//	console.log( "'" + this.name + "' swipe left! (" + this.rightPage + ")" );
 	
 	// No this is not an error, but swiping to the left means making the right side visible
 	if( this.rightPage != null ) {
@@ -69,7 +69,7 @@ Page.prototype.swipeleft = function() {
  * Called when the user swipes to the right
  */
 Page.prototype.swiperight = function() {
-	//console.log( "'" + this.name + "' swipe right! (" + this.leftPage + ")" );
+//	console.log( "'" + this.name + "' swipe right! (" + this.leftPage + ")" );
 
 	// No this is not an error, but swiping to the right means making the left side visible
 	if( this.leftPage != null ) {

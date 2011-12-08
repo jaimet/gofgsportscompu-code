@@ -85,7 +85,7 @@ var TrackHandler = {
 			
 			// Emit new track event
 			// Parameter is true if this is a load event
-			$.event.trigger( 'thnewtrack', false );
+			$.event.trigger( 'thnewtrack', [ false ] );
 
 			// Construct new file-name
 			var fileName = TrackHandler.m_startTimestamp + ".gsc";
@@ -101,7 +101,7 @@ var TrackHandler = {
 
 			// Emit end track event
 			// Parameter is true if this is a load event
-			$.event.trigger( 'thendtrack', false );
+			$.event.trigger( 'thendtrack', [ false ] );
 		},
 
 		/**
@@ -118,7 +118,7 @@ var TrackHandler = {
 
 			// Emit new track event
 			// Parameter is true if this is a load event
-			$.event.trigger( 'thnewtrack', true );
+			$.event.trigger( 'thnewtrack', [ true ] );
 
 			// Read the track
 			var trackReader = new TrackReader(
@@ -130,7 +130,7 @@ var TrackHandler = {
 
 						// Emit end track event
 						// Parameter is true if this is a load event
-						$.event.trigger( 'thendtrack', true );
+						$.event.trigger( 'thendtrack', [ true ] );
 
 						// Call complete callback
 						p_completeCallback( p_uuid );
@@ -154,7 +154,7 @@ var TrackHandler = {
 			TrackHandler.addSpeed( p_waypoint.speed );
 			
 			// Trigger new waypoint event
-			$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint, true );
+			$.event.trigger( 'thwaypoint', [ TrackHandler.m_waypoint, true ] );
 		},
 		
 		/**
@@ -341,7 +341,7 @@ var TrackHandler = {
 			// Check if status is true (which means the data-type already exists)
 			if( p_status ) {
 				// Trigger new waypoint event
-				$.event.trigger( 'thwaypoint', TrackHandler.m_waypoint, false );
+				$.event.trigger( 'thwaypoint', [ TrackHandler.m_waypoint, false ] );
 
 				// Write the waypoint to disk
 				TrackHandler._writeWayPoint();

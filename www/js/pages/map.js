@@ -22,10 +22,7 @@ function Map() {
 	$(document).bind( 'thwaypoint', pages.map.waypoint );
 	$(document).bind( 'thnewtrack', pages.map.newtrack );
 	$(document).bind( 'thendtrack', pages.map.endtrack );
-
-	// Prepare track layer
-	pages.map.track_line = new L.Polyline( [], {color: 'red'} );
-
+	
 	// Create default zoom location (vienna)
 	pages.map.m_vienna = new L.LatLng(48.208889, 16.3725);
 }
@@ -34,6 +31,7 @@ Map.prototype = new Page( 'map' );
 Map.prototype.track_map = null;
 Map.prototype.track_line = null;
 Map.prototype.m_vienna = null;
+Map.prototype.m_waypoints = [];
 Map.prototype.leftPage = "summary.html";
 
 Map.prototype.oncreate = function() {
@@ -60,7 +58,9 @@ Map.prototype.initMap = function() {
 		pages.map.track_map.addLayer( osm );
 		
 		// Add track layer
+		pages.map.track_line = new L.Polyline( pages.map.m_waypoints, {color: 'red'} );
 		pages.map.track_map.addLayer( pages.map.track_line );
+		pages.map.m_waypoints = [];	// Free some memory
 		
 		// Zoom the map according to either default or the track layer
 		if( pages.map.track_line.getLatLngs().length > 2 ) {
@@ -78,27 +78,38 @@ Map.prototype.initMap = function() {
 Map.prototype.waypoint = function( evt, p_waypoint, p_bLoadEvent ) {
 	var latLng = new L.LatLng( GPSHandler._toDegree(p_waypoint.gps.lat), GPSHandler._toDegree(p_waypoint.gps.lon) );
 	
-	pages.map.track_line.addLatLng( latLng );
-	
-	// Check if map is initialized (and skip if this is a map load event)
-	if( pages.map.track_map == null || p_bLoadEvent ) return;
+	// Check if map is already initialized
+	if( pages.map.track_map == null ) {
+		// Add waypoint to list
+		pages.map.m_waypoints.push( latLng );
+	}
+	else {
+		// Update track layer
+		pages.map.track_line.addLatLng( latLng );
 
-	// Zoom in to new waypoint
-	pages.map.track_map.setView(latLng, pages.map.track_map.getMaxZoom() );
+		if( $( '#map-page' ).is( ':visible' ) ) {
+			// Zoom in to new waypoint
+			pages.map.track_map.setView(latLng, pages.map.track_map.getMaxZoom() );
+		}
+	}
 }
 
 /**
  * Event handler for new track
  */
 Map.prototype.newtrack = function( evt, p_bLoadEvent ) {
-	// Empty track layer
-	pages.map.track_line.setLatLngs( [] );
-	
-	// Check if map is initialized (and skip if this is a map load event)
-	if( pages.map.track_map == null || p_bLoadEvent ) return;
-	
-	// Center view to vienna
-	pages.map.track_map.setView(pages.map.m_vienna, 13);
+	// Check if map is initialized
+	if( pages.map.track_map == null ) {
+		// Reset waypoints
+		pages.map.m_waypoints = [];
+	}
+	else {
+		// Update track layer
+		pages.map.track_line.setLatLngs( [] );
+
+		// Center view to vienna
+		pages.map.track_map.setView(pages.map.m_vienna, 13);
+	}
 }
 
 /**
