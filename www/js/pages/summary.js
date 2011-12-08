@@ -321,7 +321,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
 	// Apply layout to all info-panels
 	var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
-	console.log( "Row height: " + rowHeight );
+//	console.log( "Row height: " + rowHeight );
 	
 	// Speed infopanel
 	$( '#speed-infopanel' ).infopanel( {

@@ -58,17 +58,19 @@ Map.prototype.initMap = function() {
 		pages.map.track_map.addLayer( osm );
 		
 		// Add track layer
-		pages.map.track_line = new L.Polyline( pages.map.m_waypoints, {color: 'red'} );
+		pages.map.track_line = new L.Polyline( [], {color: 'red'} );
 		pages.map.track_map.addLayer( pages.map.track_line );
-		pages.map.m_waypoints = [];	// Free some memory
-		
-		// Zoom the map according to either default or the track layer
-		if( pages.map.track_line.getLatLngs().length > 2 ) {
-			pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
-		}
-		else {
-			pages.map.track_map.setView(pages.map.m_vienna, 13);
-		}
+	}
+	
+	// Setup waypoints for track-layer
+	pages.map.track_line.setLatLngs( pages.map.m_waypoints );
+
+	// Zoom the map according to either default or the track layer
+	if( pages.map.track_line.getLatLngs().length > 2 ) {
+		pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
+	}
+	else {
+		pages.map.track_map.setView(pages.map.m_vienna, 13);
 	}
 }
 
@@ -77,20 +79,16 @@ Map.prototype.initMap = function() {
  */
 Map.prototype.waypoint = function( evt, p_waypoint, p_bLoadEvent ) {
 	var latLng = new L.LatLng( GPSHandler._toDegree(p_waypoint.gps.lat), GPSHandler._toDegree(p_waypoint.gps.lon) );
-	
-	// Check if map is already initialized
-	if( pages.map.track_map == null ) {
-		// Add waypoint to list
-		pages.map.m_waypoints.push( latLng );
-	}
-	else {
-		// Update track layer
-		pages.map.track_line.addLatLng( latLng );
 
-		if( $( '#map-page' ).is( ':visible' ) ) {
-			// Zoom in to new waypoint
-			pages.map.track_map.setView(latLng, pages.map.track_map.getMaxZoom() );
-		}
+	// Add waypoint to list
+	pages.map.m_waypoints.push( latLng );
+
+	if( pages.map.track_map != null && $( '#map-page' ).is( ':visible' ) ) {
+		// Update waypoints
+		pages.map.track_line.setLatLngs( pages.map.m_waypoints );
+		
+		// Zoom in to new waypoint
+		pages.map.track_map.setView(latLng, pages.map.track_map.getMaxZoom() );
 	}
 }
 
@@ -98,14 +96,11 @@ Map.prototype.waypoint = function( evt, p_waypoint, p_bLoadEvent ) {
  * Event handler for new track
  */
 Map.prototype.newtrack = function( evt, p_bLoadEvent ) {
-	// Check if map is initialized
-	if( pages.map.track_map == null ) {
-		// Reset waypoints
-		pages.map.m_waypoints = [];
-	}
-	else {
+	pages.map.m_waypoints = [];
+
+	if( pages.map.track_map != null ) {
 		// Update track layer
-		pages.map.track_line.setLatLngs( [] );
+		pages.map.track_line.setLatLngs( pages.map.m_waypoints );
 
 		// Center view to vienna
 		pages.map.track_map.setView(pages.map.m_vienna, 13);
@@ -117,10 +112,10 @@ Map.prototype.newtrack = function( evt, p_bLoadEvent ) {
  */
 Map.prototype.endtrack = function( evt, p_bLoadEvent ) {
 	// Check if map is initialized
-	if( pages.map.track_map == null ) return;
-	
-	// Zoom to fit the whole track
-	pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
+	if( pages.map.track_map != null ) {
+		// Zoom to fit the whole track
+		pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
+	}
 }
 
 new Map();		// Create single instance
