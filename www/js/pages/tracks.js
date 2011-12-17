@@ -20,7 +20,7 @@
 function Tracks() {
 }
 Tracks.prototype = new Page( "tracks" );
-Tracks.prototype.leftPage = "settings.html";
+//Tracks.prototype.leftPage = "settings.html";
 
 Tracks.prototype.oncreate = function() {
 	// Bind to all events

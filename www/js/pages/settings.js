@@ -20,7 +20,7 @@
 function Settings() {
 }
 Settings.prototype = new Page( "settings" );
-Settings.prototype.rightPage = "tracks.html";
+//Settings.prototype.rightPage = "tracks.html";
 
 /**
  * Called when the page is created
