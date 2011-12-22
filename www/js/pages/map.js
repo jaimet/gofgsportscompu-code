@@ -50,11 +50,10 @@ Map.prototype.initMap = function() {
 		track_height -= $('#map-page_pager').outerHeight( true );
 		$( '#track_map' ).height( track_height );
 		
-		pages.map.track_map = new L.Map( 'track_map' );
+		pages.map.track_map = new L.Map( 'track_map', { attributionControl: false } );
 
-		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-	    osmAttrib = 'Map data &copy; 2011 OpenStreetMap contributors',
-	    osm = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
+		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	    var osm = new L.TileLayer(osmUrl, {maxZoom: 18});
 		pages.map.track_map.addLayer( osm );
 		
 		// Add track layer
