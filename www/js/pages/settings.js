@@ -51,7 +51,7 @@ Settings.prototype._save = function() {
 	SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
 	SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
 	SettingsHandler.set( 'gpsInterval', $( '#settings-page' ).find( '#gpsIntervalSlider' ).val() );
-	SettingsHandler.set( 'waitForGPSFix', $( '#settings-page' ).find( '#waitForGPSFixSlider' ).val() );
+        SettingsHandler.set( 'autostartTracking', $( '#settings-page' ).find( '#autostartTrackingSlider' ).val() );
 	SettingsHandler._save();
 	
 	// Init re-translation
@@ -94,7 +94,7 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
 	$( '#settings-page' ).find( '#gpsIntervalSlider' ).val( SettingsHandler.get( 'gpsInterval' ) ).slider( 'refresh' );
-	$( '#settings-page' ).find( '#waitForGPSFixSlider' ).val( SettingsHandler.get( 'waitForGPSFix' ) ).slider( 'refresh' );
+        $( '#settings-page' ).find( '#autostartTrackingSlider' ).val( SettingsHandler.get( 'autostartTracking' ) ).slider( 'refresh' );
 	// Setup page layout
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
 	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();

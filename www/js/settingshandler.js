@@ -27,7 +27,7 @@ var SettingsHandler = {
 		"licenseagreed" : 0,
 		"language" : navigator.language.substr(0, 2).toLowerCase(),
 		"gpsInterval" : 3,			// Interval (in seconds) which is used to receive new GPS position updates
-		"waitForGPSFix" : 'yes',	// Only start the track once we have a GPS fix
+                "autostartTracking" : 1,        // Automatically start tracking once the GPS signal is active
 	},
 	m_settingsFileEntry : null,
 	onload : function() {},			// Called when the settings have been loaded

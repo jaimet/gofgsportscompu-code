@@ -35,7 +35,8 @@ Summary.prototype.oncreate = function() {
 	$( '#left-button' ).live( 'tap', pages.summary.leftTap );
 	$( '#middle-button' ).live( 'tap', pages.summary.middleTap );
 	$( '#right-button' ).live( 'tap', pages.summary.rightTap );
-	
+        $( '#enableGPS-button' ).live( 'tap', pages.summary.enableGPSTap );
+
 	// Setup default tap handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;
 	pages.summary.m_rightTapHandler = pages.summary._startGPS;
@@ -46,6 +47,20 @@ Summary.prototype.oncreate = function() {
 	
 	$( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 };
+
+Summary.prototype.enableGPSTap = function() {
+    $('#enableGPS-button').button('disable');
+
+    // Disable idle mode
+    window.plugins.PowerManagement.acquire(
+            function(){ console.log( "Success!" ) },
+                    function(e){ console.log( "Error: " + e ) }
+    );
+
+    // Start GPS
+    GPSHandler.setCallback( pages.summary._gpsFixWait );
+    GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
+}
 
 /**
  * Wrapper function(s) for dynamic tap handling without having to call live / bind / die / unbind all the time
@@ -138,28 +153,19 @@ Summary.prototype._startGPS = function() {
 	// Update accuracy status image
 	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
 
-	// Start GPS
-	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
-	// Disable idle mode
-	window.plugins.PowerManagement.acquire(
-	    	function(){ console.log( "Success!" ) },
-			function(e){ console.log( "Error: " + e ) }
-	);
-		
-	// Check if we have to wait for a GPS fix first
-	if( SettingsHandler.get( 'waitForGPSFix' ) == 'yes' ) {
-		GPSHandler.setCallback( pages.summary._gpsFixWait );
-	}
-	else {
-		pages.summary._startTracking();
-	}
+        pages.summary._startTracking();
 };
 
 /**
  * Simple helper function which waits for the first GPS fix and starts the track once called
  */
 Summary.prototype._gpsFixWait = function() {
-	pages.summary._startTracking();
+    $('#enableGPS-button').hide();
+    $('#summary-page_control').show();
+
+    if( SettingsHandler.get( 'autostartTracking' ) ) {
+        pages.summary._startGPS();
+    }
 };
 
 /**
@@ -190,14 +196,17 @@ Summary.prototype._startTracking = function() {
 Summary.prototype._stopGPS = function() {
 	console.log( "Stop-GPS called" );
 	
-	// Switch button display
-	$( '#settings-button' ).show();
-	
+        // Switch button display
+        $('#summary-page_control').hide();
+        $('#enableGPS-button').show();
+        $('#settings-button').show();
+
 	// Enable / disable buttons
-	$( '#left-button' ).button( 'disable' );
+        $( '#left-button' ).button( 'disable' );
 	$( '#middle-button' ).button( 'disable' );
 	$( '#right-button' ).button( 'enable' );
-	// Setup tap handler
+        $('#enableGPS-button').button('enable');
+        // Setup tap handler
 	pages.summary.m_rightTapHandler = pages.summary._startGPS;
 	
 	GPSHandler.stopGPS();
