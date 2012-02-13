@@ -34,7 +34,7 @@ Map.prototype.m_vienna = null;
 Map.prototype.m_waypoints = [];
 Map.prototype.leftPage = "summary.html";
 
-Map.prototype.oncreate = function() {
+Map.prototype.oninit = function() {
 	$( '#map-page' ).live( 'pageshow', pages.map.getEvtHandler(pages.map.initMap) );
 }
 

@@ -32,7 +32,7 @@ License.prototype._accept = function() {
 }
 
 // Register button event
-License.prototype.oncreate = function() {
+License.prototype.oninit = function() {
 	$( '#license-accept-button' ).live( 'tap', this.getEvtHandler(this._accept) );
 }
 

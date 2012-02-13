@@ -22,7 +22,7 @@ function Tracks() {
 Tracks.prototype = new Page( "tracks" );
 //Tracks.prototype.leftPage = "settings.html";
 
-Tracks.prototype.oncreate = function() {
+Tracks.prototype.oninit = function() {
 	// Bind to all events
 	$( '#tracks-page' ).live( 'pagebeforeshow', pages.tracks._pagebeforeshow );
 	$( '#tracks-load-button' ).live( 'tap', pages.tracks._loadTrack );

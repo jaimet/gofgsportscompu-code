@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  * 
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  * 
@@ -28,8 +28,9 @@ function Page( p_name ) {
 	// Keep name for later use
 	this.name = p_name;
 	
-	// Listen for the create event
-	$( '#' + p_name + '-page' ).live( 'pageinit', this.getEvtHandler(this.create) );
+    // Listen for the init & create event
+    $( '#' + p_name + '-page' ).live( 'pageinit', this.getEvtHandler(this.init) );
+    $( '#' + p_name + '-page' ).live( 'pagecreate', this.getEvtHandler(this.create) );
 
 	// Listen to gesture events
 	$( '#' + p_name + '-page' ).live( 'swipeleft', this.getEvtHandler(this.swipeleft) );
@@ -39,18 +40,28 @@ function Page( p_name ) {
 Page.prototype.leftPage = null;
 Page.prototype.rightPage = null;
 Page.prototype.name = "";
-Page.prototype.oncreate = null;	// Hook for sub-classes to run additional code during create
+Page.prototype.oninit = null;	// Hook for sub-classes to run additional code during init
 
 /**
  * Automatically called when the page is created
  */
 Page.prototype.create = function() {
-	console.log( "'" + this.name + "' page created!" );
+    console.log( "'" + this.name + "' page created!" );
+
+    // Register for translation
+    Translator.register( $('#' + this.name + '-page') );
+}
+
+/**
+ * Automatically called when the page is inited
+ */
+Page.prototype.init = function() {
+    console.log( "'" + this.name + "' page inited!" );
 	
 	// Register for translation
 	Translator.register( $('#' + this.name + '-page') );
 	
-	if( typeof this.oncreate === "function" ) this.oncreate();
+    if( typeof this.oninit === "function" ) this.oninit();
 }
 
 /**

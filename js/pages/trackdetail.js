@@ -23,13 +23,15 @@ Trackdetail.prototype = new Page( "trackdetail" );
 Trackdetail.prototype.m_filename = null;
 
 // Register button event
-Trackdetail.prototype.oncreate = function() {
+Trackdetail.prototype.oninit = function() {
     $( '#trackdetail-page' ).live( 'pagebeforeshow', pages.trackdetail._pagebeforeshow );
 }
 
-Trackdetail.prototype.setTrack = function( p_filename ) {
+Trackdetail.prototype.setTrack = function( p_filename, p_displayname ) {
     // Store filename
     pages.trackdetail.m_filename = p_filename;
+
+    $('#trackdetail-header').html( p_displayname );
 }
 
 Trackdetail.prototype._pagebeforeshow = function() {

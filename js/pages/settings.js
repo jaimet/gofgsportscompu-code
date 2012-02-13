@@ -25,7 +25,7 @@ Settings.prototype = new Page( "settings" );
 /**
  * Called when the page is created
  */
-Settings.prototype.oncreate = function() {
+Settings.prototype.oninit = function() {
 	$( '#settings-page' ).bind( 'pagebeforeshow', pages.settings._pagebeforeshow );
 	$( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
 	

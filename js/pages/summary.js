@@ -30,7 +30,7 @@ Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.rightPage = "map.html";
 
-Summary.prototype.oncreate = function() {
+Summary.prototype.oninit = function() {
 	// Listen to button taps
 	$( '#left-button' ).live( 'tap', pages.summary.leftTap );
 	$( '#middle-button' ).live( 'tap', pages.summary.middleTap );
