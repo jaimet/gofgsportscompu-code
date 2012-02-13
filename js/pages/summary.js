@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  * 
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  * 
@@ -49,7 +49,7 @@ Summary.prototype.oncreate = function() {
 };
 
 Summary.prototype.enableGPSTap = function() {
-    //$('#enableGPS-button').button('disable');
+    $('#enableGPS-button').button('disable');
 
     // Disable idle mode
     /*window.plugins.PowerManagement.acquire(
@@ -147,13 +147,13 @@ Summary.prototype._startGPS = function() {
 	$( '#left-button' ).button( 'enable' );
 	$( '#middle-button' ).button( 'enable' );
 	$( '#right-button' ).button( 'disable' );
-	// Setup tap handlers
+    // Setup tap handlers
 	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 	
 	// Update accuracy status image
 	$( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
 
-        pages.summary._startTracking();
+    pages.summary._startTracking();
 };
 
 /**
@@ -172,6 +172,8 @@ Summary.prototype._gpsFixWait = function() {
  * Start the real tracking
  */
 Summary.prototype._startTracking = function() {
+    console.log('Start-Tracking called');
+
 	TrackHandler.startTrack();
 	GPSHandler.setCallback( pages.summary._updatePosition );
 	
@@ -179,6 +181,8 @@ Summary.prototype._startTracking = function() {
 	$( '#left-button' ).button( 'enable' );
 	$( '#middle-button' ).button( 'enable' );
 	$( '#right-button' ).button( 'enable' );
+    // Update button icons
+    $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
 	// Setup tap handlers
 	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 	pages.summary.m_rightTapHandler = pages.summary._pause;
@@ -196,17 +200,19 @@ Summary.prototype._startTracking = function() {
 Summary.prototype._stopGPS = function() {
 	console.log( "Stop-GPS called" );
 	
-        // Switch button display
-        $('#summary-page_control').hide();
-        $('#summary-page_enableGPS').show();
-        $('#settings-button').show();
+    // Switch button display
+    $('#summary-page_control').hide();
+    $('#summary-page_enableGPS').show();
+    $('#settings-button').show();
 
 	// Enable / disable buttons
-        $( '#left-button' ).button( 'disable' );
+    $( '#left-button' ).button( 'disable' );
 	$( '#middle-button' ).button( 'disable' );
 	$( '#right-button' ).button( 'enable' );
-        $('#enableGPS-button').button('enable');
-        // Setup tap handler
+    $('#enableGPS-button').button('enable');
+    // Update button icons
+    $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
+    // Setup tap handler
 	pages.summary.m_rightTapHandler = pages.summary._startGPS;
 	
 	GPSHandler.stopGPS();
@@ -234,7 +240,9 @@ Summary.prototype._pause = function() {
 	$( '#left-button' ).button( 'enable' );
 	$( '#middle-button' ).button( 'disable' );
 	$( '#right-button' ).button( 'disable' );
-	// Setup tap handler
+    // Update button icons
+    $( '#left-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-stop').addClass('ui-icon-gofgsc-play');
+    // Setup tap handler
 	pages.summary.m_leftTapHandler = pages.summary._resume;
 	
 	pages.summary.m_pauseStart = ((new Date()).getTime() / 1000).toFixed(0);
@@ -256,11 +264,13 @@ Summary.prototype._pause = function() {
 Summary.prototype._resume = function() {
 	console.log( "Resume called" );
 
-	// Enable / disable buttons
+    // Enable / disable buttons
 	$( '#left-button' ).button( 'enable' );
 	$( '#middle-button' ).button( 'enable' );
 	$( '#right-button' ).button( 'enable' );
-	// Setup tap handler
+    // Update button icons
+    $( '#left-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-stop');
+    // Setup tap handler
 	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 	pages.summary.m_rightTapHandler = pages.summary._pause;
 	
