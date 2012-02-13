@@ -31,7 +31,6 @@ var GPSHandler = {
 	
 	m_lastPosition : 0,
 	m_distance : 0,
-	m_timerReference : 0,
 	m_watchId : null,
 	
 	startGPS : function( p_interval, p_callback ) {
@@ -44,10 +43,11 @@ var GPSHandler = {
 	},
 	
 	stopGPS : function() {
-		//clearTimeout( GPSHandler.m_timerReference );
 		navigator.geolocation.clearWatch( GPSHandler.m_watchId );
 		GPSHandler.m_settings['positionUpdated'] = function() {};
 		GPSHandler.m_watchId = null;
+        GPSHandler.m_lastPosition = 0;
+        GPSHandler.m_distance = 0;
 	},
 	
 	setCallback : function( p_callback ) {
@@ -93,6 +93,7 @@ var GPSHandler = {
 		
 		if( GPSHandler.m_lastPosition == 0 ) {
 			GPSHandler.m_lastPosition = p_position;
+            GPSHandler.m_settings['positionUpdated']();
 			return;
 		}
 		

@@ -50,8 +50,8 @@ Settings.prototype._save = function() {
 	SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
 	SettingsHandler.set( 'showdidyouknow', $( '#settings-page' ).find( '#showdidyouknowSlider' ).val() );
 	SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
-	SettingsHandler.set( 'gpsInterval', $( '#settings-page' ).find( '#gpsIntervalSlider' ).val() );
-        SettingsHandler.set( 'autostartTracking', $( '#settings-page' ).find( '#autostartTrackingSlider' ).val() );
+    SettingsHandler.set( 'gpsinterval', $( '#settings-page' ).find( '#gpsIntervalSlider' ).val() );
+    SettingsHandler.set( 'autostarttracking', $( '#settings-page' ).find( '#autostartTrackingSlider' ).val() );
 	SettingsHandler._save();
 	
 	// Init re-translation
@@ -89,16 +89,17 @@ Settings.prototype._odoReset = function() {
 Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	// Read values from settings handler
 	$( '#settings-page' ).find( '#minAccuracySlider' ).val( SettingsHandler.get( 'minimumaccuracy' ) ).slider( 'refresh' );
-	//$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
-	$( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
-	$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
+    $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val( SettingsHandler.get( 'minimumaltitudechange' ) ).slider( 'refresh' );
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
-	$( '#settings-page' ).find( '#gpsIntervalSlider' ).val( SettingsHandler.get( 'gpsInterval' ) ).slider( 'refresh' );
-        $( '#settings-page' ).find( '#autostartTrackingSlider' ).val( SettingsHandler.get( 'autostartTracking' ) ).slider( 'refresh' );
+    $( '#settings-page' ).find( '#gpsIntervalSlider' ).val( SettingsHandler.get( 'gpsinterval' ) ).slider( 'refresh' );
+    $( '#settings-page' ).find( '#autostartTrackingSlider' ).slider( 'refresh', SettingsHandler.get( 'autostarttracking' ) );
 	// Setup page layout
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
 	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();
-	//$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
+
+    //$( '#settings-page' ).find( '#settings-odoConfirm-button' ).hide();
+    //$( '#settings-page' ).find( '#minAltitudeAccuracySlider' ).val( SettingsHandler.get( 'minimumaltitudeaccuracy' ) ).slider( 'refresh' );
+    //$( '#settings-page' ).find( '#showdidyouknowSlider' ).val( SettingsHandler.get( 'showdidyouknow' ) ).slider( 'refresh' );
 };
 
 new Settings();

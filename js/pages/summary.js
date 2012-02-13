@@ -49,17 +49,17 @@ Summary.prototype.oncreate = function() {
 };
 
 Summary.prototype.enableGPSTap = function() {
-    $('#enableGPS-button').button('disable');
+    //$('#enableGPS-button').button('disable');
 
     // Disable idle mode
-    window.plugins.PowerManagement.acquire(
+    /*window.plugins.PowerManagement.acquire(
             function(){ console.log( "Success!" ) },
                     function(e){ console.log( "Error: " + e ) }
-    );
+    );*/
 
     // Start GPS
     GPSHandler.setCallback( pages.summary._gpsFixWait );
-    GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ) );
+    GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
 }
 
 /**
@@ -160,10 +160,10 @@ Summary.prototype._startGPS = function() {
  * Simple helper function which waits for the first GPS fix and starts the track once called
  */
 Summary.prototype._gpsFixWait = function() {
-    $('#enableGPS-button').hide();
+    $('#summary-page_enableGPS').hide();
     $('#summary-page_control').show();
 
-    if( SettingsHandler.get( 'autostartTracking' ) ) {
+    if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
         pages.summary._startGPS();
     }
 };
@@ -198,7 +198,7 @@ Summary.prototype._stopGPS = function() {
 	
         // Switch button display
         $('#summary-page_control').hide();
-        $('#enableGPS-button').show();
+        $('#summary-page_enableGPS').show();
         $('#settings-button').show();
 
 	// Enable / disable buttons
@@ -211,10 +211,10 @@ Summary.prototype._stopGPS = function() {
 	
 	GPSHandler.stopGPS();
 	TrackHandler.stopTrack();
-	window.plugins.PowerManagement.release(
+    /*window.plugins.PowerManagement.release(
     	function(){ console.log( "Success!" ) },
 		function(e){ console.log( "Error: " + e ) }
-	);
+    );*/
 	
 	// Disable interface timer
 	if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
@@ -267,7 +267,7 @@ Summary.prototype._resume = function() {
 	var pauseEnd = ((new Date()).getTime() / 1000).toFixed(0);
 	
 	// Start GPS again
-	GPSHandler.startGPS( SettingsHandler.get( 'gpsInterval' ), pages.summary._updatePosition );
+    GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
 	// Disable suspend
 	window.plugins.PowerManagement.acquire(
     	function(){ console.log( "Success!" ) },
@@ -297,7 +297,7 @@ Summary.prototype._updatePosition = function() {
 	if( pages.summary.m_speedTimer != 0 ) {
 		clearTimeout( pages.summary.m_speedTimer );
 	}
-	pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsInterval' ) * 3 * 1000 );
+    pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsinterval' ) * 3 * 1000 );
 	
 	// Update odo (total distance - see odometer)
 	pages.summary._updateOdo( GPSHandler.getDistance() );
