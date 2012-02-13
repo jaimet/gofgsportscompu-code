@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  * 
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  * 
@@ -129,20 +129,24 @@ Tracks.prototype._trackSort = function( a, b ) {
 Tracks.prototype._refreshTracksEntries = function( entries ) {
 	entries.sort(pages.tracks._trackSort);
 	
-	var containerdiv = $( '<div data-role="fieldcontain">' );
-	var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
-	
+    var containerdiv = $( '<div data-role="fieldcontain">' );
+    //var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
+    var controlgroup = $( '<ul data-role="listview">' );
+
 	for( var i = 0; i < entries.length; i++ ) {
-		var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
-		inputRadio.data( 'fileEntry', entries[i] );
+        //var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
+        var inputRadio = $( '<li></li>' );
+        inputRadio.data( 'fileEntry', entries[i] );
 		
 		// Format date-information
 		var timestamp = parseInt( entries[i].name.replace( '.gsc', '' ) );
 		var formatDate = new Date();
 		formatDate.setTime(timestamp * 1000);
 
-		controlgroup.append( inputRadio );
-		controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
+        inputRadio.append( $('<a href="trackdetail.html" data-transition="slide"><h3>' + formatDate.format() + '</h3></a>') );
+
+        controlgroup.append( inputRadio );
+        //controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
 	}
 
 	// Append to page & initialize jQueryMobile content
