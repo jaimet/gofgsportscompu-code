@@ -52,10 +52,10 @@ Summary.prototype.enableGPSTap = function() {
     $('#enableGPS-button').button('disable');
 
     // Disable idle mode
-    /*window.plugins.PowerManagement.acquire(
+    window.plugins.PowerManagement.acquire(
             function(){ console.log( "Success!" ) },
                     function(e){ console.log( "Error: " + e ) }
-    );*/
+    );
 
     // Start GPS
     GPSHandler.setCallback( pages.summary._gpsFixWait );
@@ -217,10 +217,10 @@ Summary.prototype._stopGPS = function() {
 	
 	GPSHandler.stopGPS();
 	TrackHandler.stopTrack();
-    /*window.plugins.PowerManagement.release(
+    window.plugins.PowerManagement.release(
     	function(){ console.log( "Success!" ) },
 		function(e){ console.log( "Error: " + e ) }
-    );*/
+    );
 	
 	// Disable interface timer
 	if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
@@ -335,7 +335,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 	pages.summary.m_contentHeight = $(window).height();
 	pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight( true );
 	pages.summary.m_contentHeight -= ($( '#summary-page > [data-role="content"]' ).outerHeight( true ) - $( '#summary-page > [data-role="content"]' ).height());
-	pages.summary.m_contentHeight -= $('#summary-page_control').outerHeight( true );
+	pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight( true );
 	pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
 	// Apply layout to all info-panels
