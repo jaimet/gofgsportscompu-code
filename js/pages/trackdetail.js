@@ -70,7 +70,7 @@ Trackdetail.prototype._loadTrack = function() {
  */
 Trackdetail.prototype._loadTrackFinished = function() {
     pages.summary._updateDisplay();
-    $.mobile.changePage( "summary.html", { reverse : true } );
+    $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );
 };
 
 /**
