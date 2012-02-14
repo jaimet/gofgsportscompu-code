@@ -51,6 +51,7 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
 		
 		// Format date-information
 		var timestamp = parseInt( entries[i].name.replace( '.gsc', '' ) );
+        if( isNaN(timestamp) ) continue;
 		var formatDate = new Date();
 		formatDate.setTime(timestamp * 1000);
         listItem.jqmData( 'displayName', formatDate.format() );
