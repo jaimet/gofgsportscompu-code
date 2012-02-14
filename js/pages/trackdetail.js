@@ -20,22 +20,97 @@
 function Trackdetail() {
 }
 Trackdetail.prototype = new Page( "trackdetail" );
-Trackdetail.prototype.m_filename = null;
+Trackdetail.prototype.m_fileEntry = null;
+Trackdetail.prototype.m_displayName = null;
 
 // Register button event
 Trackdetail.prototype.oninit = function() {
     $( '#trackdetail-page' ).live( 'pagebeforeshow', pages.trackdetail._pagebeforeshow );
+    $( '#trackdetail-delete-button' ).live( 'tap', pages.trackdetail._deleteTrack );
+    $( '#trackdetail-load-button' ).live( 'tap', pages.trackdetail._loadTrack );
+    $( '#trackdetail-export-fitlog-button' ).live( 'tap', pages.trackdetail._exportTrackFitlog );
+    $( '#trackdetail-export-gpx-button' ).live( 'tap', pages.trackdetail._exportTrackGPX );
+    $( '#trackdetail-export-tcx-button' ).live( 'tap', pages.trackdetail._exportTrackTCX );
 }
 
-Trackdetail.prototype.setTrack = function( p_filename, p_displayname ) {
-    // Store filename
-    pages.trackdetail.m_filename = p_filename;
+/**
+ * Called by the Tracks-page in order to notify the page of the selected track
+ */
+Trackdetail.prototype.setTrack = function( p_fileEntry, p_displayName ) {
+    // Store file information
+    pages.trackdetail.m_fileEntry = p_fileEntry;
+    pages.trackdetail.m_displayName = p_displayName;
 
-    $('#trackdetail-header').html( p_displayname );
 }
 
 Trackdetail.prototype._pagebeforeshow = function() {
     // Load track details
+    $('#trackdetail-title').html( pages.trackdetail.m_displayName );
 }
+
+/**
+ * Delete the currently displayed track (and return to overview on success)
+ */
+Trackdetail.prototype._deleteTrack = function() {
+    pages.trackdetail.m_fileEntry.remove( function() { $.mobile.changePage( 'tracks.html', { transition: 'slide', reverse: true } ); } );
+}
+
+/**
+ * Called when the user wants to load a track
+ */
+Trackdetail.prototype._loadTrack = function() {
+    console.log( "Loading track!" );
+    $.mobile.showPageLoadingMsg();
+
+    TrackHandler.loadTrack( pages.trackdetail.m_fileEntry, pages.trackdetail._loadTrackFinished );
+};
+
+/**
+ * Called when loading of a track has finished
+ */
+Trackdetail.prototype._loadTrackFinished = function() {
+    pages.summary._updateDisplay();
+    $.mobile.changePage( "summary.html", { reverse : true } );
+};
+
+/**
+ * Called when the user wants to export a track to fitlog
+ */
+Trackdetail.prototype._exportTrackFitlog = function() {
+    // Show loading & start exporting
+    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.showPageLoadingMsg();
+    exporter.fitlog.run( pages.trackdetail.m_fileEntry, function() {
+        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.hidePageLoadingMsg();
+    } );
+};
+
+/**
+ * Called when the user wants to export a track to GPX
+ */
+Trackdetail.prototype._exportTrackGPX = function() {
+    // Show loading & start exporting
+    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.showPageLoadingMsg();
+    exporter.gpx.run( pages.trackdetail.m_fileEntry, function() {
+        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.hidePageLoadingMsg();
+    } );
+};
+
+/**
+ * Called when the user wants to export a track to TCX
+ */
+Trackdetail.prototype._exportTrackTCX = function() {
+    // Show loading & start exporting
+    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.showPageLoadingMsg();
+    exporter.tcx.run( pages.trackdetail.m_fileEntry, function() {
+        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.hidePageLoadingMsg();
+    } );
+};
+
 
 new Trackdetail();	// Create single instance

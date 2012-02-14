@@ -25,95 +25,6 @@ Tracks.prototype = new Page( "tracks" );
 Tracks.prototype.oninit = function() {
 	// Bind to all events
 	$( '#tracks-page' ).live( 'pagebeforeshow', pages.tracks._pagebeforeshow );
-	$( '#tracks-load-button' ).live( 'tap', pages.tracks._loadTrack );
-	$( '#tracks-export-fitlog-button' ).live( 'tap', pages.tracks._exportTrackFitlog );
-	$( '#tracks-export-gpx-button' ).live( 'tap', pages.tracks._exportTrackGPX );
-	$( '#tracks-export-tcx-button' ).live( 'tap', pages.tracks._exportTrackTCX );
-	$( '#tracks-delete-button' ).live( 'tap', pages.tracks._deleteTrack );
-};
-
-/**
- * Called when loading of a track has finished
- */
-Tracks.prototype._loadTrackFinished = function() {
-	pages.summary._updateDisplay();
-	$.mobile.changePage( "summary.html", { reverse : true } );
-};
-
-/**
- * Called when the user wants to load a track
- */
-Tracks.prototype._loadTrack = function() {
-	console.log( "Loading track!" );
-	$.mobile.showPageLoadingMsg();
-	
-	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
-		if( $(this).is(":checked") ) {
-			TrackHandler.loadTrack( $(this).data( 'fileEntry' ), pages.tracks._loadTrackFinished );
-		}
-	} );
-};
-
-/**
- * Called when the user wants to export a track to fitlog
- */
-Tracks.prototype._exportTrackFitlog = function() {
-	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
-		if( $(this).is(":checked") ) {
-			// Show loading & start exporting
-			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
-			$.mobile.showPageLoadingMsg();
-			exporter.fitlog.run( $(this).data( 'fileEntry' ), function() {
-				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
-				$.mobile.hidePageLoadingMsg();
-			} );
-		}
-	} );
-};
-
-/**
- * Called when the user wants to export a track to GPX
- */
-Tracks.prototype._exportTrackGPX = function() {
-	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
-		if( $(this).is(":checked") ) {
-			// Show loading & start exporting
-			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
-			$.mobile.showPageLoadingMsg();
-			exporter.gpx.run( $(this).data( 'fileEntry' ), function() {
-				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
-				$.mobile.hidePageLoadingMsg();
-			} );
-		}
-	} );
-};
-
-/**
- * Called when the user wants to export a track to TCX
- */
-Tracks.prototype._exportTrackTCX = function() {
-	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
-		if( $(this).is(":checked") ) {
-			// Show loading & start exporting
-			$.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
-			$.mobile.showPageLoadingMsg();
-			exporter.tcx.run( $(this).data( 'fileEntry' ), function() {
-				$.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
-				$.mobile.hidePageLoadingMsg();
-			} );
-		}
-	} );
-};
-
-/**
- * Called when the user wants to delete a track
- */
-Tracks.prototype._deleteTrack = function() {
-	$( '#tracks-list' ).find( "input[type='radio']" ).each( function() {
-		if( $(this).is(":checked") ) {
-			$(this).data( 'fileEntry' ).remove( pages.tracks._pagebeforeshow );
-		}
-	} );
 };
 
 /**
@@ -129,30 +40,39 @@ Tracks.prototype._trackSort = function( a, b ) {
 Tracks.prototype._refreshTracksEntries = function( entries ) {
 	entries.sort(pages.tracks._trackSort);
 	
-    var containerdiv = $( '<div data-role="fieldcontain">' );
+    var containerdiv = $( '<div>' );
     //var controlgroup = $( '<fieldset data-role="controlgroup" id="tracks-list">' );
-    var controlgroup = $( '<ul data-role="listview">' );
+    var uList = $( '<ul data-role="listview">' );
 
 	for( var i = 0; i < entries.length; i++ ) {
         //var inputRadio = $( '<input type="radio" name="track-select" id="track-' + entries[i].name + '" value="' + entries[i].name + '" />' );
-        var inputRadio = $( '<li></li>' );
-        inputRadio.data( 'fileEntry', entries[i] );
+        var listItem = $( '<li></li>' );
+        listItem.jqmData( 'fileEntry', entries[i] );
 		
 		// Format date-information
 		var timestamp = parseInt( entries[i].name.replace( '.gsc', '' ) );
 		var formatDate = new Date();
 		formatDate.setTime(timestamp * 1000);
+        listItem.jqmData( 'displayName', formatDate.format() );
 
-        inputRadio.append( $('<a href="trackdetail.html" data-transition="slide"><h3>' + formatDate.format() + '</h3></a>') );
+        listItem.append( $('<a href="trackdetail.html" data-transition="slide"><h3>' + formatDate.format() + '</h3></a>') );
 
-        controlgroup.append( inputRadio );
+        uList.append( listItem );
         //controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
 	}
 
 	// Append to page & initialize jQueryMobile content
-	containerdiv.append(controlgroup);
+    containerdiv.append(uList);
 	$( '#tracks-list-container' ).append( containerdiv );
 	containerdiv.trigger( 'create' );
+
+    // Bind to the tap-event of the newly created track entries
+    $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'tap', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
+    //bind( 'tap', pages.tracks._trackTap );
+};
+
+Tracks.prototype._trackTap = function(event) {
+    pages.trackdetail.setTrack(event.data.fileEntry, event.data.displayName);
 };
 
 /**

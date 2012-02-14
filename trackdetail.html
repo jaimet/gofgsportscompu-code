@@ -2,11 +2,34 @@
 <div data-role="page" id="trackdetail-page">
         <!-- /header -->
         <div data-role="header">
-                <h1 id="trackdetail-header"></h1>
+                <h1>Details</h1>
                 <a href="tracks.html" data-icon="arrow-l" data-i18n="tracks" data-direction="reverse" data-transition="slide"></a>
+        </div>
+
+        <div data-role="footer" data-theme="d">
+            <h1 id="trackdetail-title"></h1>
         </div>
 
         <!-- /content -->
         <div data-role="content" id="track-detail">
+            <!-- Upload track to gofg.at homepage -->
+            <!--<h3 data-i18n="upload_gofg"></h3>
+            <input id="trackdetail-upload-button" type="button" value="" data-i18n="upload" data-icon="" />-->
+
+            <!-- Load control -->
+            <h3 data-i18n="load"></h3>
+            <input id="trackdetail-load-button" type="button" value="" data-i18n="load" data-icon="reload" />
+
+            <!-- Export control -->
+            <h3 data-i18n="export"></h3>
+            <div data-role="controlgroup" data-type="horizontal">
+                    <input id="trackdetail-export-gpx-button" type="button" value="GPX" />
+                    <input id="trackdetail-export-tcx-button" type="button" value="TCX" />
+                    <input id="trackdetail-export-fitlog-button" type="button" value="Fitlog" />
+            </div>
+
+            <!-- Delete control -->
+            <h3 data-i18n="delete"></h3>
+            <input id="trackdetail-delete-button" type="button" value="" data-i18n="delete" data-icon="delete" />
         </div>
 </div>
