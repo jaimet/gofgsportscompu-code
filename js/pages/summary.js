@@ -202,7 +202,7 @@ Summary.prototype._stopGPS = function() {
 	
     // Switch button display
     $('#summary-page_control').hide();
-    $('#summary-page_enableGPS').show();
+    setTimeout( "$('#summary-page_enableGPS').show()", 600 );
     $('#settings-button').show();
 
 	// Enable / disable buttons
