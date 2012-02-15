@@ -31,6 +31,7 @@ Trackdetail.prototype.oninit = function() {
     $( '#trackdetail-export-fitlog-button' ).live( 'tap', pages.trackdetail._exportTrackFitlog );
     $( '#trackdetail-export-gpx-button' ).live( 'tap', pages.trackdetail._exportTrackGPX );
     $( '#trackdetail-export-tcx-button' ).live( 'tap', pages.trackdetail._exportTrackTCX );
+    $( '#trackdetail-upload-button' ).live( 'tap', pages.trackdetail._uploadTrack );
 }
 
 /**
@@ -44,6 +45,14 @@ Trackdetail.prototype.setTrack = function( p_fileEntry, p_displayName ) {
 }
 
 Trackdetail.prototype._pagebeforeshow = function() {
+    // Check if authkey is set
+    if( SettingsHandler.get('authkey') != "" ) {
+        $('#trackdetail-upload-button').button('enable');
+    }
+    else {
+        $('#trackdetail-upload-button').button('disable');
+    }
+
     // Load track details
     $('#trackdetail-title').html( pages.trackdetail.m_displayName );
 }
@@ -112,5 +121,18 @@ Trackdetail.prototype._exportTrackTCX = function() {
     } );
 };
 
+/**
+ * Called when the user wants to upload a track
+ */
+Trackdetail.prototype._uploadTrack = function() {
+    // Show loading & start uploading
+    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.showPageLoadingMsg();
+
+    var tu = new TrackUploader( pages.trackdetail.m_fileEntry, function() {
+        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.hidePageLoadingMsg();
+    } );
+};
 
 new Trackdetail();	// Create single instance

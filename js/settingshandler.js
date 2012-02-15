@@ -27,14 +27,15 @@ var SettingsHandler = {
 		"licenseagreed" : 0,
 		"language" : navigator.language.substr(0, 2).toLowerCase(),
         "gpsinterval" : 3,			// Interval (in seconds) which is used to receive new GPS position updates
-        "autostarttracking" : 1,        // Automatically start tracking once the GPS signal is active
+        "autostarttracking" : 1,    // Automatically start tracking once the GPS signal is active
+        "trackuploadurl" : "",      // Hardcoded path to track upload-URL
+        "authkey" : "",             // Key for authentication against the GOFG system
 	},
 	m_settingsFileEntry : null,
 	onload : function() {},			// Called when the settings have been loaded
 	
 	init : function( p_appDirectoryEntry ) {
 		SettingsHandler.m_appDirectoryEntry = p_appDirectoryEntry;
-		
 		SettingsHandler.m_appDirectoryEntry.getFile( "gsc_settings.xml", { create: true, exclusive: false }, SettingsHandler._settingsFileEntry, SettingsHandler._fileError );
 	},
 	

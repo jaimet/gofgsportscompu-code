@@ -52,7 +52,8 @@ Settings.prototype._save = function() {
 	SettingsHandler.set( 'language', $( '#settings-page' ).find( '#languageSelect' ).val() );
     SettingsHandler.set( 'gpsinterval', $( '#settings-page' ).find( '#gpsIntervalSlider' ).val() );
     SettingsHandler.set( 'autostarttracking', $( '#settings-page' ).find( '#autostartTrackingSlider' ).val() );
-	SettingsHandler._save();
+    SettingsHandler.set( 'authkey', $( '#settings-page' ).find( '#authKeyInput' ).val() );
+    SettingsHandler._save();
 	
 	// Init re-translation
 	Translator.changeLanguage(SettingsHandler.get( 'language' ));
@@ -93,6 +94,7 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	$( '#settings-page' ).find( '#languageSelect' ).val( SettingsHandler.get( 'language' ) ).selectmenu( 'refresh' );
     $( '#settings-page' ).find( '#gpsIntervalSlider' ).val( SettingsHandler.get( 'gpsinterval' ) ).slider( 'refresh' );
     $( '#settings-page' ).find( '#autostartTrackingSlider' ).slider( 'refresh', SettingsHandler.get( 'autostarttracking' ) );
+    $( '#settings-page' ).find( '#authKeyInput' ).val(SettingsHandler.get( 'authkey' ));
 	// Setup page layout
 	$( '#settings-page' ).find( '#settings-save-button' ).hide();
 	$( '#settings-page' ).find( '#settings-odoReset-button' ).show();
