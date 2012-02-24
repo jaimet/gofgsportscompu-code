@@ -22,7 +22,7 @@
  */
 function TrackUploader( p_fileEntry, p_completeCallback ) {
     this.m_completeCallback = p_completeCallback;
-    this.m_reader = new TrackReader( p_fileEntry, this._getEvtHandler( this._loadProgress ), this._getEvtHandler( this._loadComplete ) );
+    this.m_reader = new TrackReader( p_fileEntry, Utilities.getEvtHandler( this, this._loadProgress ), Utilities.getEvtHandler( this, this._loadComplete ) );
 }
 
 TrackUploader.prototype.m_reader = null;                // Reference to internal TrackReader object
@@ -53,29 +53,26 @@ TrackUploader.prototype._loadComplete = function( p_uuid ) {
         task: "jsonrpc.request",
     };
 
-    var trackuploadurl = "http://localhost/joomla/index.php";
+    // Setup ajax-request parameters
+    $.ajaxSetup( {
+                    timeout: 20000
+                }
+    );
 
-    var jqxhr = $.get( trackuploadurl, passdata, function(data) { console.log( 'success:' + data ); }, 'jsonp' );
+    // Note: This URL is hardcoded by intention
+    var trackuploadurl = "http://192.168.56.101/joomla/index.php";
 
-    // Dispatch the request to the portal
-    /*$.ajax( trackuploadurl, {
-               data: passdata,
-               success: function(data, textStatus, jqXHR) { console.log("success!"); },
-               error: function(jqXHR, textStatus, errorThrown) { console.log("error: " + jqXHR.getAllResponseHeaders() + " / " + textStatus + " / " + errorThrown); },
-               complete: function(jqXHR, textStatus) { console.log("complete: " + jqXHR.status + " / " + jqXHR.readyState ) },
-               dataType: "json",
-               beforeSend: function(jqXHR, settings) { jqXHR.setRequestHeader( "Connection", "Close" ) },
-               type: 'GET',
-           } );*/
+    $.get( trackuploadurl, passdata, function(data) {
+              console.log( 'success:' + data );
+              Utilities.msgBox( 'Track successfully uploaded to gofg.at! View it there.' );
+          },
+          'jsonp'
+    ).error( function(jqXHR, textStatus, errorThrown) {
+                console.log( 'error:' + textStatus );
+                Utilities.msgBox( 'Error during upload: ' + textStatus );
+            }
+    );
 
     // Execute the complete-Callback
     if(typeof this.m_completeCallback === "function" ) this.m_completeCallback();
-};
-
-/**
- * Internal helper function for creating an event-handler function which provides the original "this"-context
- */
-TrackUploader.prototype._getEvtHandler = function( p_callback ) {
-    var me = this;
-    return (function( parameter ) { p_callback.call(me, parameter) } );
 };

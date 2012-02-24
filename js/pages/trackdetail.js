@@ -126,7 +126,7 @@ Trackdetail.prototype._exportTrackTCX = function() {
  */
 Trackdetail.prototype._uploadTrack = function() {
     // Show loading & start uploading
-    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.loadingMessage = $.i18n.prop( "uploadMessage" );
     $.mobile.showPageLoadingMsg();
 
     var tu = new TrackUploader( pages.trackdetail.m_fileEntry, function() {
