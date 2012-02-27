@@ -20,7 +20,8 @@
 /**
  * Construct a new TrackUploader object and start uploading immediately
  */
-function TrackUploader( p_fileEntry, p_completeCallback ) {
+function TrackUploader( p_authKey, p_fileEntry, p_completeCallback ) {
+    this.m_authKey = p_authKey;
     this.m_completeCallback = p_completeCallback;
     this.m_reader = new TrackReader( p_fileEntry, Utilities.getEvtHandler( this, this._loadProgress ), Utilities.getEvtHandler( this, this._loadComplete ) );
 }
@@ -30,49 +31,51 @@ TrackUploader.prototype.m_totalDistance = 0;            // Total distance counte
 TrackUploader.prototype.m_startTime = 0;                // Start-Time of this track
 TrackUploader.prototype.m_endTime = 0;                  // End-Time of this track
 TrackUploader.prototype.m_completeCallback = null;      // Callback which is called once the track loading has finished
+TrackUploader.prototype.m_authKey = null;
 
 /**
  * Called by the TrackReader object whenever there is a new waypoint ready
  */
 TrackUploader.prototype._loadProgress = function( p_waypoint ) {
-    if( this.m_startTime == 0 ) this.m_startTime = p_waypoint.timestamp;
+            if( this.m_startTime == 0 ) this.m_startTime = p_waypoint.timestamp;
 
-    this.m_endTime = p_waypoint.timestamp;
-    this.m_totalDistance += p_waypoint.distance;
+            this.m_endTime = p_waypoint.timestamp;
+            this.m_totalDistance += p_waypoint.distance;
 };
 
 /**
  * Called by the TrackReader object when the track has finished loading
  */
 TrackUploader.prototype._loadComplete = function( p_uuid ) {
-    var passdata = {
-        method: "add",
-        params: JSON.stringify( { auth_key: "12345", start_time: this.m_startTime, end_time: this.m_endTime, total_distance: this.m_totalDistance, uuid: p_uuid } ),
-        id: "12345",
-        option: "com_gofgsportstracker",
-        task: "jsonrpc.request",
-    };
+            // Configure passed parameters to the webapp
+            var passdata = {
+                method: "add",
+                params: JSON.stringify( { auth_key: this.m_authKey, start_time: this.m_startTime, end_time: this.m_endTime, total_distance: this.m_totalDistance, uuid: p_uuid } ),
+                id: Math.random() * 10000,
+                option: "com_gofgsportstracker",
+                task: "jsonrpc.request",
+            };
 
-    // Setup ajax-request parameters
-    $.ajaxSetup( {
-                    timeout: 20000
-                }
-    );
+            // Setup ajax-request parameters
+            $.ajaxSetup( {
+                            timeout: 20000
+                        }
+                        );
 
-    // Note: This URL is hardcoded by intention
-    var trackuploadurl = "http://192.168.56.101/joomla/index.php";
+            // Note: This URL is hardcoded by intention
+            var trackuploadurl = "http://192.168.56.101/joomla/index.php";
 
-    $.get( trackuploadurl, passdata, function(data) {
-              console.log( 'success:' + data );
-              Utilities.msgBox( 'Track successfully uploaded to gofg.at! View it there.' );
-          },
-          'jsonp'
-    ).error( function(jqXHR, textStatus, errorThrown) {
-                console.log( 'error:' + textStatus );
-                Utilities.msgBox( 'Error during upload: ' + textStatus );
-            }
-    );
+            $.get( trackuploadurl, passdata, function(data) {
+                      console.log( 'success:' + data );
+                      MsgBox.show( 'Track successfully uploaded to gofg.at! View it there.' );
+                  },
+                  'jsonp'
+                  ).error( function(jqXHR, textStatus, errorThrown) {
+                              console.log( 'error:' + textStatus );
+                              MsgBox.show( 'Error during upload: ' + textStatus );
+                          }
+                          );
 
-    // Execute the complete-Callback
-    if(typeof this.m_completeCallback === "function" ) this.m_completeCallback();
+            // Execute the complete-Callback
+            if(typeof this.m_completeCallback === "function" ) this.m_completeCallback();
 };

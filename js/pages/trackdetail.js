@@ -129,7 +129,7 @@ Trackdetail.prototype._uploadTrack = function() {
     $.mobile.loadingMessage = $.i18n.prop( "uploadMessage" );
     $.mobile.showPageLoadingMsg();
 
-    var tu = new TrackUploader( pages.trackdetail.m_fileEntry, function() {
+    var tu = new TrackUploader( SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
         $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
         $.mobile.hidePageLoadingMsg();
     } );

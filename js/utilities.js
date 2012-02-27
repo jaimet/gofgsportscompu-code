@@ -31,5 +31,6 @@ Utilities.getEvtHandler = function( p_context, p_callback ) {
  * Helper function for displaying handy user notifications
  */
 Utilities.msgBox = function( p_text, p_title ) {
-    navigator.notification.alert( p_text );
+            console.log( 'Utilities.msgBox is deprecated, use MsgBox.show instead!' );
+            MsgBox.show( p_text, p_title );
 }
