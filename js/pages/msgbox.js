@@ -49,7 +49,7 @@ MsgBox.show = function( p_text, p_title, p_buttons ) {
             pages.msgbox.m_prevPage = $.mobile.activePage;
 
             pages.msgbox.m_text = p_text;
-            pages.msgbox.m_title = p_title || "Title";
+            pages.msgbox.m_title = p_title || "Info";
             pages.msgbox.m_buttons = p_buttons || MsgBox.BUTTON_OK;
 
             $.mobile.changePage( 'msgbox.html', { role: 'dialog' } );

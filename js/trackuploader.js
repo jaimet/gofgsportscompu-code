@@ -20,9 +20,10 @@
 /**
  * Construct a new TrackUploader object and start uploading immediately
  */
-function TrackUploader( p_authKey, p_fileEntry, p_completeCallback ) {
+function TrackUploader( p_authKey, p_fileEntry, p_successCallback, p_errorCallback ) {
     this.m_authKey = p_authKey;
-    this.m_completeCallback = p_completeCallback;
+    this.m_successCallback = p_successCallback;
+    this.m_errorCallback = p_errorCallback;
     this.m_reader = new TrackReader( p_fileEntry, Utilities.getEvtHandler( this, this._loadProgress ), Utilities.getEvtHandler( this, this._loadComplete ) );
 }
 
@@ -30,8 +31,11 @@ TrackUploader.prototype.m_reader = null;                // Reference to internal
 TrackUploader.prototype.m_totalDistance = 0;            // Total distance counter
 TrackUploader.prototype.m_startTime = 0;                // Start-Time of this track
 TrackUploader.prototype.m_endTime = 0;                  // End-Time of this track
-TrackUploader.prototype.m_completeCallback = null;      // Callback which is called once the track loading has finished
-TrackUploader.prototype.m_authKey = null;
+TrackUploader.prototype.m_successCallback = null;       // Callback which is called once the track loading has successfully finished
+TrackUploader.prototype.m_errorCallback = null;         // Callback which is called if there was an error
+TrackUploader.prototype.m_authKey = null;               // Authentication key to use when uploading the track
+
+TrackUploader.URL = "http://192.168.56.101/joomla/index.php";   // Static value which references the upload URL of the gofg homepage
 
 /**
  * Called by the TrackReader object whenever there is a new waypoint ready
@@ -58,24 +62,18 @@ TrackUploader.prototype._loadComplete = function( p_uuid ) {
 
             // Setup ajax-request parameters
             $.ajaxSetup( {
-                            timeout: 20000
+                            timeout: 5000
                         }
                         );
 
-            // Note: This URL is hardcoded by intention
-            var trackuploadurl = "http://192.168.56.101/joomla/index.php";
-
-            $.get( trackuploadurl, passdata, function(data) {
-                      console.log( 'success:' + data );
-                      MsgBox.show( 'Track successfully uploaded to gofg.at! View it there.' );
-                  },
+            // Upload track to gofg community page
+            $.get( TrackUploader.URL, passdata, Utilities.getEvtHandler( this, function(data) {
+                      if( typeof this.m_successCallback === "function" ) this.m_successCallback();
+                  } ),
                   'jsonp'
-                  ).error( function(jqXHR, textStatus, errorThrown) {
-                              console.log( 'error:' + textStatus );
-                              MsgBox.show( 'Error during upload: ' + textStatus );
-                          }
+                  ).error( Utilities.getEvtHandler( this, function(jqXHR, textStatus, errorThrown) {
+                              console.log( 'error: ' + typeof this.m_errorCallback );
+                              if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( textStatus );
+                          } )
                           );
-
-            // Execute the complete-Callback
-            if(typeof this.m_completeCallback === "function" ) this.m_completeCallback();
 };

@@ -125,14 +125,23 @@ Trackdetail.prototype._exportTrackTCX = function() {
  * Called when the user wants to upload a track
  */
 Trackdetail.prototype._uploadTrack = function() {
-    // Show loading & start uploading
-    $.mobile.loadingMessage = $.i18n.prop( "uploadMessage" );
-    $.mobile.showPageLoadingMsg();
+            // Show loading & start uploading
+            $.mobile.loadingMessage = $.i18n.prop( "uploadMessage" );
+            $.mobile.showPageLoadingMsg();
 
-    var tu = new TrackUploader( SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
-        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
-        $.mobile.hidePageLoadingMsg();
-    } );
+            var tu = new TrackUploader( SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
+                                   $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+                                   $.mobile.hidePageLoadingMsg();
+
+                                   MsgBox.show( $.i18n.prop( "uploadMessageSuccess" ) );
+                               },
+                               function( textStatus ) {
+                                   $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+                                   $.mobile.hidePageLoadingMsg();
+
+                                   MsgBox.show( $.i18n.prop( "uploadMessageError" ) + textStatus );
+                               }
+                               );
 };
 
 new Trackdetail();	// Create single instance
