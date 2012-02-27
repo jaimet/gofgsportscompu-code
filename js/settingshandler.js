@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  * 
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  * 
@@ -21,7 +21,6 @@ var SettingsHandler = {
 	m_appDirectoryEntry : null,
 	m_settingsStore : {
 		"minimumaccuracy" : 25,
-		//"minimumaltitudeaccuracy" : 10,
 		"minimumaltitudechange" : 3,
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,
@@ -30,6 +29,7 @@ var SettingsHandler = {
         "autostarttracking" : 1,    // Automatically start tracking once the GPS signal is active
         "trackuploadurl" : "",      // Hardcoded path to track upload-URL
         "authkey" : "",             // Key for authentication against the GOFG system
+        "autolock" : 1,             // Automatically lock screen once tracking has started
 	},
 	m_settingsFileEntry : null,
 	onload : function() {},			// Called when the settings have been loaded
@@ -76,14 +76,10 @@ var SettingsHandler = {
 		SettingsHandler.m_settingsFileEntry.file( function( p_file ) {
 			var reader = new FileReader();
 			reader.onload = function( p_evt ) {
-//				console.log( "Settings-File loaded" );
-//				console.log( p_evt.target.result );
 				if( p_evt.target.result.length > 0 ) {
 					var xmlDoc = $.parseXML( p_evt.target.result );
 				
 					$(xmlDoc).find( "settings > *" ).each( function(p_index, p_element) {
-	//					console.log( "Found setting '" + this.nodeName.toLowerCase() + "' with value '" + $(this).text() + "'" );
-					
 						SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
 					});
 				}
@@ -98,39 +94,3 @@ var SettingsHandler = {
 		console.log( "Error while handling settings file: " + p_fileError );
 	}
 };
-
-
-/*
-var SettingsHandler = function( p_appDirectoryEntry ) {
-	this.m_appDirectoryEntry = p_appDirectoryEntry;
-	this.m_settingsRoot = $( '<div></div>' );
-	
-	this.m_appDirectoryEntry.getFile( "gsc_settings.xml", { create: true, exclusive: false }, this._fileEntry, this._fileError );
-}
-
-SettingsHandler.prototype.setSetting = function( p_key, p_value ) {
-}
-
-SettingsHandler.prototype.getSetting = function( p_key ) {
-}
-
-SettingsHandler.prototype._fileEntry = function( p_fileEntry ) {
-	this.m_settingsFileEntry = p_fileEntry;
-	
-	this.m_settingsFileEntry.file( function( p_file ) {
-		var reader = new FileReader();
-		reader.onload = function( p_evt ) {
-			console.log( "Settings-File loaded" );
-			console.log( m_settingsRoot );
-			console.log( p_evt.target.result );
-			
-			$( m_settingsRoot ).append( p_evt.target.result );
-		}
-		reader.readAsText( p_file );
-	}, this._fileError );
-}
-
-SettingsHandler.prototype._fileError = function( p_fileError ) {
-	console.log( "Error while getting settings file: " + p_fileError );
-}
-*/

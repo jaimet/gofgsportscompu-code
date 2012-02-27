@@ -87,10 +87,10 @@ Trackdetail.prototype._loadTrackFinished = function() {
  */
 Trackdetail.prototype._exportTrackFitlog = function() {
     // Show loading & start exporting
-    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.loadingMessage = $.i18n.prop( "export_message" );
     $.mobile.showPageLoadingMsg();
     exporter.fitlog.run( pages.trackdetail.m_fileEntry, function() {
-        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
         $.mobile.hidePageLoadingMsg();
     } );
 };
@@ -100,10 +100,10 @@ Trackdetail.prototype._exportTrackFitlog = function() {
  */
 Trackdetail.prototype._exportTrackGPX = function() {
     // Show loading & start exporting
-    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.loadingMessage = $.i18n.prop( "export_message" );
     $.mobile.showPageLoadingMsg();
     exporter.gpx.run( pages.trackdetail.m_fileEntry, function() {
-        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
         $.mobile.hidePageLoadingMsg();
     } );
 };
@@ -113,10 +113,10 @@ Trackdetail.prototype._exportTrackGPX = function() {
  */
 Trackdetail.prototype._exportTrackTCX = function() {
     // Show loading & start exporting
-    $.mobile.loadingMessage = $.i18n.prop( "exportMessage" );
+    $.mobile.loadingMessage = $.i18n.prop( "export_message" );
     $.mobile.showPageLoadingMsg();
     exporter.tcx.run( pages.trackdetail.m_fileEntry, function() {
-        $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+        $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
         $.mobile.hidePageLoadingMsg();
     } );
 };
@@ -126,20 +126,20 @@ Trackdetail.prototype._exportTrackTCX = function() {
  */
 Trackdetail.prototype._uploadTrack = function() {
             // Show loading & start uploading
-            $.mobile.loadingMessage = $.i18n.prop( "uploadMessage" );
+            $.mobile.loadingMessage = $.i18n.prop( "upload_message" );
             $.mobile.showPageLoadingMsg();
 
             var tu = new TrackUploader( SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
-                                   $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+                                   $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
                                    $.mobile.hidePageLoadingMsg();
 
-                                   MsgBox.show( $.i18n.prop( "uploadMessageSuccess" ) );
+                                   MsgBox.show( $.i18n.prop( "upload_message_success" ) );
                                },
                                function( textStatus ) {
-                                   $.mobile.loadingMessage = $.i18n.prop( "loadingMessage" );
+                                   $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
                                    $.mobile.hidePageLoadingMsg();
 
-                                   MsgBox.show( $.i18n.prop( "uploadMessageError" ) + textStatus );
+                                   MsgBox.show( $.i18n.prop( "upload_message_error" ) + textStatus );
                                }
                                );
 };
