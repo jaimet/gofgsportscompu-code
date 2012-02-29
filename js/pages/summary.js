@@ -28,6 +28,9 @@ Summary.prototype.m_pauseStart = 0;
 Summary.prototype.m_leftTapHandler = null;
 Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
+Summary.prototype.m_track = null;               // Currently active track
+Summary.prototype.m_trackwriter = null;         // Write for active track
+
 Summary.prototype.rightPage = "map.html";
 
 Summary.prototype.oninit = function() {
@@ -64,7 +67,7 @@ Summary.prototype.enableGPSTap = function() {
                         );
 
             // Start GPS
-            GPSHandler.setCallback( pages.summary._gpsFixWait );
+            GPSHandler.setPositionCallback( pages.summary._gpsFixWait );
             GPSHandler.setErrorCallback( pages.summary_positionError );
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
 
@@ -109,13 +112,28 @@ Summary.prototype._speedTimer = function() {
  * Update the display of the app (regular interval, once a second)
  */
 Summary.prototype._updateDisplay = function() {
-            $( '#speed-infopanel' ).infopanel( 'setValue', (TrackHandler.getSpeed() * 3.6).toFixed(2) );
+            var waypoint = pages.summary.m_track.getWaypoint();
+            // Check if we actually have an info yet
+            if( waypoint === null ) return;
+
+            var coords = waypoint.m_position.coords;
+
+            // Update display
+            $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6).toFixed(2) );
+            $( '#speed-infopanel' ).infopanel( 'setStatistics', (pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6).toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
+            $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
+            $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(2) );
+            $( '#altitude-infopanel' ).infopanel( 'setInfo', (waypoint.m_altitudeDiff / waypoint.m_distance * 100).toFixed(2) + "% / &Oslash; " + (pages.summary.m_track.getElevationGain() / pages.summary.m_track.getTotalDistance() * 100).toFixed(2) + "%" );
+
+
+            /*$( '#speed-infopanel' ).infopanel( 'setValue', (TrackHandler.getSpeed() * 3.6).toFixed(2) );
             $( '#speed-infopanel' ).infopanel( 'setStatistics', (TrackHandler.getAverageSpeed() * 3.6).toFixed(2), (TrackHandler.getMaximumSpeed() * 3.6).toFixed(2) );
             $( '#distance-infopanel' ).infopanel( 'setValue', (TrackHandler.getTotalDistance() / 1000.0).toFixed(2) );
             $( '#altitude-infopanel' ).infopanel( 'setValue', TrackHandler.getElevationGain().toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', TrackHandler.getElevationRise().toFixed(2) + "% / &Oslash; " + TrackHandler.getAverageElevationRise().toFixed(2) + "%" );
+            $( '#altitude-infopanel' ).infopanel( 'setInfo', TrackHandler.getElevationRise().toFixed(2) + "% / &Oslash; " + TrackHandler.getAverageElevationRise().toFixed(2) + "%" );*/
 
-            var averageAccuracy = (TrackHandler.getAccuracy() + TrackHandler.getAltitudeAccuracy()) / 2.0;
+            //var averageAccuracy = (TrackHandler.getAccuracy() + TrackHandler.getAltitudeAccuracy()) / 2.0;
+            var averageAccuracy = (coords.accuracy + coords.altitudeAccuracy) / 2.0;
             var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
 
             if( averageAccuracy <= (minimumAccuracy / 2.0) ) {
@@ -128,7 +146,8 @@ Summary.prototype._updateDisplay = function() {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
             }
 
-            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
+            //$( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(TrackHandler.getDuration(), true) );
+            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
         };
 
 /**
@@ -186,7 +205,46 @@ Summary.prototype._gpsFixWait = function() {
 Summary.prototype._startTracking = function() {
             console.log('Start-Tracking called');
 
-            TrackHandler.startTrack();
+            pages.summary.m_track = new Track();
+            GOFGSportsComputer.m_trackDirectoryEntry.getFile(
+                        ((new Date()).getTime() / 1000).toFixed(0) + ".gsc",
+                        {create: true, exclusive: true},
+                        function( p_fileEntry ) {
+                            // Create track-writer object & write initial information
+                            pages.summary.m_trackwriter = new Trackwriter( pages.summary.m_track, p_fileEntry );
+                            pages.summary.m_trackwriter.writeInfo();
+
+                            // Set position callback
+                            GPSHandler.setPositionCallback( pages.summary._updatePosition );
+
+                            // Enable / disable buttons
+                            $( '#left-button' ).button( 'enable' );
+                            $( '#middle-button' ).button( 'enable' );
+                            $( '#right-button' ).button( 'enable' );
+                            // Update button icons
+                            $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
+                            // Setup tap handlers
+                            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+                            pages.summary.m_rightTapHandler = pages.summary._pause;
+
+                            // Display pause button
+                            setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
+
+                            // Start updating our interface
+                            pages.summary._mainTimer();
+
+                            // Check if auto-locking is on
+                            if( SettingsHandler.get( 'autolock' ) > 0 ) {
+                                pages.summary._lock();
+                            }
+                        },
+                        function( p_fileError ) {
+                            MsgBox.show( 'Error while trying to open track for writing. The error returned is: ' + p_fileError.code );
+                            pages.summary._stopGPS();
+                        }
+                        );
+
+/*            TrackHandler.startTrack();
             GPSHandler.setCallback( pages.summary._updatePosition );
 
             // Enable / disable buttons
@@ -208,7 +266,7 @@ Summary.prototype._startTracking = function() {
             // Check if auto-locking is on
             if( SettingsHandler.get( 'autolock' ) > 0 ) {
                 pages.summary._lock();
-            }
+            }*/
         };
 
 /**
@@ -233,7 +291,9 @@ Summary.prototype._stopGPS = function() {
             pages.summary.m_rightTapHandler = pages.summary._startGPS;
 
             GPSHandler.stopGPS();
-            TrackHandler.stopTrack();
+            pages.summary.m_trackwriter.writeWaypoint(true);
+
+            //TrackHandler.stopTrack();
             window.plugins.PowerManagement.release(
                         function(){},
                         function(e){}
@@ -305,7 +365,7 @@ Summary.prototype._resume = function() {
                         );
 
             // Add pause to track
-            TrackHandler.addPause( pages.summary.m_pauseStart, pauseEnd );
+            //TrackHandler.addPause( pages.summary.m_pauseStart, pauseEnd );
             pages.summary.m_pauseStart = 0;
 
             // Start updating our interface
@@ -322,7 +382,27 @@ Summary.prototype._lock = function() {
 /**
  * Callback for the GPSHandler which is called whenever the GPS position is updated
  */
-Summary.prototype._updatePosition = function() {
+Summary.prototype._updatePosition = function( p_position ) {
+            // Check if position is accurate enough
+            if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
+
+            // Calculate distance
+            var distance = 0;
+            var waypoint = pages.summary.m_track.getWaypoint();
+            if( waypoint !== null ) {
+                distance = Utilities.haversineDistance( waypoint.m_position.coords, p_position.coords );
+
+                // Check if new waypoint is out of the tolerance of the last one
+                if( distance <= waypoint.m_position.coords.accuracy ) return;
+
+                // Update odo (total distance - see odometer)
+                pages.summary._updateOdo( distance );
+            }
+
+            // Update track information
+            pages.summary.m_track.addPosition( p_position, distance );
+            pages.summary.m_trackwriter.writeWaypoint();
+
             // Handle speed timeout
             if( pages.summary.m_speedTimer != 0 ) {
                 clearTimeout( pages.summary.m_speedTimer );
@@ -330,13 +410,15 @@ Summary.prototype._updatePosition = function() {
             pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsinterval' ) * 3 * 1000 );
 
             // Update odo (total distance - see odometer)
-            pages.summary._updateOdo( GPSHandler.getDistance() );
+            /*if( pages.summary.m_track.getWaypoint() !== null ) {
+                pages.summary._updateOdo( pages.summary.m_track.getWaypoint().m_distance );
+            }*/
 
             // Add new position info to track
-            TrackHandler.addDistance( GPSHandler.getDistance() );
+            /*TrackHandler.addDistance( GPSHandler.getDistance() );
             TrackHandler.addSpeed( GPSHandler.getSpeed() );
             TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
-            TrackHandler.addAccuracy( GPSHandler.getAccuracy(), GPSHandler.getAltitudeAccuracy() );
+            TrackHandler.addAccuracy( GPSHandler.getAccuracy(), GPSHandler.getAltitudeAccuracy() );*/
         };
 
 /**

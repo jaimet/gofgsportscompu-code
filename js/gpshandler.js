@@ -31,30 +31,43 @@ var GPSHandler = {
 
     m_lastPosition : 0,
     m_distance : 0,
+
     m_watchId : null,
+    m_errorCallback : null,         // Invoked if there was an error
+    m_positionCallback : null,      // Invoked if there is a new position available
+    m_interval : 10,                // Interval for GPS watching (in seconds)
 
-    m_errorCallback : null,         // Callback which is invoked if there was an error
 
+    /**
+     * Start watching the GPS position
+     */
     startGPS : function( p_interval, p_positionCallback, p_errorCallback ) {
-                   if( GPSHandler.m_watchId != null ) return;
+                   // Check if GPSHandler is already active
+                   if( GPSHandler.m_watchId !== null ) return;
 
-                   GPSHandler.m_settings['interval'] = p_interval;
-                   if( typeof p_positionCallback === "function" ) GPSHandler.m_settings['positionUpdated'] = p_positionCallback;
-                   if( typeof p_errorCallback === "function" ) m_errorCallback = p_errorCallback;
+                   GPSHandler.m_interval = p_interval;
+                   if( typeof p_positionCallback === "function" ) GPSHandler.m_positionCallback = p_positionCallback;
+                   if( typeof p_errorCallback === "function" ) GPSHandler.m_errorCallback = p_errorCallback;
 
-                   GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_settings['interval'] * 1000, maximumAge : GPSHandler.m_settings['maximumAge'] * 1000 } );
+                   GPSHandler.m_watchId = navigator.geolocation.watchPosition( GPSHandler._positionUpdate, GPSHandler._positionError, { enableHighAccuracy : true, timeout : GPSHandler.m_interval * 1000, maximumAge : 1000 } );
                },
 
+    /**
+     * Stop watching the GPS position
+     */
     stopGPS : function() {
                   navigator.geolocation.clearWatch( GPSHandler.m_watchId );
-                  GPSHandler.m_settings['positionUpdated'] = function() {};
                   GPSHandler.m_watchId = null;
-                  GPSHandler.m_lastPosition = 0;
-                  GPSHandler.m_distance = 0;
+                  GPSHandler.m_errorCallback = null;
+                  GPSHandler.m_positionCallback = null;
+                  GPSHandler.m_interval = 10;
               },
 
-    setCallback : function( p_callback ) {
-                      if( typeof p_callback == "function" ) GPSHandler.m_settings['positionUpdated'] = p_callback;
+    /**
+     * Set position callback
+     */
+    setPositionCallback : function( p_positionCallback ) {
+                              GPSHandler.m_positionCallback = p_positionCallback;
                   },
 
     /**
@@ -64,7 +77,7 @@ var GPSHandler = {
                            GPSHandler.m_errorCallback = p_errorCallback;
                        },
 
-    getDistance : function() {
+/*    getDistance : function() {
                       return GPSHandler.m_distance;
                   },
 
@@ -94,17 +107,19 @@ var GPSHandler = {
 
     getAltitudeAccuracy : function() {
                               return GPSHandler.m_lastPosition.coords.altitudeAccuracy;
-                          },
+                          },*/
 
     /**
      * Called by the native side whenever a new position is available
      */
     _positionUpdate : function( p_position ) {
-                          if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
+                          //if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
                           // iPhone hack
                           if( p_position.coords.speed < 0 ) return;
 
-                          if( GPSHandler.m_lastPosition == 0 ) {
+                          if( typeof GPSHandler.m_positionCallback === "function" ) GPSHandler.m_positionCallback( p_position );
+
+                          /*if( GPSHandler.m_lastPosition == 0 ) {
                               GPSHandler.m_lastPosition = p_position;
                               GPSHandler.m_settings['positionUpdated']();
                               return;
@@ -117,8 +132,8 @@ var GPSHandler = {
                               GPSHandler.m_distance = distance;
                               GPSHandler.m_lastPosition = p_position;
 
-                              GPSHandler.m_settings['positionUpdated']();
-                          }
+                              GPSHandler.m_settings['positionUpdated']( p_position );
+                          }*/
                       },
 
     /**
@@ -128,12 +143,12 @@ var GPSHandler = {
                          console.log( "GPSError: " + p_error.code + " / " + p_error.message );
 
                          // Only report error to caller if it isn't a timeout
-                         if( p_error.code != PositionError.TIMEOUT ) {
+                         if( p_error.code !== PositionError.TIMEOUT ) {
                              if( typeof GPSHandler.m_errorCallback === "function" ) GPSHandler.m_errorCallback( p_error );
                          }
                      },
 
-    _haversineDistance : function( p_start, p_end ) {
+    /*_haversineDistance : function( p_start, p_end ) {
                              var latDiff = GPSHandler._toRad( p_end.latitude - p_start.latitude );
                              var lonDiff = GPSHandler._toRad( p_end.longitude - p_start.longitude );
 
@@ -149,5 +164,5 @@ var GPSHandler = {
     
     _toDegree : function( p_rad ) {
                     return p_rad / Math.PI * 180.0;
-                }
+                }*/
 };

@@ -44,15 +44,10 @@ Trackdetail.prototype.setTrack = function( p_fileEntry, p_displayName ) {
 
 }
 
+/**
+ * Called just before the page is shown (to setup buttons etc.)
+ */
 Trackdetail.prototype._pagebeforeshow = function() {
-    // Check if authkey is set
-    if( SettingsHandler.get('authkey') != "" ) {
-        $('#trackdetail-upload-button').button('enable');
-    }
-    else {
-        $('#trackdetail-upload-button').button('disable');
-    }
-
     // Load track details
     $('#trackdetail-title').html( pages.trackdetail.m_displayName );
 }
@@ -125,6 +120,12 @@ Trackdetail.prototype._exportTrackTCX = function() {
  * Called when the user wants to upload a track
  */
 Trackdetail.prototype._uploadTrack = function() {
+            // Check if user has an authentication-key set
+            if( SettingsHandler.get('authkey') === "" ) {
+                MsgBox.show( $.i18n.prop( 'upload_message_key_missing' ) );
+                return;
+            }
+
             // Show loading & start uploading
             $.mobile.loadingMessage = $.i18n.prop( "upload_message" );
             $.mobile.showPageLoadingMsg();
