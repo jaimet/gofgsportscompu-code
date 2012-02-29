@@ -20,17 +20,9 @@
 function Utilities() {}
 
 /**
- * Create a wrapped function for maintaining the original context when calling a callback
+ * Create a wrapped function for maintaining the original context when invoking a callback
  */
 Utilities.getEvtHandler = function( p_context, p_callback ) {
     var me = p_context;
     return (function() { p_callback.apply(me, arguments) } );
-}
-
-/**
- * Helper function for displaying handy user notifications
- */
-Utilities.msgBox = function( p_text, p_title ) {
-            console.log( 'Utilities.msgBox is deprecated, use MsgBox.show instead!' );
-            MsgBox.show( p_text, p_title );
 }

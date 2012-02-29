@@ -48,22 +48,28 @@ Summary.prototype.oninit = function() {
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
         };
 
+/**
+ * Enable GPS and start searching for a signal
+ */
 Summary.prototype.enableGPSTap = function() {
             $('#enableGPS-button').button('disable');
 
             // Disable idle mode
             window.plugins.PowerManagement.acquire(
-                        function(){ console.log( "Success!" ) },
-                        function(e){ console.log( "Error: " + e ) }
+                        function(){},
+                        function(e){
+                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                            pages.summary._stopGPS();
+                        }
                         );
 
             // Start GPS
             GPSHandler.setCallback( pages.summary._gpsFixWait );
+            GPSHandler.setErrorCallback( pages.summary_positionError );
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
 
             // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
             if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
-                console.log( 'auto-lock active' );
                 pages.summary._lock();
             }
         }
@@ -229,8 +235,8 @@ Summary.prototype._stopGPS = function() {
             GPSHandler.stopGPS();
             TrackHandler.stopTrack();
             window.plugins.PowerManagement.release(
-                        function(){ console.log( "Success!" ) },
-                        function(e){ console.log( "Error: " + e ) }
+                        function(){},
+                        function(e){}
                         );
 
             // Disable interface timer
@@ -264,8 +270,8 @@ Summary.prototype._pause = function() {
             pages.summary.m_mainTimer = 0;
             // Enable suspend again
             window.plugins.PowerManagement.release(
-                        function(){ console.log( "Success!" ) },
-                        function(e){ console.log( "Error: " + e ) }
+                        function(){},
+                        function(e){}
                         );
         };
 
@@ -291,8 +297,11 @@ Summary.prototype._resume = function() {
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
             // Disable suspend
             window.plugins.PowerManagement.acquire(
-                        function(){ console.log( "Success!" ) },
-                        function(e){ console.log( "Error: " + e ) }
+                        function(){},
+                        function(e){
+                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                            pages.summary._stopGPS();
+                        }
                         );
 
             // Add pause to track
@@ -329,6 +338,13 @@ Summary.prototype._updatePosition = function() {
             TrackHandler.addPosition( GPSHandler.getLatitude(), GPSHandler.getLongitude(), GPSHandler.getAltitude() );
             TrackHandler.addAccuracy( GPSHandler.getAccuracy(), GPSHandler.getAltitudeAccuracy() );
         };
+
+/**
+ * Called by the GPSHandler if there was an error
+ */
+Summary.prototype_positionError = function( p_positionError ) {
+            MsgBox.show( $.i18n.prop( 'position_message_error' ) + p_positionError.message + " (" + p_positionError.code + ")" );
+        }
 
 /**
  * Updates the clock (called once a minute)
