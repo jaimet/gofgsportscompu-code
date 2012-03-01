@@ -146,7 +146,7 @@ var TrackHandler = {
 			if( TrackHandler.m_startTimestamp == 0 ) {
 				TrackHandler.m_startTimestamp = p_waypoint.timestamp;
 			}
-			
+
 			TrackHandler.m_waypoint.timestamp = p_waypoint.timestamp;
 			TrackHandler.addAccuracy( p_waypoint.accuracy, p_waypoint.altitudeAccuracy );
 			TrackHandler.addDistance( p_waypoint.distance );

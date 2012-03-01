@@ -59,8 +59,7 @@ exporter.fitlog = {
 		exportFileName = fileName.replace( '.gsc', '.fitlog' );
 
 		// Get our export file
-		// TODO: Remove external reference to TrackHandler
-		TrackHandler.getExportDirectory().getFile( exportFileName, { create : true, exclusive : false }, exporter.fitlog._fileEntry, GOFGSportsComputer._fileSystemError );
+        GOFGSportsComputer.m_exportDirectoryEntry.getFile( exportFileName, { create : true, exclusive : false }, exporter.fitlog._fileEntry, GOFGSportsComputer._fileSystemError );
 	},
 	
 	_fileEntry : function( p_fileEntry ) {

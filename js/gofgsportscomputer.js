@@ -109,9 +109,6 @@ var GOFGSportsComputer = {
 	 */
 	_trackDirectory : function( p_directoryEntry ) {
 		GOFGSportsComputer.m_trackDirectoryEntry = p_directoryEntry;
-		
-		// Initialize our track-handler with the dir
-		TrackHandler.setDirectory(GOFGSportsComputer.m_trackDirectoryEntry);
 	},
 	
 	/**
@@ -129,9 +126,6 @@ var GOFGSportsComputer = {
 	 */
 	_exportDirectory : function( p_directoryEntry ) {
 		GOFGSportsComputer.m_exportDirectoryEntry = p_directoryEntry;
-		
-		// Set the export directory
-		TrackHandler.setExportDirectory(GOFGSportsComputer.m_exportDirectoryEntry);
 	},
 	
 	/**
@@ -202,36 +196,5 @@ function getFormattedTimeDiff( p_timeDiff ) {
  */
 $(document).ready( function() {
 	document.addEventListener("deviceready", GOFGSportsComputer._deviceReady, true);
-
-	/**
-	 * WARNING: TESTING AREA AHEAD
-	 */
-//	// Prepare our summary page
-//	$( '#summary-page' ).bind( 'pagebeforeshow', function() {
-//		$( '#navbar-buttons-summary > li > a' ).removeClass( 'ui-btn-active' );
-//		$( '#navbar-buttons-summary > li > a[data-navbar="summary"]' ).addClass( 'ui-btn-active' );
-//	} );
-//	$( '#summary-page' ).bind( 'pageshow', function() {
-//		$( 'body > div[data-role="page"][id!="summary-page"]' ).remove();
-//	} );
-//	prepareNavbar( 'summary' );
-	
-	
-	
-//	$( '#navbar-settings' ).bind( 'click', function() {
-//		$( '#home-content' ).load( 'test.html', function(responseText, textStatus, XMLHttpRequest) {
-//			alert( "Request completed: " + responseText + " / " + textStatus );
-//		} );
-//	});
-			
-	//TrackHandler.addSpeed( 10 );
-	//updateDistance();
-	//setTimeout( "GOFGSportsComputer._deviceReady()", 1000 );
-	//GOFGSportsComputer._deviceReady();
-//	var xmlRoot = $( '<customTag>should not be visible</customTag>' );
-//	var xmlSub = $( '<subCustomTag attribute="value">My Tag content</subCustomTag>' );
-//	xmlRoot.append( xmlSub );
-//	alert( xmlRoot.html() );
-//	var e = 1;
 } );
 

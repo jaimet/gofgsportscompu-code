@@ -206,7 +206,7 @@ Summary.prototype._startTracking = function() {
                         {create: true, exclusive: true},
                         function( p_fileEntry ) {
                             // Create track-writer object & write initial information
-                            pages.summary.m_trackwriter = new Trackwriter( pages.summary.m_track, p_fileEntry );
+                            pages.summary.m_trackwriter = new TrackWriter( pages.summary.m_track, p_fileEntry );
                             pages.summary.m_trackwriter.writeInfo();
 
                             // Set position callback
@@ -275,6 +275,10 @@ Summary.prototype._stopGPS = function() {
 
             // Update accuracy status image
             $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
+
+            // Remove references to closed tracks
+            pages.summary.m_track = null;
+            pages.summary.m_trackwriter = null;
         };
 
 /**
@@ -395,6 +399,16 @@ Summary.prototype._updateClock = function() {
             setTimeout( "pages.summary._updateClock()", 60000 );
         };
 
+/**
+ * Try to load a track from a given fileEntry
+ */
+Summary.prototype._loadTrack = function( p_fileEntry ) {
+            pages.summary.m_track = new Track();
+        }
+
+/**
+ * Invoked on first display to size & configure all the display panels
+ */
 Summary.prototype._pageshow = function( p_event, p_ui ) {
             // Remove init handler
             $( '#summary-page' ).die( 'pageshow', pages.summary._pageshow );

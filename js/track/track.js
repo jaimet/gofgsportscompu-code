@@ -20,8 +20,14 @@
 /**
  * Base class for handling a single track
  */
-function Track() {
-    this.m_uuid = $.uidGen( { mode: 'random' } );
+function Track( p_uuid ) {
+    // Check if we have to generate the UUID
+    if( typeof p_uuid === "undefined" ) {
+        this.m_uuid = $.uidGen( { mode: 'random' } );
+    }
+    else {
+        this.m_uuid = p_uuid;
+    }
 }
 
 Track.prototype.m_uuid = '';                // UUID

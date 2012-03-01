@@ -82,7 +82,7 @@ Tracks.prototype._trackTap = function(event) {
 Tracks.prototype._pagebeforeshow = function( p_event, p_ui ) {
 	$( '#tracks-list-container' ).html('');
 
-	var trackDirectoryReader = TrackHandler.getDirectory().createReader();
+    var trackDirectoryReader = GOFGSportsComputer.m_trackDirectoryEntry.createReader();
 	trackDirectoryReader.readEntries( pages.tracks._refreshTracksEntries, GOFGSportsComputer._fileSystemError );
 };
 

@@ -55,8 +55,7 @@ exporter.gpx = {
 		exportFileName = fileName.replace( '.gsc', '.gpx' );
 
 		// Get our export file
-		// TODO: Remove external reference to TrackHandler
-		TrackHandler.getExportDirectory().getFile( exportFileName, { create : true, exclusive : false }, exporter.gpx._fileEntry, GOFGSportsComputer._fileSystemError );
+        GOFGSportsComputer.m_exportDirectoryEntry.getFile( exportFileName, { create : true, exclusive : false }, exporter.gpx._fileEntry, GOFGSportsComputer._fileSystemError );
 	},
 	
 	_fileEntry : function( p_fileEntry ) {

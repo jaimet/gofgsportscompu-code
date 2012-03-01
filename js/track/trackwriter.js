@@ -20,18 +20,18 @@
 /**
  * Class for writing a track to a file
  */
-function Trackwriter( p_track, p_fileEntry ) {
+function TrackWriter( p_track, p_fileEntry ) {
     this.m_track = p_track;
     this.m_continuousFileWriter = new ContinuousFileWriter( p_fileEntry );
 }
 
-Trackwriter.prototype.m_track = null;                   // Track to write
-Trackwriter.prototype.m_continuousFileWriter = null;    // Writer to file
+TrackWriter.prototype.m_track = null;                   // Track to write
+TrackWriter.prototype.m_continuousFileWriter = null;    // Writer to file
 
 /**
  * Write general track information to file
  */
-Trackwriter.prototype.writeInfo = function() {
+TrackWriter.prototype.writeInfo = function() {
             this.m_continuousFileWriter.writeLine( "00;" + this.m_track.m_uuid );	// Write uuid to file
         }
 
@@ -39,7 +39,7 @@ Trackwriter.prototype.writeInfo = function() {
  * Write last complete waypoint to file
  * @param p_bCurrent Boolean If set to true, will write the current waypoint instead of the last one
  */
-Trackwriter.prototype.writeWaypoint = function( p_bCurrent ) {
+TrackWriter.prototype.writeWaypoint = function( p_bCurrent ) {
             var waypoint = null;
 
             // Check which waypoint to fetch
