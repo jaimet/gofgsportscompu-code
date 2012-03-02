@@ -88,10 +88,10 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
         }
 
 /**
- * Return UUID
+ * Add a pause to this track
+ * TODO: Add pause handling
  */
-Track.prototype.getUUID = function() {
-            return this.m_uuid;
+Track.prototype.addPause = function( p_startTime, p_endTime ) {
         }
 
 /**
@@ -101,6 +101,13 @@ Track.prototype.addHeartrate = function( p_heartrate ) {
             if( this.m_currentWaypoint !== null ) {
                 this.m_currentWaypoint.m_heartrate = p_heartrate;
             }
+        }
+
+/**
+ * Return UUID
+ */
+Track.prototype.getUUID = function() {
+            return this.m_uuid;
         }
 
 /**

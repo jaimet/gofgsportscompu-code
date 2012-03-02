@@ -345,7 +345,7 @@ Summary.prototype._resume = function() {
                         );
 
             // Add pause to track
-            //TrackHandler.addPause( pages.summary.m_pauseStart, pauseEnd );
+            pages.summary.m_track.addPause( pages.summary.m_pauseStart, pauseEnd );
             pages.summary.m_pauseStart = 0;
 
             // Start updating our interface
