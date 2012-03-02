@@ -24,13 +24,13 @@ function TrackUploader( p_authKey, p_fileEntry, p_successCallback, p_errorCallba
     this.m_authKey = p_authKey;
     this.m_successCallback = p_successCallback;
     this.m_errorCallback = p_errorCallback;
-    this.m_reader = new TrackReader( p_fileEntry, Utilities.getEvtHandler( this, this._loadProgress ), Utilities.getEvtHandler( this, this._loadComplete ) );
+    this.m_reader = new N_TrackReader( p_fileEntry, null, Utilities.getEvtHandler( this, this._loadComplete ) );
 }
 
 TrackUploader.prototype.m_reader = null;                // Reference to internal TrackReader object
-TrackUploader.prototype.m_totalDistance = 0;            // Total distance counter
+/*TrackUploader.prototype.m_totalDistance = 0;            // Total distance counter
 TrackUploader.prototype.m_startTime = 0;                // Start-Time of this track
-TrackUploader.prototype.m_endTime = 0;                  // End-Time of this track
+TrackUploader.prototype.m_endTime = 0;                  // End-Time of this track*/
 TrackUploader.prototype.m_successCallback = null;       // Callback which is called once the track loading has successfully finished
 TrackUploader.prototype.m_errorCallback = null;         // Callback which is called if there was an error
 TrackUploader.prototype.m_authKey = null;               // Authentication key to use when uploading the track
@@ -40,22 +40,22 @@ TrackUploader.URL = "http://192.168.56.101/joomla/index.php";   // Static value 
 /**
  * Called by the TrackReader object whenever there is a new waypoint ready
  */
-TrackUploader.prototype._loadProgress = function( p_waypoint ) {
+/*TrackUploader.prototype._loadProgress = function( p_waypoint ) {
             if( this.m_startTime == 0 ) this.m_startTime = p_waypoint.timestamp;
 
             this.m_endTime = p_waypoint.timestamp;
             this.m_totalDistance += p_waypoint.distance;
-};
+};*/
 
 /**
  * Called by the TrackReader object when the track has finished loading
  */
-TrackUploader.prototype._loadComplete = function( p_uuid ) {
+TrackUploader.prototype._loadComplete = function( p_track ) {
             // Configure passed parameters to the webapp
             var passdata = {
                 method: "add",
-                params: JSON.stringify( { auth_key: this.m_authKey, start_time: this.m_startTime, end_time: this.m_endTime, total_distance: this.m_totalDistance, uuid: p_uuid } ),
-                id: Math.random() * 10000,
+                params: JSON.stringify( { auth_key: this.m_authKey, start_time: p_track.getStartTime(), end_time: p_track.getEndTime(), total_distance: p_track.getTotalDistance(), uuid: p_track.getUUID() } ),
+                id: (Math.random() * 10000).toFixed(0),
                 option: "com_gofgsportstracker",
                 task: "jsonrpc.request",
             };
@@ -72,7 +72,7 @@ TrackUploader.prototype._loadComplete = function( p_uuid ) {
                   } ),
                   'jsonp'
                   ).error( Utilities.getEvtHandler( this, function(jqXHR, textStatus, errorThrown) {
-                              console.log( 'error: ' + typeof this.m_errorCallback );
+                              console.log( 'error: ' + errorThrown );
                               if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( textStatus );
                           } )
                           );

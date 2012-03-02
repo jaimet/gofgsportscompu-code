@@ -45,12 +45,17 @@ Track.prototype.m_lastWaypoint = null;      // Last waypoint
  * Add a new position to this track
  */
 Track.prototype.addPosition = function( p_position, p_distance ) {
+            // Make sure parameters are treated using the correct type
+            p_distance = parseFloat( p_distance );
+
             // Assign last waypoint
             this.m_lastWaypoint = this.m_currentWaypoint;
 
             // Create new waypoint for passed position
             this.m_currentWaypoint = new Waypoint();
             this.m_currentWaypoint.m_position = p_position;
+            this.m_currentWaypoint.m_timestamp = (p_position.timestamp / 1000).toFixed(0);
+
             this.m_endTime = this.m_currentWaypoint.m_timestamp;
 
             // Remember distance
@@ -83,6 +88,13 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
         }
 
 /**
+ * Return UUID
+ */
+Track.prototype.getUUID = function() {
+            return this.m_uuid;
+        }
+
+/**
  * Add heartrate info to current waypoint
  */
 Track.prototype.addHeartrate = function( p_heartrate ) {
@@ -106,10 +118,24 @@ Track.prototype.getCurrentWaypoint = function() {
         }
 
 /**
+ * Return the start-time
+ */
+Track.prototype.getStartTime = function() {
+            return this.m_startTime;
+        }
+
+/**
+ * Return the end-time
+ */
+Track.prototype.getEndTime = function() {
+            return this.m_endTime;
+        }
+
+/**
  * Return the total duration
  */
 Track.prototype.getDuration = function() {
-            return (this.m_endTime - this.m_startTime);
+            return (this.getEndTime() - this.getStartTime());
         }
 
 /**

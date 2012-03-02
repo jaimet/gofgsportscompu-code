@@ -66,14 +66,7 @@ Trackdetail.prototype._loadTrack = function() {
             console.log( "Loading track!" );
             $.mobile.showPageLoadingMsg();
 
-            TrackHandler.loadTrack( pages.trackdetail.m_fileEntry, pages.trackdetail._loadTrackFinished );
-        };
-
-/**
- * Called when loading of a track has finished
- */
-Trackdetail.prototype._loadTrackFinished = function() {
-            pages.summary._updateDisplay();
+            pages.summary.loadTrack( pages.trackdetail.m_fileEntry );
             $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );
         };
 

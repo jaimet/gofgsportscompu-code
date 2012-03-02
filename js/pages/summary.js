@@ -402,8 +402,15 @@ Summary.prototype._updateClock = function() {
 /**
  * Try to load a track from a given fileEntry
  */
-Summary.prototype._loadTrack = function( p_fileEntry ) {
-            pages.summary.m_track = new Track();
+Summary.prototype.loadTrack = function( p_fileEntry ) {
+            var trackReader = new N_TrackReader( p_fileEntry,
+                                                null,
+                                                function( p_track ) {
+                                                    console.log( 'received track' );
+                                                    pages.summary.m_track = p_track;
+                                                    pages.summary._updateDisplay();
+                                                },
+                                                null );
         }
 
 /**
