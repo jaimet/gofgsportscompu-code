@@ -66,7 +66,7 @@ exporter.fitlog = {
                      exporter.fitlog.m_continuousWriter = new ContinuousFileWriter( p_fileEntry );
                      exporter.fitlog.m_continuousWriter.writeLine( "<?xml version='1.0' encoding='UTF-8' ?>" );
 
-                     new N_TrackReader( exporter.fitlog.m_trackFileEntry, exporter.fitlog._waypoint, exporter.fitlog._trackComplete );
+                     new TrackReader( exporter.fitlog.m_trackFileEntry, exporter.fitlog._waypoint, exporter.fitlog._trackComplete );
                  },
 
     _waypoint : function( p_waypoint ) {

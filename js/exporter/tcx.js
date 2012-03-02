@@ -66,7 +66,7 @@ exporter.tcx = {
                      exporter.tcx.m_continuousWriter = new ContinuousFileWriter( p_fileEntry );
                      exporter.tcx.m_continuousWriter.writeLine( "<?xml version='1.0' encoding='UTF-8' ?>" );
 
-                     new N_TrackReader( exporter.tcx.m_trackFileEntry, exporter.tcx._waypoint, exporter.tcx._trackComplete );
+                     new TrackReader( exporter.tcx.m_trackFileEntry, exporter.tcx._waypoint, exporter.tcx._trackComplete );
                  },
 
     _waypoint : function( p_waypoint ) {

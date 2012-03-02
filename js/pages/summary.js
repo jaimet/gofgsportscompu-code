@@ -403,7 +403,7 @@ Summary.prototype._updateClock = function() {
  * Try to load a track from a given fileEntry
  */
 Summary.prototype.loadTrack = function( p_fileEntry ) {
-            var trackReader = new N_TrackReader( p_fileEntry,
+            var trackReader = new TrackReader( p_fileEntry,
                                                 null,
                                                 function( p_track ) {
                                                     console.log( 'received track' );

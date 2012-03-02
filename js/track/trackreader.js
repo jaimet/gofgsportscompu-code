@@ -20,7 +20,7 @@
 /**
  * Class for reading a track from a file
  */
-function N_TrackReader( p_fileEntry, p_waypointCallback, p_trackCallback, p_errorCallback ) {
+function TrackReader( p_fileEntry, p_waypointCallback, p_trackCallback, p_errorCallback ) {
     // Keep reference to callbacks
     this.m_waypointCallback = p_waypointCallback;
     this.m_trackCallback = p_trackCallback;
@@ -35,22 +35,22 @@ function N_TrackReader( p_fileEntry, p_waypointCallback, p_trackCallback, p_erro
     p_fileEntry.file( Utilities.getEvtHandler( this, this.file ), Utilities.getEvtHandler( this, this.fileError ) );
 }
 
-N_TrackReader.prototype.m_fileReader = null;
-N_TrackReader.prototype.m_waypointCallback = null;
-N_TrackReader.prototype.m_trackCallback = null;
-N_TrackReader.prototype.m_errorCallback = null;
+TrackReader.prototype.m_fileReader = null;
+TrackReader.prototype.m_waypointCallback = null;
+TrackReader.prototype.m_trackCallback = null;
+TrackReader.prototype.m_errorCallback = null;
 
 /**
  * Called once the fileEntry object returned a file entry
  */
-N_TrackReader.prototype.file = function( p_file ) {
+TrackReader.prototype.file = function( p_file ) {
             this.m_fileReader.readAsText( p_file );
         }
 
 /**
  * Called when the file was loaded
  */
-N_TrackReader.prototype.onload = function( p_progressEvent ) {
+TrackReader.prototype.onload = function( p_progressEvent ) {
             // Split file-contents into lines
             var lines = p_progressEvent.target.result.split( "\n" );
 
@@ -130,7 +130,7 @@ N_TrackReader.prototype.onload = function( p_progressEvent ) {
 /**
  * Helper function for parsing a line
  */
-N_TrackReader.prototype.parseLine = function ( p_line ) {
+TrackReader.prototype.parseLine = function ( p_line ) {
             // Split into line components
             var components = p_line.split(";");
             if( components.length < 2 ) return false;
@@ -149,10 +149,10 @@ N_TrackReader.prototype.parseLine = function ( p_line ) {
 
 
 // TODO: Improve error handling
-N_TrackReader.prototype.fileError = function( p_fileError ) {
+TrackReader.prototype.fileError = function( p_fileError ) {
             console.log( 'fileError: ' + p_fileError );
         }
 
-N_TrackReader.prototype.onerror = function() {
+TrackReader.prototype.onerror = function() {
             console.log( 'onerror' );
         }

@@ -62,7 +62,7 @@ exporter.gpx = {
                      exporter.gpx.m_continuousWriter = new ContinuousFileWriter( p_fileEntry );
                      exporter.gpx.m_continuousWriter.writeLine( "<?xml version='1.0' encoding='UTF-8' ?>" );
 
-                     new N_TrackReader( exporter.gpx.m_trackFileEntry, exporter.gpx._waypoint, exporter.gpx._trackComplete );
+                     new TrackReader( exporter.gpx.m_trackFileEntry, exporter.gpx._waypoint, exporter.gpx._trackComplete );
                  },
 
     _waypoint : function( p_waypoint ) {

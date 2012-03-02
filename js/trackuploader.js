@@ -24,7 +24,7 @@ function TrackUploader( p_authKey, p_fileEntry, p_successCallback, p_errorCallba
     this.m_authKey = p_authKey;
     this.m_successCallback = p_successCallback;
     this.m_errorCallback = p_errorCallback;
-    this.m_reader = new N_TrackReader( p_fileEntry, null, Utilities.getEvtHandler( this, this._loadComplete ) );
+    this.m_reader = new TrackReader( p_fileEntry, null, Utilities.getEvtHandler( this, this._loadComplete ) );
 }
 
 TrackUploader.prototype.m_reader = null;                // Reference to internal TrackReader object
