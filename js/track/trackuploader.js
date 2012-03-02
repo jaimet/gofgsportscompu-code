@@ -38,16 +38,6 @@ TrackUploader.prototype.m_authKey = null;               // Authentication key to
 TrackUploader.URL = "http://192.168.56.101/joomla/index.php";   // Static value which references the upload URL of the gofg homepage
 
 /**
- * Called by the TrackReader object whenever there is a new waypoint ready
- */
-/*TrackUploader.prototype._loadProgress = function( p_waypoint ) {
-            if( this.m_startTime == 0 ) this.m_startTime = p_waypoint.timestamp;
-
-            this.m_endTime = p_waypoint.timestamp;
-            this.m_totalDistance += p_waypoint.distance;
-};*/
-
-/**
  * Called by the TrackReader object when the track has finished loading
  */
 TrackUploader.prototype._loadComplete = function( p_track ) {
@@ -68,12 +58,12 @@ TrackUploader.prototype._loadComplete = function( p_track ) {
 
             // Upload track to gofg community page
             $.get( TrackUploader.URL, passdata, Utilities.getEvtHandler( this, function(data) {
-                      if( typeof this.m_successCallback === "function" ) this.m_successCallback();
-                  } ),
+                                                                            if( typeof this.m_successCallback === "function" ) this.m_successCallback();
+                                                                        } ),
                   'jsonp'
                   ).error( Utilities.getEvtHandler( this, function(jqXHR, textStatus, errorThrown) {
-                              console.log( 'error: ' + errorThrown );
-                              if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( textStatus );
-                          } )
+                                                       console.log( 'error: ' + errorThrown );
+                                                       if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( textStatus );
+                                                   } )
                           );
-};
+        };
