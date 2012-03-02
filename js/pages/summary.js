@@ -232,6 +232,9 @@ Summary.prototype._startTracking = function() {
                             if( SettingsHandler.get( 'autolock' ) > 0 ) {
                                 pages.summary._lock();
                             }
+
+                            // Notify map-screen of new track
+                            pages.map.newtrack();
                         },
                         function( p_fileError ) {
                             MsgBox.show( 'Error while trying to open track for writing. The error returned is: ' + p_fileError.code );
@@ -279,6 +282,9 @@ Summary.prototype._stopGPS = function() {
             // Remove references to closed tracks
             pages.summary.m_track = null;
             pages.summary.m_trackwriter = null;
+
+            // Notify map-screen of ending track
+            pages.map.endtrack();
         };
 
 /**
@@ -382,6 +388,9 @@ Summary.prototype._updatePosition = function( p_position ) {
                 clearTimeout( pages.summary.m_speedTimer );
             }
             pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsinterval' ) * 3 * 1000 );
+
+            // Pass waypoint on to map-screen
+            pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint());
         };
 
 /**
@@ -403,14 +412,22 @@ Summary.prototype._updateClock = function() {
  * Try to load a track from a given fileEntry
  */
 Summary.prototype.loadTrack = function( p_fileEntry ) {
+            // Notify map of new track
+            pages.map.newtrack();
+            // Start reading the track
             var trackReader = new TrackReader( p_fileEntry,
-                                                null,
-                                                function( p_track ) {
-                                                    console.log( 'received track' );
-                                                    pages.summary.m_track = p_track;
-                                                    pages.summary._updateDisplay();
-                                                },
-                                                null );
+                                              function( p_waypoint ) {
+                                                  pages.map.waypoint( p_waypoint );
+                                              },
+                                              function( p_track ) {
+                                                  console.log( 'received track' );
+                                                  pages.summary.m_track = p_track;
+                                                  pages.summary._updateDisplay();
+
+                                                  // Finish track
+                                                  pages.map.endtrack();
+                                              },
+                                              null );
         }
 
 /**
