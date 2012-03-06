@@ -28,9 +28,6 @@ function TrackUploader( p_authKey, p_fileEntry, p_successCallback, p_errorCallba
 }
 
 TrackUploader.prototype.m_reader = null;                // Reference to internal TrackReader object
-/*TrackUploader.prototype.m_totalDistance = 0;            // Total distance counter
-TrackUploader.prototype.m_startTime = 0;                // Start-Time of this track
-TrackUploader.prototype.m_endTime = 0;                  // End-Time of this track*/
 TrackUploader.prototype.m_successCallback = null;       // Callback which is called once the track loading has successfully finished
 TrackUploader.prototype.m_errorCallback = null;         // Callback which is called if there was an error
 TrackUploader.prototype.m_authKey = null;               // Authentication key to use when uploading the track

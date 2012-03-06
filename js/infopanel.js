@@ -62,7 +62,7 @@
         	$(this).html( '' );
         	$(this).addClass( 'ui-bar-c' );
         	$(this).append( data.image ).append( data.unitDiv ).append( data.currentDiv );
-        	$(this).data( 'infopanel', data );
+            $(this).jqmData( 'infopanel', data );
         	
         	// Setup the infopanel
         	var defaultVal = settings['value'];
@@ -79,10 +79,10 @@
     	return this.each(function() {
     		if( p_value == null || p_value == undefined ) p_value = "-";
     		
-    		$(this).data('infopanel').settings['value'] = p_value;
-    		$(this).data('infopanel').currentValue.html( p_value );
+            $(this).jqmData('infopanel').settings['value'] = p_value;
+            $(this).jqmData('infopanel').currentValue.html( p_value );
 
-   			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
+            methods.setSize.call($(this), $(this).jqmData( 'infopanel' ).settings['size']['width'], $(this).jqmData( 'infopanel' ).settings['size']['height'] );
     	});
     },
     
@@ -90,14 +90,14 @@
      * Set an image as value
      */
     setValueImage : function( p_imgUrl, p_imgHeight, p_imgWidth ) {
-    	$(this).data('infopanel').currentValue.css( 'display', 'none' );
-    	$(this).data('infopanel').currentValueImage.css( 'display', '' );
-    	$(this).data('infopanel').currentValueImage.attr( 'src', p_imgUrl );
-    	$(this).data('infopanel').currentValueImage.attr( 'width', p_imgHeight + 'px' );
-    	$(this).data('infopanel').currentValueImage.attr( 'height', p_imgWidth + 'px' );
+        $(this).jqmData('infopanel').currentValue.css( 'display', 'none' );
+        $(this).jqmData('infopanel').currentValueImage.css( 'display', '' );
+        $(this).jqmData('infopanel').currentValueImage.attr( 'src', p_imgUrl );
+        $(this).jqmData('infopanel').currentValueImage.attr( 'width', p_imgHeight + 'px' );
+        $(this).jqmData('infopanel').currentValueImage.attr( 'height', p_imgWidth + 'px' );
 
 		// Now calculate the remaining space for the margin
-    	methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
+        methods.setSize.call($(this), $(this).jqmData( 'infopanel' ).settings['size']['width'], $(this).jqmData( 'infopanel' ).settings['size']['height'] );
     },
     
     /**
@@ -117,38 +117,38 @@
      */
     setInfo : function( p_infoValue ) {
     	return this.each( function() {
-    		$(this).data('infopanel').statsDiv.html( p_infoValue );
+            $(this).jqmData('infopanel').statsDiv.html( p_infoValue );
     		
-   			methods.setSize.call($(this), $(this).data( 'infopanel' ).settings['size']['width'], $(this).data( 'infopanel' ).settings['size']['height'] );
+            methods.setSize.call($(this), $(this).jqmData( 'infopanel' ).settings['size']['width'], $(this).jqmData( 'infopanel' ).settings['size']['height'] );
     	} );
     },
     
     setSize : function( p_width, p_height ) {
     	return this.each(function() {
-    		$(this).data('infopanel').settings['size'] = { 'width' : p_width, 'height' : p_height };
+            $(this).jqmData('infopanel').settings['size'] = { 'width' : p_width, 'height' : p_height };
     		
     		if( !$(this).is( ':visible' ) ) return;
 
     		// Now calculate the remaining space for the margin
-    		var marginSize = (p_height - 2 - $(this).data( 'infopanel' ).currentDiv.outerHeight() - 24 );
+            var marginSize = (p_height - 2 - $(this).jqmData( 'infopanel' ).currentDiv.outerHeight() - 24 );
     		var marginTop = (marginSize / 2).toFixed(0);
     		var marginBottom = marginSize - marginTop;
     		// Finally apply the margin
-    		$(this).data( 'infopanel' ).currentDiv.css( 'margin-top', marginTop  + 'px' ).css( 'margin-bottom', marginBottom + 'px' );
+            $(this).jqmData( 'infopanel' ).currentDiv.css( 'margin-top', marginTop  + 'px' ).css( 'margin-bottom', marginBottom + 'px' );
     	});
     },
     setImage : function( p_imgUrl ) {
     	return this.each(function() {
-    		$(this).data('infopanel').settings['image'] = p_imgUrl;
+            $(this).jqmData('infopanel').settings['image'] = p_imgUrl;
 
-    		$(this).data( 'infopanel' ).image.attr( 'src', p_imgUrl );
+            $(this).jqmData( 'infopanel' ).image.attr( 'src', p_imgUrl );
     	});
     },
     setUnit : function( p_unit ) {
     	return this.each(function() {
-    		$(this).data('infopanel').settings['unit'] = p_unit;
+            $(this).jqmData('infopanel').settings['unit'] = p_unit;
     		
-    		$(this).data( 'infopanel' ).unitDiv.html( p_unit );
+            $(this).jqmData( 'infopanel' ).unitDiv.html( p_unit );
     	});
     },
     _sizeFont : function( p_width, p_height ) {
@@ -156,33 +156,34 @@
     		if( !$(this).is( ':visible' ) ) return;
     		if( p_width == 'auto' ) p_width = $(this).width();
     		
-    		var maximumHeight = p_height - $($(this).data('infopanel').image).outerHeight(true) - 2 * $(this).data('infopanel').settings['border'];
-    		var maximumWidth = p_width - ($(this).outerWidth(true) - $(this).width()) - 2 * $(this).data('infopanel').settings['border'];
+            var maximumHeight = p_height - $($(this).jqmData('infopanel').image).outerHeight(true) - 2 * $(this).jqmData('infopanel').settings['border'];
+            var maximumWidth = p_width - ($(this).outerWidth(true) - $(this).width()) - 2 * $(this).jqmData('infopanel').settings['border'];
     		
     		//console.log( "MaxSize: " + p_height + " / " + maximumHeight + " / " + maximumWidth );
     		
-//			var maximumHeight = p_height - 24 - $(this).data('infopanel').settings['border'];
-//			var maximumWidth = p_width - $(this).data('infopanel').settings['border'];
+//			var maximumHeight = p_height - 24 - $(this).jqmData('infopanel').settings['border'];
+//			var maximumWidth = p_width - $(this).jqmData('infopanel').settings['border'];
 			var fontSize = 40;
-			var fontSizeStep = $(this).data( 'infopanel' ).settings['fontSizeStep'];
+            var fontSizeStep = $(this).jqmData( 'infopanel' ).settings['fontSizeStep'];
 			
 			// Show the measure-span
-			$(this).data( 'infopanel' ).measureSpan.css( 'display', '' );
+            $(this).jqmData( 'infopanel' ).measureSpan.css( 'display', '' );
 			// Set initial font-size
-			$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
+            $(this).jqmData( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
 			// Auto-Size the font to a maximum
-			//$(this).data('infopanel').settings['value']
-			$(this).data( 'infopanel' ).measureSpan.html( $(this).data('infopanel').settings['value'] );
-			while( $(this).data( 'infopanel' ).measureSpan.height() < maximumHeight && $(this).data( 'infopanel' ).measureSpan.width() < maximumWidth ) {
+            //$(this).jqmData('infopanel').settings['value']
+            $(this).jqmData( 'infopanel' ).measureSpan.html( $(this).jqmData('infopanel').settings['value'] );
+            while( $(this).jqmData( 'infopanel' ).measureSpan.height() < maximumHeight && $(this).jqmData( 'infopanel' ).measureSpan.width() < maximumWidth ) {
 				fontSize += fontSizeStep;
-				$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
+                $(this).jqmData( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
 			}
 			fontSize -= fontSizeStep;
-			//$(this).data( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
-			$(this).data( 'infopanel' ).currentValue.css( 'font-size', fontSize + 'px' );
+            //$(this).jqmData( 'infopanel' ).measureSpan.css( 'font-size', fontSize + 'px' );
+            $(this).jqmData( 'infopanel' ).currentValue.css( 'font-size', fontSize + 'px' );
+            $(this).jqmData( 'infopanel' ).statsDiv.css( 'font-size', (fontSize / 4).toFixed(0) + 'px' );
 			
 			// Hide the measure-span
-			$(this).data( 'infopanel' ).measureSpan.css( 'display', 'none' );
+            $(this).jqmData( 'infopanel' ).measureSpan.css( 'display', 'none' );
 			//console.log( "Final font-Size: " + fontSize );
     	});
     }
