@@ -70,7 +70,7 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
                     this.m_elevationGain += this.m_currentWaypoint.m_altitudeDiff;
                 }
                 else {
-                    this.m_elevationLoss += this.m_currentWaypoint.m_altitudeDiff;
+                    this.m_elevationLoss += Math.abs(this.m_currentWaypoint.m_altitudeDiff);
                 }
             }
             // ... else remember start-time
@@ -164,4 +164,11 @@ Track.prototype.getMaximumSpeed = function() {
  */
 Track.prototype.getElevationGain = function() {
             return this.m_elevationGain;
+        }
+
+/**
+ * Return the elevation loss
+ */
+Track.prototype.getElevationLoss = function() {
+            return this.m_elevationLoss;
         }
