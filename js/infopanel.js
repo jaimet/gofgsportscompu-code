@@ -60,8 +60,8 @@
         	
         	// Create basic layout
         	$(this).html( '' );
-        	$(this).addClass( 'ui-bar-c' );
-        	$(this).append( data.image ).append( data.unitDiv ).append( data.currentDiv );
+            $(this).addClass( 'ui-bar-c' );
+            $(this).append( data.image ).append( data.unitDiv ).append( data.currentDiv );
             $(this).jqmData( 'infopanel', data );
         	
         	// Setup the infopanel

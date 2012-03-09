@@ -57,6 +57,9 @@ Summary.prototype.oninit = function() {
 Summary.prototype.enableGPSTap = function() {
             $('#enableGPS-button').button('disable');
 
+            // Switch button display
+            $( '#settings-button' ).hide();
+
             // Disable idle mode
             window.plugins.PowerManagement.acquire(
                         function(){},
@@ -118,12 +121,21 @@ Summary.prototype._updateDisplay = function() {
 
             var coords = waypoint.m_position.coords;
 
+            // Calculate average speed
+            var avgSpeed = pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6;
+            if( isNaN(avgSpeed) ) avgSpeed = 0.00;
+            // Current & average elevation rate
+            var currElevation = waypoint.m_altitudeDiff / waypoint.m_distance * 100;
+            if( isNaN(currElevation) ) currElevation = 0.00;
+            var avgElevation = pages.summary.m_track.getElevationGain() / pages.summary.m_track.getTotalDistance() * 100;
+            if( isNaN(avgElevation) ) avgElevation = 0.00;
+
             // Update display
             $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6).toFixed(2) );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', (pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6).toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
+            $( '#speed-infopanel' ).infopanel( 'setStatistics', avgSpeed.toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
             $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', (waypoint.m_altitudeDiff / waypoint.m_distance * 100).toFixed(2) + "% / &Oslash; " + (pages.summary.m_track.getElevationGain() / pages.summary.m_track.getTotalDistance() * 100).toFixed(2) + "%" );
+            $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
 
             var averageAccuracy = (coords.accuracy + coords.altitudeAccuracy) / 2.0;
             var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
@@ -161,9 +173,6 @@ Summary.prototype._updateOdo = function( p_distance ) {
  */
 Summary.prototype._startGPS = function( p_position ) {
             console.log( "Start-GPS called" );
-
-            // Switch button display
-            $( '#settings-button' ).hide();
 
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
