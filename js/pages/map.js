@@ -57,11 +57,8 @@ Map.prototype.initMap = function() {
                 }
             }
 
-            // Setup waypoints for track-layer
-            pages.map.track_line.setLatLngs( pages.map.m_waypoints );
-
             // Zoom the map according to either default or the track layer
-            if( pages.map.track_line.getLatLngs().length > 2 ) {
+            if( pages.map.track_line !== null && pages.map.track_line.getLatLngs().length > 2 ) {
                 pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
             }
             else {
