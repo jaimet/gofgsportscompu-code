@@ -84,7 +84,7 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
             }
 
             // Store current waypoint in list
-            this.m_waypoints.push( this.m_currentWaypoint );
+            //this.m_waypoints.push( this.m_currentWaypoint );
         }
 
 /**

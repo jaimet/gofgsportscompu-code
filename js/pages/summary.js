@@ -150,7 +150,7 @@ Summary.prototype._updateDisplay = function() {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
             }
 
-            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
+            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(((new Date()).getTime() / 1000 - pages.summary.m_track.getStartTime()).toFixed(0), true) );
         };
 
 /**
@@ -377,7 +377,8 @@ Summary.prototype._updatePosition = function( p_position ) {
 
             // Calculate distance
             var distance = 0;
-            var waypoint = pages.summary.m_track.getWaypoint();
+            var waypoint = pages.summary.m_track.getCurrentWaypoint();
+
             if( waypoint !== null ) {
                 distance = Utilities.haversineDistance( waypoint.m_position.coords, p_position.coords );
 

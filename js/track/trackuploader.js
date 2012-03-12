@@ -66,7 +66,13 @@ TrackUploader.prototype._loadComplete = function( p_track ) {
 
             // Upload track to gofg community page
             $.get( TrackUploader.URL, passdata, Utilities.getEvtHandler( this, function(data) {
-                                                                            if( typeof this.m_successCallback === "function" ) this.m_successCallback();
+                                                                            // Check if there was an error
+                                                                            if( typeof data.error !== 'undefined' && data.error !== null ) {
+                                                                                if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( data.error );
+                                                                            }
+                                                                            else {
+                                                                                if( typeof this.m_successCallback === "function" ) this.m_successCallback();
+                                                                            }
                                                                         } ),
                   'jsonp'
                   ).error( Utilities.getEvtHandler( this, function(jqXHR, textStatus, errorThrown) {

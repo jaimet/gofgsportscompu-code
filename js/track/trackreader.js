@@ -94,9 +94,9 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
                         // Run waypoint callback if necessary
                         if( typeof this.m_waypointCallback === "function" ) this.m_waypointCallback( track.getCurrentWaypoint() );
                     }
-                    // Create new position object
-                    position = new Position();
-                    position.coords = new Coordinates();
+                    // Create new position & coordinates object (faking through fixed objects)
+                    position = { coords: null, timestamp: 0 };
+                    position.coords = { latitude: 0, longitude: 0, altitude: 0, accuracy: 0, altitudeAccuracy: 0, heading: 0, speed: 0 };
                     position.timestamp = line_info.values[0] * 1000;
                     distance = 0;
                     break;
