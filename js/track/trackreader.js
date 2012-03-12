@@ -101,8 +101,8 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
                     distance = 0;
                     break;
                 case 2:     // location
-                    position.coords.latitude = line_info.values[0];
-                    position.coords.longitude = line_info.values[1];
+                    position.coords.latitude = Utilities.toDegree(line_info.values[0]);
+                    position.coords.longitude = Utilities.toDegree(line_info.values[1]);
                     position.coords.altitude = line_info.values[2];
                     break;
                 case 3:     // heartrate

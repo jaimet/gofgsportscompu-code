@@ -60,7 +60,7 @@ TrackWriter.prototype.writeWaypoint = function( p_bCurrent ) {
             // Check if we have a position (which we definately should)
             if( waypoint.m_position !== null ) {
                 var coords = waypoint.m_position.coords;
-                this.m_continuousFileWriter.writeLine( "02;" + coords.latitude + ":" + coords.longitude + ":" + coords.altitude );
+                this.m_continuousFileWriter.writeLine( "02;" + Utilities.toRad(coords.latitude) + ":" + Utilities.toRad(coords.longitude) + ":" + coords.altitude );
                 this.m_continuousFileWriter.writeLine( "05;" + coords.speed );
                 this.m_continuousFileWriter.writeLine( "06;" + coords.accuracy + ":" + coords.altitudeAccuracy );
             }
