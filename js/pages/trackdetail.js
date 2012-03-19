@@ -67,7 +67,6 @@ Trackdetail.prototype._loadTrack = function() {
             $.mobile.showPageLoadingMsg();
 
             pages.summary.loadTrack( pages.trackdetail.m_fileEntry );
-            $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );
         };
 
 /**

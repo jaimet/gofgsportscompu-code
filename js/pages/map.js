@@ -70,16 +70,10 @@ Map.prototype.initMap = function() {
  * Event handler for new waypoint entries
  */
 Map.prototype.waypoint = function( p_waypoint ) {
-            //console.log( 'waypoint-coords: '+ pages.map.m_waypoints.length + " / " + p_waypoint.m_position.coords.latitude + " / " + p_waypoint.m_position.coords.longitude );
-            console.log( 'waypoint-coords: ' + p_waypoint.m_position.coords.longitude );
-
             var latLng = new L.LatLng( p_waypoint.m_position.coords.latitude, p_waypoint.m_position.coords.longitude );
 
             // Add waypoint to list
             pages.map.m_waypoints.push( latLng );
-
-            // Update waypoints
-            //pages.map.track_line.setLatLngs( pages.map.m_waypoints );
 
             if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
                 // Zoom in to new waypoint

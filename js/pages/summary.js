@@ -134,7 +134,7 @@ Summary.prototype._updateDisplay = function() {
             $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6).toFixed(2) );
             $( '#speed-infopanel' ).infopanel( 'setStatistics', avgSpeed.toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
             $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(2) );
+            $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
 
             var averageAccuracy = (coords.accuracy + coords.altitudeAccuracy) / 2.0;
@@ -436,6 +436,9 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
 
                                                   // Finish track
                                                   pages.map.endtrack();
+
+                                                  // Display summary page
+                                                  $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );
                                               },
                                               null );
         }
@@ -484,7 +487,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             // Altitude infopanel
             $( '#altitude-infopanel' ).infopanel( {
                                                      'value' : '0.0',
-                                                     'maxSizeValue' : '0000.0',
+                                                     'maxSizeValue' : '00000.0',
                                                      'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
                                                      'image' : 'images/pictures24.png',
                                                      'unit' : 'm',
