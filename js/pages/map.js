@@ -74,6 +74,7 @@ Map.prototype.waypoint = function( p_waypoint ) {
 
             // Add waypoint to list
             pages.map.m_waypoints.push( latLng );
+            pages.map.track_line.setLatLngs( pages.map.m_waypoints );
 
             if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
                 // Zoom in to new waypoint
