@@ -53,3 +53,10 @@ Utilities.haversineDistance = function( p_startCoordinates, p_endCoordinates ) {
 
             return distance;
         }
+
+/**
+ * Return current time as unix-timestamp
+ */
+Utilities.getUnixTimestamp = function() {
+            return ((new Date()).getTime() / 1000).toFixed(0);
+        }

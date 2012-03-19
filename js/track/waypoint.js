@@ -21,7 +21,7 @@
  * Small helper class for handling a waypoint including all extra information attached to it
  */
 function Waypoint() {
-    this.m_timestamp = ((new Date()).getTime() / 1000).toFixed(0);
+    this.m_timestamp = Utilities.getUnixTimestamp();
 }
 
 Waypoint.prototype.m_position = null;   // Position object representing all position relevant data (see W3C spec)

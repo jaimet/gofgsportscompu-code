@@ -42,11 +42,6 @@ Summary.prototype.oninit = function() {
 
             // Setup default tap handler
             pages.summary.m_middleTapHandler = pages.summary._lock;
-            pages.summary.m_rightTapHandler = pages.summary._startGPS;
-
-            // Disable the lock & stop button by default
-            $( '#middle-button' ).button( 'disable' );
-            $( '#left-button' ).button( 'disable' );
 
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
         };
@@ -55,10 +50,16 @@ Summary.prototype.oninit = function() {
  * Enable GPS and start searching for a signal
  */
 Summary.prototype.enableGPSTap = function() {
-            $('#enableGPS-button').button('disable');
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'disable' );
+            // Setup tap handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 
             // Switch button display
             $( '#settings-button' ).hide();
+            $('#summary-page_enableGPS').hide();
+            $('#summary-page_control').show();
 
             // Disable idle mode
             window.plugins.PowerManagement.acquire(
@@ -73,6 +74,9 @@ Summary.prototype.enableGPSTap = function() {
             GPSHandler.setPositionCallback( pages.summary._gpsFixWait );
             GPSHandler.setErrorCallback( pages.summary_positionError );
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
+
+            // Update accuracy status image
+            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
 
             // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
             if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
@@ -136,22 +140,25 @@ Summary.prototype._updateDisplay = function() {
             $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
+            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff((Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime()).toFixed(0), true) );
+        };
 
-            var averageAccuracy = (coords.accuracy + coords.altitudeAccuracy) / 2.0;
+/**
+ * Update image for accuracy display
+ */
+Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
             var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
 
-            if( averageAccuracy <= (minimumAccuracy / 2.0) ) {
+            if( p_averageAccuracy <= (minimumAccuracy / 2.0) ) {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalExcellent48.png', 48, 48 );
             }
-            else if( averageAccuracy <= minimumAccuracy ) {
+            else if( p_averageAccuracy <= minimumAccuracy ) {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalGood48.png', 48, 48 );
             }
             else {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
             }
-
-            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(((new Date()).getTime() / 1000 - pages.summary.m_track.getStartTime()).toFixed(0), true) );
-        };
+        }
 
 /**
  * Update & display odo value
@@ -174,44 +181,10 @@ Summary.prototype._updateOdo = function( p_distance ) {
 Summary.prototype._startGPS = function( p_position ) {
             console.log( "Start-GPS called" );
 
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'enable' );
-            $( '#middle-button' ).button( 'enable' );
-            $( '#right-button' ).button( 'disable' );
-            // Setup tap handlers
-            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
-
-            // Update accuracy status image
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-
-            pages.summary._startTracking();
-        };
-
-/**
- * Simple helper function which waits for the first GPS fix and starts the track once called
- */
-Summary.prototype._gpsFixWait = function() {
-            $('#summary-page_enableGPS').hide();
-            $('#summary-page_control').show();
-
-            // Disable gpsfixwait callback
-            GPSHandler.setPositionCallback( null );
-
-            // Check if we automatically start tracking
-            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
-                pages.summary._startGPS();
-            }
-        };
-
-/**
- * Start the real tracking
- */
-Summary.prototype._startTracking = function() {
-            console.log('Start-Tracking called');
-
+            // Start the new track
             pages.summary.m_track = new Track();
             GOFGSportsComputer.m_trackDirectoryEntry.getFile(
-                        ((new Date()).getTime() / 1000).toFixed(0) + ".gsc",
+                        Utilities.getUnixTimestamp() + ".gsc",
                         {create: true, exclusive: true},
                         function( p_fileEntry ) {
                             // Create track-writer object & write initial information
@@ -223,16 +196,12 @@ Summary.prototype._startTracking = function() {
 
                             // Enable / disable buttons
                             $( '#left-button' ).button( 'enable' );
-                            $( '#middle-button' ).button( 'enable' );
                             $( '#right-button' ).button( 'enable' );
                             // Update button icons
                             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
                             // Setup tap handlers
                             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
                             pages.summary.m_rightTapHandler = pages.summary._pause;
-
-                            // Display pause button
-                            setTimeout( "$( '#pause-button' ).fadeIn( 'slow' );", 500 );
 
                             // Start updating our interface
                             pages.summary._mainTimer();
@@ -253,6 +222,29 @@ Summary.prototype._startTracking = function() {
         };
 
 /**
+ * Simple helper function which waits for the first GPS fix and starts the track once called
+ */
+Summary.prototype._gpsFixWait = function( p_position ) {
+            // Update accuracy display
+            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
+
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'enable' );
+            // Setup tap handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+            pages.summary.m_rightTapHandler = pages.summary._startGPS;
+
+            // Disable gpsfixwait callback
+            GPSHandler.setPositionCallback( null );
+
+            // Check if we automatically start tracking
+            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
+                pages.summary._startGPS();
+            }
+        };
+
+/**
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
@@ -263,30 +255,28 @@ Summary.prototype._stopGPS = function() {
             setTimeout( "$('#summary-page_enableGPS').show()", 600 );
             $('#settings-button').show();
 
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'disable' );
-            $( '#middle-button' ).button( 'disable' );
-            $( '#right-button' ).button( 'enable' );
-            $('#enableGPS-button').button('enable');
             // Update button icons
             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
-            // Setup tap handler
-            pages.summary.m_rightTapHandler = pages.summary._startGPS;
 
+            // Stop GPS & release power lock
             GPSHandler.stopGPS();
-            pages.summary.m_trackwriter.writeWaypoint(true);
-
             window.plugins.PowerManagement.release(
                         function(){},
                         function(e){}
                         );
 
-            // Disable interface timer
-            if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
-            pages.summary.m_mainTimer = 0;
-
             // Update accuracy status image
             $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
+
+            // No more actions to take if track didn't start yet
+            if( pages.summary.m_track === null ) return;
+
+            // Disable interface timer
+            if( pages.summary.m_mainTimer !== 0 ) clearTimeout(pages.summary.m_mainTimer);
+            pages.summary.m_mainTimer = 0;
+
+            // Finalize track
+            pages.summary.m_trackwriter.writeWaypoint(true);
 
             // Remove references to closed tracks
             pages.summary.m_track = null;
@@ -304,12 +294,12 @@ Summary.prototype._pause = function() {
 
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
-            $( '#middle-button' ).button( 'disable' );
-            $( '#right-button' ).button( 'disable' );
+            $( '#right-button' ).button( 'enable' );
             // Update button icons
-            $( '#left-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-stop').addClass('ui-icon-gofgsc-play');
+            $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
             // Setup tap handler
-            pages.summary.m_leftTapHandler = pages.summary._resume;
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+            pages.summary.m_rightTapHandler = pages.summary._resume;
 
             pages.summary.m_pauseStart = ((new Date()).getTime() / 1000).toFixed(0);
             // Stop GPS tracking
@@ -332,10 +322,9 @@ Summary.prototype._resume = function() {
 
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
-            $( '#middle-button' ).button( 'enable' );
             $( '#right-button' ).button( 'enable' );
             // Update button icons
-            $( '#left-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-stop');
+            $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
             // Setup tap handler
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._pause;
@@ -372,6 +361,9 @@ Summary.prototype._lock = function() {
  * Callback for the GPSHandler which is called whenever the GPS position is updated
  */
 Summary.prototype._updatePosition = function( p_position ) {
+            // Update accuracy display
+            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
+
             // Check if position is accurate enough
             if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
 
