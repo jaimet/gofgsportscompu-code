@@ -119,7 +119,7 @@ Summary.prototype._speedTimer = function() {
  * Update the display of the app (regular interval, once a second)
  */
 Summary.prototype._updateDisplay = function() {
-            var waypoint = pages.summary.m_track.getWaypoint();
+            var waypoint = pages.summary.m_track.getCurrentWaypoint();
             // Check if we actually have an info yet
             if( waypoint === null ) return;
 
@@ -376,6 +376,11 @@ Summary.prototype._updatePosition = function( p_position ) {
 
                 // Check if new waypoint is out of the tolerance of the last one
                 if( distance <= waypoint.m_position.coords.accuracy ) return;
+
+                // Check if altitude difference is within tolerance
+                if( Math.abs(waypoint.m_position.coords.altitude - p_position.coords.altitude) < SettingsHandler.get( 'minimumaltitudechange' ) ) {
+                    p_position.coords.altitude = waypoint.m_position.coords.altitude;
+                }
 
                 // Update odo (total distance - see odometer)
                 pages.summary._updateOdo( distance );
