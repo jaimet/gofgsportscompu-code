@@ -75,7 +75,7 @@ Settings.prototype._changed = function() {
 Settings.prototype._odoReset = function() {
             MsgBox.confirm( "Do you really want to reset the ODO-meter value?",
                            function( p_button ) {
-                               if( p_button & MsgBox.BUTTON_YES ) {
+                               if( p_button === MsgBox.BUTTON_YES ) {
                                    window.localStorage.setItem( "odo", 0.0 );
                                }
                            } );

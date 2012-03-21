@@ -41,9 +41,7 @@ MsgBox.prototype.oninit = function() {
 
             // Button events
             $( 'a[name="msgbox-button"]' ).each(function() {
-                                                    var id = $(this).attr('id').split('-')[2];
-
-                                                    $(this).bind( 'tap', id, pages.msgbox._close )
+                                                    $(this).bind( 'tap', parseInt($(this).attr('id').split('-')[2]), pages.msgbox._close )
                                                 } );
 }
 

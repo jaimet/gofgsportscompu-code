@@ -41,7 +41,6 @@ Trackdetail.prototype.setTrack = function( p_fileEntry, p_displayName ) {
             // Store file information
             pages.trackdetail.m_fileEntry = p_fileEntry;
             pages.trackdetail.m_displayName = p_displayName;
-
         }
 
 /**
@@ -58,10 +57,10 @@ Trackdetail.prototype._pagebeforeshow = function() {
 Trackdetail.prototype._deleteTrack = function() {
             MsgBox.confirm( $.i18n.prop( 'delete_message' ),
                            function(p_button) {
-                            if( p_button & MsgBox.BUTTON_YES ) {
-                                pages.trackdetail.m_fileEntry.remove( function() { $.mobile.changePage( 'tracks.html', { transition: 'slide', reverse: true } ); } );
-                            }
-                        } );
+                               if( p_button === MsgBox.BUTTON_YES ) {
+                                   pages.trackdetail.m_fileEntry.remove( function() { $.mobile.changePage( 'tracks.html', { transition: 'slide', reverse: true } ); } );
+                               }
+                           } );
         }
 
 /**
