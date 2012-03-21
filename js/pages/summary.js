@@ -329,7 +329,7 @@ Summary.prototype._resume = function() {
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._pause;
 
-            var pauseEnd = ((new Date()).getTime() / 1000).toFixed(0);
+            var pauseEnd = Utilities.getUnixTimestamp();
 
             // Start GPS again
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
@@ -365,7 +365,7 @@ Summary.prototype._updatePosition = function( p_position ) {
             pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
 
             // Check if position is accurate enough
-            if( p_position.coords.accuracy > SettingsHandler.get( 'minimumaccuracy' ) ) return;
+            if( p_position.coords.accuracy > SettingsHandler.getInt( 'minimumaccuracy' ) ) return;
 
             // Calculate distance
             var distance = 0;
@@ -378,7 +378,7 @@ Summary.prototype._updatePosition = function( p_position ) {
                 if( distance <= waypoint.m_position.coords.accuracy ) return;
 
                 // Check if altitude difference is within tolerance
-                if( Math.abs(waypoint.m_position.coords.altitude - p_position.coords.altitude) < SettingsHandler.get( 'minimumaltitudechange' ) ) {
+                if( Math.abs(waypoint.m_position.coords.altitude - p_position.coords.altitude) < SettingsHandler.getInt( 'minimumaltitudechange' ) ) {
                     p_position.coords.altitude = waypoint.m_position.coords.altitude;
                 }
 

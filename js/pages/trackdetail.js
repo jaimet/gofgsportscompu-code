@@ -56,7 +56,11 @@ Trackdetail.prototype._pagebeforeshow = function() {
  * Delete the currently displayed track (and return to overview on success)
  */
 Trackdetail.prototype._deleteTrack = function() {
-            pages.trackdetail.m_fileEntry.remove( function() { $.mobile.changePage( 'tracks.html', { transition: 'slide', reverse: true } ); } );
+            MsgBox.show( $.i18n.prop( 'delete_message' ), null, MsgBox.BUTTON_YES | MsgBox.BUTTON_NO, function(p_button) {
+                            if( p_button & MsgBox.BUTTON_YES ) {
+                                pages.trackdetail.m_fileEntry.remove( function() { $.mobile.changePage( 'tracks.html', { transition: 'slide', reverse: true } ); } );
+                            }
+                        } );
         }
 
 /**

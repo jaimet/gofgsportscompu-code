@@ -25,6 +25,7 @@ MsgBox.prototype.m_title = '';
 MsgBox.prototype.m_text = '';
 MsgBox.prototype.m_buttons = '';
 MsgBox.prototype.m_prevPage = null;
+MsgBox.prototype.m_closeCallback = null;
 MsgBox.BUTTON_OK = 0x01;
 MsgBox.BUTTON_CANCEL = 0x02;
 MsgBox.BUTTON_YES = 0x04;
@@ -39,18 +40,23 @@ MsgBox.prototype.oninit = function() {
             $( '#msgbox-page' ).bind( 'pagebeforeshow', pages.msgbox.onpagebeforeshow );
 
             // Button events
-            $( 'a[name="msgbox-button"]' ).bind( 'tap', pages.msgbox._close );
+            $( 'a[name="msgbox-button"]' ).each(function() {
+                                                    var id = $(this).attr('id').split('-')[2];
+
+                                                    $(this).bind( 'tap', id, pages.msgbox._close )
+                                                } );
 }
 
 /**
  * Function for showing the actual messagebox
  */
-MsgBox.show = function( p_text, p_title, p_buttons ) {
+MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
             pages.msgbox.m_prevPage = $.mobile.activePage;
 
             pages.msgbox.m_text = p_text;
-            pages.msgbox.m_title = p_title || "Info";
+            pages.msgbox.m_title = p_title || "";
             pages.msgbox.m_buttons = p_buttons || MsgBox.BUTTON_OK;
+            pages.msgbox.m_closeCallback = p_closeCallback || null;
 
             $.mobile.changePage( 'msgbox.html', { role: 'dialog' } );
 }
@@ -65,16 +71,23 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
             // Hide all buttons by default
             $( 'a[name="msgbox-button"]' ).hide();
 
-            if( pages.msgbox.m_buttons & MsgBox.BUTTON_OK ) {
-                $('#msgbox-ok-button').show();
+            // Show enabled buttons
+            var mask = 0x1;
+            while( mask <= 0x1000 ) {
+                if( pages.msgbox.m_buttons & mask ) {
+                    $('#msgbox-button-' + parseInt(mask) ).show();
+                }
+                mask = mask << 1;
             }
 }
 
 /**
  * Called when the ok or cancel button is clicked
  */
-MsgBox.prototype._close = function() {
+MsgBox.prototype._close = function( evt ) {
             $.mobile.changePage( pages.msgbox.m_prevPage );
+
+            if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(evt.data);
 }
 
 new MsgBox();
