@@ -73,8 +73,12 @@ Settings.prototype._changed = function() {
  * Called when the user clicks on the reset odo-meter button
  */
 Settings.prototype._odoReset = function() {
-            window.localStorage.setItem( "odo", 0.0 );
-            //setTimeout( "$( '#settings-page' ).find( '#settings-odoConfirm-button' ).show(); $( '#settings-page' ).find( '#settings-odoReset-button' ).hide();", 100 );
+            MsgBox.confirm( "Do you really want to reset the ODO-meter value?",
+                           function( p_button ) {
+                               if( p_button & MsgBox.BUTTON_YES ) {
+                                   window.localStorage.setItem( "odo", 0.0 );
+                               }
+                           } );
         };
 
 /**

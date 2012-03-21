@@ -62,6 +62,13 @@ MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
 }
 
 /**
+ * Display confirm messagebox
+ */
+MsgBox.confirm = function( p_text, p_closeCallback ) {
+            MsgBox.show( p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO, p_closeCallback );
+        }
+
+/**
  * Called right before the page is shown
  */
 MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
