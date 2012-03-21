@@ -21,6 +21,9 @@ function Summary() {
 }
 Summary.prototype = new Page( "summary" );
 
+Summary.KM_TO_MILE = 1.609344;
+Summary.M_TO_FEET = 0.3048;
+
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
@@ -123,6 +126,7 @@ Summary.prototype._updateDisplay = function() {
             // Check if we actually have an info yet
             if( waypoint === null ) return;
 
+            // Get reference to current coordinates
             var coords = waypoint.m_position.coords;
 
             // Calculate average speed
@@ -134,11 +138,23 @@ Summary.prototype._updateDisplay = function() {
             var avgElevation = pages.summary.m_track.getElevationGain() / pages.summary.m_track.getTotalDistance() * 100;
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
+            // Set display factors
+            var distanceFactor = 1.0;
+            var altitudeFactor = 1.0;
+            switch( SettingsHandler.getInt( 'displayunits' ) ) {
+            case 2:
+                distanceFactor = Summary.KM_TO_MILE;
+                altitudeFactor = Summary.M_TO_FEET;
+                break;
+            default:
+                break;
+            }
+
             // Update display
-            $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6).toFixed(2) );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', avgSpeed.toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
-            $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setValue', pages.summary.m_track.getElevationGain().toFixed(1) );
+            $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6 * distanceFactor).toFixed(2) );
+            $( '#speed-infopanel' ).infopanel( 'setStatistics', (avgSpeed * distanceFactor).toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6 * distanceFactor).toFixed(2) );
+            $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0 * distanceFactor).toFixed(2) );
+            $( '#altitude-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getElevationGain() * altitudeFactor).toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
             $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff((Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime()).toFixed(0), true) );
         };
@@ -157,6 +173,24 @@ Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
             }
             else {
                 $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
+            }
+        }
+
+/**
+ * Update unit labels based on selected display-units
+ */
+Summary.prototype.updateDisplayUnits = function() {
+            switch( SettingsHandler.getInt( 'displayunits' ) ) {
+            case 2:
+                $( '#speed-infopanel' ).infopanel( 'setUnit', 'miles/h' );
+                $( '#distance-infopanel' ).infopanel( 'setUnit', 'miles' );
+                $( '#altitude-infopanel' ).infopanel( 'setUnit', 'feet' );
+                break;
+            default:
+                $( '#speed-infopanel' ).infopanel( 'setUnit', 'km/h' );
+                $( '#distance-infopanel' ).infopanel( 'setUnit', 'km' );
+                $( '#altitude-infopanel' ).infopanel( 'setUnit', 'm' );
+                break;
             }
         }
 
@@ -524,6 +558,9 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
             // Fix page height
             $( '#summary-page' ).height( $(window).height() );
+
+            // Update display units
+            pages.summary.updateDisplayUnits();
 
             // Bind pagebeforeshow event
             $( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );

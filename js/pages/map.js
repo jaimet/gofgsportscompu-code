@@ -28,6 +28,7 @@ Map.prototype.track_line = null;
 Map.prototype.m_vienna = null;
 Map.prototype.m_waypoints = [];
 Map.prototype.leftPage = "summary.html";
+Map.prototype.m_closeZoom = 0;
 
 Map.prototype.oninit = function() {
             $( '#map-page' ).live( 'pageshow', pages.map.getEvtHandler(pages.map.initMap) );
@@ -55,6 +56,9 @@ Map.prototype.initMap = function() {
                 if( pages.map.track_line !== null ) {
                     pages.map.track_map.addLayer( pages.map.track_line );
                 }
+
+                // Calculate closeZoom (used when viewing the map during tracking)
+                pages.map.m_closeZoom = pages.map.track_map.getMinZoom() + parseInt((pages.map.track_map.getMaxZoom() - pages.map.track_map.getMinZoom()) * 0.9);
             }
 
             // Zoom the map according to either default or the track layer
@@ -78,7 +82,7 @@ Map.prototype.waypoint = function( p_waypoint ) {
 
             if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
                 // Zoom in to new waypoint
-                pages.map.track_map.setView(latLng, pages.map.track_map.getMaxZoom() );
+                pages.map.track_map.setView(latLng, pages.map.m_closeZoom );
             }
         }
 

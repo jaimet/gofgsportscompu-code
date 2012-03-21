@@ -54,10 +54,13 @@ Settings.prototype._save = function() {
             SettingsHandler.set( 'autostarttracking', $( '#settings-page' ).find( '#autostartTrackingSlider' ).val() );
             SettingsHandler.set( 'authkey', $( '#settings-page' ).find( '#authKeyInput' ).val() );
             SettingsHandler.set( 'autolock', $( '#settings-page' ).find( '#autolockSlider' ).val() );
+            SettingsHandler.set( 'displayunits', $( '#settings-page' ).find( '#displayUnitSelect' ).val() );
             SettingsHandler._save();
 
             // Init re-translation
             Translator.changeLanguage(SettingsHandler.get( 'language' ));
+            // Update display units
+            pages.summary.updateDisplayUnits();
 
             $( '#settings-page' ).find( '#settings-save-button' ).hide();
         };
@@ -93,6 +96,7 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
             $( '#settings-page' ).find( '#autostartTrackingSlider' ).slider( 'refresh', SettingsHandler.get( 'autostarttracking' ) );
             $( '#settings-page' ).find( '#authKeyInput' ).val(SettingsHandler.get( 'authkey' ));
             $( '#settings-page' ).find( '#autolockSlider' ).slider( 'refresh', SettingsHandler.get( 'autolock' ) );
+            $( '#settings-page' ).find( '#displayUnitSelect' ).val( SettingsHandler.get( 'displayunits' ) ).selectmenu( 'refresh' );
             // Setup page layout
             $( '#settings-page' ).find( '#settings-save-button' ).hide();
             $( '#settings-page' ).find( '#settings-odoReset-button' ).show();

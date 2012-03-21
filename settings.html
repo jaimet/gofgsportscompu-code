@@ -35,6 +35,13 @@
                         </select>
                 </div>
                 <div data-role="fieldcontain">
+                        <label for="displayUnitSelect" data-i18n="display_unit"></label>
+                        <select name="displayUnitSelect" id="displayUnitSelect">
+                                <option value="1" data-i18n="km_m"></option>
+                                <option value="2" data-i18n="miles_feet"></option>
+                        </select>
+                </div>
+                <div data-role="fieldcontain">
 			<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
 		 	<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30"  />
 		</div>
@@ -65,8 +72,8 @@
 				<option value="show" data-i18n="show"></option>
 			</select>
 		</div>
-		</form>
-		<a id="settings-odoReset-button" href="#" data-role="button" data-icon="delete" data-i18n="odoReset"></a>
+                <a id="settings-odoReset-button" href="#" data-role="button" data-icon="delete" data-i18n="odoReset"></a>
+                </form>
                 <a href="about.html" data-role="button" data-icon="info" data-i18n="about"></a>
         </div>
 </div>

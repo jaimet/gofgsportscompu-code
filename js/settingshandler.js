@@ -30,6 +30,7 @@ var SettingsHandler = {
         "trackuploadurl" : "",      // Hardcoded path to track upload-URL
         "authkey" : "",             // Key for authentication against the GOFG system
         "autolock" : 1,             // Automatically lock screen once tracking has started
+        "displayunits" : 1
     },
     m_settingsFileEntry : null,
     onload : function() {},			// Called when the settings have been loaded
