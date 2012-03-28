@@ -111,15 +111,7 @@ Map.prototype.waypoint = function( p_waypoint ) {
 
             // Add waypoint to list
             pages.map.m_waypoints.push( point );
-
-            // Clean previous points
-            pages.map.track_line.removeAllFeatures();
-
-            //create a polyline feature from the array of points
-            var style_red = {strokeColor: "#FF0000", strokeOpacity: 0.5, strokeWidth: 6};
-            pages.map.m_lineString = new OpenLayers.Geometry.LineString(pages.map.m_waypoints);
-            var trackFeature = new OpenLayers.Feature.Vector(pages.map.m_lineString, null, style_red);
-            pages.map.track_line.addFeatures([trackFeature]);
+            pages.map.m_lineString.addPoint(point);
 
             if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
                 // Zoom in to new waypoint
@@ -140,6 +132,11 @@ Map.prototype.newtrack = function() {
             // Create new layer
             pages.map.m_waypoints = [];
             pages.map.track_line = new OpenLayers.Layer.Vector("Track Layer");
+            //create a polyline feature from the array of points
+            var style_red = {strokeColor: "#FF0000", strokeOpacity: 0.5, strokeWidth: 6};
+            pages.map.m_lineString = new OpenLayers.Geometry.LineString(pages.map.m_waypoints);
+            var trackFeature = new OpenLayers.Feature.Vector(pages.map.m_lineString, null, style_red);
+            pages.map.track_line.addFeatures([trackFeature]);
 
             if( pages.map.track_map !== null ) {
                 pages.map.track_map.addLayer( pages.map.track_line );
