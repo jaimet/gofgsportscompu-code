@@ -18,8 +18,12 @@
  */
 
 function Map() {
+    // Create openlayers projections
+    pages.map.m_ggProjection = new OpenLayers.Projection("EPSG:4326");
+    pages.map.m_smProjection = new OpenLayers.Projection("EPSG:900913");
+
     // Create default zoom location (vienna)
-    pages.map.m_vienna = new L.LatLng(48.208889, 16.3725);
+    pages.map.m_vienna = new OpenLayers.LonLat(16.3725, 48.208889);
 }
 Map.prototype = new Page( 'map' );
 
@@ -29,6 +33,9 @@ Map.prototype.m_vienna = null;
 Map.prototype.m_waypoints = [];
 Map.prototype.leftPage = "summary.html";
 Map.prototype.m_closeZoom = 0;
+Map.prototype.m_ggProjection = null;
+Map.prototype.m_smProjection = null;
+Map.prototype.m_lineString = null;
 
 Map.prototype.oninit = function() {
             $( '#map-page' ).live( 'pageshow', pages.map.getEvtHandler(pages.map.initMap) );
@@ -38,7 +45,7 @@ Map.prototype.oninit = function() {
  * Called whenever the map is shown (which initialized the map & updates the display)
  */
 Map.prototype.initMap = function() {
-            if( pages.map.track_map == null ) {
+            if( pages.map.track_map === null ) {
                 // Calculate and setup track height
                 var track_height = $(window).height();
                 track_height -= $('#map-page > [data-role="header"]').outerHeight( true );
@@ -46,27 +53,50 @@ Map.prototype.initMap = function() {
                 track_height -= $('#map-page_pager').outerHeight( true );
                 $( '#track_map' ).height( track_height );
 
-                pages.map.track_map = new L.Map( 'track_map', { attributionControl: false } );
-
-                var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-                var osm = new L.TileLayer(osmUrl, {maxZoom: 18});
-                pages.map.track_map.addLayer( osm );
-
+                pages.map.track_map = new OpenLayers.Map({
+                                                 div: "track_map",
+                                                 theme: null,
+                                                 numZoomLevels: 18,
+                                                 projection: pages.map.m_smProjection,
+                                                 controls: [
+                                                     new OpenLayers.Control.TouchNavigation({
+                                                         dragPanOptions: {
+                                                             enableKinetic: true
+                                                         }
+                                                     }),
+                                                     new OpenLayers.Control.Zoom(),
+                                                 ],
+                                                 layers: [
+                                                     new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+                                                         transitionEffect: 'resize'
+                                                     }),
+                                                 ],
+                                                 center: new OpenLayers.LonLat(0, 0),
+                                                 zoom: 5
+                                             });
                 // Add track layer
                 if( pages.map.track_line !== null ) {
                     pages.map.track_map.addLayer( pages.map.track_line );
                 }
 
                 // Calculate closeZoom (used when viewing the map during tracking)
-                pages.map.m_closeZoom = pages.map.track_map.getMinZoom() + parseInt((pages.map.track_map.getMaxZoom() - pages.map.track_map.getMinZoom()) * 0.9);
+                pages.map.m_closeZoom =  parseInt( pages.map.track_map.getNumZoomLevels() * 0.75 );
             }
 
             // Zoom the map according to either default or the track layer
-            if( pages.map.track_line !== null && pages.map.track_line.getLatLngs().length > 2 ) {
-                pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
+            if( pages.map.track_line !== null && pages.map.m_waypoints.length > 2 ) {
+                pages.map.track_map.zoomToExtent( pages.map.m_lineString.getBounds(), true );
             }
             else {
-                pages.map.track_map.setView(pages.map.m_vienna, 13);
+                // Zoom to the center of vienna
+                pages.map.track_map.setCenter(
+                            pages.map.m_vienna.transform(
+                                pages.map.m_ggProjection,
+                                pages.map.m_smProjection),
+                            pages.map.m_closeZoom,
+                            true,
+                            true
+                            );
             }
         }
 
@@ -74,15 +104,27 @@ Map.prototype.initMap = function() {
  * Event handler for new waypoint entries
  */
 Map.prototype.waypoint = function( p_waypoint ) {
-            var latLng = new L.LatLng( p_waypoint.m_position.coords.latitude, p_waypoint.m_position.coords.longitude );
+            var point = new OpenLayers.Geometry.Point( p_waypoint.m_position.coords.longitude, p_waypoint.m_position.coords.latitude );
+            point = point.transform( pages.map.m_ggProjection, pages.map.m_smProjection );
+            var latLng = new OpenLayers.LonLat( p_waypoint.m_position.coords.longitude, p_waypoint.m_position.coords.latitude );
+            latLng = latLng.transform( pages.map.m_ggProjection, pages.map.m_smProjection );
 
             // Add waypoint to list
-            pages.map.m_waypoints.push( latLng );
-            pages.map.track_line.setLatLngs( pages.map.m_waypoints );
+            pages.map.m_waypoints.push( point );
+
+            // Clean previous points
+            pages.map.track_line.removeAllFeatures();
+
+            //create a polyline feature from the array of points
+            var style_red = {strokeColor: "#FF0000", strokeOpacity: 0.5, strokeWidth: 6};
+            pages.map.m_lineString = new OpenLayers.Geometry.LineString(pages.map.m_waypoints);
+            var trackFeature = new OpenLayers.Feature.Vector(pages.map.m_lineString, null, style_red);
+            pages.map.track_line.addFeatures([trackFeature]);
 
             if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
                 // Zoom in to new waypoint
-                pages.map.track_map.setView(latLng, pages.map.m_closeZoom );
+                pages.map.track_line.redraw();
+                pages.map.track_map.setCenter(latLng, pages.map.m_closeZoom, true, true );
             }
         }
 
@@ -97,7 +139,7 @@ Map.prototype.newtrack = function() {
 
             // Create new layer
             pages.map.m_waypoints = [];
-            pages.map.track_line = new L.Polyline(pages.map.m_waypoints, {color: 'red'});
+            pages.map.track_line = new OpenLayers.Layer.Vector("Track Layer");
 
             if( pages.map.track_map !== null ) {
                 pages.map.track_map.addLayer( pages.map.track_line );
@@ -108,11 +150,6 @@ Map.prototype.newtrack = function() {
  * Event handler for end track
  */
 Map.prototype.endtrack = function() {
-            // Check if map is initialized
-            if( pages.map.track_map !== null && $( '#map-page' ).is( ':visible' ) ) {
-                // Zoom to fit the whole track
-                pages.map.track_map.fitBounds( new L.LatLngBounds(pages.map.track_line.getLatLngs()) );
-            }
         }
 
 new Map();		// Create single instance

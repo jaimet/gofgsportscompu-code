@@ -61,8 +61,8 @@ Summary.prototype.enableGPSTap = function() {
 
             // Switch button display
             $( '#settings-button' ).hide();
-            $('#summary-page_enableGPS').hide();
-            $('#summary-page_control').show();
+            $('#summary-page_enableGPS').fadeOut( 250 );
+            setTimeout( "$('#summary-page_control').fadeIn( 250 )", 500 );
 
             // Disable idle mode
             window.plugins.PowerManagement.acquire(
@@ -285,8 +285,8 @@ Summary.prototype._stopGPS = function() {
             console.log( "Stop-GPS called" );
 
             // Switch button display
-            $('#summary-page_control').hide();
-            setTimeout( "$('#summary-page_enableGPS').show()", 600 );
+            $('#summary-page_control').fadeOut( 250 );
+            setTimeout( "$('#summary-page_enableGPS').fadeIn( 250 )", 500 );
             $('#settings-button').show();
 
             // Update button icons
