@@ -67,6 +67,13 @@ MsgBox.confirm = function( p_text, p_closeCallback ) {
         }
 
 /**
+ * Display error messagebox
+ */
+MsgBox.error = function( p_text, p_closeCallback ) {
+            MsgBox.show( p_text, 'Error', MsgBox.BUTTON_OK, p_closeCallback );
+        }
+
+/**
  * Called right before the page is shown
  */
 MsgBox.prototype.onpagebeforeshow = function( prevPage ) {

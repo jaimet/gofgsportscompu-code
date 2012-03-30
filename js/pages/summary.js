@@ -120,8 +120,9 @@ Summary.prototype._speedTimer = function() {
 
 /**
  * Update the display of the app (regular interval, once a second)
+ * @param bool p_bLoading true if we are loading a track
  */
-Summary.prototype._updateDisplay = function() {
+Summary.prototype._updateDisplay = function( p_bLoading ) {
             var waypoint = pages.summary.m_track.getCurrentWaypoint();
             // Check if we actually have an info yet
             if( waypoint === null ) return;
@@ -156,7 +157,13 @@ Summary.prototype._updateDisplay = function() {
             $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0 * distanceFactor).toFixed(2) );
             $( '#altitude-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getElevationGain() * altitudeFactor).toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
-            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff((Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime()).toFixed(0), true) );
+            if( p_bLoading ) {
+                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
+            }
+            else {
+                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime(), true) );
+            }
+
         };
 
 /**
@@ -213,8 +220,6 @@ Summary.prototype._updateOdo = function( p_distance ) {
  * Button onClick-handler for starting GPS tracking
  */
 Summary.prototype._startGPS = function( p_position ) {
-            console.log( "Start-GPS called" );
-
             // Start the new track
             pages.summary.m_track = new Track();
             GOFGSportsComputer.m_trackDirectoryEntry.getFile(
@@ -282,8 +287,6 @@ Summary.prototype._gpsFixWait = function( p_position ) {
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
-            console.log( "Stop-GPS called" );
-
             // Switch button display
             $('#summary-page_control').fadeOut( 250 );
             setTimeout( "$('#summary-page_enableGPS').fadeIn( 250 )", 500 );
@@ -324,8 +327,6 @@ Summary.prototype._stopGPS = function() {
  * Called when the pause button is clicked
  */
 Summary.prototype._pause = function() {
-            console.log( "Pause called" );
-
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
             $( '#right-button' ).button( 'enable' );
@@ -352,8 +353,6 @@ Summary.prototype._pause = function() {
  * Called when the resume button is clicked
  */
 Summary.prototype._resume = function() {
-            console.log( "Resume called" );
-
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
             $( '#right-button' ).button( 'enable' );
@@ -461,9 +460,8 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
                                                   pages.map.waypoint( p_waypoint );
                                               },
                                               function( p_track ) {
-                                                  console.log( 'received track' );
                                                   pages.summary.m_track = p_track;
-                                                  pages.summary._updateDisplay();
+                                                  pages.summary._updateDisplay( true );
 
                                                   // Finish track
                                                   pages.map.endtrack();
@@ -490,7 +488,6 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
             // Apply layout to all info-panels
             var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
-            //	console.log( "Row height: " + rowHeight );
 
             // Speed infopanel
             $( '#speed-infopanel' ).infopanel( {
@@ -561,17 +558,6 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
             // Update display units
             pages.summary.updateDisplayUnits();
-
-            // Bind pagebeforeshow event
-            $( '#summary-page' ).live( 'pagebeforeshow', pages.summary._pagebeforeshow );
-        };
-
-/**
- * Called just before the page is shown, used to update global values
- */
-Summary.prototype._pagebeforeshow = function() {
-            // Refresh ODO display
-            pages.summary._updateOdo( 0.0 );
         };
 
 new Summary();

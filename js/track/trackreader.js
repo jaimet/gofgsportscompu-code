@@ -148,11 +148,11 @@ TrackReader.prototype.parseLine = function ( p_line ) {
 }
 
 
-// TODO: Improve error handling
+// TODO: Change error handling functions to both pass the same type of parameter
 TrackReader.prototype.fileError = function( p_fileError ) {
-            console.log( 'fileError: ' + p_fileError );
+            if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( p_fileError );
         }
 
 TrackReader.prototype.onerror = function() {
-            console.log( 'onerror' );
+            if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( this.m_fileReader.error );
         }

@@ -46,8 +46,6 @@ Page.prototype.oninit = null;	// Hook for sub-classes to run additional code dur
  * Automatically called when the page is created
  */
 Page.prototype.create = function() {
-    console.log( "'" + this.name + "' page created!" );
-
     // Register for translation
     Translator.register( $('#' + this.name + '-page') );
 }
@@ -56,8 +54,6 @@ Page.prototype.create = function() {
  * Automatically called when the page is inited
  */
 Page.prototype.init = function() {
-    console.log( "'" + this.name + "' page inited!" );
-	
 	// Register for translation
 	Translator.register( $('#' + this.name + '-page') );
 	
@@ -68,8 +64,6 @@ Page.prototype.init = function() {
  * Called when the user swipes to the left
  */
 Page.prototype.swipeleft = function() {
-//	console.log( "'" + this.name + "' swipe left! (" + this.rightPage + ")" );
-	
 	// No this is not an error, but swiping to the left means making the right side visible
 	if( this.rightPage != null ) {
 		$.mobile.changePage( this.rightPage );
@@ -80,8 +74,6 @@ Page.prototype.swipeleft = function() {
  * Called when the user swipes to the right
  */
 Page.prototype.swiperight = function() {
-//	console.log( "'" + this.name + "' swipe right! (" + this.leftPage + ")" );
-
 	// No this is not an error, but swiping to the right means making the left side visible
 	if( this.leftPage != null ) {
 		$.mobile.changePage( this.leftPage );

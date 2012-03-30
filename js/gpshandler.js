@@ -140,8 +140,6 @@ var GPSHandler = {
      * Called by the native side whenever a GPS-Error occurs
      */
     _positionError : function( p_error ) {
-                         console.log( "GPSError: " + p_error.code + " / " + p_error.message );
-
                          // Only report error to caller if it isn't a timeout
                          if( p_error.code !== PositionError.TIMEOUT ) {
                              if( typeof GPSHandler.m_errorCallback === "function" ) GPSHandler.m_errorCallback( p_error );

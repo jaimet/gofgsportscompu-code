@@ -43,7 +43,6 @@ var GOFGSportsComputer = {
 				$.mobile.changePage( 'summary.html' );
 			}
 
-			console.log( "Up and running!" );
 			Translator.ontranslate = null;
 		}
 		
@@ -54,19 +53,9 @@ var GOFGSportsComputer = {
 	 * Startup function which setups the sports computer software (init, interface, etc.)
 	 */
 	_deviceReady : function() {
-		console.log( "Startup code running..." );
-		
 		// Bind swipe event to lock-overlay
 		$( '#lock-overlay' ).bind( 'swipe', function() { $(this).hide(); } );
 		
-		// Calculate available height based on empty loading page
-//		var availableHeight = $( '#empty-page' ).height();
-//		availableHeight -= $( '#empty-page > [data-role="header"]' ).outerHeight( true );
-//		availableHeight -= ($( '#empty-page > [data-role="content"]' ).outerHeight( true ) - $( '#empty-page > [data-role="content"]' ).height());
-//		availableHeight -= $( '#empty-button' ).outerHeight( true );
-//		// Save available height as internal variable
-//		pages.summary.m_contentHeight = availableHeight;
-
 		// Find our file storage
 		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );
 	},
@@ -141,8 +130,8 @@ var GOFGSportsComputer = {
 	/**
 	 * Simple error handler for any FileErrors that might occur
 	 */
-	_fileSystemError : function( p_fileError ) {
-		console.log( "Error while operating on the file-system: " + p_fileError.code );
+    _fileSystemError : function( p_fileError ) {
+                           MsgBox.error( "Error while operating on the file-system: " + p_fileError.code );
 	}
 };
 

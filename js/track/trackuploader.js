@@ -32,7 +32,7 @@ TrackUploader.prototype.m_successCallback = null;       // Callback which is cal
 TrackUploader.prototype.m_errorCallback = null;         // Callback which is called if there was an error
 TrackUploader.prototype.m_authKey = null;               // Authentication key to use when uploading the track
 
-TrackUploader.URL = "http://192.168.56.101/joomla/index.php";   // Static value which references the upload URL of the gofg homepage
+TrackUploader.URL = "http://www.gofg.at/index.php";   // Static value which references the upload URL of the gofg homepage
 
 /**
  * Called by the TrackReader object when the track has finished loading
@@ -76,7 +76,6 @@ TrackUploader.prototype._loadComplete = function( p_track ) {
                                                                         } ),
                   'jsonp'
                   ).error( Utilities.getEvtHandler( this, function(jqXHR, textStatus, errorThrown) {
-                                                       console.log( 'error: ' + errorThrown );
                                                        if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( textStatus );
                                                    } )
                           );

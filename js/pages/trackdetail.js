@@ -67,7 +67,6 @@ Trackdetail.prototype._deleteTrack = function() {
  * Called when the user wants to load a track
  */
 Trackdetail.prototype._loadTrack = function() {
-            console.log( "Loading track!" );
             $.mobile.showPageLoadingMsg();
 
             pages.summary.loadTrack( pages.trackdetail.m_fileEntry );

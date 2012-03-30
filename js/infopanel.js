@@ -159,10 +159,6 @@
             var maximumHeight = p_height - $($(this).jqmData('infopanel').image).outerHeight(true) - 2 * $(this).jqmData('infopanel').settings['border'];
             var maximumWidth = p_width - ($(this).outerWidth(true) - $(this).width()) - 2 * $(this).jqmData('infopanel').settings['border'];
     		
-    		//console.log( "MaxSize: " + p_height + " / " + maximumHeight + " / " + maximumWidth );
-    		
-//			var maximumHeight = p_height - 24 - $(this).jqmData('infopanel').settings['border'];
-//			var maximumWidth = p_width - $(this).jqmData('infopanel').settings['border'];
 			var fontSize = 40;
             var fontSizeStep = $(this).jqmData( 'infopanel' ).settings['fontSizeStep'];
 			
@@ -184,7 +180,6 @@
 			
 			// Hide the measure-span
             $(this).jqmData( 'infopanel' ).measureSpan.css( 'display', 'none' );
-			//console.log( "Final font-Size: " + fontSize );
     	});
     }
   };

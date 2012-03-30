@@ -43,8 +43,6 @@ Settings.prototype.oninit = function() {
  * Updates all settings and forces a save to disk
  */
 Settings.prototype._save = function() {
-            console.log( "settings-page save!" );
-
             // Store all settings in settingshandler & save them
             SettingsHandler.set( 'minimumaccuracy', $( '#settings-page' ).find( '#minAccuracySlider' ).val() );
             SettingsHandler.set( 'minimumaltitudechange', $( '#settings-page' ).find( '#minAltitudeChangeSlider' ).val() );
@@ -80,6 +78,7 @@ Settings.prototype._odoReset = function() {
                            function( p_button ) {
                                if( p_button === MsgBox.BUTTON_YES ) {
                                    window.localStorage.setItem( "odo", 0.0 );
+                                   pages.summary._updateOdo();
                                }
                            } );
         };
