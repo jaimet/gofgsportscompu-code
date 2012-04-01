@@ -56,7 +56,7 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
 		formatDate.setTime(timestamp * 1000);
         listItem.jqmData( 'displayName', formatDate.format() );
 
-        listItem.append( $('<a href="trackdetail.html" data-transition="slide"><h3>' + formatDate.format() + '</h3></a>') );
+        listItem.append( $('<a href="trackdetail.html"><h3>' + formatDate.format() + '</h3></a>') );
 
         uList.append( listItem );
         //controlgroup.append( $( '<label for="track-' + entries[i].name + '">' + formatDate.format() + '</label>' ) );
