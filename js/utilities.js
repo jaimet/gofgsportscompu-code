@@ -23,8 +23,14 @@ function Utilities() {}
  * Create a wrapped function for maintaining the original context when invoking a callback
  */
 Utilities.getEvtHandler = function( p_context, p_callback ) {
+            // Prepare context & arguments for callback
             var me = p_context;
-            return (function() { p_callback.apply(me, arguments) } );
+            var p_arguments = Array.prototype.slice.call(arguments, 2);
+
+            // Create wrapper function as event handler
+            return (function() {
+                        p_callback.apply(me, p_arguments.concat(arguments))
+                    } );
         }
 
 /**

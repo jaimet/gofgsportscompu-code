@@ -41,9 +41,9 @@ MsgBox.prototype.oninit = function() {
 
             // Button events
             $( 'a[name="msgbox-button"]' ).each(function() {
-                                                    $(this).bind( 'tap', parseInt($(this).attr('id').split('-')[2]), pages.msgbox._close )
+                                                    $(this).bind( 'tap', parseInt($(this).attr('id').split('-')[2]), Utilities.getEvtHandler(pages.msgbox, pages.msgbox._close) )
                                                 } );
-}
+        }
 
 /**
  * Function for showing the actual messagebox
@@ -57,7 +57,7 @@ MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
             pages.msgbox.m_closeCallback = p_closeCallback || null;
 
             $.mobile.changePage( 'msgbox.html', { role: 'dialog' } );
-}
+        }
 
 /**
  * Display confirm messagebox
@@ -91,15 +91,21 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
                 }
                 mask = mask << 1;
             }
-}
+        }
 
 /**
  * Called when the ok or cancel button is clicked
  */
 MsgBox.prototype._close = function( evt ) {
-            $.mobile.changePage( pages.msgbox.m_prevPage );
+            setTimeout( Utilities.getEvtHandler( this, this._hide, evt ), 100 );
+        }
 
+/**
+ * Detached callback for hiding the msgbox (required in order to prevent the click event from firing twice)
+ */
+MsgBox.prototype._hide = function( evt ) {
+            $.mobile.changePage( pages.msgbox.m_prevPage );
             if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(evt.data);
-}
+        }
 
 new MsgBox();
