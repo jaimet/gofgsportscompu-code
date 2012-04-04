@@ -21,9 +21,6 @@ function Summary() {
 }
 Summary.prototype = new Page( "summary" );
 
-Summary.KM_TO_MILE = 1.609344;
-Summary.M_TO_FEET = 0.3048;
-
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
@@ -123,6 +120,8 @@ Summary.prototype._speedTimer = function() {
  * @param bool p_bLoading true if we are loading a track
  */
 Summary.prototype._updateDisplay = function( p_bLoading ) {
+            // Check if we have a track at all
+            if( pages.summary.m_track === null ) return;
             var waypoint = pages.summary.m_track.getCurrentWaypoint();
             // Check if we actually have an info yet
             if( waypoint === null ) return;
@@ -139,23 +138,11 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             var avgElevation = pages.summary.m_track.getElevationGain() / pages.summary.m_track.getTotalDistance() * 100;
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
-            // Set display factors
-            var distanceFactor = 1.0;
-            var altitudeFactor = 1.0;
-            switch( SettingsHandler.getInt( 'displayunits' ) ) {
-            case 2:
-                distanceFactor = Summary.KM_TO_MILE;
-                altitudeFactor = Summary.M_TO_FEET;
-                break;
-            default:
-                break;
-            }
-
             // Update display
-            $( '#speed-infopanel' ).infopanel( 'setValue', (coords.speed * 3.6 * distanceFactor).toFixed(2) );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', (avgSpeed * distanceFactor).toFixed(2), (pages.summary.m_track.getMaximumSpeed() * 3.6 * distanceFactor).toFixed(2) );
-            $( '#distance-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getTotalDistance() / 1000.0 * distanceFactor).toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setValue', (pages.summary.m_track.getElevationGain() * altitudeFactor).toFixed(1) );
+            $( '#speed-infopanel' ).infopanel( 'setValue', (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(2) );
+            $( '#speed-infopanel' ).infopanel( 'setStatistics', l10n.largeUnitValue(avgSpeed).toFixed(2), l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
+            $( '#distance-infopanel' ).infopanel( 'setValue', l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
+            $( '#altitude-infopanel' ).infopanel( 'setValue', l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
             if( p_bLoading ) {
                 $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
@@ -187,18 +174,9 @@ Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
  * Update unit labels based on selected display-units
  */
 Summary.prototype.updateDisplayUnits = function() {
-            switch( SettingsHandler.getInt( 'displayunits' ) ) {
-            case 2:
-                $( '#speed-infopanel' ).infopanel( 'setUnit', 'miles/h' );
-                $( '#distance-infopanel' ).infopanel( 'setUnit', 'miles' );
-                $( '#altitude-infopanel' ).infopanel( 'setUnit', 'feet' );
-                break;
-            default:
-                $( '#speed-infopanel' ).infopanel( 'setUnit', 'km/h' );
-                $( '#distance-infopanel' ).infopanel( 'setUnit', 'km' );
-                $( '#altitude-infopanel' ).infopanel( 'setUnit', 'm' );
-                break;
-            }
+            $( '#speed-infopanel' ).infopanel( 'setUnit', l10n.speedUnit() );
+            $( '#distance-infopanel' ).infopanel( 'setUnit', l10n.largeUnit() );
+            $( '#altitude-infopanel' ).infopanel( 'setUnit', l10n.smallUnit() );
         }
 
 /**
@@ -208,12 +186,12 @@ Summary.prototype._updateOdo = function( p_distance ) {
             var odo = parseFloat(window.localStorage.getItem( "odo" ));
             if(isNaN(odo) ) odo = 0;
 
-            if( p_distance != undefined ) {
+            if( p_distance !== undefined ) {
                 odo += p_distance;
             }
             window.localStorage.setItem( "odo", odo );
 
-            $( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + (odo / 1000.0).toFixed(2) + "km" );
+            $( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + l10n.largeUnitValue(odo / 1000.0).toFixed(2) + l10n.largeUnit() );
         };
 
 /**
