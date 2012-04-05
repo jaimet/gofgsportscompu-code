@@ -29,7 +29,7 @@ Utilities.getEvtHandler = function( p_context, p_callback ) {
 
             // Create wrapper function as event handler
             return (function() {
-                        p_callback.apply(me, p_arguments.concat(arguments))
+                        p_callback.apply(me, p_arguments.concat(Array.prototype.slice.call(arguments, 0)));
                     } );
         }
 

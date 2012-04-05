@@ -121,6 +121,22 @@ Trackdetail.prototype._uploadTrack = function() {
                 return;
             }
 
+            // Check if user already agreed to the uploading conditions
+            if( SettingsHandler.getInt('uploadagree') === 0 ) {
+                MsgBox.confirm(
+                            'This is the first time you are uploading a track. Your uploaded data contains: <ul><li>start- & end-time</li><li>total distance</li><li>elevation gain & loss</li><li>maximum speed</li></ul>This information will be linked to your personal account on gofg.at and made visible to anybody visiting the website. Do you agree to have your data uploaded?',
+                            function( p_button ) {
+                                console.log( 'Button: ' + p_button );
+                                if( p_button === MsgBox.BUTTON_YES ) {
+                                    SettingsHandler.set('uploadagree', 1);
+                                    SettingsHandler._save();
+                                    pages.trackdetail._uploadTrack();
+                                }
+                            }
+                            );
+                return;
+            }
+
             // Show loading & start uploading
             $.mobile.loadingMessage = $.i18n.prop( "upload_message" );
             $.mobile.showPageLoadingMsg();
