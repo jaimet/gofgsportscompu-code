@@ -31,6 +31,7 @@ MsgBox.BUTTON_CANCEL = 0x02;
 MsgBox.BUTTON_YES = 0x04;
 MsgBox.BUTTON_NO = 0x08;
 MsgBox.BUTTON_CONTINUE = 0x10;
+MsgBox.BUTTON_ALWAYS = 0x20;
 
 /**
  * Called when the page is inited
@@ -64,6 +65,13 @@ MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
  */
 MsgBox.confirm = function( p_text, p_closeCallback ) {
             MsgBox.show( p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO, p_closeCallback );
+        }
+
+/**
+ * Display confirm messagebox
+ */
+MsgBox.confirmAlways = function( p_text, p_closeCallback ) {
+            MsgBox.show( p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO | MsgBox.BUTTON_ALWAYS, p_closeCallback );
         }
 
 /**

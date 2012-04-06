@@ -123,20 +123,30 @@ Trackdetail.prototype._uploadTrack = function() {
 
             // Check if user already agreed to the uploading conditions
             if( SettingsHandler.getInt('uploadagree') === 0 ) {
-                MsgBox.confirm(
-                            'This is the first time you are uploading a track. Your uploaded data contains: <ul><li>start- & end-time</li><li>total distance</li><li>elevation gain & loss</li><li>maximum speed</li></ul>This information will be linked to your personal account on gofg.at and made visible to anybody visiting the website. Do you agree to have your data uploaded?',
+                MsgBox.confirmAlways(
+                            $.i18n.prop( 'upload_message_agree' ),
                             function( p_button ) {
-                                console.log( 'Button: ' + p_button );
-                                if( p_button === MsgBox.BUTTON_YES ) {
-                                    SettingsHandler.set('uploadagree', 1);
-                                    SettingsHandler._save();
-                                    pages.trackdetail._uploadTrack();
+                                // Check if confirm counts for always
+                                if( p_button === MsgBox.BUTTON_YES || p_button === MsgBox.BUTTON_ALWAYS ) {
+                                    if( p_button === MsgBox.BUTTON_ALWAYS ) {
+                                        SettingsHandler.set('uploadagree', 1);
+                                        SettingsHandler._save();
+                                    }
+
+                                    pages.trackdetail._doUploadTrack();
                                 }
                             }
                             );
-                return;
             }
+            else {
+                pages.trackdetail._doUploadTrack();
+            }
+        };
 
+/**
+ * Upload the track
+ */
+Trackdetail.prototype._doUploadTrack = function() {
             // Show loading & start uploading
             $.mobile.loadingMessage = $.i18n.prop( "upload_message" );
             $.mobile.showPageLoadingMsg();
@@ -154,6 +164,6 @@ Trackdetail.prototype._uploadTrack = function() {
                                            MsgBox.show( $.i18n.prop( "upload_message_error" ) + textStatus );
                                        }
                                        );
-        };
+        }
 
 new Trackdetail();	// Create single instance
