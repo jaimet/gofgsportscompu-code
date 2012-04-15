@@ -61,6 +61,10 @@ Summary.prototype.enableGPSTap = function() {
             $('#summary-page_enableGPS').fadeOut( 250 );
             setTimeout( "$('#summary-page_control').fadeIn( 250 )", 500 );
 
+            // Show sat-search message
+            $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
+            $.mobile.showPageLoadingMsg();
+
             // Disable idle mode
             window.plugins.PowerManagement.acquire(
                         function(){},
@@ -242,6 +246,10 @@ Summary.prototype._startGPS = function( p_position ) {
  * Simple helper function which waits for the first GPS fix and starts the track once called
  */
 Summary.prototype._gpsFixWait = function( p_position ) {
+            // Reset / hide sat-searching message
+            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+            $.mobile.hidePageLoadingMsg();
+
             // Update accuracy display
             pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
 
@@ -269,6 +277,10 @@ Summary.prototype._stopGPS = function() {
             $('#summary-page_control').fadeOut( 250 );
             setTimeout( "$('#summary-page_enableGPS').fadeIn( 250 )", 500 );
             $('#settings-button').show();
+
+            // Reset loading message (because searching for satellites might still be active)
+            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+            $.mobile.hidePageLoadingMsg();
 
             // Update button icons
             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
