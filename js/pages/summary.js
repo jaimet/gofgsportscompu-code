@@ -234,7 +234,7 @@ Summary.prototype._startGPS = function( p_position ) {
 
                             // Notify map- & altitude-screen of new track
                             pages.map.newtrack();
-                            pages.altitude.newtrack();
+                            pages.graph.newtrack();
                         },
                         function( p_fileError ) {
                             MsgBox.show( 'Error while trying to open track for writing. The error returned is: ' + p_fileError.code );
@@ -312,7 +312,7 @@ Summary.prototype._stopGPS = function() {
 
             // Notify map- & altitude-screen of ending track
             pages.map.endtrack();
-            pages.altitude.endtrack();
+            pages.graph.endtrack();
         };
 
 /**
@@ -423,7 +423,7 @@ Summary.prototype._updatePosition = function( p_position ) {
 
             // Pass waypoint on to map- & altitude-screen
             pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint());
-            pages.altitude.waypoint(pages.summary.m_track.getCurrentWaypoint());
+            pages.graph.waypoint(pages.summary.m_track.getCurrentWaypoint());
         };
 
 /**
@@ -447,12 +447,12 @@ Summary.prototype._updateClock = function() {
 Summary.prototype.loadTrack = function( p_fileEntry ) {
             // Notify map & altitude-graph of new track
             pages.map.newtrack();
-            pages.altitude.newtrack();
+            pages.graph.newtrack();
             // Start reading the track
             var trackReader = new TrackReader( p_fileEntry,
                                               function( p_waypoint ) {
                                                   pages.map.waypoint( p_waypoint );
-                                                  pages.altitude.waypoint( p_waypoint );
+                                                  pages.graph.waypoint( p_waypoint );
                                               },
                                               function( p_track ) {
                                                   pages.summary.m_track = p_track;
@@ -460,7 +460,7 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
 
                                                   // Finish track
                                                   pages.map.endtrack();
-                                                  pages.altitude.endtrack();
+                                                  pages.graph.endtrack();
 
                                                   // Display summary page
                                                   $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );
