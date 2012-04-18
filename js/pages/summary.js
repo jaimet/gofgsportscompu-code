@@ -232,8 +232,9 @@ Summary.prototype._startGPS = function( p_position ) {
                                 pages.summary._lock();
                             }
 
-                            // Notify map-screen of new track
+                            // Notify map- & altitude-screen of new track
                             pages.map.newtrack();
+                            pages.altitude.newtrack();
                         },
                         function( p_fileError ) {
                             MsgBox.show( 'Error while trying to open track for writing. The error returned is: ' + p_fileError.code );
@@ -309,8 +310,9 @@ Summary.prototype._stopGPS = function() {
             pages.summary.m_track = null;
             pages.summary.m_trackwriter = null;
 
-            // Notify map-screen of ending track
+            // Notify map- & altitude-screen of ending track
             pages.map.endtrack();
+            pages.altitude.endtrack();
         };
 
 /**
@@ -419,8 +421,9 @@ Summary.prototype._updatePosition = function( p_position ) {
             }
             pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsinterval' ) * 3 * 1000 );
 
-            // Pass waypoint on to map-screen
+            // Pass waypoint on to map- & altitude-screen
             pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint());
+            pages.altitude.waypoint(pages.summary.m_track.getCurrentWaypoint());
         };
 
 /**
@@ -442,12 +445,14 @@ Summary.prototype._updateClock = function() {
  * Try to load a track from a given fileEntry
  */
 Summary.prototype.loadTrack = function( p_fileEntry ) {
-            // Notify map of new track
+            // Notify map & altitude-graph of new track
             pages.map.newtrack();
+            pages.altitude.newtrack();
             // Start reading the track
             var trackReader = new TrackReader( p_fileEntry,
                                               function( p_waypoint ) {
                                                   pages.map.waypoint( p_waypoint );
+                                                  pages.altitude.waypoint( p_waypoint );
                                               },
                                               function( p_track ) {
                                                   pages.summary.m_track = p_track;
@@ -455,6 +460,7 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
 
                                                   // Finish track
                                                   pages.map.endtrack();
+                                                  pages.altitude.endtrack();
 
                                                   // Display summary page
                                                   $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );

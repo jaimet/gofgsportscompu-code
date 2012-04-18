@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  *
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  *
@@ -27,11 +27,12 @@ function Map() {
 }
 Map.prototype = new Page( 'map' );
 
+Map.prototype.leftPage = "summary.html";
+Map.prototype.rightPage = "altitude.html";
 Map.prototype.track_map = null;
 Map.prototype.track_line = null;
 Map.prototype.m_vienna = null;
 Map.prototype.m_waypoints = [];
-Map.prototype.leftPage = "summary.html";
 Map.prototype.m_closeZoom = 0;
 Map.prototype.m_ggProjection = null;
 Map.prototype.m_smProjection = null;
