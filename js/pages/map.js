@@ -28,7 +28,7 @@ function Map() {
 Map.prototype = new Page( 'map' );
 
 Map.prototype.leftPage = "summary.html";
-Map.prototype.rightPage = "altitude.html";
+Map.prototype.rightPage = "graph.html";
 Map.prototype.track_map = null;
 Map.prototype.track_line = null;
 Map.prototype.m_vienna = null;

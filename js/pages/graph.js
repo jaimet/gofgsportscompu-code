@@ -66,9 +66,12 @@ Graph.prototype.initChart = function() {
                 chart_height -= $('#graph-page_pager').outerHeight( true );
                 $( '#graph-page_plot' ).height( chart_height );
 
+                var initValues = pages.graph.m_altitudeValues;
+                if( initValues.length <= 0 ) initValues = [[]];
+
                 pages.graph.m_plot = $.jqplot(
                             'graph-page_plot',
-                            [pages.graph.m_altitudeValues],
+                            [initValues],
                             Graph.m_chartOptions
                             );
             }
