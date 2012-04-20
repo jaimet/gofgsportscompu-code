@@ -23,30 +23,17 @@ Graph.prototype = new Page( 'graph' );
 
 Graph.prototype.leftPage = "map.html";
 Graph.prototype.m_plot = null;
-Graph.prototype.m_altitudeValues = [];
+Graph.prototype.m_altitudeSeries = {data: [], color: '#FF0000'};
 Graph.prototype.m_currentDistance = 0.0;
 
 Graph.m_chartOptions = {
-    axesDefaults: {
-        pad:1.0,
-        tickOptions: {
-            mark: 'cross'
-        }
+    xaxis: {
+        label: 'km',
+        labelPos: 'high'
     },
-    axes: {
-        xaxis: {
-            label: 'km'
-        },
-        yaxis: {
-            label: 'm'
-        }
-    },
-    seriesDefaults: {
-        color: '#FF0000',
-        showMarker: false
-    },
-    grid: {
-        background: '#F0F0F0'
+    yaxis: {
+        label: 'm',
+        labelPos: 'high'
     }
 };
 
@@ -66,26 +53,30 @@ Graph.prototype.initChart = function() {
                 chart_height -= $('#graph-page_pager').outerHeight( true );
                 $( '#graph-page_plot' ).height( chart_height );
 
-                var initValues = pages.graph.m_altitudeValues;
-                if( initValues.length <= 0 ) initValues = [[]];
+                var chart_width = $( '#graph-page > [data-role="content"]' ).width();
+                $( '#graph-page_plot' ).width( chart_width );
 
-                pages.graph.m_plot = $.jqplot(
-                            'graph-page_plot',
-                            [initValues],
-                            Graph.m_chartOptions
-                            );
+                pages.graph.m_plot = $.plot($("#graph-page_plot"), [pages.graph.m_altitudeSeries], Graph.m_chartOptions);
             }
             else {
-                pages.graph.m_plot.series[0].data = pages.graph.m_altitudeValues;
-                pages.graph.m_plot.replot({resetAxes:true});
+                pages.graph._refresh();
             }
+        }
+
+/**
+ * Internal function for refreshing the graph display
+ */
+Graph.prototype._refresh = function() {
+            pages.graph.m_plot.setData( [pages.graph.m_altitudeSeries] );
+            pages.graph.m_plot.setupGrid();
+            pages.graph.m_plot.draw();
         }
 
 /**
  * Called when a new track should be started (thus reset the graph)
  */
 Graph.prototype.newtrack = function() {
-            pages.graph.m_altitudeValues = [];
+            pages.graph.m_altitudeSeries.data = [];
             pages.graph.m_currentDistance = 0.0;
         }
 
@@ -96,11 +87,10 @@ Graph.prototype.waypoint = function( p_waypoint ) {
             pages.graph.m_currentDistance += parseFloat(p_waypoint.m_distance / 1000.0);
             var alt = parseFloat(p_waypoint.m_position.coords.altitude);
 
-            pages.graph.m_altitudeValues.push( [pages.graph.m_currentDistance, alt] );
+            pages.graph.m_altitudeSeries.data.push( [pages.graph.m_currentDistance, alt] );
 
             if( pages.graph.m_altitudeChart !== null && $( '#graph-page' ).is( ':visible' ) ) {
-                pages.graph.m_altitudeChart.series[0].data = pages.graph.m_altitudeValues;
-                pages.graph.m_altitudeChart.replot({resetAxes:true});
+                pages.graph._refresh();
             }
         }
 
