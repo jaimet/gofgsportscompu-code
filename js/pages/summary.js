@@ -306,13 +306,13 @@ Summary.prototype._stopGPS = function() {
             // Finalize track
             pages.summary.m_trackwriter.writeWaypoint(true);
 
+            // Notify map- & altitude-screen of ending track
+            pages.map.endtrack( pages.summary.m_track );
+            pages.graph.endtrack( pages.summary.m_track );
+
             // Remove references to closed tracks
             pages.summary.m_track = null;
             pages.summary.m_trackwriter = null;
-
-            // Notify map- & altitude-screen of ending track
-            pages.map.endtrack();
-            pages.graph.endtrack();
         };
 
 /**
@@ -422,8 +422,8 @@ Summary.prototype._updatePosition = function( p_position ) {
             pages.summary.m_speedTimer = setTimeout( "pages.summary._speedTimer()", SettingsHandler.get( 'gpsinterval' ) * 3 * 1000 );
 
             // Pass waypoint on to map- & altitude-screen
-            pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint());
-            pages.graph.waypoint(pages.summary.m_track.getCurrentWaypoint());
+            pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint(), pages.summary.m_track);
+            pages.graph.waypoint(pages.summary.m_track.getCurrentWaypoint(), pages.summary.m_track);
         };
 
 /**
@@ -450,17 +450,18 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
             pages.graph.newtrack();
             // Start reading the track
             var trackReader = new TrackReader( p_fileEntry,
-                                              function( p_waypoint ) {
-                                                  pages.map.waypoint( p_waypoint );
-                                                  pages.graph.waypoint( p_waypoint );
+                                              function( p_waypoint, p_track ) {
+                                                  pages.map.waypoint( p_waypoint, p_track );
+                                                  pages.graph.waypoint( p_waypoint, p_track );
                                               },
                                               function( p_track ) {
                                                   pages.summary.m_track = p_track;
                                                   pages.summary._updateDisplay( true );
 
                                                   // Finish track
-                                                  pages.map.endtrack();
-                                                  pages.graph.endtrack();
+                                                  pages.map.endtrack( p_track );
+                                                  pages.graph.endtrack( p_track );
+                                                  pages.summary.m_track = null;
 
                                                   // Display summary page
                                                   $.mobile.changePage( "summary.html", { transition: 'slidedown', reverse : true } );

@@ -25,6 +25,8 @@ Graph.prototype.leftPage = "map.html";
 Graph.prototype.m_plot = null;
 Graph.prototype.m_altitudeSeries = {data: [], color: '#FF0000'};
 Graph.prototype.m_currentDistance = 0.0;
+Graph.prototype.m_elevationGain = 0.0;
+Graph.prototype.m_elevationLoss = 0.0;
 
 Graph.m_chartOptions = {
     xaxis: {
@@ -51,12 +53,14 @@ Graph.prototype.initChart = function() {
                 chart_height -= $('#graph-page > [data-role="header"]').outerHeight( true );
                 chart_height -= ($( '#graph-page > [data-role="content"]' ).outerHeight( true ) - $( '#graph-page > [data-role="content"]' ).height());
                 chart_height -= $('#graph-page_pager').outerHeight( true );
+                chart_height -= $('#graph-page_display').outerHeight( true );
                 $( '#graph-page_plot' ).height( chart_height );
 
                 var chart_width = $( '#graph-page > [data-role="content"]' ).width();
                 $( '#graph-page_plot' ).width( chart_width );
 
                 pages.graph.m_plot = $.plot($("#graph-page_plot"), [pages.graph.m_altitudeSeries], Graph.m_chartOptions);
+                $( '#graph-page_display' ).html( '&uarr; ' + pages.graph.m_elevationGain.toFixed(0) + 'm - &darr; ' + pages.graph.m_elevationLoss.toFixed(0) + 'm' );
             }
             else {
                 pages.graph._refresh();
@@ -70,6 +74,7 @@ Graph.prototype._refresh = function() {
             pages.graph.m_plot.setData( [pages.graph.m_altitudeSeries] );
             pages.graph.m_plot.setupGrid();
             pages.graph.m_plot.draw();
+            $( '#graph-page_display' ).html( '&uarr; ' + pages.graph.m_elevationGain.toFixed(0) + 'm - &darr; ' + pages.graph.m_elevationLoss.toFixed(0) + 'm' );
         }
 
 /**
@@ -78,16 +83,21 @@ Graph.prototype._refresh = function() {
 Graph.prototype.newtrack = function() {
             pages.graph.m_altitudeSeries.data = [];
             pages.graph.m_currentDistance = 0.0;
+            pages.graph.m_elevationGain = 0.0;
+            pages.graph.m_elevationLoss = 0.0;
         }
 
 /**
  * Add a new waypoint to the altitude graph
  */
-Graph.prototype.waypoint = function( p_waypoint ) {
+Graph.prototype.waypoint = function( p_waypoint, p_track ) {
             pages.graph.m_currentDistance += parseFloat(p_waypoint.m_distance / 1000.0);
             var alt = parseFloat(p_waypoint.m_position.coords.altitude);
 
             pages.graph.m_altitudeSeries.data.push( [pages.graph.m_currentDistance, alt] );
+
+            pages.graph.m_elevationGain = p_track.getElevationGain();
+            pages.graph.m_elevationLoss = p_track.getElevationLoss();
 
             if( pages.graph.m_altitudeChart !== null && $( '#graph-page' ).is( ':visible' ) ) {
                 pages.graph._refresh();
@@ -97,6 +107,13 @@ Graph.prototype.waypoint = function( p_waypoint ) {
 /**
  * Finalize the track (no action required in this case)
  */
-Graph.prototype.endtrack = function() {}
+Graph.prototype.endtrack = function( p_track ) {
+            pages.graph.m_elevationGain = p_track.getElevationGain();
+            pages.graph.m_elevationLoss = p_track.getElevationLoss();
+
+            if( $( '#graph-page' ).is( ':visible' ) ) {
+                pages.graph._refresh();
+            }
+        }
 
 new Graph();
