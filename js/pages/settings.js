@@ -59,6 +59,7 @@ Settings.prototype._save = function() {
             Translator.changeLanguage(SettingsHandler.get( 'language' ));
             // Update display units
             pages.summary.updateDisplayUnits();
+            pages.graph.updateDisplayUnits();
             pages.summary._updateOdo();
 
             $( '#settings-page' ).find( '#settings-save-button' ).hide();
