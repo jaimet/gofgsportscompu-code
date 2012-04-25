@@ -40,13 +40,13 @@ Graph.m_chartOptions = {
 };
 
 Graph.prototype.oninit = function() {
-            $( '#graph-page' ).live( 'pageshow', Utilities.getEvtHandler(pages.graph, pages.graph.initChart) );
+            $( '#graph-page' ).live( 'pageshow', Utilities.getEvtHandler(pages.graph, pages.graph.onshow) );
         }
 
 /**
- * Called whenever the chart is shown (which initialized the chart & updates the display)
+ * Called whenever the chart is shown (which initialized the chart and/or updates the display)
  */
-Graph.prototype.initChart = function() {
+Graph.prototype.onshow = function() {
             if( pages.graph.m_plot === null ) {
                 // Calculate and setup chart height
                 var chart_height = $(window).height();
@@ -56,16 +56,16 @@ Graph.prototype.initChart = function() {
                 chart_height -= $('#graph-page_display').outerHeight( true );
                 $( '#graph-page_plot' ).height( chart_height );
 
-                var chart_width = $( '#graph-page > [data-role="content"]' ).width();
-                $( '#graph-page_plot' ).width( chart_width );
-
+                // Fetch labels for x- & y-axis
                 Graph.m_chartOptions.xaxis.label = l10n.largeUnit();
                 Graph.m_chartOptions.yaxis.label = l10n.smallUnit();
 
+                // Initialize graph and refresh elevation display
                 pages.graph.m_plot = $.plot($("#graph-page_plot"), [pages.graph.m_altitudeSeries], Graph.m_chartOptions);
                 pages.graph._refreshElevation();
             }
             else {
+                // Refresh display of chart
                 pages.graph._refresh();
                 pages.graph._refreshElevation();
             }
