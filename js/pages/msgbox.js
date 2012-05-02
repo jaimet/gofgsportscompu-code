@@ -42,7 +42,7 @@ MsgBox.prototype.oninit = function() {
 
             // Button events
             $( 'a[name="msgbox-button"]' ).each(function() {
-                                                    $(this).bind( 'tap', parseInt($(this).attr('id').split('-')[2]), Utilities.getEvtHandler(pages.msgbox, pages.msgbox._close) )
+                                                    $(this).bind( 'click', parseInt($(this).attr('id').split('-')[2]), Utilities.getEvtHandler(pages.msgbox, pages.msgbox._close) )
                                                 } );
         }
 
@@ -57,7 +57,7 @@ MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
             pages.msgbox.m_buttons = p_buttons || MsgBox.BUTTON_OK;
             pages.msgbox.m_closeCallback = p_closeCallback || null;
 
-            $.mobile.changePage( 'msgbox.html', { role: 'dialog' } );
+            $.mobile.changePage( 'msgbox.html', { role: 'dialog', transition: 'none' } );
         }
 
 /**
@@ -105,6 +105,7 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
  * Called when the ok or cancel button is clicked
  */
 MsgBox.prototype._close = function( evt ) {
+            evt.preventDefault();
             evt.stopPropagation();
             setTimeout( Utilities.getEvtHandler( this, this._hide, evt.data ), 250 );
         }

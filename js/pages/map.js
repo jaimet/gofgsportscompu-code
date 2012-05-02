@@ -24,6 +24,7 @@ function Map() {
 
     // Create default zoom location (vienna)
     pages.map.m_vienna = new OpenLayers.LonLat(16.3725, 48.208889);
+    pages.map.m_vienna = pages.map.m_vienna.transform(pages.map.m_ggProjection, pages.map.m_smProjection);
 }
 Map.prototype = new Page( 'map' );
 
@@ -91,9 +92,7 @@ Map.prototype.initMap = function() {
             else {
                 // Zoom to the center of vienna
                 pages.map.track_map.setCenter(
-                            pages.map.m_vienna.transform(
-                                pages.map.m_ggProjection,
-                                pages.map.m_smProjection),
+                            pages.map.m_vienna,
                             pages.map.m_closeZoom,
                             true,
                             true
