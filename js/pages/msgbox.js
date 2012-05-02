@@ -106,7 +106,7 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
  */
 MsgBox.prototype._close = function( evt ) {
             evt.stopPropagation();
-            setTimeout( Utilities.getEvtHandler( this, this._hide, evt.data ), 100 );
+            setTimeout( Utilities.getEvtHandler( this, this._hide, evt.data ), 250 );
         }
 
 /**
