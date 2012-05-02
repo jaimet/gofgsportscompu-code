@@ -34,13 +34,13 @@ Summary.prototype.m_trackwriter = null;         // Write for active track
 Summary.prototype.rightPage = "map.html";
 
 Summary.prototype.oninit = function() {
-            // Listen to button taps
-            $( '#left-button' ).live( 'tap', pages.summary.leftTap );
-            $( '#middle-button' ).live( 'tap', pages.summary.middleTap );
-            $( '#right-button' ).live( 'tap', pages.summary.rightTap );
-            $( '#enableGPS-button' ).live( 'tap', pages.summary.enableGPSTap );
+            // Listen to button clicks
+            $( '#left-button' ).live( 'click', pages.summary.leftTap );
+            $( '#middle-button' ).live( 'click', pages.summary.middleTap );
+            $( '#right-button' ).live( 'click', pages.summary.rightTap );
+            $( '#enableGPS-button' ).live( 'click', pages.summary.enableGPSTap );
 
-            // Setup default tap handler
+            // Setup default click handler
             pages.summary.m_middleTapHandler = pages.summary._lock;
 
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
@@ -53,13 +53,14 @@ Summary.prototype.enableGPSTap = function() {
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
             $( '#right-button' ).button( 'disable' );
-            // Setup tap handlers
+            // Setup click handlers
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
 
             // Switch button display
             $( '#settings-button' ).hide();
-            $('#summary-page_enableGPS').fadeOut( 250 );
-            setTimeout( "$('#summary-page_control').fadeIn( 250 )", 500 );
+            $('#summary-page_enableGPS').fadeOut( 250, function() {
+                                                     $('#summary-page_control').fadeIn( 250 );
+                                                 } );
 
             // Show sat-search message
             $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
@@ -89,7 +90,7 @@ Summary.prototype.enableGPSTap = function() {
         }
 
 /**
- * Wrapper function(s) for dynamic tap handling without having to call live / bind / die / unbind all the time
+ * Wrapper function(s) for dynamic click handling without having to call live / bind / die / unbind all the time
  */
 Summary.prototype.leftTap = function() {
             if( typeof pages.summary.m_leftTapHandler === "function" ) pages.summary.m_leftTapHandler();
@@ -220,7 +221,7 @@ Summary.prototype._startGPS = function( p_position ) {
                             $( '#right-button' ).button( 'enable' );
                             // Update button icons
                             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
-                            // Setup tap handlers
+                            // Setup click handlers
                             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
                             pages.summary.m_rightTapHandler = pages.summary._pause;
 
@@ -257,7 +258,7 @@ Summary.prototype._gpsFixWait = function( p_position ) {
             // Enable / disable buttons
             $( '#left-button' ).button( 'enable' );
             $( '#right-button' ).button( 'enable' );
-            // Setup tap handlers
+            // Setup click handlers
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._startGPS;
 
@@ -275,8 +276,9 @@ Summary.prototype._gpsFixWait = function( p_position ) {
  */
 Summary.prototype._stopGPS = function() {
             // Switch button display
-            $('#summary-page_control').fadeOut( 250 );
-            setTimeout( "$('#summary-page_enableGPS').fadeIn( 250 )", 500 );
+            $('#summary-page_control').fadeOut( 250, function() {
+                                                   $('#summary-page_enableGPS').fadeIn( 250 );
+                                               } );
             $('#settings-button').show();
 
             // Reset loading message (because searching for satellites might still be active)
@@ -324,7 +326,7 @@ Summary.prototype._pause = function() {
             $( '#right-button' ).button( 'enable' );
             // Update button icons
             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
-            // Setup tap handler
+            // Setup click handler
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._resume;
 
@@ -350,7 +352,7 @@ Summary.prototype._resume = function() {
             $( '#right-button' ).button( 'enable' );
             // Update button icons
             $( '#right-button' ).parent().find( '.ui-icon' ).removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
-            // Setup tap handler
+            // Setup click handler
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._pause;
 
@@ -376,7 +378,7 @@ Summary.prototype._resume = function() {
         };
 
 /**
- * Callback when the lock button is tapped
+ * Callback when the lock button is clicked
  */
 Summary.prototype._lock = function() {
             $( '#lock-overlay' ).show();

@@ -27,15 +27,14 @@ Settings.prototype = new Page( "settings" );
  */
 Settings.prototype.oninit = function() {
             $( '#settings-page' ).bind( 'pagebeforeshow', pages.settings._pagebeforeshow );
-            $( '#settings-page' ).find( '#settings-save-button' ).bind( 'tap', pages.settings._save );
+            $( '#settings-page' ).find( '#settings-save-button' ).bind( 'click', pages.settings._save );
 
             // Bind change events
             $( '#settings-page' ).find( 'input' ).bind( 'change', pages.settings._changed );
             $( '#settings-page' ).find( 'select' ).bind( 'change', pages.settings._changed );
 
             // Bind button events
-            $( '#settings-page' ).find( '#settings-odoReset-button' ).bind( 'tap', pages.settings._odoReset );
-            //$( '#settings-page' ).find( '#settings-odoConfirm-button' ).bind( 'tap', pages.settings._odoConfirm );
+            $( '#settings-page' ).find( '#settings-odoReset-button' ).bind( 'click', pages.settings._odoReset );
         };
 
 /**

@@ -26,12 +26,12 @@ Trackdetail.prototype.m_displayName = null;
 // Register button event
 Trackdetail.prototype.oninit = function() {
             $( '#trackdetail-page' ).live( 'pagebeforeshow', pages.trackdetail._pagebeforeshow );
-            $( '#trackdetail-delete-button' ).live( 'tap', pages.trackdetail._deleteTrack );
-            $( '#trackdetail-load-button' ).live( 'tap', pages.trackdetail._loadTrack );
-            $( '#trackdetail-export-fitlog-button' ).live( 'tap', pages.trackdetail._exportTrackFitlog );
-            $( '#trackdetail-export-gpx-button' ).live( 'tap', pages.trackdetail._exportTrackGPX );
-            $( '#trackdetail-export-tcx-button' ).live( 'tap', pages.trackdetail._exportTrackTCX );
-            $( '#trackdetail-upload-button' ).live( 'tap', pages.trackdetail._uploadTrack );
+            $( '#trackdetail-delete-button' ).live( 'click', pages.trackdetail._deleteTrack );
+            $( '#trackdetail-load-button' ).live( 'click', pages.trackdetail._loadTrack );
+            $( '#trackdetail-export-fitlog-button' ).live( 'click', pages.trackdetail._exportTrackFitlog );
+            $( '#trackdetail-export-gpx-button' ).live( 'click', pages.trackdetail._exportTrackGPX );
+            $( '#trackdetail-export-tcx-button' ).live( 'click', pages.trackdetail._exportTrackTCX );
+            $( '#trackdetail-upload-button' ).live( 'click', pages.trackdetail._uploadTrack );
         }
 
 /**

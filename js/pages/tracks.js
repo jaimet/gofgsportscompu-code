@@ -67,9 +67,8 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
 	$( '#tracks-list-container' ).append( containerdiv );
 	containerdiv.trigger( 'create' );
 
-    // Bind to the tap-event of the newly created track entries
-    $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'tap', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
-    //bind( 'tap', pages.tracks._trackTap );
+    // Bind to the click-event of the newly created track entries
+    $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'click', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
 };
 
 Tracks.prototype._trackTap = function(event) {
