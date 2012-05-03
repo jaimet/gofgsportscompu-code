@@ -13,23 +13,31 @@
         <!-- /content -->
         <div data-role="content" id="track-detail">
             <!-- Upload track to gofg.at homepage -->
-            <h3 data-i18n="upload_gofg"></h3>
-            <input id="trackdetail-upload-button" type="button" value="" data-i18n="upload" data-icon="" />
+            <div data-role="fieldcontain">
+                <label for="trackdetail-upload-button" data-i18n="upload_gofg"></label>
+                <input id="trackdetail-upload-button" type="button" value="" data-i18n="upload" data-icon="" />
+            </div>
 
             <!-- Load control -->
-            <h3 data-i18n="load"></h3>
-            <input id="trackdetail-load-button" type="button" value="" data-i18n="load" data-icon="reload" />
+            <div data-role="fieldcontain">
+                <label for="trackdetail-load-button" data-i18n="load"></label>
+                <input id="trackdetail-load-button" type="button" value="" data-i18n="load" data-icon="reload" />
+            </div>
 
             <!-- Export control -->
-            <h3 data-i18n="export"></h3>
-            <div data-role="controlgroup" data-type="horizontal" id="trackdetail-page_exportcontrol">
-                    <input id="trackdetail-export-gpx-button" type="button" value="GPX" />
-                    <input id="trackdetail-export-tcx-button" type="button" value="TCX" />
-                    <input id="trackdetail-export-fitlog-button" type="button" value="Fitlog" />
+            <div data-role="fieldcontain">
+                <label for="trackdetail-page_exportcontrol" data-i18n="export"></label>
+                <div data-role="controlgroup" data-type="horizontal" id="trackdetail-page_exportcontrol">
+                        <input id="trackdetail-export-gpx-button" type="button" value="GPX" />
+                        <input id="trackdetail-export-tcx-button" type="button" value="TCX" />
+                        <input id="trackdetail-export-fitlog-button" type="button" value="Fitlog" />
+                </div>
             </div>
 
             <!-- Delete control -->
-            <h3 data-i18n="delete"></h3>
-            <input id="trackdetail-delete-button" type="button" value="" data-i18n="delete" data-icon="delete" />
+            <div data-role="fieldcontain">
+                <label for="trackdetail-delete-button" data-i18n="delete"></label>
+                <input id="trackdetail-delete-button" type="button" value="" data-i18n="delete" data-icon="delete" data-theme="g" />
+            </div>
         </div>
 </div>
