@@ -31,7 +31,7 @@ Tracks.prototype.oninit = function() {
  * Helper function for sorting the tracks by date
  */
 Tracks.prototype._trackSort = function( a, b ) {
-	return ( (a.name == b.name) ? 0 : (a.name > b.name) ? 1 : -1 );
+    return ( (a.name == b.name) ? 0 : (a.name > b.name) ? -1 : 1 );
 };
 
 /**

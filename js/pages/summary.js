@@ -18,6 +18,7 @@
  */
 
 function Summary() {
+    this.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugins/powermanagement');
 }
 Summary.prototype = new Page( "summary" );
 
@@ -30,6 +31,7 @@ Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.m_track = null;               // Currently active track
 Summary.prototype.m_trackwriter = null;         // Write for active track
+Summary.prototype.m_powerManagement = null;
 
 Summary.prototype.rightPage = "map.html";
 
@@ -67,7 +69,7 @@ Summary.prototype.enableGPSTap = function() {
             $.mobile.showPageLoadingMsg();
 
             // Disable idle mode
-            window.plugins.PowerManagement.acquire(
+            pages.summary.m_powerManagement.acquire(
                         function(){},
                         function(e){
                             MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
@@ -290,7 +292,7 @@ Summary.prototype._stopGPS = function() {
 
             // Stop GPS & release power lock
             GPSHandler.stopGPS();
-            window.plugins.PowerManagement.release(
+            pages.summary.m_powerManagement.release(
                         function(){},
                         function(e){}
                         );
@@ -337,7 +339,7 @@ Summary.prototype._pause = function() {
             if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
             pages.summary.m_mainTimer = 0;
             // Enable suspend again
-            window.plugins.PowerManagement.release(
+            pages.summary.m_powerManagement.release(
                         function(){},
                         function(e){}
                         );
@@ -361,7 +363,7 @@ Summary.prototype._resume = function() {
             // Start GPS again
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
             // Disable suspend
-            window.plugins.PowerManagement.acquire(
+            pages.summary.m_powerManagement.acquire(
                         function(){},
                         function(e){
                             MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
