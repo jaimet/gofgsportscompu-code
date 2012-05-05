@@ -18,7 +18,6 @@
  */
 
 function Summary() {
-    this.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugins/powermanagement');
 }
 Summary.prototype = new Page( "summary" );
 
@@ -477,6 +476,9 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
  * Invoked on first display to size & configure all the display panels
  */
 Summary.prototype._pageshow = function( p_event, p_ui ) {
+            // Fetch reference to powermanagement object
+            pages.summary.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugin/powermanagement');
+
             // Remove init handler
             $( '#summary-page' ).die( 'pageshow', pages.summary._pageshow );
 

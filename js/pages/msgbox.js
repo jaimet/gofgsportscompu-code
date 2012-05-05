@@ -105,19 +105,8 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
  * Called when the ok or cancel button is clicked
  */
 MsgBox.prototype._close = function( evt ) {
-            /*evt.preventDefault();
-            evt.stopPropagation();
-            setTimeout( Utilities.getEvtHandler( this, this._hide, evt.data ), 250 );*/
             $.mobile.changePage( pages.msgbox.m_prevPage );
-            if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(data);
+            if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(evt.data);
         }
-
-/**
- * Detached callback for hiding the msgbox (required in order to prevent the click event from firing twice)
- */
-/*MsgBox.prototype._hide = function( data ) {
-            $.mobile.changePage( pages.msgbox.m_prevPage );
-            if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(data);
-        }*/
 
 new MsgBox();
