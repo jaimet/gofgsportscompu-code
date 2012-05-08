@@ -37,14 +37,14 @@ Track.prototype.m_totalDistance = 0;        // Total distance (in meters)
 Track.prototype.m_elevationGain = 0;        // Total elevation gain (in meters)
 Track.prototype.m_elevationLoss = 0;        // Total elevation loss (in meters)
 Track.prototype.m_maximumSpeed = 0;         // Maximum speed (in m/s)
-Track.prototype.m_waypoints = [];           // Collection of waypoint objects representing each measurement point
 Track.prototype.m_currentWaypoint = null;   // Current waypoint
 Track.prototype.m_lastWaypoint = null;      // Last waypoint
+Track.prototype.m_pauseTime = 0;            // Total time of pause in this track
 
 /**
  * Add a new position to this track
  */
-Track.prototype.addPosition = function( p_position, p_distance ) {
+Track.prototype.addPosition = function( p_position, p_distance, p_bPauseEnd ) {
             // Make sure parameters are treated using the correct type
             p_distance = parseFloat( p_distance );
 
@@ -55,8 +55,14 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
             this.m_currentWaypoint = new Waypoint();
             this.m_currentWaypoint.m_position = p_position;
             this.m_currentWaypoint.m_timestamp = (p_position.timestamp / 1000).toFixed(0);
+            this.m_currentWaypoint.m_bPauseEnd = p_bPauseEnd;
 
             this.m_endTime = this.m_currentWaypoint.m_timestamp;
+
+            // Check if we have a pause
+            if( this.m_currentWaypoint.m_bPauseEnd ) {
+                this.m_pauseTime += (this.m_currentWaypoint.m_timestamp - this.m_lastWaypoint.m_timestamp );
+            }
 
             // Remember distance
             this.m_currentWaypoint.m_distance = p_distance;
@@ -82,16 +88,6 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
             if( this.m_maximumSpeed < this.m_currentWaypoint.m_position.coords.speed ) {
                 this.m_maximumSpeed = this.m_currentWaypoint.m_position.coords.speed;
             }
-
-            // Store current waypoint in list
-            //this.m_waypoints.push( this.m_currentWaypoint );
-        }
-
-/**
- * Add a pause to this track
- * TODO: Add pause handling
- */
-Track.prototype.addPause = function( p_startTime, p_endTime ) {
         }
 
 /**
@@ -136,6 +132,13 @@ Track.prototype.getStartTime = function() {
  */
 Track.prototype.getEndTime = function() {
             return this.m_endTime;
+        }
+
+/**
+ * Return the pause time
+ */
+Track.prototype.getPauseTime = function() {
+            return this.m_pauseTime;
         }
 
 /**

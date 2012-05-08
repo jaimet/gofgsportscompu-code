@@ -77,6 +77,7 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
             // Cycle through all lines and read them
             var position = null;
             var distance = 0;
+            var bPauseEnd = false;
             while( lines.length > 0 ) {
                 var line = lines.shift();
                 line_info = this.parseLine( line );
@@ -90,7 +91,7 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
                 switch(line_info.type) {
                 case 1:     // timestamp
                     if( position !== null ) {
-                        track.addPosition( position, distance )
+                        track.addPosition( position, distance, bPauseEnd )
                         // Run waypoint callback if necessary
                         if( typeof this.m_waypointCallback === "function" ) this.m_waypointCallback( track.getCurrentWaypoint(), track );
                     }
@@ -99,6 +100,7 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
                     position.coords = { latitude: 0, longitude: 0, altitude: 0, accuracy: 0, altitudeAccuracy: 0, heading: 0, speed: 0 };
                     position.timestamp = line_info.values[0] * 1000;
                     distance = 0;
+                    bPauseEnd = false;
                     break;
                 case 2:     // location
                     position.coords.latitude = Utilities.toDegree(line_info.values[0]);
@@ -117,6 +119,9 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
                 case 6:     // accuracy
                     position.coords.accuracy = line_info.values[0];
                     position.coords.altitudeAccuracy = line_info.values[1];
+                    break;
+                case 7:     // pause
+                    bPauseEnd = true;
                     break;
                 default:    // invalid
                     break;

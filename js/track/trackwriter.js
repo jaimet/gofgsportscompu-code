@@ -68,4 +68,6 @@ TrackWriter.prototype.writeWaypoint = function( p_bCurrent ) {
             if( waypoint.m_heartrate > 0 ) this.m_continuousFileWriter.writeLine( "03;" + waypoint.m_heartrate );
             // Check for distance value
             if( waypoint.m_distance > 0 ) this.m_continuousFileWriter.writeLine( "04;" + waypoint.m_distance );
+            // Check if this is a pause ending waypoint
+            if( waypoint.m_bPauseEnd ) this.m_continuousFileWriter.writeLine( "07;" + waypoint.m_bPauseEnd );
         }

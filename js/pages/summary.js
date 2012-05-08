@@ -24,7 +24,7 @@ Summary.prototype = new Page( "summary" );
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
-Summary.prototype.m_pauseStart = 0;
+Summary.prototype.m_bPauseEnding = false;
 Summary.prototype.m_leftTapHandler = null;
 Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
@@ -150,13 +150,18 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             $( '#distance-infopanel' ).infopanel( 'setValue', l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             $( '#altitude-infopanel' ).infopanel( 'setValue', l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
             $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
+
+            // Calculate track duration
+            var duration = 0;
             if( p_bLoading ) {
-                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
+                duration = pages.summary.m_track.getDuration();
             }
             else {
-                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime(), true) );
+                duration = Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime();
             }
-
+            // Substract pause from total duration
+            duration -= pages.summary.m_track.getPauseTime();
+            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(duration, true) );
         };
 
 /**
@@ -331,13 +336,12 @@ Summary.prototype._pause = function() {
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._resume;
 
-            pages.summary.m_pauseStart = ((new Date()).getTime() / 1000).toFixed(0);
             // Stop GPS tracking
             GPSHandler.stopGPS();
             // Disable interface timer
             if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
             pages.summary.m_mainTimer = 0;
-            // Enable suspend again
+            // Enable suspend
             pages.summary.m_powerManagement.release(
                         function(){},
                         function(e){}
@@ -357,7 +361,8 @@ Summary.prototype._resume = function() {
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._pause;
 
-            var pauseEnd = Utilities.getUnixTimestamp();
+            // Pause is ending
+            pages.summary.m_bPauseEnding = true;
 
             // Start GPS again
             GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
@@ -369,10 +374,6 @@ Summary.prototype._resume = function() {
                             pages.summary._stopGPS();
                         }
                         );
-
-            // Add pause to track
-            pages.summary.m_track.addPause( pages.summary.m_pauseStart, pauseEnd );
-            pages.summary.m_pauseStart = 0;
 
             // Start updating our interface
             pages.summary._mainTimer();
@@ -415,8 +416,9 @@ Summary.prototype._updatePosition = function( p_position ) {
             }
 
             // Update track information
-            pages.summary.m_track.addPosition( p_position, distance );
+            pages.summary.m_track.addPosition( p_position, distance, pages.summary.m_bPauseEnding );
             pages.summary.m_trackwriter.writeWaypoint();
+            pages.summary.m_bPauseEnding = false;
 
             // Handle speed timeout
             if( pages.summary.m_speedTimer != 0 ) {
