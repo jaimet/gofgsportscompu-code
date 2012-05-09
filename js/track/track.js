@@ -59,11 +59,6 @@ Track.prototype.addPosition = function( p_position, p_distance, p_bPauseEnd ) {
 
             this.m_endTime = this.m_currentWaypoint.m_timestamp;
 
-            // Check if we have a pause
-            if( this.m_currentWaypoint.m_bPauseEnd ) {
-                this.m_pauseTime += (this.m_currentWaypoint.m_timestamp - this.m_lastWaypoint.m_timestamp );
-            }
-
             // Remember distance
             this.m_currentWaypoint.m_distance = p_distance;
             this.m_totalDistance += this.m_currentWaypoint.m_distance;
@@ -77,6 +72,11 @@ Track.prototype.addPosition = function( p_position, p_distance, p_bPauseEnd ) {
                 }
                 else {
                     this.m_elevationLoss += Math.abs(this.m_currentWaypoint.m_altitudeDiff);
+                }
+
+                // Check if we have a pause
+                if( this.m_currentWaypoint.m_bPauseEnd ) {
+                    this.m_pauseTime += (this.m_currentWaypoint.m_timestamp - this.m_lastWaypoint.m_timestamp );
                 }
             }
             // ... else remember start-time

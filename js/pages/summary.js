@@ -48,49 +48,6 @@ Summary.prototype.oninit = function() {
         };
 
 /**
- * Enable GPS and start searching for a signal
- */
-Summary.prototype.enableGPSTap = function() {
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'enable' );
-            $( '#right-button' ).button( 'disable' );
-            // Setup click handlers
-            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
-
-            // Switch button display
-            $( '#settings-button' ).hide();
-            $('#summary-page_enableGPS').fadeOut( 250, function() {
-                                                     $('#summary-page_control').fadeIn( 250 );
-                                                 } );
-
-            // Show sat-search message
-            $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
-            $.mobile.showPageLoadingMsg();
-
-            // Disable idle mode
-            pages.summary.m_powerManagement.acquire(
-                        function(){},
-                        function(e){
-                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
-                            pages.summary._stopGPS();
-                        }
-                        );
-
-            // Start GPS
-            GPSHandler.setPositionCallback( pages.summary._gpsFixWait );
-            GPSHandler.setErrorCallback( pages.summary_positionError );
-            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
-
-            // Update accuracy status image
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-
-            // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
-            if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
-                pages.summary._lock();
-            }
-        }
-
-/**
  * Wrapper function(s) for dynamic click handling without having to call live / bind / die / unbind all the time
  */
 Summary.prototype.leftTap = function() {
@@ -206,6 +163,97 @@ Summary.prototype._updateOdo = function( p_distance ) {
         };
 
 /**
+ * Simple helper function which waits for the first GPS fix and starts the track once called
+ */
+Summary.prototype._gpsFixWait = function( p_position ) {
+            // Reset / hide sat-searching message
+            $.mobile.hidePageLoadingMsg();
+            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+            // Update accuracy display
+            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
+
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'enable' );
+            // Setup click handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+            pages.summary.m_rightTapHandler = pages.summary._startGPS;
+
+            // Disable gpsfixwait callback
+            GPSHandler.setPositionCallback( null );
+
+            // Check if we automatically start tracking
+            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
+                pages.summary._startGPS();
+            }
+        };
+
+/**
+ * Helper function which starts searching for satellites and calls successCallback once we have a GPS lock
+ */
+Summary.prototype._searchForSatellites = function( p_successCallback, p_errorCallback ) {
+            // Define internal success callback
+            var successCallback = function( p_position ) {
+                // Reset / hide sat-searching message
+                $.mobile.hidePageLoadingMsg();
+                $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+                if( typeof p_successCallback === "function" ) p_successCallback( p_position );
+            };
+
+            // Define internal error callback
+            var errorCallback = function( p_error ) {
+                // Reset / hide sat-searching message
+                $.mobile.hidePageLoadingMsg();
+                $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+                if( typeof p_errorCallback === "function" ) p_errorCallback( p_error );
+            }
+
+            // Show sat-search message
+            $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
+            $.mobile.showPageLoadingMsg();
+
+            // Disable idle mode
+            pages.summary.m_powerManagement.acquire(
+                        function(){},
+                        errorCallback
+                        );
+
+            // Start GPS
+            GPSHandler.setPositionCallback( successCallback );
+            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
+        }
+
+/**
+ * Enable GPS and start searching for a signal
+ */
+Summary.prototype.enableGPSTap = function() {
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'disable' );
+            // Setup click handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+
+            // Switch button display
+            $( '#settings-button' ).hide();
+            $('#summary-page_enableGPS').fadeOut( 250, function() {
+                                                     $('#summary-page_control').fadeIn( 250 );
+                                                 } );
+
+            pages.summary._searchForSatellites( pages.summary._gpsFixWait, function( p_error ) {
+                                                   MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                                                   pages.summary._stopGPS();
+                                               } );
+
+            // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
+            if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
+                pages.summary._lock();
+            }
+        }
+
+/**
  * Button onClick-handler for starting GPS tracking
  */
 Summary.prototype._startGPS = function( p_position ) {
@@ -248,33 +296,6 @@ Summary.prototype._startGPS = function( p_position ) {
                             pages.summary._stopGPS();
                         }
                         );
-        };
-
-/**
- * Simple helper function which waits for the first GPS fix and starts the track once called
- */
-Summary.prototype._gpsFixWait = function( p_position ) {
-            // Reset / hide sat-searching message
-            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
-            $.mobile.hidePageLoadingMsg();
-
-            // Update accuracy display
-            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
-
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'enable' );
-            $( '#right-button' ).button( 'enable' );
-            // Setup click handlers
-            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
-            pages.summary.m_rightTapHandler = pages.summary._startGPS;
-
-            // Disable gpsfixwait callback
-            GPSHandler.setPositionCallback( null );
-
-            // Check if we automatically start tracking
-            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
-                pages.summary._startGPS();
-            }
         };
 
 /**
@@ -339,7 +360,7 @@ Summary.prototype._pause = function() {
             // Stop GPS tracking
             GPSHandler.stopGPS();
             // Disable interface timer
-            if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
+            if( pages.summary.m_mainTimer !== 0 ) clearTimeout(pages.summary.m_mainTimer);
             pages.summary.m_mainTimer = 0;
             // Enable suspend
             pages.summary.m_powerManagement.release(
@@ -364,19 +385,21 @@ Summary.prototype._resume = function() {
             // Pause is ending
             pages.summary.m_bPauseEnding = true;
 
-            // Start GPS again
-            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
-            // Disable suspend
-            pages.summary.m_powerManagement.acquire(
-                        function(){},
-                        function(e){
-                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
-                            pages.summary._stopGPS();
-                        }
-                        );
+            // Start searching for GPS signal again
+            pages.summary._searchForSatellites( function( p_position ) {
+                                                   // Setup new position callback
+                                                   GPSHandler.setPositionCallback( pages.summary._updatePosition );
 
-            // Start updating our interface
-            pages.summary._mainTimer();
+                                                   // Call position callback with current position
+                                                   pages.summary._updatePosition( p_position );
+
+                                                   // Start updating our interface
+                                                   pages.summary._mainTimer();
+                                               },
+                                               function( p_error ) {
+                                                   MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                                                   pages.summary._stopGPS();
+                                               } );
         };
 
 /**
@@ -434,7 +457,7 @@ Summary.prototype._updatePosition = function( p_position ) {
 /**
  * Called by the GPSHandler if there was an error
  */
-Summary.prototype_positionError = function( p_positionError ) {
+Summary.prototype._positionError = function( p_positionError ) {
             MsgBox.show( $.i18n.prop( 'position_message_error' ) + p_positionError.message + " (" + p_positionError.code + ")" );
         }
 
@@ -563,6 +586,9 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
             // Update display units
             pages.summary.updateDisplayUnits();
+
+            // Register error callback for GPSHandler
+            GPSHandler.setErrorCallback( pages.summary._positionError );
         };
 
 new Summary();
