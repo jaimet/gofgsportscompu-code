@@ -49,11 +49,11 @@ TrackUploader.prototype._loadComplete = function( p_track ) {
                                            uuid: p_track.getUUID(),
                                            elevation_gain: p_track.getElevationGain(),
                                            elevation_loss: p_track.getElevationLoss(),
-                                           maximum_speed: p_track.getMaximumSpeed(),
+                                           maximum_speed: p_track.getMaximumSpeed()
                                        } ),
                 id: (Math.random() * 10000).toFixed(0),
                 option: "com_gofgsportstracker",
-                task: "jsonrpc.request",
+                task: "jsonrpc.request"
             };
 
             // Some new stuff

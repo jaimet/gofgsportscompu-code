@@ -144,7 +144,7 @@ var GPSHandler = {
                          if( p_error.code !== PositionError.TIMEOUT ) {
                              if( typeof GPSHandler.m_errorCallback === "function" ) GPSHandler.m_errorCallback( p_error );
                          }
-                     },
+                     }
 
     /*_haversineDistance : function( p_start, p_end ) {
                              var latDiff = GPSHandler._toRad( p_end.latitude - p_start.latitude );
