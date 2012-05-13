@@ -126,16 +126,20 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
  */
 Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
             var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
+            var imageSrc = 'images/wirelessSignalBad48.png';
 
-            if( p_averageAccuracy <= (minimumAccuracy / 2.0) ) {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalExcellent48.png', 48, 48 );
+            if( p_averageAccuracy < 0 ) {
+                imageSrc = 'images/wirelessSignalOff48.png';
+            }
+            else if( p_averageAccuracy <= (minimumAccuracy / 2.0) ) {
+                imageSrc = 'images/wirelessSignalExcellent48.png';
             }
             else if( p_averageAccuracy <= minimumAccuracy ) {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalGood48.png', 48, 48 );
+                imageSrc = 'images/wirelessSignalGood48.png';
             }
-            else {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-            }
+
+            // Finally set the new image src
+            $( '#summary-page_signal-strength' ).attr( 'src', imageSrc );
         }
 
 /**
@@ -242,6 +246,10 @@ Summary.prototype.enableGPSTap = function() {
                                                      $('#summary-page_control').fadeIn( 250 );
                                                  } );
 
+            // Show accuracy status image
+            $( '#summary-page_signal-strength' ).show();
+
+            // Start searching forsatellites
             pages.summary._searchForSatellites( pages.summary._gpsFixWait, function( p_error ) {
                                                    MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
                                                    pages.summary._stopGPS();
@@ -302,6 +310,10 @@ Summary.prototype._startGPS = function( p_position ) {
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
+            // Hide accuracy status image & update it
+            $( '#summary-page_signal-strength' ).hide();
+            pages.summary._updateAccuracy( -1 );
+
             // Switch button display
             $('#summary-page_control').fadeOut( 250, function() {
                                                    $('#summary-page_enableGPS').fadeIn( 250 );
@@ -321,9 +333,6 @@ Summary.prototype._stopGPS = function() {
                         function(){},
                         function(e){}
                         );
-
-            // Update accuracy status image
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
 
             // No more actions to take if track didn't start yet
             if( pages.summary.m_track === null ) return;
@@ -518,7 +527,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
 
             // Speed infopanel
-            $( '#speed-infopanel' ).infopanel( {
+            /*$( '#speed-infopanel' ).infopanel( {
                                                   'value' : '0.00',
                                                   'maxSizeValue' : '000.00',
                                                   'size' : { 'width' : 'auto', 'height' : rowHeight * 3 },
@@ -526,13 +535,16 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                                                   'unit' : 'km/h',
                                                   'showStatistics' : true
                                               } );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );
+            $( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );*/
+            var speedWidget = new infoWidget( 'speed-infopanel', { value: '0.00', size: { width: 'auto', height: rowHeight * 3 }, unit: 'km/h' } );
+            speedWidget.addSubInfo( 'avg:' );
+            speedWidget.addSubInfo( 'max:' );
 
             // Distance infopanel
             $( '#distance-infopanel' ).infopanel( {
                                                      'value' : '0.00',
                                                      'maxSizeValue' : '000.00',
-                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 3 },
+                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
                                                      'image' : 'images/web24.png',
                                                      'unit' : 'km',
                                                      'showStatistics' : true
@@ -552,14 +564,14 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             $( '#altitude-infopanel' ).infopanel( 'setInfo', "0.00% / &Oslash; 0.00%" );
 
             // Status infopanel
-            $( '#status-infopanel' ).infopanel( {
+            /*$( '#status-infopanel' ).infopanel( {
                                                    'value' : '-',
                                                    'maxSizeValue' : '000_/_000',
                                                    'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
                                                    'image' : 'images/find24.png',
                                                    'unit' : 'Accuracy'
                                                } );
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
+            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );*/
 
             // Timer infopanel
             $( '#timer-infopanel' ).infopanel( {

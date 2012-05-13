@@ -184,6 +184,8 @@ function getFormattedTimeDiff( p_timeDiff ) {
  * Application starts here
  */
 $(document).ready( function() {
+                      $.mobile.changePage( "summary.html" );
+
 	document.addEventListener("deviceready", GOFGSportsComputer._deviceReady, true);
 } );
 
