@@ -32,6 +32,10 @@ Summary.prototype.m_track = null;               // Currently active track
 Summary.prototype.m_trackwriter = null;         // Write for active track
 Summary.prototype.m_powerManagement = null;
 
+// Widgets references
+Summary.prototype.m_odometerWidget = null;
+Summary.prototype.m_clockWidget = null;
+
 Summary.prototype.rightPage = "map.html";
 
 Summary.prototype.oninit = function() {
@@ -163,7 +167,9 @@ Summary.prototype._updateOdo = function( p_distance ) {
             }
             window.localStorage.setItem( "odo", odo );
 
-            $( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + l10n.largeUnitValue(odo / 1000.0).toFixed(2) + l10n.largeUnit() );
+            pages.summary.m_odometerWidget.setValue( l10n.largeUnitValue(odo / 1000.0).toFixed(2) );
+
+            //$( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + l10n.largeUnitValue(odo / 1000.0).toFixed(2) + l10n.largeUnit() );
         };
 
 /**
@@ -474,7 +480,9 @@ Summary.prototype._positionError = function( p_positionError ) {
  * Updates the clock (called once a minute)
  */
 Summary.prototype._updateClock = function() {
-            $( '#clock-infopanel' ).infopanel( 'setValue', formatDate( new Date() ) );
+            pages.summary.m_clockWidget.setValue( formatDate( new Date() ) );
+
+            //$( '#clock-infopanel' ).infopanel( 'setValue', formatDate( new Date() ) );
             setTimeout( "pages.summary._updateClock()", 60000 );
         };
 
@@ -524,7 +532,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
             // Apply layout to all info-panels
-            var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
+            var rowHeight = (pages.summary.m_contentHeight / 5).toFixed(0);
 
             // Speed infopanel
             /*$( '#speed-infopanel' ).infopanel( {
@@ -536,62 +544,69 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                                                   'showStatistics' : true
                                               } );
             $( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );*/
-            var speedWidget = new infoWidget( 'speed-infopanel', { value: '0.00', size: { width: 'auto', height: rowHeight * 3 }, unit: 'km/h' } );
-            speedWidget.addSubInfo( 'avg:' );
-            speedWidget.addSubInfo( 'max:' );
+            var speedWidget = new InfoWidget( 'speed-infowidget', {
+                                                 value: '0.00',
+                                                 size: { width: 'auto', height: rowHeight },
+                                                 unit: 'km/h',
+                                                 sizeValue: '000.00',
+                                                 showIndicator: true
+                                             } );
+            speedWidget.addSubInfo( 'avg: 0.00', 'avg: 000.00' );
+            speedWidget.addSubInfo( 'max: 0.00', 'max: 000.00' );
 
-            // Distance infopanel
-            $( '#distance-infopanel' ).infopanel( {
-                                                     'value' : '0.00',
-                                                     'maxSizeValue' : '000.00',
-                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-                                                     'image' : 'images/web24.png',
-                                                     'unit' : 'km',
-                                                     'showStatistics' : true
-                                                 } );
+            var distanceWidget = new InfoWidget( 'distance-infowidget', {
+                                                    value: '0.00',
+                                                    size: { width: 'auto', height: rowHeight },
+                                                    unit: 'km',
+                                                    sizeValue: '0000.00'
+                                                } );
+
+            var timerWidget = new InfoWidget( 'timer-infowidget', {
+                                                    value: '00:00:00',
+                                                    size: { width: 'auto', height: rowHeight },
+                                                    unit: 'hh:mm:ss'
+                                                } );
+
+            var altitudeWidget = new InfoWidget( 'altitude-infowidget', {
+                                                 value: '0.00',
+                                                 size: { width: 'auto', height: rowHeight },
+                                                 unit: 'm',
+                                                 sizeValue: '0000.00',
+                                                 showSubInfos: true
+                                             } );
+            altitudeWidget.addSubInfo( 'curr: 0%', 'curr: 00%' );
+            altitudeWidget.addSubInfo( 'avg: 0%', 'max: 00%' );
+
+            var heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
+                                                 value: '0',
+                                                 size: { width: 'auto', height: rowHeight },
+                                                 unit: 'bpm',
+                                                 sizeValue: '000',
+                                                 showSubInfos: true
+                                             } );
+            heartrateWidget.addSubInfo( 'avg: 0', 'avg: 000' );
+            heartrateWidget.addSubInfo( 'max: 0', 'max: 000' );
+
+            pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
+                                                 value: '00:00',
+                                                 size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                 unit: 'hh:mm',
+                                                 sizeValue: '00:00'
+                                             } );
+
+            // Create widget for odo-meter display
+            pages.summary.m_odometerWidget = new InfoWidget( 'odometer-infowidget', {
+                                                 value: '0.0',
+                                                 size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                 unit: 'km',
+                                                 sizeValue: '00000.00'
+                                             } );
+
             // Show initial odo
             pages.summary._updateOdo();
 
-            // Altitude infopanel
-            $( '#altitude-infopanel' ).infopanel( {
-                                                     'value' : '0.0',
-                                                     'maxSizeValue' : '00000.0',
-                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-                                                     'image' : 'images/pictures24.png',
-                                                     'unit' : 'm',
-                                                     'showStatistics' : true
-                                                 } );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', "0.00% / &Oslash; 0.00%" );
-
-            // Status infopanel
-            /*$( '#status-infopanel' ).infopanel( {
-                                                   'value' : '-',
-                                                   'maxSizeValue' : '000_/_000',
-                                                   'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-                                                   'image' : 'images/find24.png',
-                                                   'unit' : 'Accuracy'
-                                               } );
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );*/
-
-            // Timer infopanel
-            $( '#timer-infopanel' ).infopanel( {
-                                                  'value' : '00:00:00',
-                                                  'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 5 * rowHeight) },
-                                                  'image' : 'images/timer24.png',
-                                                  'unit' : 'hh:mm:ss'
-                                              } );
-
-            // Clock infopanel
-            $( '#clock-infopanel' ).infopanel( {
-                                                  'value' : '00:00',
-                                                  'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 5 * rowHeight) },
-                                                  'image' : 'images/clock24.png',
-                                                  'unit' : 'hh:mm'
-                                              } );
-
             // Add clock timer
             pages.summary._updateClock();
-            $( '#stop-button' ).button( 'disable' );
 
             // Fix page height
             $( '#summary-page' ).height( $(window).height() );
