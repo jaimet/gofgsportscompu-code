@@ -122,14 +122,14 @@ Trackdetail.prototype._uploadTrack = function() {
             }
 
             // Check if user already agreed to the uploading conditions
-            if( SettingsHandler.getInt('uploadagree') === 0 ) {
+            if( SettingsHandler.getInt('uploadagree_2') === 0 ) {
                 MsgBox.confirmAlways(
                             $.i18n.prop( 'upload_message_agree' ),
                             function( p_button ) {
                                 // Check if confirm counts for always
                                 if( p_button === MsgBox.BUTTON_YES || p_button === MsgBox.BUTTON_ALWAYS ) {
                                     if( p_button === MsgBox.BUTTON_ALWAYS ) {
-                                        SettingsHandler.set('uploadagree', 1);
+                                        SettingsHandler.set('uploadagree_2', 1);
                                         SettingsHandler._save();
                                     }
 
