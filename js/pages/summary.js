@@ -110,9 +110,9 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
             // Update display
-            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(2) );
-            pages.summary.m_speedWidget.setSubInfo( 0, l10n.largeUnitValue(avgSpeed).toFixed(2) );
-            pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
+            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(1) );
+            pages.summary.m_speedWidget.setSubInfo( 0, l10n.largeUnitValue(avgSpeed).toFixed(1) );
+            pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(1) );
             pages.summary.m_distanceWidget.setValue( l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             pages.summary.m_altitudeWidget.setValue( l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
             pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(2) + '%' );
@@ -539,14 +539,14 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
 
             // Create speed widget
             pages.summary.m_speedWidget = new InfoWidget( 'speed-infowidget', {
-                                                 value: '0.00',
+                                                 value: '0.0',
                                                  size: { width: 'auto', height: rowHeight },
                                                  unit: 'km/h',
-                                                 sizeValue: '000.00',
+                                                 sizeValue: '000.0',
                                                  showIndicator: true
                                              } );
-            pages.summary.m_speedWidget.addSubInfo( 'avg: 0.00', 'avg: 000.00' );
-            pages.summary.m_speedWidget.addSubInfo( 'max: 0.00', 'max: 000.00' );
+            pages.summary.m_speedWidget.addSubInfo( 'avg:', '0.0', '000.0' );
+            pages.summary.m_speedWidget.addSubInfo( 'max:', '0.0', '000.0' );
 
             // Create distance widget
             pages.summary.m_distanceWidget = new InfoWidget( 'distance-infowidget', {
@@ -569,8 +569,8 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                                                     sizeValue: '0000.00',
                                                     showSubInfos: true
                                                 } );
-            pages.summary.m_altitudeWidget.addSubInfo( 'curr: 0%', 'curr: 00%' );
-            pages.summary.m_altitudeWidget.addSubInfo( 'avg: 0%', 'max: 00%' );
+            pages.summary.m_altitudeWidget.addSubInfo( 'curr:',  '0%', '00%' );
+            pages.summary.m_altitudeWidget.addSubInfo( 'avg:', '0%', '00%' );
 
             var heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
                                                      value: '0',
@@ -579,8 +579,8 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                                                      sizeValue: '000',
                                                      showSubInfos: true
                                                  } );
-            heartrateWidget.addSubInfo( 'avg: 0', 'avg: 000' );
-            heartrateWidget.addSubInfo( 'max: 0', 'max: 000' );
+            heartrateWidget.addSubInfo( 'avg:', '0', '000' );
+            heartrateWidget.addSubInfo( 'max:', '0', '000' );
 
             pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
                                                              value: '00:00',

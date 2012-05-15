@@ -60,13 +60,13 @@ function InfoWidget( p_targetDiv, p_options ) {
     var unitDivWidth = this.m_options.size.width;
     var unitDivHeight = (this.m_options.size.height * 0.25).toFixed(0);
     var valueDivWidth = this.m_options.size.width;
-    var valueDivHeight = this.m_options.size.height;
+    var valueDivHeight = (this.m_options.size.height * 0.75).toFixed(0);
 
     // Check if we need additional space for additional components
     if( this.m_options.showIndicator || this.m_options.showSubInfos ) {
         unitDivWidth = (this.m_options.size.width * 0.25).toFixed(0);
         valueDivWidth = (this.m_options.size.width * 0.5).toFixed(0);
-        valueDivHeight = (this.m_options.size.height * 0.75).toFixed(0);
+        valueDivHeight = this.m_options.size.height;
     }
 
     // Check if indicators should be shown
@@ -141,15 +141,38 @@ InfoWidget.prototype.m_classBorder = 0;
 /**
  * Add a new sub-info to the InfoWidget
  */
-InfoWidget.prototype.addSubInfo = function( p_value, p_sizeValue ) {
+InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
             if( typeof p_sizeValue === "undefined" ) p_sizeValue = p_value;
 
+            var infoWidth = this.m_options.size.width * 0.25;
+
+            var infoLabelDiv = $( '<div>' );
+            infoLabelDiv.css( 'position', 'absolute' )
+            .css( 'left', '0px' )
+            .css( 'top', '0px' )
+            .css( 'text-align', 'right' )
+            .width( infoWidth * 0.5 )
+            .html( p_label );
+
+            var infoValueDiv = $( '<div>' );
+            infoValueDiv.css( 'position', 'absolute' )
+            .css( 'right', '0px' )
+            .css( 'top', '0px' )
+            .css( 'text-align', 'right' )
+            .css( 'padding-right', infoWidth * 0.1 )
+            .width( infoWidth * 0.4 )
+            .html( p_value );
+
+            // Create main div
             var infoDiv = $( '<div>' );
             infoDiv.css( 'position', 'absolute' )
             .css( 'right', '0px'  )
-            .css( 'width', (this.m_options.size.width * 0.20).toFixed(0) + 'px' )
-            .html( p_value )
-            .jqmData( 'sizeValue', p_sizeValue );
+            .width( infoWidth )
+            .jqmData( 'sizeValue', p_sizeValue )
+            .jqmData( 'label', infoLabelDiv )
+            .jqmData( 'value', infoValueDiv )
+            .append( infoLabelDiv )
+            .append( infoValueDiv );
 
             // Append to target & save in internal memory
             this.m_targetDiv.append(infoDiv);
@@ -158,17 +181,26 @@ InfoWidget.prototype.addSubInfo = function( p_value, p_sizeValue ) {
             // Re-position all infoDivs & calculate smallest font-size
             var divHeight = (this.m_options.size.height / this.m_infoDivs.length).toFixed(0);
             var fontSize = -1;
-            for( var i = 0; i < this.m_infoDivs.length; i++ ) {
-                this.m_infoDivs[i].css( 'top', (divHeight * i) + 'px' );
-                var currFontSize = InfoWidget.applyFontSize( this.m_infoDivs[i], this.m_infoDivs[i].width(), divHeight, this.m_infoDivs[i].jqmData( 'sizeValue' ) );
+            $( this.m_infoDivs ).each( function(index, value) {
+                                          value.css( 'top', (divHeight * index) + 'px' );
 
-                if( fontSize < 0 || currFontSize < fontSize ) fontSize = currFontSize;
-            }
+                                          var currFontSize = InfoWidget.applyFontSize(
+                                                      value.jqmData( 'value' ),
+                                                      value.jqmData( 'value' ).width(),
+                                                      divHeight,
+                                                      value.jqmData( 'sizeValue' )
+                                                      );
+
+                                          value.jqmData( 'value' ).css( 'font-size', '' );
+
+                                          if( fontSize < 0 || currFontSize < fontSize ) fontSize = currFontSize;
+                                      } );
+
 
             // Apply smallest font-size to all info-widgets & center them vertically
             $( this.m_infoDivs ).each( function( index, value ) {
                                           value.css( 'font-size', fontSize + 'px' );
-                                          value.css( 'margin-top', ((divHeight - value.height()) / 2.0).toFixed(0) + 'px' );
+                                          value.css( 'margin-top', ((divHeight - value.jqmData( 'value' ).height()) / 2.0).toFixed(0) + 'px' );
                                       } );
 
             return this.m_infoDivs.length;
@@ -180,7 +212,7 @@ InfoWidget.prototype.addSubInfo = function( p_value, p_sizeValue ) {
 InfoWidget.prototype.setSubInfo = function( p_index, p_value ) {
             if( p_index >= this.m_infoDivs.length ) return;
 
-            this.m_infoDivs[p_index].html( p_value );
+            $(this.m_infoDivs[p_index].find( 'td' ).get(1)).html( p_value );
         }
 
 /**
