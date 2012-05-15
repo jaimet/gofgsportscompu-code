@@ -35,6 +35,10 @@ Summary.prototype.m_powerManagement = null;
 // Widgets references
 Summary.prototype.m_odometerWidget = null;
 Summary.prototype.m_clockWidget = null;
+Summary.prototype.m_speedWidget = null;
+Summary.prototype.m_distanceWidget = null;
+Summary.prototype.m_timerWidget = null;
+Summary.prototype.m_altitudeWidget = null;
 
 Summary.prototype.rightPage = "map.html";
 
@@ -79,7 +83,7 @@ Summary.prototype._mainTimer = function() {
  * Called when the speed timeout is reached (resets speed display)
  */
 Summary.prototype._speedTimer = function() {
-            $( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
+            pages.summary.m_speedWidget.setValue( '0.00' );
         }
 
 /**
@@ -106,11 +110,13 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
             // Update display
-            $( '#speed-infopanel' ).infopanel( 'setValue', (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(2) );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', l10n.largeUnitValue(avgSpeed).toFixed(2), l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
-            $( '#distance-infopanel' ).infopanel( 'setValue', l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setValue', l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
+            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(2) );
+            pages.summary.m_speedWidget.setSubInfo( 0, l10n.largeUnitValue(avgSpeed).toFixed(2) );
+            pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
+            pages.summary.m_distanceWidget.setValue( l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
+            pages.summary.m_altitudeWidget.setValue( l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
+            pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(2) + '%' );
+            pages.summary.m_altitudeWidget.setSubInfo( 1, avgElevation.toFixed(2) + '%' );
 
             // Calculate track duration
             var duration = 0;
@@ -122,7 +128,8 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             }
             // Substract pause from total duration
             duration -= pages.summary.m_track.getPauseTime();
-            $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(duration, true) );
+
+            pages.summary.m_timerWidget.setValue( getFormattedTimeDiff(duration, true) );
         };
 
 /**
@@ -150,9 +157,9 @@ Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
  * Update unit labels based on selected display-units
  */
 Summary.prototype.updateDisplayUnits = function() {
-            $( '#speed-infopanel' ).infopanel( 'setUnit', l10n.speedUnit() );
-            $( '#distance-infopanel' ).infopanel( 'setUnit', l10n.largeUnit() );
-            $( '#altitude-infopanel' ).infopanel( 'setUnit', l10n.smallUnit() );
+            pages.summary.m_speedWidget.setUnit( l10n.speedUnit() );
+            pages.summary.m_distanceWidget.setUnit( l10n.largeUnit );
+            pages.summary.m_altitudeWidget.setUnit( l10n.smallUnit() );
         }
 
 /**
@@ -168,8 +175,6 @@ Summary.prototype._updateOdo = function( p_distance ) {
             window.localStorage.setItem( "odo", odo );
 
             pages.summary.m_odometerWidget.setValue( l10n.largeUnitValue(odo / 1000.0).toFixed(2) );
-
-            //$( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + l10n.largeUnitValue(odo / 1000.0).toFixed(2) + l10n.largeUnit() );
         };
 
 /**
@@ -481,8 +486,6 @@ Summary.prototype._positionError = function( p_positionError ) {
  */
 Summary.prototype._updateClock = function() {
             pages.summary.m_clockWidget.setValue( formatDate( new Date() ) );
-
-            //$( '#clock-infopanel' ).infopanel( 'setValue', formatDate( new Date() ) );
             setTimeout( "pages.summary._updateClock()", 60000 );
         };
 
@@ -534,73 +537,65 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             // Apply layout to all info-panels
             var rowHeight = (pages.summary.m_contentHeight / 5).toFixed(0);
 
-            // Speed infopanel
-            /*$( '#speed-infopanel' ).infopanel( {
-                                                  'value' : '0.00',
-                                                  'maxSizeValue' : '000.00',
-                                                  'size' : { 'width' : 'auto', 'height' : rowHeight * 3 },
-                                                  'image' : 'images/gowebsite24.png',
-                                                  'unit' : 'km/h',
-                                                  'showStatistics' : true
-                                              } );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );*/
-            var speedWidget = new InfoWidget( 'speed-infowidget', {
+            // Create speed widget
+            pages.summary.m_speedWidget = new InfoWidget( 'speed-infowidget', {
                                                  value: '0.00',
                                                  size: { width: 'auto', height: rowHeight },
                                                  unit: 'km/h',
                                                  sizeValue: '000.00',
                                                  showIndicator: true
                                              } );
-            speedWidget.addSubInfo( 'avg: 0.00', 'avg: 000.00' );
-            speedWidget.addSubInfo( 'max: 0.00', 'max: 000.00' );
+            pages.summary.m_speedWidget.addSubInfo( 'avg: 0.00', 'avg: 000.00' );
+            pages.summary.m_speedWidget.addSubInfo( 'max: 0.00', 'max: 000.00' );
 
-            var distanceWidget = new InfoWidget( 'distance-infowidget', {
+            // Create distance widget
+            pages.summary.m_distanceWidget = new InfoWidget( 'distance-infowidget', {
                                                     value: '0.00',
                                                     size: { width: 'auto', height: rowHeight },
                                                     unit: 'km',
                                                     sizeValue: '0000.00'
                                                 } );
 
-            var timerWidget = new InfoWidget( 'timer-infowidget', {
-                                                    value: '00:00:00',
-                                                    size: { width: 'auto', height: rowHeight },
-                                                    unit: 'hh:mm:ss'
-                                                } );
-
-            var altitudeWidget = new InfoWidget( 'altitude-infowidget', {
-                                                 value: '0.00',
+            pages.summary.m_timerWidget = new InfoWidget( 'timer-infowidget', {
+                                                 value: '00:00:00',
                                                  size: { width: 'auto', height: rowHeight },
-                                                 unit: 'm',
-                                                 sizeValue: '0000.00',
-                                                 showSubInfos: true
+                                                 unit: 'hh:mm:ss'
                                              } );
-            altitudeWidget.addSubInfo( 'curr: 0%', 'curr: 00%' );
-            altitudeWidget.addSubInfo( 'avg: 0%', 'max: 00%' );
+
+            pages.summary.m_altitudeWidget = new InfoWidget( 'altitude-infowidget', {
+                                                    value: '0.00',
+                                                    size: { width: 'auto', height: rowHeight },
+                                                    unit: 'm',
+                                                    sizeValue: '0000.00',
+                                                    showSubInfos: true
+                                                } );
+            pages.summary.m_altitudeWidget.addSubInfo( 'curr: 0%', 'curr: 00%' );
+            pages.summary.m_altitudeWidget.addSubInfo( 'avg: 0%', 'max: 00%' );
 
             var heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
-                                                 value: '0',
-                                                 size: { width: 'auto', height: rowHeight },
-                                                 unit: 'bpm',
-                                                 sizeValue: '000',
-                                                 showSubInfos: true
-                                             } );
+                                                     value: '0',
+                                                     size: { width: 'auto', height: rowHeight },
+                                                     unit: 'bpm',
+                                                     sizeValue: '000',
+                                                     showSubInfos: true
+                                                 } );
             heartrateWidget.addSubInfo( 'avg: 0', 'avg: 000' );
             heartrateWidget.addSubInfo( 'max: 0', 'max: 000' );
 
             pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
-                                                 value: '00:00',
-                                                 size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
-                                                 unit: 'hh:mm',
-                                                 sizeValue: '00:00'
-                                             } );
+                                                             value: '00:00',
+                                                             size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                             unit: 'hh:mm',
+                                                             sizeValue: '00:00'
+                                                         } );
 
             // Create widget for odo-meter display
             pages.summary.m_odometerWidget = new InfoWidget( 'odometer-infowidget', {
-                                                 value: '0.0',
-                                                 size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
-                                                 unit: 'km',
-                                                 sizeValue: '00000.00'
-                                             } );
+                                                                value: '0.0',
+                                                                size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                                unit: 'km (odo)',
+                                                                sizeValue: '00000.00'
+                                                            } );
 
             // Show initial odo
             pages.summary._updateOdo();
