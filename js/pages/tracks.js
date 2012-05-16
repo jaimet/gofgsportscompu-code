@@ -46,7 +46,10 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
             // Remove any previous items
             uList.html( '' );
 
+            // Status variable for month-headings
             var lastMonthHeading = '';
+            var currMonthDivider = null;
+            var currMonthTracksCount = 0;
 
             // Cycle through entries and add them
             for( var i = 0; i < entries.length; i++ ) {
@@ -61,31 +64,36 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
                 // Check heading
                 var monthHeading = formatDate.format( 'mmmm' );
                 if( monthHeading !== lastMonthHeading ) {
-                    // Create new heading item
-                    uList.append( '<li data-role="list-divider">' + monthHeading + '</li>' );
+                    // Create new month divider
+                    currMonthDivider = $( '<li data-role="list-divider">' + monthHeading + '</li>' );
+                    // Reset tracks-count
+                    currMonthTracksCount = 0;
+
+                    // Append new heading item
+                    uList.append( currMonthDivider );
                     lastMonthHeading = monthHeading;
                 }
 
                 // Create new listItem
                 var listItem = $( '<li></li>' );
                 listItem.jqmData( 'fileEntry', entries[i] );
-
                 listItem.jqmData( 'displayName', formatDate.format() );
-
                 listItem.append( $('<a href="trackdetail.html"><h3>' + formatDate.format() + '</h3></a>') );
 
+                // Finally append new item to list
                 uList.append( listItem );
 
-                console.log( 'Added item' );
+                // Increase tracks count & update data
+                currMonthTracksCount++;
+                currMonthDivider.jqmData( 'currMonthTracksCount', currMonthTracksCount );
             }
-            console.log( 'Yes' );
-            uList.listview( 'refresh' );
-            console.log( 'Yes - #2' );
+            // Add count bubbles to month entries
+            uList.find( 'li[data-role="list-divider"]' ).each( function( index, value) {
+                                                                  $(value).append( '<span class="ui-li-count">' + $(value).jqmData('currMonthTracksCount') + '</span>' );
+                                                              } );
 
-            // Append to page & initialize jQueryMobile content
-            //containerdiv.append(uList);
-            //$( '#tracks-list-container' ).append( containerdiv );
-            //containerdiv.trigger( 'create' );
+            // Refresh tracks-list markup
+            uList.listview( 'refresh' );
 
             // Bind to the click-event of the newly created track entries
             $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'click', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
