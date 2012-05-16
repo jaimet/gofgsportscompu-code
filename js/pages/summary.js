@@ -39,6 +39,7 @@ Summary.prototype.m_speedWidget = null;
 Summary.prototype.m_distanceWidget = null;
 Summary.prototype.m_timerWidget = null;
 Summary.prototype.m_altitudeWidget = null;
+Summary.prototype.m_heartrateWidget = null;
 
 Summary.prototype.rightPage = "map.html";
 
@@ -83,7 +84,7 @@ Summary.prototype._mainTimer = function() {
  * Called when the speed timeout is reached (resets speed display)
  */
 Summary.prototype._speedTimer = function() {
-            pages.summary.m_speedWidget.setValue( '0.00' );
+            pages.summary.m_speedWidget.setValue( '0.0' );
         }
 
 /**
@@ -572,15 +573,15 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_altitudeWidget.addSubInfo( 'curr:',  '0%', '00%' );
             pages.summary.m_altitudeWidget.addSubInfo( 'avg:', '0%', '00%' );
 
-            var heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
+            pages.summary.m_heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
                                                      value: '0',
                                                      size: { width: 'auto', height: rowHeight },
                                                      unit: 'bpm',
                                                      sizeValue: '000',
                                                      showSubInfos: true
                                                  } );
-            heartrateWidget.addSubInfo( 'avg:', '0', '000' );
-            heartrateWidget.addSubInfo( 'max:', '0', '000' );
+            pages.summary.m_heartrateWidget.addSubInfo( 'avg:', '0', '000' );
+            pages.summary.m_heartrateWidget.addSubInfo( 'max:', '0', '000' );
 
             pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
                                                              value: '00:00',

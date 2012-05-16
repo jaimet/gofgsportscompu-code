@@ -64,8 +64,8 @@ function InfoWidget( p_targetDiv, p_options ) {
 
     // Check if we need additional space for additional components
     if( this.m_options.showIndicator || this.m_options.showSubInfos ) {
-        unitDivWidth = (this.m_options.size.width * 0.25).toFixed(0);
-        valueDivWidth = (this.m_options.size.width * 0.5).toFixed(0);
+        unitDivWidth = (this.m_options.size.width * 0.3).toFixed(0);
+        valueDivWidth = (this.m_options.size.width * 0.4).toFixed(0);
         valueDivHeight = this.m_options.size.height;
     }
 
@@ -86,6 +86,8 @@ function InfoWidget( p_targetDiv, p_options ) {
         .append( this.m_indicatorDown );
         // Calculate font size
         InfoWidget.applyFontSize( this.m_indicatorDiv, unitDivWidth, this.m_options.size.height - unitDivHeight );
+        // Verticall center the indicator widget
+        this.m_indicatorDiv.css( 'margin-top', ((this.m_options.size.height - unitDivHeight - this.m_indicatorDiv.height()) / 2).toFixed(0) + 'px' );
 
         // Initial indicator-arrow setup
         this.m_indicatorUp.hide();
@@ -108,8 +110,8 @@ function InfoWidget( p_targetDiv, p_options ) {
     .css( 'width', valueDivWidth )
     .css( 'text-align', 'center' )
     .html( this.m_options.value );
-    // Calculate font size
-    InfoWidget.applyFontSize( this.m_valueDiv, valueDivWidth, valueDivHeight, this.m_options.sizeValue );
+    // Calculate font size (including a border of 5px for left and right)
+    InfoWidget.applyFontSize( this.m_valueDiv, valueDivWidth - 10, valueDivHeight, this.m_options.sizeValue );
     // Vertically center the text
     this.m_valueDiv.css( 'margin-top', ((this.m_options.size.height - this.m_valueDiv.height()) / 2).toFixed(0) + 'px' );
 }
@@ -144,14 +146,14 @@ InfoWidget.prototype.m_classBorder = 0;
 InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
             if( typeof p_sizeValue === "undefined" ) p_sizeValue = p_value;
 
-            var infoWidth = this.m_options.size.width * 0.25;
+            var infoWidth = this.m_options.size.width * 0.30;
 
             var infoLabelDiv = $( '<div>' );
             infoLabelDiv.css( 'position', 'absolute' )
             .css( 'left', '0px' )
             .css( 'top', '0px' )
             .css( 'text-align', 'right' )
-            .width( infoWidth * 0.5 )
+            .width( infoWidth * 0.45 )
             .html( p_label );
 
             var infoValueDiv = $( '<div>' );
@@ -160,7 +162,7 @@ InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
             .css( 'top', '0px' )
             .css( 'text-align', 'right' )
             .css( 'padding-right', infoWidth * 0.1 )
-            .width( infoWidth * 0.4 )
+            .width( infoWidth * 0.45 )
             .html( p_value );
 
             // Create main div
