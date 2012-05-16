@@ -49,71 +49,25 @@ function InfoWidget( p_targetDiv, p_options ) {
     // Apply basic layout
     this.m_targetDiv.height( this.m_options.size.height + 'px' );
 
-    // Create all the internal display divs
+    // Create all the internal display divs ..
     this.m_unitDiv = $( '<div>' );
     this.m_valueDiv = $( '<div>' );
+    this.m_indicatorDiv = $( '<div>' );
+    // .. and append them to the target
+    this.m_targetDiv.append( this.m_unitDiv )
+    .append( this.m_valueDiv )
+    .append( this.m_indicatorDiv );
 
-    // .. end append them to the target
-    this.m_targetDiv.append( this.m_unitDiv ).append( this.m_valueDiv );
+    // Create indicator components ..
+    this.m_indicatorUp = $( '<span>&uarr;</span>' );
+    this.m_indicatorDown = $( '<span>&darr;</span>' );
+    // .. and append them to the indicator-div
+    this.m_indicatorDiv.append( this.m_indicatorUp )
+    .append( $('<br/>&bull;<br/>') )
+    .append( this.m_indicatorDown );
 
-    // Calculate sizes for internal display divs
-    var unitDivWidth = this.m_options.size.width;
-    var unitDivHeight = (this.m_options.size.height * 0.25).toFixed(0);
-    var valueDivWidth = this.m_options.size.width;
-    var valueDivHeight = (this.m_options.size.height * 0.75).toFixed(0);
-
-    // Check if we need additional space for additional components
-    if( this.m_options.showIndicator || this.m_options.showSubInfos ) {
-        unitDivWidth = (this.m_options.size.width * 0.3).toFixed(0);
-        valueDivWidth = (this.m_options.size.width * 0.4).toFixed(0);
-        valueDivHeight = this.m_options.size.height;
-    }
-
-    // Check if indicators should be shown
-    if( this.m_options.showIndicator ) {
-        // Create indicator components
-        this.m_indicatorDiv = $( '<div>' ).appendTo( this.m_targetDiv );
-        this.m_indicatorUp = $( '<span>&uarr;</span>' );
-        this.m_indicatorDown = $( '<span>&darr;</span>' );
-        // Fill indicator div
-        this.m_indicatorDiv.css( 'position', 'absolute' )
-        .css( 'top', unitDivHeight + 'px' )
-        .css( 'left', '0px' )
-        .css( 'width', unitDivWidth )
-        .css( 'text-align', 'center' )
-        .append( this.m_indicatorUp )
-        .append( $('<br/>&bull;<br/>') )
-        .append( this.m_indicatorDown );
-        // Calculate font size
-        InfoWidget.applyFontSize( this.m_indicatorDiv, unitDivWidth, this.m_options.size.height - unitDivHeight );
-        // Verticall center the indicator widget
-        this.m_indicatorDiv.css( 'margin-top', ((this.m_options.size.height - unitDivHeight - this.m_indicatorDiv.height()) / 2).toFixed(0) + 'px' );
-
-        // Initial indicator-arrow setup
-        this.m_indicatorUp.hide();
-        this.m_indicatorDown.hide();
-    }
-
-    // Apply sizes to divs
-    this.m_unitDiv.css( 'position', 'absolute' )
-    .css( 'top', '0px' )
-    .css( 'left', '5px' )
-    .css( 'width', unitDivWidth )
-    .css( 'text-align', 'left' )
-    .html( this.m_options.unit );
-    // Calculate font size
-    InfoWidget.applyFontSize( this.m_unitDiv, unitDivWidth, unitDivHeight );
-
-    this.m_valueDiv.css( 'position', 'absolute' )
-    .css( 'top', '0px' )
-    .css( 'left', ((this.m_options.size.width - valueDivWidth) / 2).toFixed(0) + 'px' )
-    .css( 'width', valueDivWidth )
-    .css( 'text-align', 'center' )
-    .html( this.m_options.value );
-    // Calculate font size (including a border of 5px for left and right)
-    InfoWidget.applyFontSize( this.m_valueDiv, valueDivWidth - 10, valueDivHeight, this.m_options.sizeValue );
-    // Vertically center the text
-    this.m_valueDiv.css( 'margin-top', ((this.m_options.size.height - this.m_valueDiv.height()) / 2).toFixed(0) + 'px' );
+    // Auto-size the panel
+    this.autoSize();
 }
 
 // Defining the default options for an InfoWidget
@@ -139,6 +93,75 @@ InfoWidget.prototype.m_indicatorUp = null;
 InfoWidget.prototype.m_indicatorDown = null;
 InfoWidget.prototype.m_infoDivs = null;
 InfoWidget.prototype.m_classBorder = 0;
+
+/**
+ * Automatically size all elements of the widget so that they fit the defined space
+ */
+InfoWidget.prototype.autoSize = function() {
+            // Calculate sizes for internal display divs
+            var unitDivWidth = this.m_options.size.width;
+            var unitDivHeight = (this.m_options.size.height * 0.25).toFixed(0);
+            var valueDivWidth = this.m_options.size.width;
+            var valueDivHeight = (this.m_options.size.height * 0.75).toFixed(0);
+
+            // Check if we need additional space for additional components
+            if( this.m_options.showIndicator || this.m_options.showSubInfos ) {
+                unitDivWidth = (this.m_options.size.width * 0.3).toFixed(0);
+                valueDivWidth = (this.m_options.size.width * 0.4).toFixed(0);
+                valueDivHeight = this.m_options.size.height;
+            }
+
+            // Check if indicators should be shown
+            if( this.m_options.showIndicator ) {
+                this.m_indicatorDiv.show();
+
+                // Fill indicator div
+                this.m_indicatorDiv.css( 'position', 'absolute' )
+                .css( 'top', unitDivHeight + 'px' )
+                .css( 'left', '0px' )
+                .css( 'width', unitDivWidth )
+                .css( 'text-align', 'center' );
+                // Calculate font size
+                InfoWidget.applyFontSize( this.m_indicatorDiv, unitDivWidth, this.m_options.size.height - unitDivHeight );
+                // Verticall center the indicator widget
+                this.m_indicatorDiv.css( 'margin-top', ((this.m_options.size.height - unitDivHeight - this.m_indicatorDiv.height()) / 2).toFixed(0) + 'px' );
+
+                // Initial indicator-arrow setup
+                this.m_indicatorUp.hide();
+                this.m_indicatorDown.hide();
+            }
+            else {
+                this.m_indicatorDiv.hide();
+            }
+
+            // Apply sizes to divs
+            this.m_unitDiv.css( 'position', 'absolute' )
+            .css( 'top', '0px' )
+            .css( 'left', '5px' )
+            .css( 'width', unitDivWidth )
+            .css( 'text-align', 'left' )
+            .html( this.m_options.unit );
+            // Calculate font size
+            InfoWidget.applyFontSize( this.m_unitDiv, unitDivWidth, unitDivHeight );
+
+            this.m_valueDiv.css( 'position', 'absolute' )
+            .css( 'top', '0px' )
+            .css( 'left', ((this.m_options.size.width - valueDivWidth) / 2).toFixed(0) + 'px' )
+            .css( 'width', valueDivWidth )
+            .css( 'text-align', 'center' )
+            .html( this.m_options.value );
+            // Calculate font size (including a border of 5px for left and right)
+            InfoWidget.applyFontSize( this.m_valueDiv, valueDivWidth - 10, valueDivHeight, this.m_options.sizeValue );
+            // Vertically center the text
+            this.m_valueDiv.css( 'margin-top', ((this.m_options.size.height - this.m_valueDiv.height()) / 2).toFixed(0) + 'px' );
+        }
+
+/**
+ * Can be called to update the options for this widget
+ */
+InfoWidget.prototype.setOptions = function( p_options ) {
+            $.extend( this.m_options, p_options );
+        }
 
 /**
  * Add a new sub-info to the InfoWidget
