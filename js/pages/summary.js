@@ -159,8 +159,9 @@ Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
  */
 Summary.prototype.updateDisplayUnits = function() {
             pages.summary.m_speedWidget.setUnit( l10n.speedUnit() );
-            pages.summary.m_distanceWidget.setUnit( l10n.largeUnit );
+            pages.summary.m_distanceWidget.setUnit( l10n.largeUnit() );
             pages.summary.m_altitudeWidget.setUnit( l10n.smallUnit() );
+            pages.summary.m_odometerWidget.setUnit( l10n.largeUnit() + ' (odo)' );
         }
 
 /**
@@ -597,6 +598,9 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                                                                 unit: 'km (odo)',
                                                                 sizeValue: '00000.00'
                                                             } );
+
+            // TODO: Think of something better here
+            InfoWidget.measurementSpan.hide();
 
             // Show initial odo
             pages.summary._updateOdo();
