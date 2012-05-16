@@ -96,41 +96,13 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
             uList.listview( 'refresh' );
 
             // Bind to the click-event of the newly created track entries
-            $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'click', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
+            $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'click', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackClick ) } );
         };
 
-/*Tracks.prototype._refreshTracksEntries = function( entries ) {
-    entries.sort(pages.tracks._trackSort);
-
-    var containerdiv = $( '<div>' );
-    var uList = $( '<ul data-role="listview">' );
-
-    for( var i = 0; i < entries.length; i++ ) {
-        var listItem = $( '<li></li>' );
-        listItem.jqmData( 'fileEntry', entries[i] );
-
-        // Format date-information
-        var timestamp = parseInt( entries[i].name.replace( '.gsc', '' ) );
-        if( isNaN(timestamp) ) continue;
-        var formatDate = new Date();
-        formatDate.setTime(timestamp * 1000);
-        listItem.jqmData( 'displayName', formatDate.format() );
-
-        listItem.append( $('<a href="trackdetail.html"><h3>' + formatDate.format() + '</h3></a>') );
-
-        uList.append( listItem );
-    }
-
-    // Append to page & initialize jQueryMobile content
-    containerdiv.append(uList);
-    $( '#tracks-list-container' ).append( containerdiv );
-    containerdiv.trigger( 'create' );
-
-    // Bind to the click-event of the newly created track entries
-    $('#tracks-list-container').find('li').each( function(index) { $(this).bind( 'click', {fileEntry: $(this).jqmData('fileEntry'), displayName: $(this).jqmData('displayName')}, pages.tracks._trackTap ) } );
-};*/
-
-Tracks.prototype._trackTap = function(event) {
+/**
+ * Called when the user clicks on a track entry
+ */
+Tracks.prototype._trackClick = function(event) {
             pages.trackdetail.setTrack(event.data.fileEntry, event.data.displayName);
         };
 
