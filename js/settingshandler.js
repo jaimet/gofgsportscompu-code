@@ -24,7 +24,7 @@ var SettingsHandler = {
         "minimumaltitudechange" : 3,
         "showdidyouknow" : 'show',
         "licenseagreed" : 0,
-        "language" : navigator.language.substr(0, 2).toLowerCase(),
+        "language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
         "gpsinterval" : 3,			// Interval (in seconds) which is used to receive new GPS position updates
         "autostarttracking" : 1,    // Automatically start tracking once the GPS signal is active
         "trackuploadurl" : "",      // Hardcoded path to track upload-URL
