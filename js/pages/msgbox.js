@@ -50,6 +50,9 @@ MsgBox.prototype.oninit = function() {
  * Function for showing the actual messagebox
  */
 MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
+            // Check if msgbox is already visible
+            if( pages.msgbox.m_prevPage !== null ) return;
+
             pages.msgbox.m_prevPage = $.mobile.activePage;
 
             pages.msgbox.m_text = p_text;
@@ -106,6 +109,7 @@ MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
  */
 MsgBox.prototype._close = function( evt ) {
             $.mobile.changePage( pages.msgbox.m_prevPage );
+            pages.msgbox.m_prevPage = null;
             if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(evt.data);
         }
 

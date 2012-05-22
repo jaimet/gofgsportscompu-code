@@ -24,13 +24,22 @@ Summary.prototype = new Page( "summary" );
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
 Summary.prototype.m_speedTimer = 0;
-Summary.prototype.m_pauseStart = 0;
+Summary.prototype.m_bPauseEnding = false;
 Summary.prototype.m_leftTapHandler = null;
 Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.m_track = null;               // Currently active track
 Summary.prototype.m_trackwriter = null;         // Write for active track
 Summary.prototype.m_powerManagement = null;
+
+// Widgets references
+Summary.prototype.m_odometerWidget = null;
+Summary.prototype.m_clockWidget = null;
+Summary.prototype.m_speedWidget = null;
+Summary.prototype.m_distanceWidget = null;
+Summary.prototype.m_timerWidget = null;
+Summary.prototype.m_altitudeWidget = null;
+Summary.prototype.m_heartrateWidget = null;
 
 Summary.prototype.rightPage = "map.html";
 
@@ -46,49 +55,6 @@ Summary.prototype.oninit = function() {
 
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
         };
-
-/**
- * Enable GPS and start searching for a signal
- */
-Summary.prototype.enableGPSTap = function() {
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'enable' );
-            $( '#right-button' ).button( 'disable' );
-            // Setup click handlers
-            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
-
-            // Switch button display
-            $( '#settings-button' ).hide();
-            $('#summary-page_enableGPS').fadeOut( 250, function() {
-                                                     $('#summary-page_control').fadeIn( 250 );
-                                                 } );
-
-            // Show sat-search message
-            $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
-            $.mobile.showPageLoadingMsg();
-
-            // Disable idle mode
-            pages.summary.m_powerManagement.acquire(
-                        function(){},
-                        function(e){
-                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
-                            pages.summary._stopGPS();
-                        }
-                        );
-
-            // Start GPS
-            GPSHandler.setPositionCallback( pages.summary._gpsFixWait );
-            GPSHandler.setErrorCallback( pages.summary_positionError );
-            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
-
-            // Update accuracy status image
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-
-            // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
-            if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
-                pages.summary._lock();
-            }
-        }
 
 /**
  * Wrapper function(s) for dynamic click handling without having to call live / bind / die / unbind all the time
@@ -118,7 +84,7 @@ Summary.prototype._mainTimer = function() {
  * Called when the speed timeout is reached (resets speed display)
  */
 Summary.prototype._speedTimer = function() {
-            $( '#speed-infopanel' ).infopanel( 'setValue', '0.00' );
+            pages.summary.m_speedWidget.setValue( '0.0' );
         }
 
 /**
@@ -145,18 +111,26 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
             // Update display
-            $( '#speed-infopanel' ).infopanel( 'setValue', (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(2) );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', l10n.largeUnitValue(avgSpeed).toFixed(2), l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(2) );
-            $( '#distance-infopanel' ).infopanel( 'setValue', l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
-            $( '#altitude-infopanel' ).infopanel( 'setValue', l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', currElevation.toFixed(2) + "% / &Oslash; " + avgElevation.toFixed(2) + "%" );
+            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(1) );
+            pages.summary.m_speedWidget.setSubInfo( 0, l10n.largeUnitValue(avgSpeed).toFixed(1) );
+            pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(1) );
+            pages.summary.m_distanceWidget.setValue( l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
+            pages.summary.m_altitudeWidget.setValue( l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
+            pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(2) + '%' );
+            pages.summary.m_altitudeWidget.setSubInfo( 1, avgElevation.toFixed(2) + '%' );
+
+            // Calculate track duration
+            var duration = 0;
             if( p_bLoading ) {
-                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(pages.summary.m_track.getDuration(), true) );
+                duration = pages.summary.m_track.getDuration();
             }
             else {
-                $( '#timer-infopanel' ).infopanel( 'setValue', getFormattedTimeDiff(Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime(), true) );
+                duration = Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime();
             }
+            // Substract pause from total duration
+            duration -= pages.summary.m_track.getPauseTime();
 
+            pages.summary.m_timerWidget.setValue( getFormattedTimeDiff(duration, true) );
         };
 
 /**
@@ -164,25 +138,30 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
  */
 Summary.prototype._updateAccuracy = function( p_averageAccuracy ) {
             var minimumAccuracy = SettingsHandler.get( 'minimumaccuracy' );
+            var imageSrc = 'images/wirelessSignalBad48.png';
 
-            if( p_averageAccuracy <= (minimumAccuracy / 2.0) ) {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalExcellent48.png', 48, 48 );
+            if( p_averageAccuracy < 0 ) {
+                imageSrc = 'images/wirelessSignalOff48.png';
+            }
+            else if( p_averageAccuracy <= (minimumAccuracy / 2.0) ) {
+                imageSrc = 'images/wirelessSignalExcellent48.png';
             }
             else if( p_averageAccuracy <= minimumAccuracy ) {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalGood48.png', 48, 48 );
+                imageSrc = 'images/wirelessSignalGood48.png';
             }
-            else {
-                $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalBad48.png', 48, 48 );
-            }
+
+            // Finally set the new image src
+            $( '#summary-page_signal-strength' ).attr( 'src', imageSrc );
         }
 
 /**
  * Update unit labels based on selected display-units
  */
 Summary.prototype.updateDisplayUnits = function() {
-            $( '#speed-infopanel' ).infopanel( 'setUnit', l10n.speedUnit() );
-            $( '#distance-infopanel' ).infopanel( 'setUnit', l10n.largeUnit() );
-            $( '#altitude-infopanel' ).infopanel( 'setUnit', l10n.smallUnit() );
+            pages.summary.m_speedWidget.setUnit( l10n.speedUnit() );
+            pages.summary.m_distanceWidget.setUnit( l10n.largeUnit() );
+            pages.summary.m_altitudeWidget.setUnit( l10n.smallUnit() );
+            pages.summary.m_odometerWidget.setUnit( l10n.largeUnit() + ' (odo)' );
         }
 
 /**
@@ -197,8 +176,103 @@ Summary.prototype._updateOdo = function( p_distance ) {
             }
             window.localStorage.setItem( "odo", odo );
 
-            $( '#distance-infopanel' ).infopanel( 'setInfo', "odo: " + l10n.largeUnitValue(odo / 1000.0).toFixed(2) + l10n.largeUnit() );
+            pages.summary.m_odometerWidget.setValue( l10n.largeUnitValue(odo / 1000.0).toFixed(2) );
         };
+
+/**
+ * Simple helper function which waits for the first GPS fix and starts the track once called
+ */
+Summary.prototype._gpsFixWait = function( p_position ) {
+            // Reset / hide sat-searching message
+            $.mobile.hidePageLoadingMsg();
+            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+            // Update accuracy display
+            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
+
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'enable' );
+            // Setup click handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+            pages.summary.m_rightTapHandler = pages.summary._startGPS;
+
+            // Disable gpsfixwait callback
+            GPSHandler.setPositionCallback( null );
+
+            // Check if we automatically start tracking
+            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
+                pages.summary._startGPS();
+            }
+        };
+
+/**
+ * Helper function which starts searching for satellites and calls successCallback once we have a GPS lock
+ */
+Summary.prototype._searchForSatellites = function( p_successCallback, p_errorCallback ) {
+            // Define internal success callback
+            var successCallback = function( p_position ) {
+                // Reset / hide sat-searching message
+                $.mobile.hidePageLoadingMsg();
+                $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+                if( typeof p_successCallback === "function" ) p_successCallback( p_position );
+            };
+
+            // Define internal error callback
+            var errorCallback = function( p_error ) {
+                // Reset / hide sat-searching message
+                $.mobile.hidePageLoadingMsg();
+                $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
+
+                if( typeof p_errorCallback === "function" ) p_errorCallback( p_error );
+            }
+
+            // Show sat-search message
+            $.mobile.loadingMessage = $.i18n.prop( "searching_message" );
+            $.mobile.showPageLoadingMsg();
+
+            // Disable idle mode
+            pages.summary.m_powerManagement.acquire(
+                        function(){},
+                        errorCallback
+                        );
+
+            // Start GPS
+            GPSHandler.setPositionCallback( successCallback );
+            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ) );
+        }
+
+/**
+ * Enable GPS and start searching for a signal
+ */
+Summary.prototype.enableGPSTap = function() {
+            // Enable / disable buttons
+            $( '#left-button' ).button( 'enable' );
+            $( '#right-button' ).button( 'disable' );
+            // Setup click handlers
+            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+
+            // Switch button display
+            $( '#settings-button' ).hide();
+            $('#summary-page_enableGPS').fadeOut( 250, function() {
+                                                     $('#summary-page_control').fadeIn( 250 );
+                                                 } );
+
+            // Show accuracy status image
+            $( '#summary-page_signal-strength' ).show();
+
+            // Start searching forsatellites
+            pages.summary._searchForSatellites( pages.summary._gpsFixWait, function( p_error ) {
+                                                   MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                                                   pages.summary._stopGPS();
+                                               } );
+
+            // Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
+            if( SettingsHandler.get( 'autostarttracking' ) > 0 && SettingsHandler.get( 'autolock' ) > 0 ) {
+                pages.summary._lock();
+            }
+        }
 
 /**
  * Button onClick-handler for starting GPS tracking
@@ -246,36 +320,13 @@ Summary.prototype._startGPS = function( p_position ) {
         };
 
 /**
- * Simple helper function which waits for the first GPS fix and starts the track once called
- */
-Summary.prototype._gpsFixWait = function( p_position ) {
-            // Reset / hide sat-searching message
-            $.mobile.loadingMessage = $.i18n.prop( "loading_message" );
-            $.mobile.hidePageLoadingMsg();
-
-            // Update accuracy display
-            pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
-
-            // Enable / disable buttons
-            $( '#left-button' ).button( 'enable' );
-            $( '#right-button' ).button( 'enable' );
-            // Setup click handlers
-            pages.summary.m_leftTapHandler = pages.summary._stopGPS;
-            pages.summary.m_rightTapHandler = pages.summary._startGPS;
-
-            // Disable gpsfixwait callback
-            GPSHandler.setPositionCallback( null );
-
-            // Check if we automatically start tracking
-            if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
-                pages.summary._startGPS();
-            }
-        };
-
-/**
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
+            // Hide accuracy status image & update it
+            $( '#summary-page_signal-strength' ).hide();
+            pages.summary._updateAccuracy( -1 );
+
             // Switch button display
             $('#summary-page_control').fadeOut( 250, function() {
                                                    $('#summary-page_enableGPS').fadeIn( 250 );
@@ -295,9 +346,6 @@ Summary.prototype._stopGPS = function() {
                         function(){},
                         function(e){}
                         );
-
-            // Update accuracy status image
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
 
             // No more actions to take if track didn't start yet
             if( pages.summary.m_track === null ) return;
@@ -331,13 +379,12 @@ Summary.prototype._pause = function() {
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._resume;
 
-            pages.summary.m_pauseStart = ((new Date()).getTime() / 1000).toFixed(0);
             // Stop GPS tracking
             GPSHandler.stopGPS();
             // Disable interface timer
-            if( pages.summary.m_mainTimer != 0 ) clearTimeout(pages.summary.m_mainTimer);
+            if( pages.summary.m_mainTimer !== 0 ) clearTimeout(pages.summary.m_mainTimer);
             pages.summary.m_mainTimer = 0;
-            // Enable suspend again
+            // Enable suspend
             pages.summary.m_powerManagement.release(
                         function(){},
                         function(e){}
@@ -357,25 +404,24 @@ Summary.prototype._resume = function() {
             pages.summary.m_leftTapHandler = pages.summary._stopGPS;
             pages.summary.m_rightTapHandler = pages.summary._pause;
 
-            var pauseEnd = Utilities.getUnixTimestamp();
+            // Pause is ending
+            pages.summary.m_bPauseEnding = true;
 
-            // Start GPS again
-            GPSHandler.startGPS( SettingsHandler.get( 'gpsinterval' ), pages.summary._updatePosition );
-            // Disable suspend
-            pages.summary.m_powerManagement.acquire(
-                        function(){},
-                        function(e){
-                            MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
-                            pages.summary._stopGPS();
-                        }
-                        );
+            // Start searching for GPS signal again
+            pages.summary._searchForSatellites( function( p_position ) {
+                                                   // Setup new position callback
+                                                   GPSHandler.setPositionCallback( pages.summary._updatePosition );
 
-            // Add pause to track
-            pages.summary.m_track.addPause( pages.summary.m_pauseStart, pauseEnd );
-            pages.summary.m_pauseStart = 0;
+                                                   // Call position callback with current position
+                                                   pages.summary._updatePosition( p_position );
 
-            // Start updating our interface
-            pages.summary._mainTimer();
+                                                   // Start updating our interface
+                                                   pages.summary._mainTimer();
+                                               },
+                                               function( p_error ) {
+                                                   MsgBox.show( $.i18n.prop( 'suspend_message_error' ) + e );
+                                                   pages.summary._stopGPS();
+                                               } );
         };
 
 /**
@@ -415,8 +461,9 @@ Summary.prototype._updatePosition = function( p_position ) {
             }
 
             // Update track information
-            pages.summary.m_track.addPosition( p_position, distance );
+            pages.summary.m_track.addPosition( p_position, distance, pages.summary.m_bPauseEnding );
             pages.summary.m_trackwriter.writeWaypoint();
+            pages.summary.m_bPauseEnding = false;
 
             // Handle speed timeout
             if( pages.summary.m_speedTimer != 0 ) {
@@ -432,7 +479,7 @@ Summary.prototype._updatePosition = function( p_position ) {
 /**
  * Called by the GPSHandler if there was an error
  */
-Summary.prototype_positionError = function( p_positionError ) {
+Summary.prototype._positionError = function( p_positionError ) {
             MsgBox.show( $.i18n.prop( 'position_message_error' ) + p_positionError.message + " (" + p_positionError.code + ")" );
         }
 
@@ -440,7 +487,7 @@ Summary.prototype_positionError = function( p_positionError ) {
  * Updates the clock (called once a minute)
  */
 Summary.prototype._updateClock = function() {
-            $( '#clock-infopanel' ).infopanel( 'setValue', formatDate( new Date() ) );
+            pages.summary.m_clockWidget.setValue( formatDate( new Date() ) );
             setTimeout( "pages.summary._updateClock()", 60000 );
         };
 
@@ -490,77 +537,85 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
             // Apply layout to all info-panels
-            var rowHeight = (pages.summary.m_contentHeight / 7).toFixed(0);
+            var rowHeight = (pages.summary.m_contentHeight / 5).toFixed(0);
 
-            // Speed infopanel
-            $( '#speed-infopanel' ).infopanel( {
-                                                  'value' : '0.00',
-                                                  'maxSizeValue' : '000.00',
-                                                  'size' : { 'width' : 'auto', 'height' : rowHeight * 3 },
-                                                  'image' : 'images/gowebsite24.png',
-                                                  'unit' : 'km/h',
-                                                  'showStatistics' : true
-                                              } );
-            $( '#speed-infopanel' ).infopanel( 'setStatistics', "0.00", "0.00" );
+            // Create speed widget
+            pages.summary.m_speedWidget = new InfoWidget( 'speed-infowidget', {
+                                                 value: '0.0',
+                                                 size: { width: 'auto', height: rowHeight },
+                                                 unit: 'km/h',
+                                                 sizeValue: '000.0',
+                                                 showIndicator: true
+                                             } );
+            pages.summary.m_speedWidget.addSubInfo( 'avg:', '0.0', '000.0' );
+            pages.summary.m_speedWidget.addSubInfo( 'max:', '0.0', '000.0' );
 
-            // Distance infopanel
-            $( '#distance-infopanel' ).infopanel( {
-                                                     'value' : '0.00',
-                                                     'maxSizeValue' : '000.00',
-                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 3 },
-                                                     'image' : 'images/web24.png',
-                                                     'unit' : 'km',
-                                                     'showStatistics' : true
+            // Create distance widget
+            pages.summary.m_distanceWidget = new InfoWidget( 'distance-infowidget', {
+                                                    value: '0.00',
+                                                    size: { width: 'auto', height: rowHeight },
+                                                    unit: 'km',
+                                                    sizeValue: '0000.00'
+                                                } );
+
+            pages.summary.m_timerWidget = new InfoWidget( 'timer-infowidget', {
+                                                 value: '00:00:00',
+                                                 size: { width: 'auto', height: rowHeight },
+                                                 unit: 'hh:mm:ss'
+                                             } );
+
+            pages.summary.m_altitudeWidget = new InfoWidget( 'altitude-infowidget', {
+                                                    value: '0.00',
+                                                    size: { width: 'auto', height: rowHeight },
+                                                    unit: 'm',
+                                                    sizeValue: '0000.00',
+                                                    showSubInfos: true
+                                                } );
+            pages.summary.m_altitudeWidget.addSubInfo( 'curr:',  '0%', '00%' );
+            pages.summary.m_altitudeWidget.addSubInfo( 'avg:', '0%', '00%' );
+
+            pages.summary.m_heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
+                                                     value: '0',
+                                                     size: { width: 'auto', height: rowHeight },
+                                                     unit: 'bpm',
+                                                     sizeValue: '000',
+                                                     showSubInfos: true
                                                  } );
+            pages.summary.m_heartrateWidget.addSubInfo( 'avg:', '0', '000' );
+            pages.summary.m_heartrateWidget.addSubInfo( 'max:', '0', '000' );
+
+            pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
+                                                             value: '00:00',
+                                                             size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                             unit: 'hh:mm',
+                                                             sizeValue: '00:00'
+                                                         } );
+
+            // Create widget for odo-meter display
+            pages.summary.m_odometerWidget = new InfoWidget( 'odometer-infowidget', {
+                                                                value: '0.0',
+                                                                size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                                unit: 'km (odo)',
+                                                                sizeValue: '00000.00'
+                                                            } );
+
+            // TODO: Think of something better here
+            InfoWidget.measurementSpan.hide();
+
             // Show initial odo
             pages.summary._updateOdo();
 
-            // Altitude infopanel
-            $( '#altitude-infopanel' ).infopanel( {
-                                                     'value' : '0.0',
-                                                     'maxSizeValue' : '00000.0',
-                                                     'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-                                                     'image' : 'images/pictures24.png',
-                                                     'unit' : 'm',
-                                                     'showStatistics' : true
-                                                 } );
-            $( '#altitude-infopanel' ).infopanel( 'setInfo', "0.00% / &Oslash; 0.00%" );
-
-            // Status infopanel
-            $( '#status-infopanel' ).infopanel( {
-                                                   'value' : '-',
-                                                   'maxSizeValue' : '000_/_000',
-                                                   'size' : { 'width' : 'auto', 'height' : rowHeight * 2 },
-                                                   'image' : 'images/find24.png',
-                                                   'unit' : 'Accuracy'
-                                               } );
-            $( '#status-infopanel' ).infopanel( 'setValueImage', 'images/wirelessSignalOff48.png', 48, 48 );
-
-            // Timer infopanel
-            $( '#timer-infopanel' ).infopanel( {
-                                                  'value' : '00:00:00',
-                                                  'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 5 * rowHeight) },
-                                                  'image' : 'images/timer24.png',
-                                                  'unit' : 'hh:mm:ss'
-                                              } );
-
-            // Clock infopanel
-            $( '#clock-infopanel' ).infopanel( {
-                                                  'value' : '00:00',
-                                                  'size' : { 'width' : 'auto', 'height' : (pages.summary.m_contentHeight - 5 * rowHeight) },
-                                                  'image' : 'images/clock24.png',
-                                                  'unit' : 'hh:mm'
-                                              } );
-
             // Add clock timer
             pages.summary._updateClock();
-            $( '#stop-button' ).button( 'disable' );
 
             // Fix page height
             $( '#summary-page' ).height( $(window).height() );
 
             // Update display units
             pages.summary.updateDisplayUnits();
+
+            // Register error callback for GPSHandler
+            GPSHandler.setErrorCallback( pages.summary._positionError );
         };
 
 new Summary();

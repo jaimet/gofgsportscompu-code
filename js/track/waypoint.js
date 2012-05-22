@@ -29,3 +29,4 @@ Waypoint.prototype.m_heartrate = 0;     // Current heart-rate of this point
 Waypoint.prototype.m_distance = 0;      // Distance to previous waypoint
 Waypoint.prototype.m_altitudeDiff = 0;  // Altitude diff to last waypoint
 Waypoint.prototype.m_timestamp = 0;     // Unix-Timestamp of creation-date
+Waypoint.prototype.m_bPauseEnd = false; // This waypoint is the end of a pause (pause between last and this waypoint)

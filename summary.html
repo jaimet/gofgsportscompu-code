@@ -1,34 +1,41 @@
 <!-- Summary page -->
 <div data-role="page" id="summary-page">
-	<!-- /header -->
+    <!-- /header -->
 	<div data-role="header" id="summary-page_header">
-		<img src="images/gofgEmblem85x30.png" style="position: absolute; left: 10px; top: 2px;">
+                <img src="images/gofgEmblem85x30.png" style="position: absolute; left: 10px; top: 2px;" />
 		<h1 data-i18n="summary"></h1>
+                <img id="summary-page_signal-strength" src="images/wirelessSignalOff48.png" style="position: absolute; right: 10px; top: 2px; height: 30px; width: 30px; display: none;" />
                 <a id="settings-button" href="settings.html" data-icon="grid" class="ui-btn-right" data-i18n="menu"></a>
 	</div>
 
 	<!-- /content -->
-	<div data-role="content">
-		<div class="ui-grid-a">
-			<div class="ui-block-a">
-                                <div id="speed-infopanel" class="ui-corner-tl"></div>
-			</div>
-			<div class="ui-block-b">
-                                <div id="distance-infopanel" class="ui-corner-tr"></div>
-			</div>
-			<div class="ui-block-a">
-				<div id="altitude-infopanel"></div>
-			</div>
-			<div class="ui-block-b">
-				<div id="status-infopanel"></div>
-			</div>
-			<div class="ui-block-a">
-                                <div id="timer-infopanel" class="ui-corner-bl"></div>
-			</div>
-			<div class="ui-block-b">
-                                <div id="clock-infopanel" class="ui-corner-br"></div>
-			</div>
-		</div>
+        <div data-role="content" style="padding: 5px; padding-bottom: 0px;">
+                <div class="ui-block">
+                        <div id="speed-infowidget" class="ui-corner-tl ui-corner-tr"></div>
+                </div>
+                <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                                <div id="distance-infowidget"></div>
+                        </div>
+                        <div class="ui-block-b">
+                                <div id="timer-infowidget"></div>
+                        </div>
+                </div>
+                <div class="ui-block">
+                                <div id="altitude-infowidget"></div>
+                </div>
+                <div class="ui-block">
+                                <div id="heartrate-infowidget"></div>
+                </div>
+                <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                                <div id="clock-infowidget" class="ui-corner-bl"></div>
+                        </div>
+                        <div class="ui-block-b">
+                                <div id="odometer-infowidget" class="ui-corner-br"></div>
+                        </div>
+                </div>
+
                 <div data-role="controlgroup" id="summary-page_enableGPS" style="margin-bottom: 0.25em; margin-top: 0.25em;">
                     <input id="enableGPS-button" type="button" value="" data-i18n="start" data-icon="" data-theme="f" />
                 </div>
@@ -42,3 +49,4 @@
 		</div>
         </div>
 </div>
+

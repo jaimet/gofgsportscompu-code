@@ -67,5 +67,5 @@ var Translator = {
 					}
 				}
 			});
-		},
+		}
 };
