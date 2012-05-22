@@ -31,7 +31,8 @@ var SettingsHandler = {
         "authkey" : "",             // Key for authentication against the GOFG system
         "autolock" : 1,             // Automatically lock screen once tracking has started
         "displayunits" : 1,         // Unit(s) to use for displaying values
-        "uploadagree_2" : 0         // Agreed to the upload agreement
+        "uploadagree_2" : 0,        // Agreed to the upload agreement
+        "enablehrm" : 0            // Enable heart rate monitor
     },
     m_settingsFileEntry : null,
     onload : function() {},			// Called when the settings have been loaded

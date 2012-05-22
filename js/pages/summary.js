@@ -536,8 +536,10 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight( true );
             pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
+            var rowDivider = (SettingsHandler.get( 'enablehrm' )) ? 5 : 4;
+
             // Apply layout to all info-panels
-            var rowHeight = (pages.summary.m_contentHeight / 5).toFixed(0);
+            var rowHeight = (pages.summary.m_contentHeight / rowDivider).toFixed(0);
 
             // Create speed widget
             pages.summary.m_speedWidget = new InfoWidget( 'speed-infowidget', {
@@ -584,9 +586,14 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_heartrateWidget.addSubInfo( 'avg:', '0', '000' );
             pages.summary.m_heartrateWidget.addSubInfo( 'max:', '0', '000' );
 
+            // Hide HRM widget if not enabled
+            if( !SettingsHandler.get( 'enablehrm' ) ) {
+                $( '#heartrate-infowidget' ).hide();
+            }
+
             pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
                                                              value: '00:00',
-                                                             size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                             size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * (rowDivider - 1) },
                                                              unit: 'hh:mm',
                                                              sizeValue: '00:00'
                                                          } );
@@ -594,7 +601,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             // Create widget for odo-meter display
             pages.summary.m_odometerWidget = new InfoWidget( 'odometer-infowidget', {
                                                                 value: '0.0',
-                                                                size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * 4 },
+                                                                size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * (rowDivider - 1) },
                                                                 unit: 'km (odo)',
                                                                 sizeValue: '00000.00'
                                                             } );
