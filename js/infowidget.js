@@ -38,17 +38,6 @@ function InfoWidget( p_targetDiv, p_options ) {
     this.m_targetDiv = $( '#' + p_targetDiv );
     this.m_targetDiv.css( 'position', 'relative' ).addClass( 'ui-bar-c' );
 
-    // Check for auto-width
-    if( this.m_options.size.width === 'auto' ) this.m_options.size.width = this.m_targetDiv.width();
-
-    // Adjust size values
-    this.m_classBorder = parseInt(this.m_targetDiv.outerHeight( true ) - this.m_targetDiv.height());
-    this.m_options.size.width -= this.m_classBorder;
-    this.m_options.size.height -= this.m_classBorder;
-
-    // Apply basic layout
-    this.m_targetDiv.height( this.m_options.size.height + 'px' );
-
     // Create all the internal display divs ..
     this.m_unitDiv = $( '<div>' );
     this.m_valueDiv = $( '<div>' );
@@ -77,7 +66,7 @@ InfoWidget.defaultOptions = {
     showIndicator: false,
     showSubInfos: false,
     sizeValue: null,
-    size : { width : 'auto', height : 120 }
+    size : { width : 'auto', height : 'auto' }
 };
 
 // Helper-Span used for auto-sizing the font
@@ -98,6 +87,17 @@ InfoWidget.prototype.m_classBorder = 0;
  * Automatically size all elements of the widget so that they fit the defined space
  */
 InfoWidget.prototype.autoSize = function() {
+            // Check for auto-width
+            if( this.m_options.size.width === 'auto' ) this.m_options.size.width = this.m_targetDiv.width();
+
+            // Adjust size values
+            this.m_classBorder = parseInt(this.m_targetDiv.outerHeight( true ) - this.m_targetDiv.height());
+            this.m_options.size.width -= this.m_classBorder;
+            this.m_options.size.height -= this.m_classBorder;
+
+            // Apply basic layout
+            this.m_targetDiv.height( this.m_options.size.height + 'px' );
+
             // Calculate sizes for internal display divs
             var unitDivWidth = this.m_options.size.width;
             var unitDivHeight = (this.m_options.size.height * 0.25).toFixed(0);
@@ -154,60 +154,18 @@ InfoWidget.prototype.autoSize = function() {
             InfoWidget.applyFontSize( this.m_valueDiv, valueDivWidth - 10, valueDivHeight, this.m_options.sizeValue );
             // Vertically center the text
             this.m_valueDiv.css( 'margin-top', ((this.m_options.size.height - this.m_valueDiv.height()) / 2).toFixed(0) + 'px' );
-        }
-
-/**
- * Can be called to update the options for this widget
- */
-InfoWidget.prototype.setOptions = function( p_options ) {
-            $.extend( this.m_options, p_options );
-        }
-
-/**
- * Add a new sub-info to the InfoWidget
- */
-InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
-            if( typeof p_sizeValue === "undefined" ) p_sizeValue = p_value;
-
-            var infoWidth = this.m_options.size.width * 0.30;
-
-            var infoLabelDiv = $( '<div>' );
-            infoLabelDiv.css( 'position', 'absolute' )
-            .css( 'left', '0px' )
-            .css( 'top', '0px' )
-            .css( 'text-align', 'right' )
-            .width( infoWidth * 0.45 )
-            .html( p_label );
-
-            var infoValueDiv = $( '<div>' );
-            infoValueDiv.css( 'position', 'absolute' )
-            .css( 'right', '0px' )
-            .css( 'top', '0px' )
-            .css( 'text-align', 'right' )
-            .css( 'padding-right', infoWidth * 0.1 )
-            .width( infoWidth * 0.45 )
-            .html( p_value );
-
-            // Create main div
-            var infoDiv = $( '<div>' );
-            infoDiv.css( 'position', 'absolute' )
-            .css( 'right', '0px'  )
-            .width( infoWidth )
-            .jqmData( 'sizeValue', p_sizeValue )
-            .jqmData( 'label', infoLabelDiv )
-            .jqmData( 'value', infoValueDiv )
-            .append( infoLabelDiv )
-            .append( infoValueDiv );
-
-            // Append to target & save in internal memory
-            this.m_targetDiv.append(infoDiv);
-            this.m_infoDivs.push( infoDiv );
 
             // Re-position all infoDivs & calculate smallest font-size
             var divHeight = (this.m_options.size.height / this.m_infoDivs.length).toFixed(0);
+            var infoWidth = this.m_options.size.width * 0.30;
             var fontSize = -1;
             $( this.m_infoDivs ).each( function(index, value) {
-                                          value.css( 'top', (divHeight * index) + 'px' );
+                                          value.css( 'top', (divHeight * index) + 'px' )
+                                          .width( infoWidth );
+
+                                          value.jqmData('label').width( infoWidth * 0.45 );
+                                          value.jqmData('value').css( 'padding-right', infoWidth * 0.1 )
+                                          .width( infoWidth * 0.45 );
 
                                           var currFontSize = InfoWidget.applyFontSize(
                                                       value.jqmData( 'value' ),
@@ -227,6 +185,49 @@ InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
                                           value.css( 'font-size', fontSize + 'px' );
                                           value.css( 'margin-top', ((divHeight - value.jqmData( 'value' ).height()) / 2.0).toFixed(0) + 'px' );
                                       } );
+
+        }
+
+/**
+ * Can be called to update the options for this widget
+ */
+InfoWidget.prototype.setOptions = function( p_options ) {
+            $.extend( this.m_options, p_options );
+        }
+
+/**
+ * Add a new sub-info to the InfoWidget
+ */
+InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
+            if( typeof p_sizeValue === "undefined" ) p_sizeValue = p_value;
+
+            var infoLabelDiv = $( '<div>' );
+            infoLabelDiv.css( 'position', 'absolute' )
+            .css( 'left', '0px' )
+            .css( 'top', '0px' )
+            .css( 'text-align', 'right' )
+            .html( p_label );
+
+            var infoValueDiv = $( '<div>' );
+            infoValueDiv.css( 'position', 'absolute' )
+            .css( 'right', '0px' )
+            .css( 'top', '0px' )
+            .css( 'text-align', 'right' )
+            .html( p_value );
+
+            // Create main div
+            var infoDiv = $( '<div>' );
+            infoDiv.css( 'position', 'absolute' )
+            .css( 'right', '0px'  )
+            .jqmData( 'sizeValue', p_sizeValue )
+            .jqmData( 'label', infoLabelDiv )
+            .jqmData( 'value', infoValueDiv )
+            .append( infoLabelDiv )
+            .append( infoValueDiv );
+
+            // Append to target & save in internal memory
+            this.m_targetDiv.append(infoDiv);
+            this.m_infoDivs.push( infoDiv );
 
             return this.m_infoDivs.length;
         }

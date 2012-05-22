@@ -52,6 +52,7 @@ Settings.prototype._save = function() {
             SettingsHandler.set( 'authkey', $( '#settings-page' ).find( '#authKeyInput' ).val() );
             SettingsHandler.set( 'autolock', $( '#settings-page' ).find( '#autolockSlider' ).val() );
             SettingsHandler.set( 'displayunits', $( '#settings-page' ).find( '#displayUnitSelect' ).val() );
+            SettingsHandler.set( 'enablehrm', $( '#settings-page' ).find( '#enablehrmSlider' ).val() );
             SettingsHandler._save();
 
             // Init re-translation
@@ -97,6 +98,7 @@ Settings.prototype._pagebeforeshow = function( p_event, p_ui ) {
             $( '#settings-page' ).find( '#authKeyInput' ).val(SettingsHandler.get( 'authkey' ));
             $( '#settings-page' ).find( '#autolockSlider' ).slider( 'refresh', SettingsHandler.get( 'autolock' ) );
             $( '#settings-page' ).find( '#displayUnitSelect' ).val( SettingsHandler.get( 'displayunits' ) ).selectmenu( 'refresh' );
+            $( '#settings-page' ).find( '#enablehrmSlider' ).slider( 'refresh', SettingsHandler.get( 'enablehrm' ) );
             // Setup page layout
             $( '#settings-page' ).find( '#settings-save-button' ).hide();
             $( '#settings-page' ).find( '#settings-odoReset-button' ).show();
