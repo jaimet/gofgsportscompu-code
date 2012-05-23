@@ -127,8 +127,7 @@ InfoWidget.prototype.autoSize = function() {
                 this.m_indicatorDiv.css( 'margin-top', ((this.m_options.size.height - unitDivHeight - this.m_indicatorDiv.height()) / 2).toFixed(0) + 'px' );
 
                 // Initial indicator-arrow setup
-                this.m_indicatorUp.hide();
-                this.m_indicatorDown.hide();
+                this.setIndicator( false, false );
             }
             else {
                 this.m_indicatorDiv.hide();
@@ -250,17 +249,17 @@ InfoWidget.prototype.setIndicator = function( p_up, p_down ) {
 
             // Update indicator display
             if( p_up ) {
-                this.m_indicatorUp.show();
+                this.m_indicatorUp.css( 'visibility', 'visible' );
             }
             else {
-                this.m_indicatorUp.hide();
+                this.m_indicatorUp.css( 'visibility', 'hidden' );
             }
             // Update indicator display
             if( p_down ) {
-                this.m_indicatorDown.show();
+                this.m_indicatorDown.css( 'visibility', 'visible' );
             }
             else {
-                this.m_indicatorDown.hide();
+                this.m_indicatorDown.css( 'visibility', 'hidden' );
             }
         }
 

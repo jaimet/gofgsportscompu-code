@@ -90,9 +90,9 @@ Summary.prototype.oninit = function() {
 
             // Create altitude widget
             pages.summary.m_altitudeWidget = new InfoWidget( 'altitude-infowidget', {
-                                                    value: '0.00',
+                                                    value: '0.0',
                                                     unit: 'm',
-                                                    sizeValue: '0000.00',
+                                                    sizeValue: '0000.0',
                                                     showSubInfos: true
                                                 } );
             pages.summary.m_altitudeWidget.addSubInfo( 'curr:',  '0%', '00%' );
@@ -119,11 +119,11 @@ Summary.prototype.oninit = function() {
             pages.summary.m_odometerWidget = new InfoWidget( 'odometer-infowidget', {
                                                                 value: '0.0',
                                                                 unit: 'km (odo)',
-                                                                sizeValue: '00000.00'
+                                                                sizeValue: '00000.0'
                                                             } );
 
             // Add clock timer
-            pages.summary._updateClock();
+            setInterval( "pages.summary._updateClock()", 60000 );
         };
 
 /**
@@ -173,6 +173,7 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
 
             // Calculate average speed
             var avgSpeed = pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6;
+            var currSpeed = coords.speed * 3.6;
             if( isNaN(avgSpeed) ) avgSpeed = 0.00;
             // Current & average elevation rate
             var currElevation = waypoint.m_altitudeDiff / waypoint.m_distance * 100;
@@ -181,9 +182,10 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             if( isNaN(avgElevation) ) avgElevation = 0.00;
 
             // Update display
-            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(coords.speed * 3.6)).toFixed(1) );
+            pages.summary.m_speedWidget.setValue( (l10n.largeUnitValue(currSpeed)).toFixed(1) );
             pages.summary.m_speedWidget.setSubInfo( 0, l10n.largeUnitValue(avgSpeed).toFixed(1) );
             pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(1) );
+            pages.summary.m_speedWidget.setIndicator( currSpeed > avgSpeed, currSpeed < avgSpeed );
             pages.summary.m_distanceWidget.setValue( l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             pages.summary.m_altitudeWidget.setValue( l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
             pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(0) + '%' );
@@ -246,7 +248,7 @@ Summary.prototype._updateOdo = function( p_distance ) {
             }
             window.localStorage.setItem( "odo", odo );
 
-            pages.summary.m_odometerWidget.setValue( l10n.largeUnitValue(odo / 1000.0).toFixed(2) );
+            pages.summary.m_odometerWidget.setValue( l10n.largeUnitValue(odo / 1000.0).toFixed(1) );
         };
 
 /**
@@ -558,7 +560,6 @@ Summary.prototype._positionError = function( p_positionError ) {
  */
 Summary.prototype._updateClock = function() {
             pages.summary.m_clockWidget.setValue( formatDate( new Date() ) );
-            setTimeout( "pages.summary._updateClock()", 60000 );
         };
 
 /**
@@ -608,8 +609,6 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             var gofgEmblemHeight = $('#summary-page > [data-role="header"]').outerHeight( true ) - 4;
             $( '#summary-page_gofgEmblem' ).height( gofgEmblemHeight ).width( gofgEmblemHeight * gofgEmblemRatio );
 
-            console.log( 'Height: ' + gofgEmblemHeight );
-
             // Calculate available height for each row
             var rowDivider = (SettingsHandler.getInt( 'enablehrm' )) ? 5 : 4;
             var rowHeight = (pages.summary.m_contentHeight / rowDivider).toFixed(0);
@@ -647,6 +646,9 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             // Update odometer & display units
             pages.summary._updateOdo();
             pages.summary.updateDisplayUnits();
+
+            // Update clock
+            pages.summary._updateClock();
         };
 
 new Summary();
