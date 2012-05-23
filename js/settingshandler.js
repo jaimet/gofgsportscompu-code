@@ -20,8 +20,8 @@
 var SettingsHandler = {
     m_appDirectoryEntry : null,
     m_settingsStore : {
-        "minimumaccuracy" : 25,
-        "minimumaltitudechange" : 3,
+        "minimumaccuracy" : 15,
+        "minimumaltitudechange" : 5,
         "showdidyouknow" : 'show',
         "licenseagreed" : 0,
         "language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
