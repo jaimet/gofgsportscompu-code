@@ -238,7 +238,7 @@ InfoWidget.prototype.addSubInfo = function( p_label, p_value, p_sizeValue ) {
 InfoWidget.prototype.setSubInfo = function( p_index, p_value ) {
             if( p_index >= this.m_infoDivs.length ) return;
 
-            $(this.m_infoDivs[p_index].find( 'td' ).get(1)).html( p_value );
+            this.m_infoDivs[p_index].jqmData( 'value' ).html( p_value );
         }
 
 /**
