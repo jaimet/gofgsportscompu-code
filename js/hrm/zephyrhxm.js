@@ -75,6 +75,8 @@ ZephyrHxM.prototype.listDevices = function( p_successCallback, p_errorCallback )
  * p_errorCallback gets passed an error message
  */
 ZephyrHxM.prototype.connect = function( p_successCallback, p_errorCallback, p_deviceId ) {
+            var me = this;
+
             if( this.m_connectId !== null ) {
                 if( typeof p_errorCallback === 'function' ) p_errorCallback();
             }
@@ -86,16 +88,21 @@ ZephyrHxM.prototype.connect = function( p_successCallback, p_errorCallback, p_de
                                                     }
 
                                                     // Connect to the given endpoint
-                                                    this.m_bluetoothPlugin.connect( function( p_socketid ) {
-                                                                                       this.m_connectId = p_deviceId;
+                                                    me.m_bluetoothPlugin.connect( function( p_socketid ) {
+                                                                                     me.m_connectId = p_deviceId;
 
-                                                                                       // TODO: Continue here
-                                                                                   },
-                                                                                   p_errorCallback,
-                                                                                   p_deviceId,
-                                                                                   p_uuids[0] );
+                                                                                     me.read( me._read, p_errorCallback, p_socketid );
+
+                                                                                     // TODO: Continue here
+                                                                                 },
+                                                                                 p_errorCallback,
+                                                                                 p_deviceId,
+                                                                                 p_uuids[0] );
                                                 },
                                                 p_errorCallback,
                                                 p_deviceId );
             }
+        };
+
+ZephyrHxM.prototype._read = function( p_data ) {
         };
