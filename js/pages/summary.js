@@ -53,8 +53,18 @@ Summary.prototype.oninit = function() {
             // Setup default click handler
             pages.summary.m_middleTapHandler = pages.summary._lock;
 
+            // Register event handler for pageshow event
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 
+            // Fetch reference to powermanagement object
+            pages.summary.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugin/powermanagement');
+
+            // Register error callback for GPSHandler
+            GPSHandler.setErrorCallback( pages.summary._positionError );
+
+            /**
+             * Create all widgets for our interface
+             */
             // Create speed widget
             pages.summary.m_speedWidget = new InfoWidget( 'speed-infowidget', {
                                                  value: '0.0',
@@ -72,11 +82,13 @@ Summary.prototype.oninit = function() {
                                                     sizeValue: '0000.00'
                                                 } );
 
+            // Create timer widget
             pages.summary.m_timerWidget = new InfoWidget( 'timer-infowidget', {
                                                  value: '00:00:00',
                                                  unit: 'hh:mm:ss'
                                              } );
 
+            // Create altitude widget
             pages.summary.m_altitudeWidget = new InfoWidget( 'altitude-infowidget', {
                                                     value: '0.00',
                                                     unit: 'm',
@@ -86,6 +98,7 @@ Summary.prototype.oninit = function() {
             pages.summary.m_altitudeWidget.addSubInfo( 'curr:',  '0%', '00%' );
             pages.summary.m_altitudeWidget.addSubInfo( 'avg:', '0%', '00%' );
 
+            // Create heartrate widget
             pages.summary.m_heartrateWidget = new InfoWidget( 'heartrate-infowidget', {
                                                      value: '0',
                                                      unit: 'bpm',
@@ -95,6 +108,7 @@ Summary.prototype.oninit = function() {
             pages.summary.m_heartrateWidget.addSubInfo( 'avg:', '0', '000' );
             pages.summary.m_heartrateWidget.addSubInfo( 'max:', '0', '000' );
 
+            // Create clock widget
             pages.summary.m_clockWidget = new InfoWidget( 'clock-infowidget', {
                                                              value: '00:00',
                                                              unit: 'hh:mm',
@@ -108,8 +122,8 @@ Summary.prototype.oninit = function() {
                                                                 sizeValue: '00000.00'
                                                             } );
 
-            // Register error callback for GPSHandler
-            GPSHandler.setErrorCallback( pages.summary._positionError );
+            // Add clock timer
+            pages.summary._updateClock();
         };
 
 /**
@@ -172,8 +186,8 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
             pages.summary.m_speedWidget.setSubInfo( 1, l10n.largeUnitValue(pages.summary.m_track.getMaximumSpeed() * 3.6).toFixed(1) );
             pages.summary.m_distanceWidget.setValue( l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2) );
             pages.summary.m_altitudeWidget.setValue( l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1) );
-            pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(2) + '%' );
-            pages.summary.m_altitudeWidget.setSubInfo( 1, avgElevation.toFixed(2) + '%' );
+            pages.summary.m_altitudeWidget.setSubInfo( 0, currElevation.toFixed(0) + '%' );
+            pages.summary.m_altitudeWidget.setSubInfo( 1, avgElevation.toFixed(0) + '%' );
 
             // Calculate track duration
             var duration = 0;
@@ -579,11 +593,8 @@ Summary.prototype.loadTrack = function( p_fileEntry ) {
  * Invoked on first display to size & configure all the display panels
  */
 Summary.prototype._pageshow = function( p_event, p_ui ) {
-            // Fetch reference to powermanagement object
-            pages.summary.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugin/powermanagement');
-
-            // Remove init handler
-            //$( '#summary-page' ).die( 'pageshow', pages.summary._pageshow );
+            // Set fixed page height
+            $( '#summary-page' ).height( $(window).height() );
 
             // Calculate available height for content
             pages.summary.m_contentHeight = $(window).height();
@@ -592,10 +603,10 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight( true );
             pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
+            // Calculate available height for each row
             var rowDivider = (SettingsHandler.getInt( 'enablehrm' )) ? 5 : 4;
-
-            // Apply layout to all info-panels
             var rowHeight = (pages.summary.m_contentHeight / rowDivider).toFixed(0);
+
             // Hide HRM widget if not enabled
             if( !SettingsHandler.getInt( 'enablehrm' ) ) {
                 $( '#heartrate-infowidget' ).hide();
@@ -604,6 +615,7 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
                 $( '#heartrate-infowidget' ).show();
             }
 
+            // Show measurement-span of infowidget class
             InfoWidget.measurementSpan.show();
 
             // Adjust infowidget sizes
@@ -622,18 +634,11 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_odometerWidget.setOptions( { size: { width: 'auto', height: pages.summary.m_contentHeight - rowHeight * (rowDivider - 1) } } );
             pages.summary.m_odometerWidget.autoSize();
 
+            // Hide the info widget
             InfoWidget.measurementSpan.hide();
 
-            // Show initial odo
+            // Update odometer & display units
             pages.summary._updateOdo();
-
-            // Add clock timer
-            pages.summary._updateClock();
-
-            // Fix page height
-            $( '#summary-page' ).height( $(window).height() );
-
-            // Update display units
             pages.summary.updateDisplayUnits();
         };
 
