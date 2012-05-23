@@ -57,7 +57,7 @@ Summary.prototype.oninit = function() {
             $( '#summary-page' ).live( 'pageshow', pages.summary._pageshow );
 
             // Fetch reference to powermanagement object
-            pages.summary.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement :  cordova.require('cordova/plugin/powermanagement');
+            pages.summary.m_powerManagement = (typeof window.plugins.PowerManagement !== "undefined" ) ? window.plugins.PowerManagement : cordova.require('cordova/plugin/powermanagement');
 
             // Register error callback for GPSHandler
             GPSHandler.setErrorCallback( pages.summary._positionError );

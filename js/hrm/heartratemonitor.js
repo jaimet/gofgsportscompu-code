@@ -20,8 +20,7 @@
 /**
  * Base class for a heart-rate monitor
  */
-function HeartRateMonitor() {
-}
+function HeartRateMonitor() {}
 
 HeartRateMonitor.prototype.m_connectId = null;                  // Internal variable to handle the currently connected device
 HeartRateMonitor.prototype.m_HeartRateMonitorCallback = null;   // Storage for hrm-callback
