@@ -603,6 +603,13 @@ Summary.prototype._pageshow = function( p_event, p_ui ) {
             pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight( true );
             pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight( true );
 
+            // Fit the GOFG logo into the header bar
+            var gofgEmblemRatio = 110.0 / 39.0;
+            var gofgEmblemHeight = $('#summary-page > [data-role="header"]').outerHeight( true ) - 4;
+            $( '#summary-page_gofgEmblem' ).height( gofgEmblemHeight ).width( gofgEmblemHeight * gofgEmblemRatio );
+
+            console.log( 'Height: ' + gofgEmblemHeight );
+
             // Calculate available height for each row
             var rowDivider = (SettingsHandler.getInt( 'enablehrm' )) ? 5 : 4;
             var rowHeight = (pages.summary.m_contentHeight / rowDivider).toFixed(0);
