@@ -337,6 +337,7 @@ Summary.prototype.enableGPSTap = function() {
 	
 	// Check if user has a HRM selected
 	var hrmType = SettingsHandler.getInt( 'hrmtype' );
+	console.log( "hrmType: " + hrmType );
 	if( hrmType > 0 ) {
 		var hrmImplementation = null;
 		
@@ -352,6 +353,7 @@ Summary.prototype.enableGPSTap = function() {
 				alert( 'New HRM: ' + p_hrm );
 			} );
 			hrmImplementation.listDevices( function( p_devices ) {
+				console.log( 'Found devices: ' + p_devices );
 				if( p_devices.length > 0 ) {
 					var device = p_devices[0];
 					

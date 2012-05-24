@@ -55,7 +55,7 @@ ZephyrHxM.prototype.listDevices = function(p_successCallback) {
 	// Discover all bluetooth devices
 	this.m_bluetoothPlugin.discoverDevices(function(p_devices) {
 		var foundDevices = [];
-
+		
 		// Cycle through discovered devices and check for HxM devices
 		for ( var i = 0; i < p_devices.length; i++) {
 			var currDevice = p_devices[i];

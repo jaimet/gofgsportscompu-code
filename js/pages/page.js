@@ -41,6 +41,7 @@ Page.prototype.leftPage = null;
 Page.prototype.rightPage = null;
 Page.prototype.name = "";
 Page.prototype.oninit = null;	// Hook for sub-classes to run additional code during init
+Page.prototype.oncreate = null;	// Hook for sub-classes to run additional code during create
 
 /**
  * Automatically called when the page is created
@@ -48,6 +49,8 @@ Page.prototype.oninit = null;	// Hook for sub-classes to run additional code dur
 Page.prototype.create = function() {
     // Register for translation
     Translator.register( $('#' + this.name + '-page') );
+	
+    if( typeof this.oncreate === "function" ) this.oncreate();
 }
 
 /**
