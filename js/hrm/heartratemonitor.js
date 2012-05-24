@@ -20,10 +20,31 @@
 /**
  * Base class for a heart-rate monitor
  */
-function HeartRateMonitor() {}
+function HeartRateMonitor( p_name ) {
+    HeartRateMonitor.m_implementations.push( { name: p_name, object: this } );
+}
+
+/**
+ * Return all implementations
+ */
+HeartRateMonitor.getImplementations = function() {
+            return m_implementations;
+        }
+
+HeartRateMonitor.m_implementations = [];                        // Static storage of all implementations
 
 HeartRateMonitor.prototype.m_connectId = null;                  // Internal variable to handle the currently connected device
-HeartRateMonitor.prototype.m_HeartRateMonitorCallback = null;   // Storage for hrm-callback
+HeartRateMonitor.prototype.m_heartRateMonitorCallback = null;   // Storage for hrm-callback
+HeartRateMonitor.prototype.m_errorCallback = null;              // Reference to error callback, gets passed a message
+
+/**
+ * Check if this device is supported on this platform
+ * Should be re-implemented by sub-classes
+ * Returns true if supported, else false
+ */
+HeartRateMonitor.prototype.isSupported = function() {
+            return false;
+        };
 
 /**
  * Get a list of available devices for the specific implementation
@@ -45,9 +66,17 @@ HeartRateMonitor.prototype.connect = function( p_successCallback, p_errorCallbac
  * Set the callback for new HeartRateMonitor data
  * p_HeartRateMonitorCallback gets passed the new heartrate in beats per minute
  */
-HeartRateMonitor.prototype.setCallback = function( p_HeartRateMonitorCallback ) {
-            this.m_HeartRateMonitorCallback = p_HeartRateMonitorCallback;
+HeartRateMonitor.prototype.setCallback = function( p_heartRateMonitorCallback ) {
+            this.m_heartRateMonitorCallback = p_heartRateMonitorCallback;
         };
+
+/**
+ * Set the callback which gets called if an error occurs
+ * p_errorCallback gets passed a string message
+ */
+HeartRateMonitor.prototype.setErrorCallback = function( p_errorCallback ) {
+            this.m_errorCallback = p_errorCallback;
+        }
 
 /**
  * Disconnect from a currently connected device
