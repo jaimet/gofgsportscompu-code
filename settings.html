@@ -3,12 +3,11 @@
 	<!-- /header -->
 	<div data-role="header">
 		<h1 data-i18n="settings"></h1>
-                <a href="summary.html" data-icon="arrow-u" data-i18n="summary" data-direction="reverse"></a>
-		<a id="settings-save-button" href="#" data-icon="check" class="ui-btn-right" data-i18n="save"></a>
+		<a href="summary.html" data-icon="arrow-u" data-i18n="summary" data-direction="reverse"></a> <a id="settings-save-button" href="#" data-icon="check" class="ui-btn-right" data-i18n="save"></a>
 		<div data-role="navbar" data-id="menu-navbar">
 			<ul>
 				<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="gear" data-i18n="settings"></a></li>
-                                <li><a href="tracks.html" data-icon="grid" data-i18n="tracks"></a></li>
+				<li><a href="tracks.html" data-icon="grid" data-i18n="tracks"></a></li>
 			</ul>
 		</div>
 	</div>
@@ -16,67 +15,66 @@
 	<!-- /content -->
 	<div data-role="content">
 		<form action='#' method='get'>
-                <div data-role="fieldcontain">
-                    <label for="authKeyInput" data-i18n="auth_key"></label>
-                    <input type="text" name="authKeyInput" id="authKeyInput" value=""  />
-                </div>
+			<div data-role="fieldcontain">
+				<label for="authKeyInput" data-i18n="auth_key"></label>
+				<input type="text" name="authKeyInput" id="authKeyInput" value="" />
+			</div>
 
-		<div data-role="fieldcontain">
-                        <label for="autostartTrackingSlider" data-i18n="autostart_tracking"></label>
-                        <select name="autostartTrackingSlider" id="autostartTrackingSlider" data-role="slider">
-                                <option value="0" data-i18n="no"></option>
-                                <option value="1" data-i18n="yes"></option>
-			</select>
-                        <label for="autolockSlider" data-i18n="autolock"></label>
-                        <select name="autolockSlider" id="autolockSlider" data-role="slider">
-                                <option value="0" data-i18n="no"></option>
-                                <option value="1" data-i18n="yes"></option>
-                        </select>
-                </div>
+			<div data-role="fieldcontain">
+				<label for="autostartTrackingSlider" data-i18n="autostart_tracking"></label>
+				<select name="autostartTrackingSlider" id="autostartTrackingSlider" data-role="slider">
+					<option value="0" data-i18n="no"></option>
+					<option value="1" data-i18n="yes"></option>
+				</select>
+				<label for="autolockSlider" data-i18n="autolock"></label>
+				<select name="autolockSlider" id="autolockSlider" data-role="slider">
+					<option value="0" data-i18n="no"></option>
+					<option value="1" data-i18n="yes"></option>
+				</select>
+			</div>
 
-                <div data-role="fieldcontain">
-                        <label for="enablehrmSlider" data-i18n="enablehrm"></label>
-                        <select name="enablehrmSlider" id="enablehrmSlider" data-role="slider">
-                                <option value="0" data-i18n="no"></option>
-                                <option value="1" data-i18n="yes"></option>
-                        </select>
-                </div>
+			<div data-role="fieldcontain">
+				<label for="hrmTypeSelect" data-i18n="hrm_type"></label>
+				<select name="hrmTypeSelect" id="hrmTypeSelect">
+					<option value="0" data-i18n="none"></option>
+					<option value="1">Zephyr HxM</option>
+					<option value="2">Wahoo Blue HR</option>
+				</select>
+			</div>
 
-                <div data-role="fieldcontain">
-                        <label for="displayUnitSelect" data-i18n="display_unit"></label>
-                        <select name="displayUnitSelect" id="displayUnitSelect">
-                                <option value="1" data-i18n="km_m"></option>
-                                <option value="2" data-i18n="miles_feet"></option>
-                        </select>
-                </div>
+			<div data-role="fieldcontain">
+				<label for="displayUnitSelect" data-i18n="display_unit"></label>
+				<select name="displayUnitSelect" id="displayUnitSelect">
+					<option value="1" data-i18n="km_m"></option>
+					<option value="2" data-i18n="miles_feet"></option>
+				</select>
+			</div>
 
-                <div data-role="fieldcontain">
-			<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
-		 	<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30"  />
-
-                        <label for="minAccuracySlider" data-i18n="min_loc_accuracy"></label>
-		 	<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="1" max="50"  />
-
-			<label for="minAltitudeChangeSlider" data-i18n="min_alt_change"></label>
-                        <input type="range" name="minAltitudeChangeSlider" id="minAltitudeChangeSlider" value="3" min="1" max="20"  />
-		</div>
-		<div data-role="fieldcontain">
-			<label for="languageSelect" data-i18n="language"></label>
-			<select name="languageSelect" id="languageSelect">
-                                <option value="en" data-i18n="english"></option>
-				<option value="de" data-i18n="german"></option>
-				<option value="it" data-i18n="italian"></option>
-			</select>
-		</div>
-		<div data-role="fieldcontain" style="display: none;">
-			<label for="showdidyouknowSlider" data-i18n="show_dyk"></label>
-			<select name="showdidyouknowSlider" id="showdidyouknowSlider" data-role="slider">
-				<option value="hide" data-i18n="hide"></option>
-				<option value="show" data-i18n="show"></option>
-			</select>
-		</div>
-                <a id="settings-odoReset-button" href="#" data-role="button" data-icon="delete" data-i18n="odoReset" data-theme="g"></a>
-                </form>
-                <a href="about.html" data-role="button" data-icon="info" data-i18n="about"></a>
-        </div>
+			<div data-role="fieldcontain">
+				<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
+				<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30" />
+				<label for="minAccuracySlider" data-i18n="min_loc_accuracy"></label>
+				<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="1" max="50" />
+				<label for="minAltitudeChangeSlider" data-i18n="min_alt_change"></label>
+				<input type="range" name="minAltitudeChangeSlider" id="minAltitudeChangeSlider" value="3" min="1" max="20" />
+			</div>
+			<div data-role="fieldcontain">
+				<label for="languageSelect" data-i18n="language"></label>
+				<select name="languageSelect" id="languageSelect">
+					<option value="en" data-i18n="english"></option>
+					<option value="de" data-i18n="german"></option>
+					<option value="it" data-i18n="italian"></option>
+				</select>
+			</div>
+			<div data-role="fieldcontain" style="display: none;">
+				<label for="showdidyouknowSlider" data-i18n="show_dyk"></label>
+				<select name="showdidyouknowSlider" id="showdidyouknowSlider" data-role="slider">
+					<option value="hide" data-i18n="hide"></option>
+					<option value="show" data-i18n="show"></option>
+				</select>
+			</div>
+			<a id="settings-odoReset-button" href="#" data-role="button" data-icon="delete" data-i18n="odoReset" data-theme="g"></a>
+		</form>
+		<a href="about.html" data-role="button" data-icon="info" data-i18n="about"></a>
+	</div>
 </div>

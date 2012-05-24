@@ -20,18 +20,7 @@
 /**
  * Base class for a heart-rate monitor
  */
-function HeartRateMonitor( p_name ) {
-    HeartRateMonitor.m_implementations.push( { name: p_name, object: this } );
-}
-
-/**
- * Return all implementations
- */
-HeartRateMonitor.getImplementations = function() {
-            return m_implementations;
-        }
-
-HeartRateMonitor.m_implementations = [];                        // Static storage of all implementations
+function HeartRateMonitor() {}
 
 HeartRateMonitor.prototype.m_connectId = null;                  // Internal variable to handle the currently connected device
 HeartRateMonitor.prototype.m_heartRateMonitorCallback = null;   // Storage for hrm-callback

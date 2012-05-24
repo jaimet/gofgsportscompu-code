@@ -18,98 +18,102 @@
  */
 
 var SettingsHandler = {
-    m_appDirectoryEntry : null,
-    m_settingsStore : {
-        "minimumaccuracy" : 15,
-        "minimumaltitudechange" : 5,
-        "showdidyouknow" : 'show',
-        "licenseagreed" : 0,
-        "language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
-        "gpsinterval" : 3,			// Interval (in seconds) which is used to receive new GPS position updates
-        "autostarttracking" : 1,    // Automatically start tracking once the GPS signal is active
-        "trackuploadurl" : "",      // Hardcoded path to track upload-URL
-        "authkey" : "",             // Key for authentication against the GOFG system
-        "autolock" : 1,             // Automatically lock screen once tracking has started
-        "displayunits" : 1,         // Unit(s) to use for displaying values
-        "uploadagree_2" : 0,        // Agreed to the upload agreement
-        "enablehrm" : 0            // Enable heart rate monitor
-    },
-    m_settingsFileEntry : null,
-    onload : function() {},			// Called when the settings have been loaded
+	m_appDirectoryEntry : null,
+	m_settingsStore : {
+		"minimumaccuracy" : 15,
+		"minimumaltitudechange" : 5,
+		"showdidyouknow" : 'show',
+		"licenseagreed" : 0,
+		"language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
+		"gpsinterval" : 3, // Interval (in seconds) which is used to receive new GPS position updates
+		"autostarttracking" : 1, // Automatically start tracking once the GPS signal is active
+		"trackuploadurl" : "", // Hardcoded path to track upload-URL
+		"authkey" : "", // Key for authentication against the GOFG system
+		"autolock" : 1, // Automatically lock screen once tracking has started
+		"displayunits" : 1, // Unit(s) to use for displaying values
+		"uploadagree_2" : 0, // Agreed to the upload agreement
+		"hrmtype" : 0
+	// Enable heart rate monitor
+	},
+	m_settingsFileEntry : null,
+	onload : function() {
+	}, // Called when the settings have been loaded
 
-    init : function( p_appDirectoryEntry ) {
-               SettingsHandler.m_appDirectoryEntry = p_appDirectoryEntry;
-               SettingsHandler.m_appDirectoryEntry.getFile( "gsc_settings.xml", { create: true, exclusive: false }, SettingsHandler._settingsFileEntry, SettingsHandler._fileError );
-           },
+	init : function(p_appDirectoryEntry) {
+		SettingsHandler.m_appDirectoryEntry = p_appDirectoryEntry;
+		SettingsHandler.m_appDirectoryEntry.getFile("gsc_settings.xml", {
+			create : true,
+			exclusive : false
+		}, SettingsHandler._settingsFileEntry, SettingsHandler._fileError);
+	},
 
-    /**
-     * Return value without pre-parsing, null if not found
-     */
-    get : function( p_key ) {
-              if( p_key in SettingsHandler.m_settingsStore ) {
-                  return SettingsHandler.m_settingsStore[p_key];
-              }
+	/**
+	 * Return value without pre-parsing, null if not found
+	 */
+	get : function(p_key) {
+		if (p_key in SettingsHandler.m_settingsStore) {
+			return SettingsHandler.m_settingsStore[p_key];
+		}
 
-              return null;
-          },
+		return null;
+	},
 
-    /**
-     * Return a settings parsed as integer value, null if invalid
-     */
-    getInt : function( p_key ) {
-                 var val = parseInt(SettingsHandler.get( p_key ));
+	/**
+	 * Return a settings parsed as integer value, null if invalid
+	 */
+	getInt : function(p_key) {
+		var val = parseInt(SettingsHandler.get(p_key));
 
-                 // Check if we do not have a number
-                 if( isNaN(val) ) return null;
+		// Check if we do not have a number
+		if (isNaN(val)) return null;
 
-                 // Return parsed value
-                 return val;
-             },
+		// Return parsed value
+		return val;
+	},
 
-    set : function( p_key, p_value ) {
-              if( p_key in SettingsHandler.m_settingsStore ) {
-                  SettingsHandler.m_settingsStore[p_key] = p_value;
-              }
-          },
+	set : function(p_key, p_value) {
+		if (p_key in SettingsHandler.m_settingsStore) {
+			SettingsHandler.m_settingsStore[p_key] = p_value;
+		}
+	},
 
-    _save : function() {
-                SettingsHandler.m_settingsFileEntry.createWriter( function( p_fileWriter ) {
-                                                                     // Create settings header
-                                                                     var settingsString = "<?xml version='1.0' encoding='UTF-8' ?>\n";
-                                                                     settingsString += "<settings>\n";
+	_save : function() {
+		SettingsHandler.m_settingsFileEntry.createWriter(function(p_fileWriter) {
+			// Create settings header
+			var settingsString = "<?xml version='1.0' encoding='UTF-8' ?>\n";
+			settingsString += "<settings>\n";
 
-                                                                     $.each( SettingsHandler.m_settingsStore, function( p_key, p_value ) {
-                                                                                settingsString += "\t<" + p_key + ">" + p_value + "</" + p_key + ">\n";
-                                                                            } );
+			$.each(SettingsHandler.m_settingsStore, function(p_key, p_value) {
+				settingsString += "\t<" + p_key + ">" + p_value + "</" + p_key + ">\n";
+			});
 
-                                                                     settingsString += '</settings>';
+			settingsString += '</settings>';
 
-                                                                     p_fileWriter.write( settingsString );
-                                                                 },
-                                                                 SettingsHandler._fileError );
-            },
+			p_fileWriter.write(settingsString);
+		}, SettingsHandler._fileError);
+	},
 
-    _settingsFileEntry : function( p_fileEntry ) {
-                             SettingsHandler.m_settingsFileEntry = p_fileEntry;
+	_settingsFileEntry : function(p_fileEntry) {
+		SettingsHandler.m_settingsFileEntry = p_fileEntry;
 
-                             SettingsHandler.m_settingsFileEntry.file( function( p_file ) {
-                                                                          var reader = new FileReader();
-                                                                          reader.onload = function( p_evt ) {
-                                                                                      if( p_evt.target.result.length > 0 ) {
-                                                                                          var xmlDoc = $.parseXML( p_evt.target.result );
+		SettingsHandler.m_settingsFileEntry.file(function(p_file) {
+			var reader = new FileReader();
+			reader.onload = function(p_evt) {
+				if (p_evt.target.result.length > 0) {
+					var xmlDoc = $.parseXML(p_evt.target.result);
 
-                                                                                          $(xmlDoc).find( "settings > *" ).each( function(p_index, p_element) {
-                                                                                                                                    SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
-                                                                                                                                });
-                                                                                      }
-                                                                                      // Notify others
-                                                                                      if( typeof SettingsHandler.onload === "function" ) SettingsHandler.onload();
-                                                                                  }
-                                                                          reader.readAsText( p_file );
-                                                                      }, this._fileError );
-                         },
+					$(xmlDoc).find("settings > *").each(function(p_index, p_element) {
+						SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
+					});
+				}
+				// Notify others
+				if (typeof SettingsHandler.onload === "function") SettingsHandler.onload();
+			}
+			reader.readAsText(p_file);
+		}, this._fileError);
+	},
 
-    _fileError : function( p_fileError ) {
-                     console.log( "Error while handling settings file: " + p_fileError );
-                 }
+	_fileError : function(p_fileError) {
+		console.log("Error while handling settings file: " + p_fileError);
+	}
 };

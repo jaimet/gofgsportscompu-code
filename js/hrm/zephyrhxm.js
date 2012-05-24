@@ -21,136 +21,127 @@
  * ZephyrHxM specific implementation of the HeartRateMonitor abstract class
  */
 function ZephyrHxM() {
-    // Fetch bluetooth plugin
-    this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
+	// Fetch bluetooth plugin
+	this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
 
-    // Enable bluetooth
-    this.m_bluetoothPlugin.enable();
+	// Enable bluetooth
+	this.m_bluetoothPlugin.enable();
 }
 
-ZephyrHxM.prototype = new HeartRateMonitor( 'ZephyrHxM' );   // Inherhit from HeartRateMonitor class
+ZephyrHxM.prototype = new HeartRateMonitor(); // Inherhit from HeartRateMonitor class
 
-ZephyrHxM.prototype.m_bluetoothPlugin = null;   // Reference to bluetooth-plugin
-ZephyrHxM.prototype.m_socketId = null;          // Reference to active socket id
-ZephyrHxM.prototype.m_dataBuffer = "";          // Buffer for incoming data from ZephyrHxM
+ZephyrHxM.prototype.m_bluetoothPlugin = null; // Reference to bluetooth-plugin
+ZephyrHxM.prototype.m_socketId = null; // Reference to active socket id
+ZephyrHxM.prototype.m_dataBuffer = ""; // Buffer for incoming data from ZephyrHxM
 
 /**
  * Check if this platform offers support for the ZephyrHxM
  */
 ZephyrHxM.prototype.isSupported = function() {
-            // Check if all requirements are fulfilled
-            if( this.m_bluetoothPlugin !== null && this.m_bluetoothPlugin.isSupported() ) return true;
+	// Check if all requirements are fulfilled
+	if (this.m_bluetoothPlugin !== null && this.m_bluetoothPlugin.isSupported()) return true;
 
-            return false;
-        };
+	return false;
+};
 
 /**
  * Get a list of available devices for the specific implementation
  * p_successCallback gets passed a list of devices in the form:
  * [ {id: id1, name: name1}, {id: id2, name: name2}, ... ]
  */
-ZephyrHxM.prototype.listDevices = function( p_successCallback ) {
-            // Discover all bluetooth devices
-            this.m_bluetoothPlugin.discoverDevices( function( p_devices ) {
-                                                       var foundDevices = [];
+ZephyrHxM.prototype.listDevices = function(p_successCallback) {
+	// Discover all bluetooth devices
+	this.m_bluetoothPlugin.discoverDevices(function(p_devices) {
+		var foundDevices = [];
 
-                                                       // Cycle through discovered devices and check for HxM devices
-                                                       for( var i = 0; i < p_devices.length; i++ ) {
-                                                           var currDevice = p_devices[i];
+		// Cycle through discovered devices and check for HxM devices
+		for ( var i = 0; i < p_devices.length; i++) {
+			var currDevice = p_devices[i];
 
-                                                           // Check if this is a valid HxM device
-                                                           if( currDevice.name.indexOf( 'HXM' ) === 0 ) {
-                                                               foundDevices.put( { id: currDevice.address, name: currDevice.name } );
-                                                           }
-                                                       }
+			// Check if this is a valid HxM device
+			if (currDevice.name.indexOf('HXM') === 0) {
+				foundDevices.put({
+					id : currDevice.address,
+					name : currDevice.name
+				});
+			}
+		}
 
-                                                       // Send found devices to callback
-                                                       if( typeof p_successCallback === 'function' ) p_successCallback( foundDevices );
-                                                   },
-                                                   Utilities.getEvtHandler(this, this._errorCallback) );
-        };
+		// Send found devices to callback
+		if (typeof p_successCallback === 'function') p_successCallback(foundDevices);
+	}, Utilities.getEvtHandler(this, this._errorCallback));
+};
 
 /**
  * Connect to a given device (and start tracking HeartRateMonitor data)
  * p_deviceId should contain an ID of a device receive from listDevices before
  * p_successCallback gets passed no argument
  */
-ZephyrHxM.prototype.connect = function( p_successCallback, p_deviceId ) {
-            var me = this;
+ZephyrHxM.prototype.connect = function(p_successCallback, p_deviceId) {
+	var me = this;
 
-            if( this.m_connectId !== null ) {
-                this._errorCallback( 'Already connected' );
-            }
-            else {
-                this.m_bluetoothPlugin.getUUIDs( function( p_uuids ) {
-                                                    // Check if we have at least one endpoint
-                                                    if( p_uuids.length < 1 ) {
-                                                        this._errorCallback( 'No endpoint found' );
-                                                    }
+	if (this.m_connectId !== null) {
+		this._errorCallback('Already connected');
+	} else {
+		this.m_bluetoothPlugin.getUUIDs(function(p_uuids) {
+			// Check if we have at least one endpoint
+			if (p_uuids.length < 1) {
+				this._errorCallback('No endpoint found');
+			}
 
-                                                    // Connect to the given endpoint
-                                                    me.m_bluetoothPlugin.connect( function( p_socketid ) {
-                                                                                     me.m_connectId = p_deviceId;
-                                                                                     me.m_socketId = p_socketid;
+			// Connect to the given endpoint
+			me.m_bluetoothPlugin.connect(function(p_socketid) {
+				me.m_connectId = p_deviceId;
+				me.m_socketId = p_socketid;
 
-                                                                                     // Start reading from the serial port
-                                                                                     me.m_bluetoothPlugin.read( Utilities.getEvtHandler(me, me._read),
-                                                                                                                Utilities.getEvtHandler(this, this._errorCallback),
-                                                                                                                p_socketid );
-                                                                                 },
-                                                                                 Utilities.getEvtHandler(this, this._errorCallback),
-                                                                                 p_deviceId,
-                                                                                 p_uuids[0] );
-                                                },
-                                                Utilities.getEvtHandler(this, this._errorCallback),
-                                                p_deviceId );
-            }
-        };
+				// Start reading from the serial port
+				me.m_bluetoothPlugin.read(Utilities.getEvtHandler(me, me._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
+			}, Utilities.getEvtHandler(this, this._errorCallback), p_deviceId, p_uuids[0]);
+		}, Utilities.getEvtHandler(this, this._errorCallback), p_deviceId);
+	}
+};
 
 /**
  * Called by the bluetooth plugin if reading from the device was successfull
  */
-ZephyrHxM.prototype._read = function( p_data ) {
-            // Attach data to internal buffer
-            this.m_dataBuffer += p_data;
+ZephyrHxM.prototype._read = function(p_data) {
+	// Attach data to internal buffer
+	this.m_dataBuffer += p_data;
 
-            // Search for a complete data frame
-            var heartrate = 0;
-            for( var i = this.m_dataBuffer.length - 60; i >= 0; i-- ) {
-                // Check for a valid data frame (see ZephyrHxM SDK for details)
-                if(
-                        this.m_dataBuffer.charCodeAt(i) === 0x02 &&         // STX
-                        this.m_dataBuffer.charCodeAt(i + 1) === 0x26 &&     // MsgID
-                        this.m_dataBuffer.charCodeAt(i + 2) === 0x37 &&     // DLC
-                        this.m_dataBuffer.charCodeAt(i + 59) === 0x03       // ETX
-                        ) {
+	// Search for a complete data frame
+	var heartrate = 0;
+	for ( var i = this.m_dataBuffer.length - 60; i >= 0; i--) {
+		// Check for a valid data frame (see ZephyrHxM SDK for details)
+		if (this.m_dataBuffer.charCodeAt(i) === 0x02 && // STX
+		this.m_dataBuffer.charCodeAt(i + 1) === 0x26 && // MsgID
+		this.m_dataBuffer.charCodeAt(i + 2) === 0x37 && // DLC
+		this.m_dataBuffer.charCodeAt(i + 59) === 0x03 // ETX
+		) {
 
-                    // Extract the heartrate from the data frame
-                    heartrate = this.m_dataBuffer.charCodeAt(i + 12);
+			// Extract the heartrate from the data frame
+			heartrate = this.m_dataBuffer.charCodeAt(i + 12);
 
-                    // Remove old data from buffer
-                    this.m_dataBuffer = this.m_dataBuffer.substring(i + 60);
+			// Remove old data from buffer
+			this.m_dataBuffer = this.m_dataBuffer.substring(i + 60);
 
-                    break;
-                }
+			break;
+		}
 
-            }
+	}
 
-            // Notify callback
-            if( heartrate > 0 && typeof this.m_heartRateMonitorCallback === "function" ) this.m_heartRateMonitorCallback( heartrate );
+	// Notify callback
+	if (heartrate > 0 && typeof this.m_heartRateMonitorCallback === "function") this.m_heartRateMonitorCallback(heartrate);
 
-            // Continue reading
-            this.m_bluetoothPlugin.read( Utilities.getEvtHandler(this, this._read),
-                                         Utilities.getEvtHandler(this, this._errorCallback),
-                                         p_socketid );
-        };
+	// Continue reading
+	this.m_bluetoothPlugin.read(Utilities.getEvtHandler(this, this._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
+};
 
 /**
  * Internal error callback
  */
-ZephyrHxM.prototype._errorCallback = function( p_error ) {
-            if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( p_error );
-        }
+ZephyrHxM.prototype._errorCallback = function(p_error) {
+	if (typeof this.m_errorCallback === "function") this.m_errorCallback(p_error);
+}
 
 // Create single instance
-new ZephyrHxM();
+ZephyrHxM.instance = new ZephyrHxM();
