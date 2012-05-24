@@ -20,11 +20,17 @@
 /**
  * Base class for a heart-rate monitor
  */
-function HeartRateMonitor() {}
+function HeartRateMonitor() {
+	HeartRateMonitor.m_implementations.push( this );
+}
+
+HeartRateMonitor.m_implementations = [];
 
 HeartRateMonitor.prototype.m_connectId = null;                  // Internal variable to handle the currently connected device
 HeartRateMonitor.prototype.m_heartRateMonitorCallback = null;   // Storage for hrm-callback
 HeartRateMonitor.prototype.m_errorCallback = null;              // Reference to error callback, gets passed a message
+HeartRateMonitor.prototype.m_name = "Unknown";					// Should be re-definied by implementation
+HeartRateMonitor.prototype.m_id = 0;							// Assign unique id in implementation
 
 /**
  * Check if this device is supported on this platform
@@ -41,7 +47,7 @@ HeartRateMonitor.prototype.isSupported = function() {
  * [ {id: id1, name: name1}, {id: id2, name: name2}, ... ]
  * p_errorCallback gets passed an error message
  */
-HeartRateMonitor.prototype.listDevices = function( p_successCallback, p_errorCallback ) {};
+HeartRateMonitor.prototype.listDevices = function( p_successCallback ) {};
 
 /**
  * Connect to a given device (and start tracking HeartRateMonitor data)
@@ -49,7 +55,7 @@ HeartRateMonitor.prototype.listDevices = function( p_successCallback, p_errorCal
  * p_successCallback gets passed no argument
  * p_errorCallback gets passed an error message
  */
-HeartRateMonitor.prototype.connect = function( p_successCallback, p_errorCallback, p_deviceId ) {};
+HeartRateMonitor.prototype.connect = function( p_deviceId ) {};
 
 /**
  * Set the callback for new HeartRateMonitor data

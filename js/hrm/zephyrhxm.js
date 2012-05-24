@@ -21,11 +21,6 @@
  * ZephyrHxM specific implementation of the HeartRateMonitor abstract class
  */
 function ZephyrHxM() {
-	// Fetch bluetooth plugin
-	this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
-
-	// Enable bluetooth
-	this.m_bluetoothPlugin.enable();
 }
 
 ZephyrHxM.prototype = new HeartRateMonitor(); // Inherhit from HeartRateMonitor class
@@ -33,11 +28,18 @@ ZephyrHxM.prototype = new HeartRateMonitor(); // Inherhit from HeartRateMonitor 
 ZephyrHxM.prototype.m_bluetoothPlugin = null; // Reference to bluetooth-plugin
 ZephyrHxM.prototype.m_socketId = null; // Reference to active socket id
 ZephyrHxM.prototype.m_dataBuffer = ""; // Buffer for incoming data from ZephyrHxM
+ZephyrHxM.prototype.m_name = "Zephyr HxM";
+ZephyrHxM.prototype.m_id = 1;
 
 /**
  * Check if this platform offers support for the ZephyrHxM
  */
 ZephyrHxM.prototype.isSupported = function() {
+	// Fetch bluetooth plugin
+	this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
+	// Enable bluetooth
+	this.m_bluetoothPlugin.enable();
+
 	// Check if all requirements are fulfilled
 	if (this.m_bluetoothPlugin !== null && this.m_bluetoothPlugin.isSupported()) return true;
 
@@ -77,7 +79,7 @@ ZephyrHxM.prototype.listDevices = function(p_successCallback) {
  * p_deviceId should contain an ID of a device receive from listDevices before
  * p_successCallback gets passed no argument
  */
-ZephyrHxM.prototype.connect = function(p_successCallback, p_deviceId) {
+ZephyrHxM.prototype.connect = function(p_deviceId) {
 	var me = this;
 
 	if (this.m_connectId !== null) {
@@ -144,4 +146,4 @@ ZephyrHxM.prototype._errorCallback = function(p_error) {
 }
 
 // Create single instance
-ZephyrHxM.instance = new ZephyrHxM();
+new ZephyrHxM();

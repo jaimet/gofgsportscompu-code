@@ -35,6 +35,17 @@ Settings.prototype.oninit = function() {
 
             // Bind button events
             $( '#settings-page' ).find( '#settings-odoReset-button' ).bind( 'click', pages.settings._odoReset );
+            
+            // Append all available HRM implementation
+            var hrmTypeSelect = $( '#hrmTypeSelect' );
+            for( var i = 0; i < HeartRateMonitor.m_implementations.length; i++ ) {
+            	if( HeartRateMonitor.m_implementations[i].isSupported() ) {
+            		hrmTypeSelect.append( $( '<option value="' + HeartRateMonitor.m_implementations[i].m_id + '">' + HeartRateMonitor.m_implementations[i].m_name + '</option>' ) );
+            	}
+            	else {
+            		console.log( 'Sorry, ' + HeartRateMonitor.m_implementations[i].m_name + ' is not supported!'  );
+            	}
+            }
         };
 
 /**

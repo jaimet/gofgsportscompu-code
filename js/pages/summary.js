@@ -334,6 +334,33 @@ Summary.prototype.enableGPSTap = function() {
 		MsgBox.show($.i18n.prop('suspend_message_error') + e);
 		pages.summary._stopGPS();
 	});
+	
+	// Check if user has a HRM selected
+	var hrmType = SettingsHandler.getInt( 'hrmtype' );
+	if( hrmType > 0 ) {
+		var hrmImplementation = null;
+		
+		for( var i = 0; i < HeartRateMonitor.m_implementations.length; i++ ) {
+			if( HeartRateMonitor.m_implementations[i].m_id === hrmType ) {
+				hrmImplementation = HeartRateMonitor.m_implementations[i];
+				break;
+			}
+		}
+		
+		if( hrmImplementation !== null ) {
+			hrmImplementation.setCallback( function( p_hrm ) {
+				alert( 'New HRM: ' + p_hrm );
+			} );
+			hrmImplementation.listDevices( function( p_devices ) {
+				if( p_devices.length > 0 ) {
+					var device = p_devices[0];
+					
+					hrmImplementation.connect( device.id );
+				}
+				
+			} );
+		}
+	}
 
 	// Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
 	if (SettingsHandler.get('autostarttracking') > 0 && SettingsHandler.get('autolock') > 0) {
