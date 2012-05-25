@@ -56,18 +56,24 @@ ZephyrHxM.prototype.listDevices = function(p_successCallback) {
 	this.m_bluetoothPlugin.discoverDevices(function(p_devices) {
 		var foundDevices = [];
 		
+		console.log( 'Discovered devices (JS): ' + p_devices.length );
+		
 		// Cycle through discovered devices and check for HxM devices
 		for ( var i = 0; i < p_devices.length; i++) {
 			var currDevice = p_devices[i];
+			
+			console.log( 'Found device: ' + currDevice.name );
 
 			// Check if this is a valid HxM device
 			if (currDevice.name.indexOf('HXM') === 0) {
-				foundDevices.put({
+				foundDevices.push({
 					id : currDevice.address,
 					name : currDevice.name
 				});
 			}
 		}
+		
+		console.log( 'Discovered valid devices: ' + foundDevices.length );
 
 		// Send found devices to callback
 		if (typeof p_successCallback === 'function') p_successCallback(foundDevices);
@@ -119,7 +125,6 @@ ZephyrHxM.prototype._read = function(p_data) {
 		this.m_dataBuffer.charCodeAt(i + 2) === 0x37 && // DLC
 		this.m_dataBuffer.charCodeAt(i + 59) === 0x03 // ETX
 		) {
-
 			// Extract the heartrate from the data frame
 			heartrate = this.m_dataBuffer.charCodeAt(i + 12);
 
@@ -130,12 +135,11 @@ ZephyrHxM.prototype._read = function(p_data) {
 		}
 
 	}
+	// Continue reading
+	this.m_bluetoothPlugin.read(Utilities.getEvtHandler(this, this._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
 
 	// Notify callback
 	if (heartrate > 0 && typeof this.m_heartRateMonitorCallback === "function") this.m_heartRateMonitorCallback(heartrate);
-
-	// Continue reading
-	this.m_bluetoothPlugin.read(Utilities.getEvtHandler(this, this._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
 };
 
 /**
