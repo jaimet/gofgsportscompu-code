@@ -66,7 +66,7 @@ Map.prototype.initMap = function() {
                                                              enableKinetic: true
                                                          }
                                                      }),
-                                                     new OpenLayers.Control.Zoom(),
+                                                     new OpenLayers.Control.Zoom()
                                                  ],
                                                  layers: [
                                                      new OpenLayers.Layer.OSM("OpenStreetMap", null, {

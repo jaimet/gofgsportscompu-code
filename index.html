@@ -2,9 +2,8 @@
 <html> 
 	<head> 
 	<title>GOFG Sports Computer</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
-
+    <meta name="viewport" content="width=375, height=600, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" id="meta_viewport" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Cordova 1.6.1 -->
         <script type="text/javascript" charset="utf-8" src="lib/cordova/cordova.js"></script>
         <script type="text/javascript" charset="utf-8" src="lib/cordova/powermanagement.js"></script>
@@ -22,13 +21,13 @@
 
         <!-- Pre-Configure jQueryMobile -->
 	<script type="text/javascript">
-	$(document).bind("mobileinit", function(){
-		$.mobile.page.prototype.options.domCache = true;
-		$.mobile.defaultPageTransition = 'none';
-		$.mobile.hashListeningEnabled = false;		// Disable history tracking as we don't need it in our app
-                $.mobile.loadingMessageTextVisible = true;
-	});
-	</script>
+    $(document).bind("mobileinit", function(){
+    $.mobile.page.prototype.options.domCache = true;
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.hashListeningEnabled = false;		// Disable history tracking as we don't need it in our app
+    $.mobile.loadingMessageTextVisible = true;
+    });
+  </script>
         <!-- jQueryMobile 1.1.0 -->
         <link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.css" />
         <link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.structure.css" />
@@ -88,7 +87,7 @@
 	<div id='lock-overlay-background' style="z-index: 10000; position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; opacity: 0.25; background-color: #000000; color: #FFFFFF;">
 	</div>
 	<div id='lock-overlay-message' style="z-index: 10000; position: absolute; bottom: 0; left: 0; width: 100%; background-color: #000000; color: #FFFFFF; text-align: center;">
-                <h3 data-i18n="unlock_message"></h1>
+                <h1 data-i18n="unlock_message"></h1>
 	</div>
 </div>
 
