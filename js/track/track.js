@@ -54,7 +54,8 @@ Track.prototype.addPosition = function( p_position, p_distance ) {
             // Create new waypoint for passed position
             this.m_currentWaypoint = new Waypoint();
             this.m_currentWaypoint.m_position = p_position;
-            this.m_currentWaypoint.m_timestamp = (p_position.timestamp / 1000).toFixed(0);
+            //this.m_currentWaypoint.m_timestamp = (p_position.timestamp / 1000).toFixed(0);
+            this.m_currentWaypoint.m_timestamp = Utilities.getUnixTimestamp();
 
             this.m_endTime = this.m_currentWaypoint.m_timestamp;
 
