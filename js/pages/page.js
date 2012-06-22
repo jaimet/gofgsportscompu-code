@@ -32,6 +32,11 @@ function Page( p_name ) {
     $( '#' + p_name + '-page' ).live( 'pageinit', this.getEvtHandler(this.init) );
     $( '#' + p_name + '-page' ).live( 'pagecreate', this.getEvtHandler(this.create) );
 
+	// Listen to windows phone specific custom mouse events (used for simulating incomplete touch input)
+	$( '#' + p_name + '-page' ).live( 'wpmousedown', Utilities.getEvtHandler(this, this.wpmousedown) );
+	$( '#' + p_name + '-page' ).live( 'wpmouseup', Utilities.getEvtHandler(this, this.wpmouseup) );
+	$( '#' + p_name + '-page' ).live( 'wpmousemove', Utilities.getEvtHandler(this, this.wpmousemove) );
+
 	// Listen to gesture events
 	$( '#' + p_name + '-page' ).live( 'swipeleft', this.getEvtHandler(this.swipeleft) );
 	$( '#' + p_name + '-page' ).live( 'swiperight', this.getEvtHandler(this.swiperight) );
@@ -58,6 +63,38 @@ Page.prototype.init = function() {
 	Translator.register( $('#' + this.name + '-page') );
 	
     if( typeof this.oninit === "function" ) this.oninit();
+}
+
+Page.prototype.wpmousedown = function(evt) {
+	console.log( 'wpmousedown' );
+
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		console.log( 'triggering mousedown' );
+
+		var mouse_evt = $.Event('mousedown', evt);
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
+}
+
+Page.prototype.wpmouseup = function(evt) {
+	console.log( 'wpmouseup' );
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		console.log( 'triggering mouseup' );
+		var mouse_evt = $.Event('mouseup', evt);
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
+}
+
+Page.prototype.wpmousemove = function(evt) {
+	console.log( 'wpmousemove' );
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		console.log( 'triggering mousemove' );
+		var mouse_evt = $.Event('mousemove', evt);
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
 }
 
 /**
