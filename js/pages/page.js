@@ -65,34 +65,35 @@ Page.prototype.init = function() {
     if( typeof this.oninit === "function" ) this.oninit();
 }
 
+/**
+* WP7 event for supporting swipe gestures
+*/
 Page.prototype.wpmousedown = function(evt) {
-	console.log( 'wpmousedown' );
-
 	// Check if there is a page
 	if( this.leftPage != null || this.rightPage != null ) {
-		console.log( 'triggering mousedown' );
-
-		var mouse_evt = $.Event('mousedown', evt);
+		var mouse_evt = $.Event('mousedown', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
 		$( '#' + this.name + '-page' ).trigger( mouse_evt );
 	}
 }
 
+/**
+* WP7 event for supporting swipe gestures
+*/
 Page.prototype.wpmouseup = function(evt) {
-	console.log( 'wpmouseup' );
 	// Check if there is a page
 	if( this.leftPage != null || this.rightPage != null ) {
-		console.log( 'triggering mouseup' );
-		var mouse_evt = $.Event('mouseup', evt);
+		var mouse_evt = $.Event('mouseup', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
 		$( '#' + this.name + '-page' ).trigger( mouse_evt );
 	}
 }
 
+/**
+* WP7 event for supporting swipe gestures
+*/
 Page.prototype.wpmousemove = function(evt) {
-	console.log( 'wpmousemove' );
 	// Check if there is a page
 	if( this.leftPage != null || this.rightPage != null ) {
-		console.log( 'triggering mousemove' );
-		var mouse_evt = $.Event('mousemove', evt);
+		var mouse_evt = $.Event('mousemove', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
 		$( '#' + this.name + '-page' ).trigger( mouse_evt );
 	}
 }
