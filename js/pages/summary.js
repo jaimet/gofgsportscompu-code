@@ -395,6 +395,9 @@ Summary.prototype._updatePosition = function( p_position ) {
             // Check if position is accurate enough
             if( p_position.coords.accuracy > SettingsHandler.getInt( 'minimumaccuracy' ) ) return;
 
+			// Reset the timestamp of the position (since we want to use the system time)
+			p_position.timestamp = 0;
+
             // Calculate distance
             var distance = 0;
             var waypoint = pages.summary.m_track.getCurrentWaypoint();
