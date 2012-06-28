@@ -54,7 +54,6 @@ var GOFGSportsComputer = {
 	 */
 	_deviceReady : function() {
 		window.onerror = console.log;
-		console.log( 'support.touch: ' + $.support.touch );
 
 		// Bind swipe event to lock-overlay
 		$( '#lock-overlay' ).bind( 'swipe', function() { $(this).hide(); } );
@@ -73,6 +72,9 @@ var GOFGSportsComputer = {
 			var mouse_evt = $.Event('mousemove', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
 			$( '#lock-overlay' ).trigger( mouse_evt );
 		} );
+		
+		// Listen to back button events
+		$(document).bind( 'backbutton', Page.backInHistory );
 		
 		// Find our file storage
 		window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError );
