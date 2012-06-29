@@ -41,7 +41,7 @@ ZephyrHxM.prototype.isSupported = function() {
 
 	// Check if all requirements are fulfilled
 	if (this.m_bluetoothPlugin === null || !this.m_bluetoothPlugin.isSupported()) return false;
-	
+
 	// Enable bluetooth
 	this.m_bluetoothPlugin.enable();
 
@@ -119,7 +119,7 @@ ZephyrHxM.prototype.connect = function(p_deviceId) {
  */
 ZephyrHxM.prototype._read = function(p_data) {
 	// Check if we should abort reading
-	if( this.m_abort ) {
+	if (this.m_abort) {
 		this.m_bluetoothPlugin.disconnect(this.m_socketId);
 		this.m_socketId = null;
 		this.m_connectId = null;
@@ -127,7 +127,7 @@ ZephyrHxM.prototype._read = function(p_data) {
 		this.m_abort = false;
 		return;
 	}
-	
+
 	// Attach data to internal buffer
 	this.m_dataBuffer += p_data;
 
@@ -169,7 +169,7 @@ ZephyrHxM.prototype._errorCallback = function(p_error) {
  * NOTE: no argument passed, since the interface supports only one simultaneous connection
  */
 ZephyrHxM.prototype.disconnect = function() {
-	this.m_abort = true;
+	this.m_abort = true; // Will abort on next read from socket ("soft abort")
 };
 
 // Create single instance
