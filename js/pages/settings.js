@@ -43,12 +43,19 @@ Settings.prototype.oninit = function() {
 Settings.prototype.oncreate = function() {
 	// Append all available HRM implementation
 	var hrmTypeSelect = $('#hrmTypeSelect');
+	var hrmSupportedCount = 0;
 	for ( var i = 0; i < HeartRateMonitor.m_implementations.length; i++) {
 		if (HeartRateMonitor.m_implementations[i].isSupported()) {
 			hrmTypeSelect.append($('<option value="' + HeartRateMonitor.m_implementations[i].m_id + '">' + HeartRateMonitor.m_implementations[i].m_name + '</option>'));
+			hrmSupportedCount++;
 		} else {
 			console.log('Sorry, ' + HeartRateMonitor.m_implementations[i].m_name + ' is not supported!');
 		}
+	}
+	
+	// If no hrm-implementation is supported, hide it alltogether
+	if( hrmSupportedCount <= 0 ) {
+		$('#settings-page_hrmType').hide();
 	}
 }
 

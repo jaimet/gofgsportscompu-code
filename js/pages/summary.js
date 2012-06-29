@@ -346,6 +346,7 @@ Summary.prototype.enableGPSTap = function() {
 	if (hrmType > 0) {
 		var hrmImplementation = null;
 
+		// Search for fitting hrm implementation
 		for ( var i = 0; i < HeartRateMonitor.m_implementations.length; i++) {
 			if (HeartRateMonitor.m_implementations[i].m_id === hrmType) {
 				hrmImplementation = HeartRateMonitor.m_implementations[i];
@@ -353,18 +354,29 @@ Summary.prototype.enableGPSTap = function() {
 			}
 		}
 
+		// If we found a HRM implementation, start the connection
 		if (hrmImplementation !== null) {
-			hrmImplementation.setCallback(function(p_hrm) {
-				alert('New HRM: ' + p_hrm);
+			// Setup error handler for HRM
+			hrmImplementation.setErrorCallback(function(p_error) {
+				alert( 'HRM error: ' + p_error );
 			});
+			
+			// Called when we receive a new HRM value
+			hrmImplementation.setCallback(function(p_hrm) {
+				console.log('New heartrate: ' + p_hrm);
+				
+				pages.summary.m_heartrateWidget.setValue( p_hrm );
+			});
+			
+			// List all devices and connect to first found
 			hrmImplementation.listDevices(function(p_devices) {
 				console.log('Found devices: ' + p_devices);
 				if (p_devices.length > 0) {
 					var device = p_devices[0];
 
+					// Connect to devie & start reading
 					hrmImplementation.connect(device.id);
 				}
-
 			});
 		}
 	}
