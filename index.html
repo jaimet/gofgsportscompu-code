@@ -3,10 +3,9 @@
 <head>
 <title>GOFG Sports Computer</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport"
-	content="width=375, height=600, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
 
-<!-- Cordova 1.7.0 -->
+<!-- Cordova 1.8.1 -->
 <script type="text/javascript" charset="utf-8" src="lib/cordova/cordova.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/cordova/powermanagement.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/cordova/bluetooth.js"></script>
@@ -83,16 +82,16 @@
 <script type="text/javascript" src="js/hrm/zephyrhxm.js" charset="utf-8"></script>
 
 <style type="text/css">
-#summary-page_control > div {
+#summary-page_control>div {
 	width: 33%;
 }
 
-#summary-page_control > div > span {
+#summary-page_control>div>span {
 	padding-top: 9.6px;
 	padding-bottom: 9.6px;
 }
 
-#trackdetail-page_exportcontrol > div {
+#trackdetail-page_exportcontrol>div {
 	width: 33%;
 }
 </style>
@@ -100,11 +99,8 @@
 <body>
 	<!-- Screen lock div -->
 	<div id='lock-overlay' style='display: none;'>
-		<div id='lock-overlay-background'
-			style="z-index: 10000; position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; opacity: 0.25; background-color: #000000; color: #FFFFFF;">
-		</div>
-		<div id='lock-overlay-message'
-			style="z-index: 10000; position: absolute; bottom: 0; left: 0; width: 100%; background-color: #000000; color: #FFFFFF; text-align: center;">
+		<div id='lock-overlay-background' style="z-index: 10000; position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; opacity: 0.25; background-color: #000000; color: #FFFFFF;"></div>
+		<div id='lock-overlay-message' style="z-index: 10000; position: absolute; bottom: 0; left: 0; width: 100%; background-color: #000000; color: #FFFFFF; text-align: center;">
 			<h3 data-i18n="unlock_message"></h3>
 		</div>
 	</div>

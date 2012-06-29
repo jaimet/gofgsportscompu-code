@@ -23,7 +23,7 @@ Settings.prototype = new Page("settings");
 //Settings.prototype.rightPage = "tracks.html";
 
 /**
- * Called when the page is created
+ * Called when the page is initiated
  */
 Settings.prototype.oninit = function() {
 	$('#settings-page').bind('pagebeforeshow', pages.settings._pagebeforeshow);
@@ -37,6 +37,9 @@ Settings.prototype.oninit = function() {
 	$('#settings-page').find('#settings-odoReset-button').bind('click', pages.settings._odoReset);
 };
 
+/**
+ * Called when the page is created
+ */
 Settings.prototype.oncreate = function() {
 	// Append all available HRM implementation
 	var hrmTypeSelect = $('#hrmTypeSelect');
@@ -71,6 +74,9 @@ Settings.prototype._save = function() {
 	Translator.changeLanguage(SettingsHandler.get('language'));
 	// Update display units
 	pages.graph.updateDisplayUnits();
+	
+	// Set summary page to dirty
+	pages.summary.setWidgetDirty();
 
 	$('#settings-page').find('#settings-save-button').hide();
 };

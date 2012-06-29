@@ -37,13 +37,15 @@ ZephyrHxM.prototype.m_id = 1;
 ZephyrHxM.prototype.isSupported = function() {
 	// Fetch bluetooth plugin
 	this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
+
+	// Check if all requirements are fulfilled
+	if (this.m_bluetoothPlugin === null || !this.m_bluetoothPlugin.isSupported()) return false;
+
 	// Enable bluetooth
 	this.m_bluetoothPlugin.enable();
 
-	// Check if all requirements are fulfilled
-	if (this.m_bluetoothPlugin !== null && this.m_bluetoothPlugin.isSupported()) return true;
-
-	return false;
+	// Everything went fine
+	return true;
 };
 
 /**

@@ -40,9 +40,14 @@ Summary.prototype.m_distanceWidget = null;
 Summary.prototype.m_timerWidget = null;
 Summary.prototype.m_altitudeWidget = null;
 Summary.prototype.m_heartrateWidget = null;
+// Set to true if the page needs to adjust widget sizes (true on startup)
+Summary.prototype.m_bWidgetDirty = true;
 
 Summary.prototype.rightPage = "map.html";
 
+/**
+ * Called when the page is initialized
+ */
 Summary.prototype.oninit = function() {
 	// Listen to button clicks
 	$('#left-button').live('click', pages.summary.leftTap);
@@ -334,33 +339,33 @@ Summary.prototype.enableGPSTap = function() {
 		MsgBox.show($.i18n.prop('suspend_message_error') + e);
 		pages.summary._stopGPS();
 	});
-	
+
 	// Check if user has a HRM selected
-	var hrmType = SettingsHandler.getInt( 'hrmtype' );
-	console.log( "hrmType: " + hrmType );
-	if( hrmType > 0 ) {
+	var hrmType = SettingsHandler.getInt('hrmtype');
+	console.log("hrmType: " + hrmType);
+	if (hrmType > 0) {
 		var hrmImplementation = null;
-		
-		for( var i = 0; i < HeartRateMonitor.m_implementations.length; i++ ) {
-			if( HeartRateMonitor.m_implementations[i].m_id === hrmType ) {
+
+		for ( var i = 0; i < HeartRateMonitor.m_implementations.length; i++) {
+			if (HeartRateMonitor.m_implementations[i].m_id === hrmType) {
 				hrmImplementation = HeartRateMonitor.m_implementations[i];
 				break;
 			}
 		}
-		
-		if( hrmImplementation !== null ) {
-			hrmImplementation.setCallback( function( p_hrm ) {
-				alert( 'New HRM: ' + p_hrm );
-			} );
-			hrmImplementation.listDevices( function( p_devices ) {
-				console.log( 'Found devices: ' + p_devices );
-				if( p_devices.length > 0 ) {
+
+		if (hrmImplementation !== null) {
+			hrmImplementation.setCallback(function(p_hrm) {
+				alert('New HRM: ' + p_hrm);
+			});
+			hrmImplementation.listDevices(function(p_devices) {
+				console.log('Found devices: ' + p_devices);
+				if (p_devices.length > 0) {
 					var device = p_devices[0];
-					
-					hrmImplementation.connect( device.id );
+
+					hrmImplementation.connect(device.id);
 				}
-				
-			} );
+
+			});
 		}
 	}
 
@@ -535,8 +540,8 @@ Summary.prototype._updatePosition = function(p_position) {
 	// Reset the timestamp of the position (since we want to use the system time)
 	p_position.timestamp = 0;
 
-        // Calculate distance
-        var distance = 0;
+	// Calculate distance
+	var distance = 0;
 	var waypoint = pages.summary.m_track.getCurrentWaypoint();
 
 	if (waypoint !== null) {
@@ -613,9 +618,19 @@ Summary.prototype.loadTrack = function(p_fileEntry) {
 }
 
 /**
+ * Set the widgets to "dirty" (meaning that they should redraw the next time)
+ */
+Summary.prototype.setWidgetDirty = function() {
+	pages.summary.m_bWidgetDirty = true;
+}
+
+/**
  * Invoked on first display to size & configure all the display panels
  */
 Summary.prototype._pageshow = function(p_event, p_ui) {
+	// Check if we need to rescale
+	if (!pages.summary.m_bWidgetDirty) return;
+
 	// Set fixed page height
 	$('#summary-page').height($(window).height());
 
@@ -705,6 +720,9 @@ Summary.prototype._pageshow = function(p_event, p_ui) {
 
 	// Update clock
 	pages.summary._updateClock();
+
+	// We are all clean now
+	pages.summary.m_bWidgetDirty = false;
 };
 
 new Summary();
