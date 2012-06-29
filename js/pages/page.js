@@ -28,13 +28,21 @@ function Page( p_name ) {
 	// Keep name for later use
 	this.name = p_name;
 	
-    // Listen for the init & create event
-    $( '#' + p_name + '-page' ).live( 'pageinit', this.getEvtHandler(this.init) );
-    $( '#' + p_name + '-page' ).live( 'pagecreate', this.getEvtHandler(this.create) );
+	// Listen for the init & create event
+	$( '#' + p_name + '-page' ).live( 'pageinit', Utilities.getEvtHandler(this, this.init) );
+	$( '#' + p_name + '-page' ).live( 'pagecreate', Utilities.getEvtHandler(this, this.create) );
+
+	// Listen to windows phone specific custom mouse events (used for simulating incomplete touch input)
+	$( '#' + p_name + '-page' ).live( 'wpmousedown', Utilities.getEvtHandler(this, this.wpmousedown) );
+	$( '#' + p_name + '-page' ).live( 'wpmouseup', Utilities.getEvtHandler(this, this.wpmouseup) );
+	$( '#' + p_name + '-page' ).live( 'wpmousemove', Utilities.getEvtHandler(this, this.wpmousemove) );
 
 	// Listen to gesture events
-	$( '#' + p_name + '-page' ).live( 'swipeleft', this.getEvtHandler(this.swipeleft) );
-	$( '#' + p_name + '-page' ).live( 'swiperight', this.getEvtHandler(this.swiperight) );
+	$( '#' + p_name + '-page' ).live( 'swipeleft', Utilities.getEvtHandler(this, this.swipeleft) );
+	$( '#' + p_name + '-page' ).live( 'swiperight', Utilities.getEvtHandler(this, this.swiperight) );
+	
+	// Listen to pagehide event
+	$( '#' + p_name + '-page' ).live( 'pagehide', Utilities.getEvtHandler(this, Page.addHistory, this) );
 }
 
 Page.prototype.leftPage = null;
@@ -42,6 +50,45 @@ Page.prototype.rightPage = null;
 Page.prototype.name = "";
 Page.prototype.oninit = null;	// Hook for sub-classes to run additional code during init
 Page.prototype.oncreate = null;	// Hook for sub-classes to run additional code during create
+Page.prototype.m_bInHistory = true;	// Page should be included in history stack
+
+Page.historyStack = [];	// Global history stack
+Page.historyChangePage = false;
+
+/**
+ * Add a page to the history stack
+ */
+Page.addHistory = function( p_page ) {
+	if( !Page.historyChangePage && p_page.m_bInHistory ) {
+		Page.historyStack.push( p_page );
+	}
+}
+
+/**
+ * Go back one item in history stack
+ */
+Page.backInHistory = function() {
+	if( Page.historyStack.length > 0 ) {
+		var page = Page.historyStack.pop();
+		
+		// Switch back to page in history stack (but prevent from hashing page again)
+		Page.historyChangePage = true;
+		$.mobile.changePage( $('#' + page.name + '-page') );
+		Page.historyChangePage = false;
+	}
+	else {
+		// Exit app on android
+		var app = cordova.require("cordova/plugin/android/app");
+		if( app != null ) {
+			app.exitApp();
+		}
+		// Throw exception for windows phone
+		else {
+			throw "Last history item";
+		}
+		
+	}
+}
 
 /**
  * Automatically called when the page is created
@@ -61,6 +108,39 @@ Page.prototype.init = function() {
 	Translator.register( $('#' + this.name + '-page') );
 	
     if( typeof this.oninit === "function" ) this.oninit();
+}
+
+/**
+* WP7 event for supporting swipe gestures
+*/
+Page.prototype.wpmousedown = function(evt) {
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		var mouse_evt = $.Event('mousedown', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
+}
+
+/**
+* WP7 event for supporting swipe gestures
+*/
+Page.prototype.wpmouseup = function(evt) {
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		var mouse_evt = $.Event('mouseup', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
+}
+ 
+/**
+* WP7 event for supporting swipe gestures
+*/
+Page.prototype.wpmousemove = function(evt) {
+	// Check if there is a page
+	if( this.leftPage != null || this.rightPage != null ) {
+		var mouse_evt = $.Event('mousemove', { originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY } );
+		$( '#' + this.name + '-page' ).trigger( mouse_evt );
+	}
 }
 
 /**

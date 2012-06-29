@@ -20,6 +20,7 @@
 function License() {
 }
 License.prototype = new Page( "license" );
+License.prototype.m_bInHistory = false;
 
 /**
  * Handler for accepting the license
@@ -33,7 +34,7 @@ License.prototype._accept = function() {
 
 // Register button event
 License.prototype.oninit = function() {
-    $( '#license-accept-button' ).live( 'click', this.getEvtHandler(this._accept) );
+    $( '#license-accept-button' ).live( 'click', Utilities.getEvtHandler(this, this._accept) );
 }
 
 new License();	// Create single instance

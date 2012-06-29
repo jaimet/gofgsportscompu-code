@@ -22,6 +22,7 @@ function Trackdetail() {
 Trackdetail.prototype = new Page( "trackdetail" );
 Trackdetail.prototype.m_fileEntry = null;
 Trackdetail.prototype.m_displayName = null;
+Trackdetail.prototype.m_bInHistory = false;
 
 // Register button event
 Trackdetail.prototype.oninit = function() {

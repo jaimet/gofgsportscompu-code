@@ -20,4 +20,5 @@
 function About() {	
 }
 About.prototype = new Page( "about" );
+About.prototype.m_bInHistory = false;
 new About();
