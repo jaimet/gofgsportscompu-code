@@ -30,7 +30,8 @@ Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.m_track = null; // Currently active track
 Summary.prototype.m_trackwriter = null; // Write for active track
-Summary.prototype.m_powerManagement = null;
+Summary.prototype.m_powerManagement = null;		// Reference to powermanagement plugin
+Summary.prototype.m_hrmImplementation = null;	// Reference to hrmImplementation
 
 // Widgets references
 Summary.prototype.m_odometerWidget = null;
@@ -344,38 +345,36 @@ Summary.prototype.enableGPSTap = function() {
 	var hrmType = SettingsHandler.getInt('hrmtype');
 	console.log("hrmType: " + hrmType);
 	if (hrmType > 0) {
-		var hrmImplementation = null;
-
 		// Search for fitting hrm implementation
 		for ( var i = 0; i < HeartRateMonitor.m_implementations.length; i++) {
 			if (HeartRateMonitor.m_implementations[i].m_id === hrmType) {
-				hrmImplementation = HeartRateMonitor.m_implementations[i];
+				pages.summary.m_hrmImplementation = HeartRateMonitor.m_implementations[i];
 				break;
 			}
 		}
 
 		// If we found a HRM implementation, start the connection
-		if (hrmImplementation !== null) {
+		if (pages.summary.m_hrmImplementation !== null) {
 			// Setup error handler for HRM
-			hrmImplementation.setErrorCallback(function(p_error) {
+			pages.summary.m_hrmImplementation.setErrorCallback(function(p_error) {
 				alert( 'HRM error: ' + p_error );
 			});
 			
 			// Called when we receive a new HRM value
-			hrmImplementation.setCallback(function(p_hrm) {
+			pages.summary.m_hrmImplementation.setCallback(function(p_hrm) {
 				console.log('New heartrate: ' + p_hrm);
 				
 				pages.summary.m_heartrateWidget.setValue( p_hrm );
 			});
 			
 			// List all devices and connect to first found
-			hrmImplementation.listDevices(function(p_devices) {
+			pages.summary.m_hrmImplementation.listDevices(function(p_devices) {
 				console.log('Found devices: ' + p_devices);
 				if (p_devices.length > 0) {
 					var device = p_devices[0];
 
 					// Connect to devie & start reading
-					hrmImplementation.connect(device.id);
+					pages.summary.m_hrmImplementation.connect(device.id);
 				}
 			});
 		}
@@ -456,6 +455,12 @@ Summary.prototype._stopGPS = function() {
 	pages.summary.m_powerManagement.release(function() {
 	}, function(e) {
 	});
+	
+	// Check if there is an active HRM
+	if( pages.summary.m_hrmImplementation !== null ) {
+		pages.summary.m_hrmImplementation.disconnect();
+		pages.summary.m_hrmImplementation = null;
+	}
 
 	// No more actions to take if track didn't start yet
 	if (pages.summary.m_track === null) return;

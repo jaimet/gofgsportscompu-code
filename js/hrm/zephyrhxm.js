@@ -30,6 +30,7 @@ ZephyrHxM.prototype.m_socketId = null; // Reference to active socket id
 ZephyrHxM.prototype.m_dataBuffer = ""; // Buffer for incoming data from ZephyrHxM
 ZephyrHxM.prototype.m_name = "Zephyr HxM";
 ZephyrHxM.prototype.m_id = 1;
+ZephyrHxM.prototype.m_abort = false; // Set to true if an abort is pending
 
 /**
  * Check if this platform offers support for the ZephyrHxM
@@ -40,7 +41,7 @@ ZephyrHxM.prototype.isSupported = function() {
 
 	// Check if all requirements are fulfilled
 	if (this.m_bluetoothPlugin === null || !this.m_bluetoothPlugin.isSupported()) return false;
-
+	
 	// Enable bluetooth
 	this.m_bluetoothPlugin.enable();
 
@@ -57,14 +58,14 @@ ZephyrHxM.prototype.listDevices = function(p_successCallback) {
 	// Discover all bluetooth devices
 	this.m_bluetoothPlugin.discoverDevices(function(p_devices) {
 		var foundDevices = [];
-		
-		console.log( 'Discovered devices (JS): ' + p_devices.length );
-		
+
+		console.log('Discovered devices (JS): ' + p_devices.length);
+
 		// Cycle through discovered devices and check for HxM devices
 		for ( var i = 0; i < p_devices.length; i++) {
 			var currDevice = p_devices[i];
-			
-			console.log( 'Found device: ' + currDevice.name );
+
+			console.log('Found device: ' + currDevice.name);
 
 			// Check if this is a valid HxM device
 			if (currDevice.name.indexOf('HXM') === 0) {
@@ -74,8 +75,8 @@ ZephyrHxM.prototype.listDevices = function(p_successCallback) {
 				});
 			}
 		}
-		
-		console.log( 'Discovered valid devices: ' + foundDevices.length );
+
+		console.log('Discovered valid devices: ' + foundDevices.length);
 
 		// Send found devices to callback
 		if (typeof p_successCallback === 'function') p_successCallback(foundDevices);
@@ -103,10 +104,12 @@ ZephyrHxM.prototype.connect = function(p_deviceId) {
 			me.m_bluetoothPlugin.connect(function(p_socketid) {
 				me.m_connectId = p_deviceId;
 				me.m_socketId = p_socketid;
+				me.m_dataBuffer = "";
+				me.m_abort = false;
 
 				// Start reading from the serial port
-				me.m_bluetoothPlugin.read(Utilities.getEvtHandler(me, me._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
-			}, Utilities.getEvtHandler(this, this._errorCallback), p_deviceId, p_uuids[0]);
+				me.m_bluetoothPlugin.read(Utilities.getEvtHandler(me, me._read), Utilities.getEvtHandler(me, me._errorCallback), me.m_socketId);
+			}, Utilities.getEvtHandler(me, me._errorCallback), p_deviceId, p_uuids[0]);
 		}, Utilities.getEvtHandler(this, this._errorCallback), p_deviceId);
 	}
 };
@@ -115,6 +118,16 @@ ZephyrHxM.prototype.connect = function(p_deviceId) {
  * Called by the bluetooth plugin if reading from the device was successfull
  */
 ZephyrHxM.prototype._read = function(p_data) {
+	// Check if we should abort reading
+	if( this.m_abort ) {
+		this.m_bluetoothPlugin.disconnect(this.m_socketId);
+		this.m_socketId = null;
+		this.m_connectId = null;
+		this.m_dataBuffer = "";
+		this.m_abort = false;
+		return;
+	}
+	
 	// Attach data to internal buffer
 	this.m_dataBuffer += p_data;
 
@@ -138,7 +151,7 @@ ZephyrHxM.prototype._read = function(p_data) {
 
 	}
 	// Continue reading
-	this.m_bluetoothPlugin.read(Utilities.getEvtHandler(this, this._read), Utilities.getEvtHandler(this, this._errorCallback), p_socketid);
+	this.m_bluetoothPlugin.read(Utilities.getEvtHandler(this, this._read), Utilities.getEvtHandler(this, this._errorCallback), this.m_socketId);
 
 	// Notify callback
 	if (heartrate > 0 && typeof this.m_heartRateMonitorCallback === "function") this.m_heartRateMonitorCallback(heartrate);
@@ -150,6 +163,14 @@ ZephyrHxM.prototype._read = function(p_data) {
 ZephyrHxM.prototype._errorCallback = function(p_error) {
 	if (typeof this.m_errorCallback === "function") this.m_errorCallback(p_error);
 }
+
+/**
+ * Disconnect from a currently connected device
+ * NOTE: no argument passed, since the interface supports only one simultaneous connection
+ */
+ZephyrHxM.prototype.disconnect = function() {
+	this.m_abort = true;
+};
 
 // Create single instance
 new ZephyrHxM();
