@@ -196,6 +196,8 @@ Summary.prototype._updateDisplay = function(p_bLoading) {
 	pages.summary.m_altitudeWidget.setValue(l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1));
 	pages.summary.m_altitudeWidget.setSubInfo(0, currElevation.toFixed(0) + '%');
 	pages.summary.m_altitudeWidget.setSubInfo(1, avgElevation.toFixed(0) + '%');
+	pages.summary.m_heartrateWidget.setValue( waypoint.m_heartrate );
+	pages.summary.m_heartrateWidget.setSubInfo( 0, pages.summary.m_track.getMaximumHeartrate() );
 
 	// Calculate track duration
 	var duration = 0;
@@ -362,9 +364,10 @@ Summary.prototype.enableGPSTap = function() {
 			
 			// Called when we receive a new HRM value
 			pages.summary.m_hrmImplementation.setCallback(function(p_hrm) {
-				console.log('New heartrate: ' + p_hrm);
-				
 				pages.summary.m_heartrateWidget.setValue( p_hrm );
+				if( pages.summary.m_track !== null ) {
+					pages.summary.m_track.addHeartrate( p_hrm );
+				}
 			});
 			
 			// List all devices and connect to first found

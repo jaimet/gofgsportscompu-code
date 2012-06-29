@@ -32,7 +32,8 @@ var SettingsHandler = {
 		"autolock" : 1, // Automatically lock screen once tracking has started
 		"displayunits" : 1, // Unit(s) to use for displaying values
 		"uploadagree_2" : 0, // Agreed to the upload agreement
-		"hrmtype" : 0
+		"hrmtype" : 0,
+		"enablehrm": 1
 	// Enable heart rate monitor
 	},
 	m_settingsFileEntry : null,

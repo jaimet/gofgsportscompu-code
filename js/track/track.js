@@ -41,6 +41,7 @@ Track.prototype.m_maximumSpeed = 0; // Maximum speed (in m/s)
 Track.prototype.m_currentWaypoint = null; // Current waypoint
 Track.prototype.m_lastWaypoint = null; // Last waypoint
 Track.prototype.m_pauseTime = 0; // Total time of pause in this track
+Track.prototype.m_maximumHeartrate = 0;	// Maximum heartrate for this track
 
 /**
  * Add a new position to this track
@@ -98,7 +99,19 @@ Track.prototype.addPosition = function(p_position, p_distance, p_bPauseEnd) {
 Track.prototype.addHeartrate = function(p_heartrate) {
 	if (this.m_currentWaypoint !== null) {
 		this.m_currentWaypoint.m_heartrate = p_heartrate;
+		
+		// Check for new maximum heartrate
+		if( this.m_maximumHeartrate < p_heartrate ) {
+			this.m_maximumHeartrate = p_heartrate;
+		}
 	}
+}
+
+/**
+ * Get maximum heartrate
+ */
+Track.prototype.getMaximumHeartrate = function() {
+	return this.m_maximumHeartrate;
 }
 
 /**
