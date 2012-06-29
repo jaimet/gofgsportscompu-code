@@ -134,7 +134,7 @@ Summary.prototype._updateDisplay = function( p_bLoading ) {
 
             // Get reference to current coordinates
             var coords = waypoint.m_position.coords;
-
+            
             // Calculate average speed
             var avgSpeed = pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6;
             if( isNaN(avgSpeed) ) avgSpeed = 0.00;
@@ -268,7 +268,7 @@ Summary.prototype._gpsFixWait = function( p_position ) {
 
             // Check if we automatically start tracking
             if( SettingsHandler.get( 'autostarttracking' ) > 0 ) {
-                pages.summary._startGPS();
+                pages.summary._startGPS( p_position );
             }
         };
 
@@ -394,6 +394,9 @@ Summary.prototype._updatePosition = function( p_position ) {
 
             // Check if position is accurate enough
             if( p_position.coords.accuracy > SettingsHandler.getInt( 'minimumaccuracy' ) ) return;
+
+			// Reset the timestamp of the position (since we want to use the system time)
+			p_position.timestamp = 0;
 
             // Calculate distance
             var distance = 0;
