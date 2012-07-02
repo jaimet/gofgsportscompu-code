@@ -118,7 +118,10 @@ var GPSHandler = {
                           if( p_position.coords.speed < 0 ) return;
                           
                           // Force JavaScript timestamp (since on Android this sometimes seems to differ)
-                          p_position.timestamp = Utilities.getUnixTimestamp() * 1000;
+                          p_position = {
+                        		  coords: p_position.coords,
+                        		  timestamp: Utilities.getUnixTimestamp() * 1000
+                          };
 
                           if( typeof GPSHandler.m_positionCallback === "function" ) GPSHandler.m_positionCallback( p_position );
 
