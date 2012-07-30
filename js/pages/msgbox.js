@@ -26,6 +26,7 @@ MsgBox.prototype.m_text = '';
 MsgBox.prototype.m_buttons = '';
 MsgBox.prototype.m_prevPage = null;
 MsgBox.prototype.m_closeCallback = null;
+MsgBox.prototype.m_bInHistory = false;
 MsgBox.BUTTON_OK = 0x01;
 MsgBox.BUTTON_CANCEL = 0x02;
 MsgBox.BUTTON_YES = 0x04;
