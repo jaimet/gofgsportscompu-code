@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 .ui-icon-gofgsc-play {
 	background-image: url(icons/play.png);
 	background-position: 1px;
@@ -40,4 +39,89 @@
 .ui-icon-gofgsc-lock {
 	background-image: url(icons/lock.png);
 	background-position: 1px;
+}
+
+/* sport icons */
+.ui-icon-gofgsc-cycling {
+	background-image: url("../images/sporttypes/cycling.png");
+}
+
+.ui-icon-gofgsc-hiking {
+	background-image: url("../images/sporttypes/hiking.png");
+}
+
+.ui-icon-gofgsc-horseriding {
+	background-image: url("../images/sporttypes/horseriding.png");
+}
+
+.ui-icon-gofgsc-iceskating {
+	background-image: url("../images/sporttypes/iceskating.png");
+}
+
+.ui-icon-gofgsc-rollerblading {
+	background-image: url("../images/sporttypes/rollerblading.png");
+}
+
+.ui-icon-gofgsc-rowboat {
+	background-image: url("../images/sporttypes/rowboat.png");
+}
+
+.ui-icon-gofgsc-running {
+	background-image: url("../images/sporttypes/running.png");
+}
+
+.ui-icon-gofgsc-skateboarding {
+	background-image: url("../images/sporttypes/skateboarding.png");
+}
+
+.ui-icon-gofgsc-snowshoeing {
+	background-image: url("../images/sporttypes/snowshoeing.png");
+}
+
+.ui-icon-gofgsc-swimming {
+	background-image: url("../images/sporttypes/swimming.png");
+}
+
+/* HD sport icons */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.ui-icon-gofgsc-cycling {
+		background-image: url("../images/sporttypes/cycling-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-hiking {
+		background-image: url("../images/sporttypes/hiking-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-horseriding {
+		background-image: url("../images/sporttypes/horseriding-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-iceskating {
+		background-image: url("../images/sporttypes/iceskating-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-rollerblading {
+		background-image: url("../images/sporttypes/rollerblading-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-rowboat {
+		background-image: url("../images/sporttypes/rowboat-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-running {
+		background-image: url("../images/sporttypes/running-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-skateboarding {
+		background-image: url("../images/sporttypes/skateboarding-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-snowshoeing {
+		background-image: url("../images/sporttypes/snowshoeing-hires.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-gofgsc-swimming {
+		background-image: url("../images/sporttypes/swimming-hires.png");
+		background-size: 18px 18px;
+	}
 }

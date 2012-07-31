@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
 
-<!-- Cordova 1.9.0 -->
+<!-- Cordova 2.0.0 -->
 <script type="text/javascript" charset="utf-8" src="lib/cordova/cordova.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/cordova/powermanagement.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/cordova/bluetooth.js"></script>
@@ -26,11 +26,12 @@
 	$(document).bind("mobileinit", function() {
 		$.mobile.page.prototype.options.domCache = true;
 		$.mobile.defaultPageTransition = 'none';
+		$.mobile.defaultDialogTransition = 'none';
 		$.mobile.hashListeningEnabled = false; // Disable history tracking as we don't need it in our app
 		$.mobile.loadingMessageTextVisible = true;
 	});
 </script>
-<!-- jQueryMobile 1.1.0 -->
+<!-- jQueryMobile 1.1.1 -->
 <link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.css" />
 <link rel="stylesheet" href="lib/jquery.mobile/jquery.mobile.structure.css" />
 <script type="text/javascript" src="lib/jquery.mobile/jquery.mobile.js"></script>
