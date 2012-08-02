@@ -55,6 +55,9 @@ Summary.prototype.oninit = function() {
 	$('#middle-button').live('click', pages.summary.middleTap);
 	$('#right-button').live('click', pages.summary.rightTap);
 	$('#enableGPS-button').live('click', pages.summary.enableGPSTap);
+	$('#summary-page_sportstype-button').live('click', function(event,ui) {
+		$('#summary-page_sportstype-select').toggle();
+	} );
 
 	// Setup default click handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;
