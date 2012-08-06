@@ -20,7 +20,7 @@
 var SettingsHandler = {
 	m_appDirectoryEntry : null,
 	m_settingsStore : {
-		"minimumaccuracy" : 15,
+		"minimumaccuracy" : 10,
 		"minimumaltitudechange" : 5,
 		"showdidyouknow" : 'show',
 		"licenseagreed" : 0,
@@ -33,8 +33,8 @@ var SettingsHandler = {
 		"displayunits" : 1, // Unit(s) to use for displaying values
 		"uploadagree_2" : 0, // Agreed to the upload agreement
 		"hrmtype" : 0,
-		"enablehrm": 1
-	// Enable heart rate monitor
+		"enablehrm": 1,	// Enable heart rate monitor
+		"sportstype": 1	// Default sports type
 	},
 	m_settingsFileEntry : null,
 	onload : function() {
