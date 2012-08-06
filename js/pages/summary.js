@@ -563,12 +563,17 @@ Summary.prototype._updatePosition = function(p_position) {
 	// Calculate distance
 	var distance = 0;
 	var waypoint = pages.summary.m_track.getCurrentWaypoint();
-
+	
 	if (waypoint !== null) {
 		distance = Utilities.haversineDistance(waypoint.m_position.coords, p_position.coords);
 
 		// Check if new waypoint is out of the tolerance of the last one
 		if (distance <= waypoint.m_position.coords.accuracy) return;
+		
+		// Check if altitude accuracy is outside the minimum accuracy
+		if( p_position.coords.altitudeAccuracy > SettingsHandler.getInt('minimumaccuracy') ) {
+			p_position.coords.altitude = waypoint.m_position.coords.altitude;
+		}
 
 		// Check if altitude difference is within tolerance
 		if (Math.abs(waypoint.m_position.coords.altitude - p_position.coords.altitude) < SettingsHandler.getInt('minimumaltitudechange')) {

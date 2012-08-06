@@ -87,14 +87,23 @@ var GPSHandler = {
 	_positionUpdate : function(p_position) {
 		// iPhone hack
 		if (p_position.coords.speed < 0) return;
-
-		// Force JavaScript timestamp (since on Android this sometimes seems to differ)
-		p_position = {
-			coords : p_position.coords,
-			timestamp : Utilities.getUnixTimestamp() * 1000
+		
+		// Create separate in-js object for position data since on Android this seems to be read only
+		var position = {
+				coords: {
+					latitude: p_position.coords.latitude,
+					longitude: p_position.coords.longitude,
+					altitude: p_position.coords.altitude,
+					accuracy: p_position.coords.accuracy,
+					altitudeAccuracy: p_position.coords.altitudeAccuracy,
+					heading: p_position.coords.heading,
+					speed: p_position.coords.speed
+				},
+				timestamp: Utilities.getUnixTimestamp() * 1000	// Force JavaScript timestamp (since on Android this sometimes seems to differ)
 		};
 
-		if (typeof GPSHandler.m_positionCallback === "function") GPSHandler.m_positionCallback(p_position);
+		// Execute callback (if set)
+		if (typeof GPSHandler.m_positionCallback === "function") GPSHandler.m_positionCallback(position);
 	},
 
 	/**
