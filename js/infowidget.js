@@ -239,6 +239,7 @@ InfoWidget.prototype.setIndicator = function(p_up, p_down) {
  * Update display value
  */
 InfoWidget.prototype.setValue = function(p_value) {
+	this.m_options.value = p_value;
 	this.m_valueDiv.html(p_value);
 }
 
@@ -246,6 +247,7 @@ InfoWidget.prototype.setValue = function(p_value) {
  * Update unit value
  */
 InfoWidget.prototype.setUnit = function(p_unit) {
+	this.m_options.unit = p_unit;
 	this.m_unitDiv.html(p_unit);
 }
 
