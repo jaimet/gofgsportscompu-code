@@ -65,6 +65,9 @@ Summary.prototype.oninit = function() {
 		$('#summary-page_sportstype-button').buttonMarkup({ icon: "gofgsc-" + value });
 		SettingsHandler.set('sportstype', value);
 		SettingsHandler._save();
+		
+		// Hack since native returning doesn't seem to work
+		$.mobile.changePage('summary.html');
 	} );
 	// Add icons to all select options
 	$('#summary-page_sportstype-select').find('option').each( function(index, element) {
