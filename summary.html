@@ -5,25 +5,39 @@
 		<a id="summary-page_sportstype-button" href="#" data-icon="gofgsc-cycling" data-iconpos="notext"></a>
 		<!-- 		<img id="summary-page_gofgEmblem" src="images/gofgEmblem.png" style="position: absolute; left: 10px; top: 2px;" /> -->
 		<h1 data-i18n="summary"></h1>
-		<img id="summary-page_signal-strength" src="images/wirelessSignalOff48.png" style="position: absolute; right: 10px; top: 2px; height: 30px; width: 30px; display: none;" /> <a id="settings-button" href="settings.html" data-icon="grid" class="ui-btn-right" data-i18n="menu"></a>
+		<img id="summary-page_signal-strength" src="images/wirelessSignalOff48.png" style="position: absolute; right: 10px; top: 2px; height: 30px; width: 30px; display: none;" />
+		<a id="settings-button" href="settings.html" data-icon="grid" class="ui-btn-right" data-i18n="menu"></a>
 	</div>
 
 	<!-- /content -->
 	<div data-role="content" style="padding: 5px; padding-bottom: 0px;">
-		<div id="summary-page_sportstype-select" style="position: absolute; z-index: 1000; display: none;">
-			<ul data-role="listview" data-theme="a">
-				<li data-icon="gofgsc-cycling"><a href="#" name="summary-page_sportstype-button">cycling</a></li>
-				<li data-icon="gofgsc-hiking"><a href="#" name="summary-page_sportstype-button">hiking</a></li>
-				<li data-icon="gofgsc-horseriding"><a href="#" name="summary-page_sportstype-button">horseriding</a></li>
-				<li data-icon="gofgsc-iceskating"><a href="#" name="summary-page_sportstype-button">iceskating</a></li>
-				<li data-icon="gofgsc-rollerblading"><a href="#" name="summary-page_sportstype-button">rollerblading</a></li>
-				<li data-icon="gofgsc-rowboat"><a href="#" name="summary-page_sportstype-button">rowboat</a></li>
-				<li data-icon="gofgsc-running"><a href="#" name="summary-page_sportstype-button">running</a></li>
-				<li data-icon="gofgsc-skateboarding"><a href="#" name="summary-page_sportstype-button">skateboarding</a></li>
-				<li data-icon="gofgsc-snowshoeing"><a href="#" name="summary-page_sportstype-button">snowshoeing</a></li>
-				<li data-icon="gofgsc-swimming"><a href="#" name="summary-page_sportstype-button">swimming</a></li>
-			</ul>
-		</div>
+		<select data-native-menu="false" name="summary-page_sportstype-select" id="summary-page_sportstype-select">
+			<option value="cycling">cycling</option>
+			<option value="hiking">hiking</option>
+			<option value="horseriding">horseriding</option>
+			<option value="iceskating">iceskating</option>
+			<option value="rollerblading">rollerblading</option>
+			<option value="rowboat">rowboat</option>
+			<option value="running">running</option>
+			<option value="skateboarding">skateboarding</option>
+			<option value="snowshoeing">snowshoeing</option>
+			<option value="swimming">swimming</option>
+		</select>
+		
+<!-- 		<div id="summary-page_sportstype-select" style="position: absolute; z-index: 1000; display: none;"> -->
+<!-- 			<ul data-role="listview" data-theme="a"> -->
+<!-- 				<li data-icon="gofgsc-cycling"><a href="#" name="summary-page_sportstype-button">cycling</a></li> -->
+<!-- 				<li data-icon="gofgsc-hiking"><a href="#" name="summary-page_sportstype-button">hiking</a></li> -->
+<!-- 				<li data-icon="gofgsc-horseriding"><a href="#" name="summary-page_sportstype-button">horseriding</a></li> -->
+<!-- 				<li data-icon="gofgsc-iceskating"><a href="#" name="summary-page_sportstype-button">iceskating</a></li> -->
+<!-- 				<li data-icon="gofgsc-rollerblading"><a href="#" name="summary-page_sportstype-button">rollerblading</a></li> -->
+<!-- 				<li data-icon="gofgsc-rowboat"><a href="#" name="summary-page_sportstype-button">rowboat</a></li> -->
+<!-- 				<li data-icon="gofgsc-running"><a href="#" name="summary-page_sportstype-button">running</a></li> -->
+<!-- 				<li data-icon="gofgsc-skateboarding"><a href="#" name="summary-page_sportstype-button">skateboarding</a></li> -->
+<!-- 				<li data-icon="gofgsc-snowshoeing"><a href="#" name="summary-page_sportstype-button">snowshoeing</a></li> -->
+<!-- 				<li data-icon="gofgsc-swimming"><a href="#" name="summary-page_sportstype-button">swimming</a></li> -->
+<!-- 			</ul> -->
+<!-- 		</div> -->
 
 		<div class="ui-block">
 			<div id="speed-infowidget" class="ui-corner-tl ui-corner-tr"></div>

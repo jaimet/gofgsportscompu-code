@@ -20,7 +20,7 @@
 /**
  * Base class for handling a single track
  */
-function Track(p_uuid) {
+function Track(p_uuid, p_sportstype) {
 	// Check if we have to generate the UUID
 	if (typeof p_uuid === "undefined") {
 		this.m_uuid = $.uidGen({
@@ -29,19 +29,23 @@ function Track(p_uuid) {
 	} else {
 		this.m_uuid = p_uuid;
 	}
+	
+	// Remember sportstype
+	if(typeof p_sportstype !== "undefined" ) this.m_sportstype = p_sportstype;
 }
 
 Track.prototype.m_uuid = ''; // UUID
-Track.prototype.m_startTime = 0; // Start-Time (as unix-timestamp)
-Track.prototype.m_endTime = 0; // End-Time (as unix-timestamp)
-Track.prototype.m_totalDistance = 0; // Total distance (in meters)
-Track.prototype.m_elevationGain = 0; // Total elevation gain (in meters)
-Track.prototype.m_elevationLoss = 0; // Total elevation loss (in meters)
-Track.prototype.m_maximumSpeed = 0; // Maximum speed (in m/s)
-Track.prototype.m_currentWaypoint = null; // Current waypoint
-Track.prototype.m_lastWaypoint = null; // Last waypoint
-Track.prototype.m_pauseTime = 0; // Total time of pause in this track
-Track.prototype.m_maximumHeartrate = 0; // Maximum heartrate for this track
+Track.prototype.m_startTime = 0; // start-time (as unix-timestamp)
+Track.prototype.m_endTime = 0; // end-time (as unix-timestamp)
+Track.prototype.m_totalDistance = 0; // total distance (in meters)
+Track.prototype.m_elevationGain = 0; // total elevation gain (in meters)
+Track.prototype.m_elevationLoss = 0; // total elevation loss (in meters)
+Track.prototype.m_maximumSpeed = 0; // maximum speed (in m/s)
+Track.prototype.m_currentWaypoint = null; // current waypoint
+Track.prototype.m_lastWaypoint = null; // last waypoint
+Track.prototype.m_pauseTime = 0; // total time of pause in this track
+Track.prototype.m_maximumHeartrate = 0; // maximum heartrate for this track
+Track.prototype.m_sportstype = null;	// default sportstype
 
 /**
  * Add a new position to this track
@@ -187,4 +191,11 @@ Track.prototype.getElevationGain = function() {
  */
 Track.prototype.getElevationLoss = function() {
 	return this.m_elevationLoss;
+}
+
+/**
+ * Return the sportstype
+ */
+Track.prototype.getSportstype = function() {
+	return this.m_sportstype;
 }

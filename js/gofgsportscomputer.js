@@ -223,4 +223,6 @@ function getFormattedTimeDiff(p_timeDiff) {
  */
 $(document).ready(function() {
 	document.addEventListener("deviceready", GOFGSportsComputer._deviceReady, true);
+	
+	//$.mobile.changePage('summary.html');
 });

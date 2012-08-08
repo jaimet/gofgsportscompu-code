@@ -32,7 +32,7 @@ TrackWriter.prototype.m_continuousFileWriter = null;    // Writer to file
  * Write general track information to file
  */
 TrackWriter.prototype.writeInfo = function() {
-            this.m_continuousFileWriter.writeLine( "00;" + this.m_track.getUUID() );	// Write uuid to file
+            this.m_continuousFileWriter.writeLine( "00;" + this.m_track.getUUID() + ":" + this.m_track.getSportstype() );	// Write uuid & sportstype to file
         }
 
 /**

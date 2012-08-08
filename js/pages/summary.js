@@ -55,9 +55,26 @@ Summary.prototype.oninit = function() {
 	$('#middle-button').live('click', pages.summary.middleTap);
 	$('#right-button').live('click', pages.summary.rightTap);
 	$('#enableGPS-button').live('click', pages.summary.enableGPSTap);
-	$('#summary-page_sportstype-button').live('click', function(event,ui) {
-		$('#summary-page_sportstype-select').toggle();
+	// Open the sportstype select menu when clicking the button
+	$('#summary-page_sportstype-button').bind('click', function(event,ui) {
+		$('#summary-page_sportstype-select').selectmenu('open');
 	} );
+	// Listen to change event in order to update the icon + setting
+	$('#summary-page_sportstype-select').bind('change', function(event,ui) {
+		var value = $(event.target).val();
+		$('#summary-page_sportstype-button').buttonMarkup({ icon: "gofgsc-" + value });
+		SettingsHandler.set('sportstype', value);
+		SettingsHandler._save();
+	} );
+	// Add icons to all select options
+	$('#summary-page_sportstype-select').find('option').each( function(index, element) {
+		var value = $(this).val();
+		$('#summary-page_sportstype-select-menu').children().eq(index).find('.ui-btn-inner').append('<span class="ui-icon ui-icon-gofgsc-' + value + ' ui-icon-shadow" />');
+	} );
+	// Hide generated select button, since we use our own
+	$('#summary-page_sportstype-select-button').hide();
+	// Load stored sportstype and trigger a change to update everything
+	$('#summary-page_sportstype-select').val(SettingsHandler.get('sportstype')).selectmenu('refresh').trigger('change');
 
 	// Setup default click handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;
@@ -397,7 +414,7 @@ Summary.prototype.enableGPSTap = function() {
  */
 Summary.prototype._startGPS = function(p_position) {
 	// Start the new track
-	pages.summary.m_track = new Track();
+	pages.summary.m_track = new Track(SettingsHandler.get('sportstype'));
 	GOFGSportsComputer.m_trackDirectoryEntry.getFile(Utilities.getUnixTimestamp() + ".gsc", {
 		create : true,
 		exclusive : true

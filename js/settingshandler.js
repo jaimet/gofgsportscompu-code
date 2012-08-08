@@ -34,7 +34,7 @@ var SettingsHandler = {
 		"uploadagree_2" : 0, // Agreed to the upload agreement
 		"hrmtype" : 0,
 		"enablehrm": 1,	// Enable heart rate monitor
-		"sportstype": 1	// Default sports type
+		"sportstype": "cycling"	// Default sports type
 	},
 	m_settingsFileEntry : null,
 	onload : function() {

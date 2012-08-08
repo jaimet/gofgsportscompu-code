@@ -164,13 +164,13 @@ InfoWidget.prototype.autoSize = function() {
 
 	// Apply new sizes to all info-divs
 	$(this.m_infoDivs).each(function(index, value) {
-		// Apply sizes to label
-		value.jqmData('label').css('font-size', labelFontSize + 'px');
-		value.jqmData('label').css('margin-top', (value.jqmData('value').height() - value.jqmData('label').height()) + 'px');
-		
 		// Apply sizes to value & center vertically
 		value.jqmData('value').css('font-size', fontSize + 'px');
 		value.css('margin-top', ((divHeight - value.jqmData('value').height()) / 2.0).toFixed(0) + 'px');
+
+		// Apply sizes to label
+		value.jqmData('label').css('font-size', labelFontSize + 'px');
+		value.jqmData('label').css('margin-top', ((divHeight - value.jqmData('label').height()) / 2.0).toFixed(0) + 'px');
 	});
 
 }

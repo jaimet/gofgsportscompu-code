@@ -67,7 +67,14 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
             var first_line = lines.shift();
             var line_info = this.parseLine( first_line );
             if( line_info !== false && line_info.type === 0 ) {
-                track = new Track( line_info.values[0] );
+
+                // Due to compatibility to old versions, we support non-sportstype tracks as well
+                if( line_info.values.length >= 2 ) {
+                    track = new Track( line_info.values[0], line_info.values[1] );
+                }
+                else {
+                    track = new Track( line_info.values[0] );
+                }
             }
             else {
                 track = new Track();
