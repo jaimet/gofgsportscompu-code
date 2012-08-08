@@ -36,6 +36,8 @@ ZephyrHxM.prototype.m_abort = false; // Set to true if an abort is pending
  * Check if this platform offers support for the ZephyrHxM
  */
 ZephyrHxM.prototype.isSupported = function() {
+	return false;
+	
 	// Fetch bluetooth plugin
 	this.m_bluetoothPlugin = cordova.require('cordova/plugin/bluetooth');
 
