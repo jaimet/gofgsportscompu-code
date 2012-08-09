@@ -20,7 +20,7 @@
 /**
  * Base class for handling a single track
  */
-function Track(p_uuid, p_sporttype) {
+function Track(p_sporttype, p_uuid) {
 	// Check if we have to generate the UUID
 	if (typeof p_uuid === "undefined") {
 		this.m_uuid = $.uidGen({
@@ -45,7 +45,7 @@ Track.prototype.m_currentWaypoint = null; // current waypoint
 Track.prototype.m_lastWaypoint = null; // last waypoint
 Track.prototype.m_pauseTime = 0; // total time of pause in this track
 Track.prototype.m_maximumHeartrate = 0; // maximum heartrate for this track
-Track.prototype.m_sporttype = null;	// default sporttype
+Track.prototype.m_sporttype = '';	// default sporttype
 
 /**
  * Add a new position to this track

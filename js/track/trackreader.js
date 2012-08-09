@@ -70,10 +70,10 @@ TrackReader.prototype.onload = function( p_progressEvent ) {
 
                 // Due to compatibility to old versions, we support non-sporttype tracks as well
                 if( line_info.values.length >= 2 ) {
-                    track = new Track( line_info.values[0], line_info.values[1] );
+                    track = new Track( line_info.values[1], line_info.values[0] );
                 }
                 else {
-                    track = new Track( line_info.values[0] );
+                    track = new Track( undefined, line_info.values[0] );
                 }
             }
             else {
