@@ -51,7 +51,7 @@ TrackUploader.prototype._loadComplete = function(p_track) {
 			elevation_gain : p_track.getElevationGain(),
 			elevation_loss : p_track.getElevationLoss(),
 			maximum_speed : p_track.getMaximumSpeed(),
-			sports_type : p_track.getSportstype()
+			sport_type : p_track.getSporttype()
 		}),
 		id : (Math.random() * 10000).toFixed(0),
 		option : "com_gofgsportstracker",

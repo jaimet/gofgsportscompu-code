@@ -55,29 +55,29 @@ Summary.prototype.oninit = function() {
 	$('#middle-button').live('click', pages.summary.middleTap);
 	$('#right-button').live('click', pages.summary.rightTap);
 	$('#enableGPS-button').live('click', pages.summary.enableGPSTap);
-	// Open the sportstype select menu when clicking the button
-	$('#summary-page_sportstype-button').bind('click', function(event,ui) {
-		$('#summary-page_sportstype-select').selectmenu('open');
+	// Open the sporttype select menu when clicking the button
+	$('#summary-page_sporttype-button').bind('click', function(event,ui) {
+		$('#summary-page_sporttype-select').selectmenu('open');
 	} );
 	// Listen to change event in order to update the icon + setting
-	$('#summary-page_sportstype-select').bind('change', function(event,ui) {
+	$('#summary-page_sporttype-select').bind('change', function(event,ui) {
 		var value = $(event.target).val();
-		$('#summary-page_sportstype-button').buttonMarkup({ icon: "gofgsc-" + value });
-		SettingsHandler.set('sportstype', value);
+		$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + value });
+		SettingsHandler.set('sporttype', value);
 		SettingsHandler._save();
 		
 		// Hack since native returning doesn't seem to work
 		$.mobile.changePage('summary.html');
 	} );
 	// Add icons to all select options
-	$('#summary-page_sportstype-select').find('option').each( function(index, element) {
+	$('#summary-page_sporttype-select').find('option').each( function(index, element) {
 		var value = $(this).val();
-		$('#summary-page_sportstype-select-menu').children().eq(index).find('.ui-btn-inner').append('<span class="ui-icon ui-icon-gofgsc-' + value + ' ui-icon-shadow" />');
+		$('#summary-page_sporttype-select-menu').children().eq(index).find('.ui-btn-inner').append('<span class="ui-icon ui-icon-gofgsc-' + value + ' ui-icon-shadow" />');
 	} );
 	// Hide generated select button, since we use our own
-	$('#summary-page_sportstype-select-button').hide();
-	// Load stored sportstype and trigger a change to update everything
-	$('#summary-page_sportstype-select').val(SettingsHandler.get('sportstype')).selectmenu('refresh').trigger('change');
+	$('#summary-page_sporttype-select-button').hide();
+	// Load stored sporttype and trigger a change to update everything
+	$('#summary-page_sporttype-select').val(SettingsHandler.get('sporttype')).selectmenu('refresh').trigger('change');
 
 	// Setup default click handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;
@@ -417,7 +417,7 @@ Summary.prototype.enableGPSTap = function() {
  */
 Summary.prototype._startGPS = function(p_position) {
 	// Start the new track
-	pages.summary.m_track = new Track(SettingsHandler.get('sportstype'));
+	pages.summary.m_track = new Track(SettingsHandler.get('sporttype'));
 	GOFGSportsComputer.m_trackDirectoryEntry.getFile(Utilities.getUnixTimestamp() + ".gsc", {
 		create : true,
 		exclusive : true

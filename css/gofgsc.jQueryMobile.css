@@ -42,6 +42,10 @@
 }
 
 /* sport icons */
+.ui-icon-gofgsc-crosscountryskiing {
+	background-image: url("../images/sporttypes/crosscountryskiing.png");
+}
+
 .ui-icon-gofgsc-cycling {
 	background-image: url("../images/sporttypes/cycling.png");
 }
@@ -84,6 +88,11 @@
 
 /* HD sport icons */
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.ui-icon-gofgsc-crosscountryskiing {
+		background-image: url("../images/sporttypes/crosscountryskiing-hires.png");
+		background-size: 18px 18px;
+	}
+	
 	.ui-icon-gofgsc-cycling {
 		background-image: url("../images/sporttypes/cycling-hires.png");
 		background-size: 18px 18px;
