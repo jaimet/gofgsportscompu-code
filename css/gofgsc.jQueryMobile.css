@@ -66,8 +66,8 @@
 	background-image: url("../images/sporttypes/rollerblading.png");
 }
 
-.ui-icon-gofgsc-rowboat {
-	background-image: url("../images/sporttypes/rowboat.png");
+.ui-icon-gofgsc-rowing {
+	background-image: url("../images/sporttypes/rowing.png");
 }
 
 .ui-icon-gofgsc-running {
@@ -113,8 +113,8 @@
 		background-image: url("../images/sporttypes/rollerblading-hires.png");
 		background-size: 18px 18px;
 	}
-	.ui-icon-gofgsc-rowboat {
-		background-image: url("../images/sporttypes/rowboat-hires.png");
+	.ui-icon-gofgsc-rowing {
+		background-image: url("../images/sporttypes/rowing-hires.png");
 		background-size: 18px 18px;
 	}
 	.ui-icon-gofgsc-running {
