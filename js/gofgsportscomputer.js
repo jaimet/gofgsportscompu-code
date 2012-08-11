@@ -112,15 +112,6 @@ var GOFGSportsComputer = {
 			create : true,
 			exclusive : false
 		}, GOFGSportsComputer._trackDirectory, GOFGSportsComputer._trackDirectoryError);
-		// Get the export folder entry
-		GOFGSportsComputer.m_appDirectoryEntry.getDirectory("exports", {
-			create : true,
-			exclusive : false
-		}, GOFGSportsComputer._exportDirectory, GOFGSportsComputer._exportDirectoryError);
-
-		// Initialize settings handler
-		SettingsHandler.onload = GOFGSportsComputer._settingsReady;
-		SettingsHandler.init(GOFGSportsComputer.m_appDirectoryEntry);
 	},
 
 	/**
@@ -138,6 +129,12 @@ var GOFGSportsComputer = {
 	 */
 	_trackDirectory : function(p_directoryEntry) {
 		GOFGSportsComputer.m_trackDirectoryEntry = p_directoryEntry;
+
+		// Get the export folder entry
+		GOFGSportsComputer.m_appDirectoryEntry.getDirectory("exports", {
+			create : true,
+			exclusive : false
+		}, GOFGSportsComputer._exportDirectory, GOFGSportsComputer._exportDirectoryError);
 	},
 
 	/**
@@ -155,6 +152,10 @@ var GOFGSportsComputer = {
 	 */
 	_exportDirectory : function(p_directoryEntry) {
 		GOFGSportsComputer.m_exportDirectoryEntry = p_directoryEntry;
+
+		// Initialize settings handler
+		SettingsHandler.onload = GOFGSportsComputer._settingsReady;
+		SettingsHandler.init(GOFGSportsComputer.m_appDirectoryEntry);
 	},
 
 	/**
