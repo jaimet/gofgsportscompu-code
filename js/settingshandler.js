@@ -33,7 +33,7 @@ var SettingsHandler = {
 		"displayunits" : 1, // Unit(s) to use for displaying values
 		"uploadagree_2" : 0, // Agreed to the upload agreement
 		"hrmtype" : 0,
-		"enablehrm": 1,	// Enable heart rate monitor
+		"enablehrm": 0,	// Enable heart rate monitor
 		"sporttype": "cycling"	// Default sport type
 	},
 	m_settingsFileEntry : null,

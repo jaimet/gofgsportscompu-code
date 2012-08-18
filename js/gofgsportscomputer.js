@@ -59,7 +59,7 @@ var GOFGSportsComputer = {
 		/**
 		 * Windows Phone 7 hack for supporting basic swipe gestures
 		 */
-		$('#lock-overlay').bind('wpmousedown', function(evt) {
+		/*$('#lock-overlay').bind('wpmousedown', function(evt) {
 			var mouse_evt = $.Event('mousedown', {
 				originalEvent : evt,
 				pageX : evt.clientX,
@@ -82,7 +82,7 @@ var GOFGSportsComputer = {
 				pageY : evt.clientY
 			});
 			$('#lock-overlay').trigger(mouse_evt);
-		});
+		});*/
 
 		// Listen to back button events
 		$(document).bind('backbutton', Page.backInHistory);
