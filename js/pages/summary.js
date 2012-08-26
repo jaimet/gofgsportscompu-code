@@ -644,6 +644,9 @@ Summary.prototype._updatePosition = function(p_position) {
  * Called by the GPSHandler if there was an error
  */
 Summary.prototype._positionError = function(p_positionError) {
+	// ignore "The last location provider is no longer available" on Android
+	if( device.platform.toLowerCase() == "android" && p_positionError.code == 2 ) return;
+	
 	MsgBox.show($.i18n.prop('position_message_error') + p_positionError.message + " (" + p_positionError.code + ")");
 }
 
