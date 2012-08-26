@@ -20,7 +20,7 @@
 function MsgBox() {
 }
 
-MsgBox.prototype = new Page( "msgbox" );
+MsgBox.prototype = new Page("msgbox");
 MsgBox.prototype.m_title = '';
 MsgBox.prototype.m_text = '';
 MsgBox.prototype.m_buttons = '';
@@ -38,80 +38,82 @@ MsgBox.BUTTON_ALWAYS = 0x20;
  * Called when the page is inited
  */
 MsgBox.prototype.oninit = function() {
-            // Page events
-            $( '#msgbox-page' ).bind( 'pagebeforeshow', pages.msgbox.onpagebeforeshow );
+	// Page events
+	$('#msgbox-page').bind('pagebeforeshow', pages.msgbox.onpagebeforeshow);
 
-            // Button events
-            $( 'a[name="msgbox-button"]' ).each(function() {
-                                                    $(this).bind( 'click', parseInt($(this).attr('id').split('-')[2]), Utilities.getEvtHandler(pages.msgbox, pages.msgbox._close) )
-                                                } );
-        }
+	// Button events
+	$('a[name="msgbox-button"]').each(function() {
+		$(this).bind('click', parseInt($(this).attr('id').split('-')[2]), Utilities.getEvtHandler(pages.msgbox, pages.msgbox._close))
+	});
+}
 
 /**
  * Function for showing the actual messagebox
  */
-MsgBox.show = function( p_text, p_title, p_buttons, p_closeCallback ) {
-            // Check if msgbox is already visible
-            if( pages.msgbox.m_prevPage !== null ) return;
+MsgBox.show = function(p_text, p_title, p_buttons, p_closeCallback) {
+	// Check if msgbox is already visible
+	if (pages.msgbox.m_prevPage !== null) return;
 
-            pages.msgbox.m_prevPage = $.mobile.activePage;
+	pages.msgbox.m_prevPage = $.mobile.activePage;
 
-            pages.msgbox.m_text = p_text;
-            pages.msgbox.m_title = p_title || "";
-            pages.msgbox.m_buttons = p_buttons || MsgBox.BUTTON_OK;
-            pages.msgbox.m_closeCallback = p_closeCallback || null;
+	pages.msgbox.m_text = p_text;
+	pages.msgbox.m_title = p_title || "";
+	pages.msgbox.m_buttons = p_buttons || MsgBox.BUTTON_OK;
+	pages.msgbox.m_closeCallback = p_closeCallback || null;
 
-            $.mobile.changePage( 'msgbox.html', { role: 'dialog', transition: 'none' } );
-        }
-
-/**
- * Display confirm messagebox
- */
-MsgBox.confirm = function( p_text, p_closeCallback ) {
-            MsgBox.show( p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO, p_closeCallback );
-        }
+	$.mobile.changePage('msgbox.html', {
+		role : 'dialog'
+	});
+}
 
 /**
  * Display confirm messagebox
  */
-MsgBox.confirmAlways = function( p_text, p_closeCallback ) {
-            MsgBox.show( p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO | MsgBox.BUTTON_ALWAYS, p_closeCallback );
-        }
+MsgBox.confirm = function(p_text, p_closeCallback) {
+	MsgBox.show(p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO, p_closeCallback);
+}
+
+/**
+ * Display confirm messagebox
+ */
+MsgBox.confirmAlways = function(p_text, p_closeCallback) {
+	MsgBox.show(p_text, 'Confirm', MsgBox.BUTTON_YES | MsgBox.BUTTON_NO | MsgBox.BUTTON_ALWAYS, p_closeCallback);
+}
 
 /**
  * Display error messagebox
  */
-MsgBox.error = function( p_text, p_closeCallback ) {
-            MsgBox.show( p_text, 'Error', MsgBox.BUTTON_OK, p_closeCallback );
-        }
+MsgBox.error = function(p_text, p_closeCallback) {
+	MsgBox.show(p_text, 'Error', MsgBox.BUTTON_OK, p_closeCallback);
+}
 
 /**
  * Called right before the page is shown
  */
-MsgBox.prototype.onpagebeforeshow = function( prevPage ) {
-            $( '#msgbox-title' ).html( pages.msgbox.m_title );
-            $( '#msgbox-text' ).html( pages.msgbox.m_text );
+MsgBox.prototype.onpagebeforeshow = function(prevPage) {
+	$('#msgbox-title').html(pages.msgbox.m_title);
+	$('#msgbox-text').html(pages.msgbox.m_text);
 
-            // Hide all buttons by default
-            $( 'a[name="msgbox-button"]' ).hide();
+	// Hide all buttons by default
+	$('a[name="msgbox-button"]').hide();
 
-            // Show enabled buttons
-            var mask = 0x1;
-            while( mask <= 0x1000 ) {
-                if( pages.msgbox.m_buttons & mask ) {
-                    $('#msgbox-button-' + parseInt(mask) ).show();
-                }
-                mask = mask << 1;
-            }
-        }
+	// Show enabled buttons
+	var mask = 0x1;
+	while (mask <= 0x1000) {
+		if (pages.msgbox.m_buttons & mask) {
+			$('#msgbox-button-' + parseInt(mask)).show();
+		}
+		mask = mask << 1;
+	}
+}
 
 /**
  * Called when the ok or cancel button is clicked
  */
-MsgBox.prototype._close = function( evt ) {
-            $.mobile.changePage( pages.msgbox.m_prevPage );
-            pages.msgbox.m_prevPage = null;
-            if( typeof pages.msgbox.m_closeCallback === "function" ) pages.msgbox.m_closeCallback(evt.data);
-        }
+MsgBox.prototype._close = function(evt) {
+	$.mobile.changePage(pages.msgbox.m_prevPage);
+	pages.msgbox.m_prevPage = null;
+	if (typeof pages.msgbox.m_closeCallback === "function") pages.msgbox.m_closeCallback(evt.data);
+}
 
 new MsgBox();

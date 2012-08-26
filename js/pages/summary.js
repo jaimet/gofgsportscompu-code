@@ -187,6 +187,23 @@ Summary.prototype._speedTimer = function() {
 }
 
 /**
+ * Reset the display of the summary page to the values used during startup
+ */
+Summary.prototype._resetDisplay = function() {
+	pages.summary.m_speedWidget.setValue('0.0');
+	pages.summary.m_speedWidget.setSubInfo(0, '0.0');
+	pages.summary.m_speedWidget.setSubInfo(1, '0.0');
+	pages.summary.m_speedWidget.setIndicator(false, false);
+	pages.summary.m_distanceWidget.setValue('0.00');
+	pages.summary.m_timerWidget.setValue(getFormattedTimeDiff(0, true));
+	pages.summary.m_altitudeWidget.setValue('0.0');
+	pages.summary.m_altitudeWidget.setSubInfo(0, '0%');
+	pages.summary.m_altitudeWidget.setSubInfo(1, '0%');
+	pages.summary.m_heartrateWidget.setValue( '0' );
+	pages.summary.m_heartrateWidget.setSubInfo( 0, '0' );
+}
+
+/**
  * Update the display of the app (regular interval, once a second)
  * @param bool p_bLoading true if we are loading a track
  */
@@ -345,6 +362,9 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
  * Enable GPS and start searching for a signal
  */
 Summary.prototype.enableGPSTap = function() {
+	// Reset display
+	pages.summary._resetDisplay();
+
 	// Enable / disable buttons
 	$('#left-button').button('enable');
 	$('#right-button').button('disable');
@@ -367,7 +387,7 @@ Summary.prototype.enableGPSTap = function() {
 	});
 
 	// Check if user has a HRM selected
-	var hrmType = SettingsHandler.getInt('hrmtype');
+	/*var hrmType = SettingsHandler.getInt('hrmtype');
 	console.log("hrmType: " + hrmType);
 	if (hrmType > 0) {
 		// Search for fitting hrm implementation
@@ -404,7 +424,7 @@ Summary.prototype.enableGPSTap = function() {
 				}
 			});
 		}
-	}
+	}*/
 
 	// Check if auto-locking is on (but only apply it if we also enable autostart of tracking)
 	if (SettingsHandler.get('autostarttracking') > 0 && SettingsHandler.get('autolock') > 0) {
@@ -641,6 +661,8 @@ Summary.prototype.loadTrack = function(p_fileEntry) {
 	// Notify map & altitude-graph of new track
 	pages.map.newtrack();
 	pages.graph.newtrack();
+	// Reset display
+	pages.summary._resetDisplay();
 	// Start reading the track
 	var trackReader = new TrackReader(p_fileEntry, function(p_waypoint, p_track) {
 		pages.map.waypoint(p_waypoint, p_track);
@@ -655,10 +677,7 @@ Summary.prototype.loadTrack = function(p_fileEntry) {
 		pages.summary.m_track = null;
 
 		// Display summary page
-		$.mobile.changePage("summary.html", {
-			transition : 'slidedown',
-			reverse : true
-		});
+		$.mobile.changePage("summary.html");
 	}, null);
 }
 
