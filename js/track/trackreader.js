@@ -20,19 +20,19 @@
 /**
  * Class for reading a track from a file
  */
-function TrackReader( p_fileEntry, p_waypointCallback, p_trackCallback, p_errorCallback ) {
-    // Keep reference to callbacks
-    this.m_waypointCallback = p_waypointCallback;
-    this.m_trackCallback = p_trackCallback;
-    this.m_errorCallback = p_errorCallback;
+function TrackReader(p_fileEntry, p_waypointCallback, p_trackCallback, p_errorCallback) {
+	// Keep reference to callbacks
+	this.m_waypointCallback = p_waypointCallback;
+	this.m_trackCallback = p_trackCallback;
+	this.m_errorCallback = p_errorCallback;
 
-    // Create fileReader object
-    this.m_fileReader = new FileReader();
-    this.m_fileReader.onload = Utilities.getEvtHandler( this, this.onload );
-    this.m_fileReader.onerror = Utilities.getEvtHandler( this, this.onerror );
+	// Create fileReader object
+	this.m_fileReader = new FileReader();
+	this.m_fileReader.onload = Utilities.getEvtHandler(this, this.onload);
+	this.m_fileReader.onerror = Utilities.getEvtHandler(this, this.onerror);
 
-    // Create a file object out of the fileEntry
-    p_fileEntry.file( Utilities.getEvtHandler( this, this.file ), Utilities.getEvtHandler( this, this.fileError ) );
+	// Create a file object out of the fileEntry
+	p_fileEntry.file(Utilities.getEvtHandler(this, this.file), Utilities.getEvtHandler(this, this.fileError));
 }
 
 TrackReader.prototype.m_fileReader = null;
@@ -43,127 +43,133 @@ TrackReader.prototype.m_errorCallback = null;
 /**
  * Called once the fileEntry object returned a file entry
  */
-TrackReader.prototype.file = function( p_file ) {
-            this.m_fileReader.readAsText( p_file );
-        }
+TrackReader.prototype.file = function(p_file) {
+	this.m_fileReader.readAsText(p_file);
+}
 
 /**
  * Called when the file was loaded
  */
-TrackReader.prototype.onload = function( p_progressEvent ) {
-            // Split file-contents into lines
-            var lines = p_progressEvent.target.result.split( "\n" );
+TrackReader.prototype.onload = function(p_progressEvent) {
+	// Split file-contents into lines
+	var lines = p_progressEvent.target.result.split("\n");
 
-            // Check if we have at least two lines
-            if( lines.length < 2 ) {
-                return;
-            }
+	// Check if we have at least two lines
+	if (lines.length < 2) {
+		return;
+	}
 
-            // Define variable to track
-            var track = null;
+	// Define variable to track
+	var track = null;
 
-            // Fetch first line (which should contain the UUID)
-            // Due to compatibility to old versions, we support non-uuid tracks aswell
-            var first_line = lines.shift();
-            var line_info = this.parseLine( first_line );
-            if( line_info !== false && line_info.type === 0 ) {
+	// Fetch first line (which should contain the UUID)
+	// Due to compatibility to old versions, we support non-uuid tracks aswell
+	var first_line = lines.shift();
+	var line_info = this.parseLine(first_line);
+	if (line_info !== false && line_info.type === 0) {
+		// Due to compatibility to old versions, we support non-sporttype tracks as well
+		if (line_info.values.length >= 2) {
+			track = new Track(line_info.values[1], line_info.values[0]);
+		} else {
+			track = new Track(undefined, line_info.values[0]);
+		}
+	} else {
+		track = new Track();
+		lines.unshift(first_line);
+	}
 
-                // Due to compatibility to old versions, we support non-sporttype tracks as well
-                if( line_info.values.length >= 2 ) {
-                    track = new Track( line_info.values[1], line_info.values[0] );
-                }
-                else {
-                    track = new Track( undefined, line_info.values[0] );
-                }
-            }
-            else {
-                track = new Track();
-                lines.unshift( first_line );
-            }
+	// Cycle through all lines and read them
+	var position = null;
+	var distance = 0;
+	var bPauseEnd = false;
+	while (lines.length > 0) {
+		var line = lines.shift();
+		line_info = this.parseLine(line);
 
-            // Cycle through all lines and read them
-            var position = null;
-            var distance = 0;
-            var bPauseEnd = false;
-            while( lines.length > 0 ) {
-                var line = lines.shift();
-                line_info = this.parseLine( line );
+		// Check if we found a valid line
+		if (line_info === false) {
+			continue;
+		}
 
-                // Check if we found a valid line
-                if( line_info === false ) {
-                    continue;
-                }
+		// Select type of line
+		switch (line_info.type) {
+		case 1: // timestamp
+			if (position !== null) {
+				track.addPosition(position, distance, bPauseEnd)
+				// Run waypoint callback if necessary
+				if (typeof this.m_waypointCallback === "function") this.m_waypointCallback(track.getCurrentWaypoint(), track);
+			}
+			// Create new position & coordinates object (faking through fixed objects)
+			position = new gofg_position();
+			position.timestamp = line_info.values[0] * 1000;
+			distance = 0;
+			bPauseEnd = false;
+			break;
+		case 2: // location
+			position.coords.latitude = Utilities.toDegree(line_info.values[0]);
+			position.coords.longitude = Utilities.toDegree(line_info.values[1]);
+			position.coords.altitude = line_info.values[2];
+			break;
+		case 3: // heartrate
+			track.addHeartrate(line_info.values[0]);
+			break;
+		case 4: // distance
+			distance = line_info.values[0];
+			break;
+		case 5: // speed
+			position.coords.speed = line_info.values[0];
+			break;
+		case 6: // accuracy
+			position.coords.accuracy = line_info.values[0];
+			position.coords.altitudeAccuracy = line_info.values[1];
+			break;
+		case 7: // pause
+			bPauseEnd = true;
+			break;
+		default: // invalid
+			break;
+		}
+	}
+	
+	// handle last position entry
+	if (position !== null) {
+		track.addPosition(position, distance, bPauseEnd)
+		// Run waypoint callback if necessary
+		if (typeof this.m_waypointCallback === "function") this.m_waypointCallback(track.getCurrentWaypoint(), track);
+	}
 
-                // Select type of line
-                switch(line_info.type) {
-                case 1:     // timestamp
-                    if( position !== null ) {
-                        track.addPosition( position, distance, bPauseEnd )
-                        // Run waypoint callback if necessary
-                        if( typeof this.m_waypointCallback === "function" ) this.m_waypointCallback( track.getCurrentWaypoint(), track );
-                    }
-                    // Create new position & coordinates object (faking through fixed objects)
-                    position = new gofg_position();
-                    position.timestamp = line_info.values[0] * 1000;
-                    distance = 0;
-                    bPauseEnd = false;
-                    break;
-                case 2:     // location
-                    position.coords.latitude = Utilities.toDegree(line_info.values[0]);
-                    position.coords.longitude = Utilities.toDegree(line_info.values[1]);
-                    position.coords.altitude = line_info.values[2];
-                    break;
-                case 3:     // heartrate
-                    track.addHeartrate( line_info.values[0] );
-                    break;
-                case 4:     // distance
-                    distance = line_info.values[0];
-                    break;
-                case 5:     // speed
-                    position.coords.speed = line_info.values[0];
-                    break;
-                case 6:     // accuracy
-                    position.coords.accuracy = line_info.values[0];
-                    position.coords.altitudeAccuracy = line_info.values[1];
-                    break;
-                case 7:     // pause
-                    bPauseEnd = true;
-                    break;
-                default:    // invalid
-                    break;
-                }
-            }
-
-            // Run track callback if necessary
-            if( typeof this.m_trackCallback === "function" ) this.m_trackCallback( track );
-        }
+	// Run track callback if necessary
+	if (typeof this.m_trackCallback === "function") this.m_trackCallback(track);
+}
 
 /**
  * Helper function for parsing a line
  */
-TrackReader.prototype.parseLine = function ( p_line ) {
-            // Split into line components
-            var components = p_line.split(";");
-            if( components.length < 2 ) return false;
+TrackReader.prototype.parseLine = function(p_line) {
+	// Split into line components
+	var components = p_line.split(";");
+	if (components.length < 2) return false;
 
-            // Fetch the type
-            var type = components[0];
-            if( isNaN(type) ) return false;
-            type = parseInt(type);
+	// Fetch the type
+	var type = components[0];
+	if (isNaN(type)) return false;
+	type = parseInt(type);
 
-            // Fetch values
-            var values = components[1].split(":");
+	// Fetch values
+	var values = components[1].split(":");
 
-            // Return object for this line
-            return { type: type, values: values };
+	// Return object for this line
+	return {
+		type : type,
+		values : values
+	};
 }
 
-
 // TODO: Change error handling functions to both pass the same type of parameter
-TrackReader.prototype.fileError = function( p_fileError ) {
-            if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( p_fileError );
-        }
+TrackReader.prototype.fileError = function(p_fileError) {
+	if (typeof this.m_errorCallback === "function") this.m_errorCallback(p_fileError);
+}
 
 TrackReader.prototype.onerror = function() {
-            if( typeof this.m_errorCallback === "function" ) this.m_errorCallback( this.m_fileReader.error );
-        }
+	if (typeof this.m_errorCallback === "function") this.m_errorCallback(this.m_fileReader.error);
+}

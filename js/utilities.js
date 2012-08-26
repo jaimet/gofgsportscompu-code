@@ -17,52 +17,53 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function Utilities() {}
+function Utilities() {
+}
 
 /**
  * Create a wrapped function for maintaining the original context when invoking a callback
  */
-Utilities.getEvtHandler = function( p_context, p_callback ) {
-            // Prepare context & arguments for callback
-            var me = p_context;
-            var p_arguments = Array.prototype.slice.call(arguments, 2);
+Utilities.getEvtHandler = function(p_context, p_callback) {
+	// Prepare context & arguments for callback
+	var me = p_context;
+	var p_arguments = Array.prototype.slice.call(arguments, 2);
 
-            // Create wrapper function as event handler
-            return (function() {
-                        p_callback.apply(me, p_arguments.concat(Array.prototype.slice.call(arguments, 0)));
-                    } );
-        }
+	// Create wrapper function as event handler
+	return (function() {
+		p_callback.apply(me, p_arguments.concat(Array.prototype.slice.call(arguments, 0)));
+	});
+}
 
 /**
  * Convert a passed degree value to rad
  */
-Utilities.toRad = function( p_degree ) {
-            return p_degree / 180.0 * Math.PI;
-        }
+Utilities.toRad = function(p_degree) {
+	return p_degree / 180.0 * Math.PI;
+}
 
 /**
  * Convert a passed rad value to degree
  */
-Utilities.toDegree = function( p_rad ) {
-            return p_rad / Math.PI * 180.0;
-        }
+Utilities.toDegree = function(p_rad) {
+	return p_rad / Math.PI * 180.0;
+}
 
 /**
  * Calculate the distance between two coordinates based on the haversine formula
  */
-Utilities.haversineDistance = function( p_startCoordinates, p_endCoordinates ) {
-            var latDiff = Utilities.toRad( p_endCoordinates.latitude - p_startCoordinates.latitude );
-            var lonDiff = Utilities.toRad( p_endCoordinates.longitude - p_startCoordinates.longitude );
+Utilities.haversineDistance = function(p_startCoordinates, p_endCoordinates) {
+	var latDiff = Utilities.toRad(p_endCoordinates.latitude - p_startCoordinates.latitude);
+	var lonDiff = Utilities.toRad(p_endCoordinates.longitude - p_startCoordinates.longitude);
 
-            var h = Math.pow( Math.sin( latDiff / 2.0 ), 2 ) + Math.cos( Utilities.toRad(p_startCoordinates.latitude) ) * Math.cos( Utilities.toRad(p_endCoordinates.latitude) ) * Math.pow( Math.sin(lonDiff) / 2.0, 2 );
-            var distance = 2.0 * 6371009 * Math.asin( Math.sqrt(h) );
+	var h = Math.pow(Math.sin(latDiff / 2.0), 2) + Math.cos(Utilities.toRad(p_startCoordinates.latitude)) * Math.cos(Utilities.toRad(p_endCoordinates.latitude)) * Math.pow(Math.sin(lonDiff) / 2.0, 2);
+	var distance = 2.0 * 6371009 * Math.asin(Math.sqrt(h));
 
-            return distance;
-        }
+	return distance;
+}
 
 /**
  * Return current time as unix-timestamp
  */
 Utilities.getUnixTimestamp = function() {
-            return ((new Date()).getTime() / 1000).toFixed(0);
-        }
+	return ((new Date()).getTime() / 1000).toFixed(0);
+}
