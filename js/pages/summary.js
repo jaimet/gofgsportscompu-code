@@ -479,52 +479,56 @@ Summary.prototype._startGPS = function(p_position) {
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
-	// Hide accuracy status image & update it
-	$('#summary-page_signal-strength').hide();
-	pages.summary._updateAccuracy(-1);
+	MsgBox.confirm($.i18n.prop('stop_message'), function(p_button) {
+		if (p_button === MsgBox.BUTTON_YES) {
+			// Hide accuracy status image & update it
+			$('#summary-page_signal-strength').hide();
+			pages.summary._updateAccuracy(-1);
 
-	// Switch button display
-	$('#summary-page_control').fadeOut(250, function() {
-		$('#summary-page_enableGPS').fadeIn(250);
+			// Switch button display
+			$('#summary-page_control').fadeOut(250, function() {
+				$('#summary-page_enableGPS').fadeIn(250);
+			});
+			$('#settings-button').show();
+
+			// Reset loading message (because searching for satellites might still be active)
+			$.mobile.loadingMessage = $.i18n.prop("loading_message");
+			$.mobile.hidePageLoadingMsg();
+
+			// Update button icons
+			$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
+
+			// Stop GPS & release power lock
+			GPSHandler.stopGPS();
+			pages.summary.m_powerManagement.release(function() {
+			}, function(e) {
+			});
+
+			// Check if there is an active HRM
+			if( pages.summary.m_hrmImplementation !== null ) {
+				pages.summary.m_hrmImplementation.disconnect();
+				pages.summary.m_hrmImplementation = null;
+			}
+
+			// No more actions to take if track didn't start yet
+			if (pages.summary.m_track === null) return;
+
+			// Disable interface timer
+			if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
+			pages.summary.m_mainTimer = 0;
+
+			// Finalize track
+			pages.summary.m_trackwriter.writeWaypoint(true);
+
+			// Notify map- & altitude-screen of ending track
+			pages.map.endtrack(pages.summary.m_track);
+			pages.graph.endtrack(pages.summary.m_track);
+
+			// Remove references to closed tracks
+			pages.summary.m_track = null;
+			pages.summary.m_trackwriter = null;
+		}
 	});
-	$('#settings-button').show();
-
-	// Reset loading message (because searching for satellites might still be active)
-	$.mobile.loadingMessage = $.i18n.prop("loading_message");
-	$.mobile.hidePageLoadingMsg();
-
-	// Update button icons
-	$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
-
-	// Stop GPS & release power lock
-	GPSHandler.stopGPS();
-	pages.summary.m_powerManagement.release(function() {
-	}, function(e) {
-	});
-	
-	// Check if there is an active HRM
-	if( pages.summary.m_hrmImplementation !== null ) {
-		pages.summary.m_hrmImplementation.disconnect();
-		pages.summary.m_hrmImplementation = null;
-	}
-
-	// No more actions to take if track didn't start yet
-	if (pages.summary.m_track === null) return;
-
-	// Disable interface timer
-	if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
-	pages.summary.m_mainTimer = 0;
-
-	// Finalize track
-	pages.summary.m_trackwriter.writeWaypoint(true);
-
-	// Notify map- & altitude-screen of ending track
-	pages.map.endtrack(pages.summary.m_track);
-	pages.graph.endtrack(pages.summary.m_track);
-
-	// Remove references to closed tracks
-	pages.summary.m_track = null;
-	pages.summary.m_trackwriter = null;
 };
 
 /**

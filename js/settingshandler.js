@@ -21,8 +21,7 @@ var SettingsHandler = {
 	m_appDirectoryEntry : null,
 	m_settingsStore : {
 		"minimumaccuracy" : 10,
-		"minimumaltitudechange" : 5,
-		"showdidyouknow" : 'show',
+		"minimumaltitudechange" : 15,
 		"licenseagreed" : 0,
 		"language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
 		"gpsinterval" : 3, // Interval (in seconds) which is used to receive new GPS position updates
@@ -107,9 +106,11 @@ var SettingsHandler = {
 						SettingsHandler.m_settingsStore[this.nodeName.toLowerCase()] = $(this).text();
 					});
 				}
+				// force disabled hrm
+				SettingsHandler.m_settingsStore['enablehrm'] = 0;
 				// Notify others
 				if (typeof SettingsHandler.onload === "function") SettingsHandler.onload();
-			}
+			};
 			reader.readAsText(p_file);
 		}, this._fileError);
 	},

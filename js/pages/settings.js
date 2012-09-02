@@ -67,7 +67,6 @@ Settings.prototype._save = function() {
 	// Store all settings in settingshandler & save them
 	SettingsHandler.set('minimumaccuracy', $('#settings-page').find('#minAccuracySlider').val());
 	SettingsHandler.set('minimumaltitudechange', $('#settings-page').find('#minAltitudeChangeSlider').val());
-	SettingsHandler.set('showdidyouknow', $('#settings-page').find('#showdidyouknowSlider').val());
 	SettingsHandler.set('language', $('#settings-page').find('#languageSelect').val());
 	SettingsHandler.set('gpsinterval', $('#settings-page').find('#gpsIntervalSlider').val());
 	SettingsHandler.set('autostarttracking', $('#settings-page').find('#autostartTrackingSlider').val());
