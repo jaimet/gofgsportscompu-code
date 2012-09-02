@@ -166,7 +166,7 @@ InfoWidget.prototype.autoSize = function() {
 	$(this.m_infoDivs).each(function(index, value) {
 		// Apply sizes to value & center vertically
 		value.jqmData('value').css('font-size', fontSize + 'px');
-		value.css('margin-top', ((divHeight - value.jqmData('value').height()) / 2.0).toFixed(0) + 'px');
+		value.jqmData('value').css('margin-top', ((divHeight - value.jqmData('value').height()) / 2.0).toFixed(0) + 'px');
 
 		// Apply sizes to label
 		value.jqmData('label').css('font-size', labelFontSize + 'px');
@@ -190,7 +190,7 @@ InfoWidget.prototype.addSubInfo = function(p_label, p_value, p_sizeValue) {
 
 	var infoLabelDiv = $('<div>');
 	infoLabelDiv.css('position', 'absolute').css('left', '0px').css('top', '0px').css('text-align', 'right').html(p_label);
-
+	
 	var infoValueDiv = $('<div>');
 	infoValueDiv.css('position', 'absolute').css('right', '0px').css('top', '0px').css('text-align', 'right').html(p_value);
 
