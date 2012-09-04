@@ -70,23 +70,24 @@ Page.addHistory = function( p_page ) {
 Page.backInHistory = function() {
 	if( Page.historyStack.length > 0 ) {
 		var page = Page.historyStack.pop();
-		
+
 		// Switch back to page in history stack (but prevent from hashing page again)
 		Page.historyChangePage = true;
 		$.mobile.changePage( $('#' + page.name + '-page') );
 		Page.historyChangePage = false;
 	}
 	else {
-		// Exit app on android
-		var app = cordova.require("cordova/plugin/android/app");
-		if( app != null ) {
-			app.exitApp();
+		if( device.platform.toLowerCase() == "android" ) {
+			// Exit app on android
+			var app = cordova.require("cordova/plugin/android/app");
+			if( app != null ) {
+				app.exitApp();
+			}
 		}
 		// Throw exception for windows phone
 		else {
 			throw "Last history item";
 		}
-		
 	}
 }
 
