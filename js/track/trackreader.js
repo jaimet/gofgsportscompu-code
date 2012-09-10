@@ -53,6 +53,7 @@ TrackReader.prototype.file = function(p_file) {
 TrackReader.prototype.onload = function(p_progressEvent) {
 	// Split file-contents into lines
 	var lines = p_progressEvent.target.result.split("\n");
+	p_progressEvent = null;
 
 	// Check if we have at least two lines
 	if (lines.length < 2) {
@@ -77,7 +78,7 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 		track = new Track();
 		lines.unshift(first_line);
 	}
-
+	
 	// Cycle through all lines and read them
 	var position = null;
 	var distance = 0;
@@ -101,27 +102,27 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 			}
 			// Create new position & coordinates object (faking through fixed objects)
 			position = new gofg_position();
-			position.timestamp = line_info.values[0] * 1000;
+			position.timestamp = parseInt(line_info.values[0]) * 1000;
 			distance = 0;
 			bPauseEnd = false;
 			break;
 		case 2: // location
-			position.coords.latitude = Utilities.toDegree(line_info.values[0]);
-			position.coords.longitude = Utilities.toDegree(line_info.values[1]);
-			position.coords.altitude = line_info.values[2];
+			position.coords.latitude = Utilities.toDegree(parseFloat(line_info.values[0]));
+			position.coords.longitude = Utilities.toDegree(parseFloat(line_info.values[1]));
+			position.coords.altitude = parseFloat(line_info.values[2]);
 			break;
 		case 3: // heartrate
-			track.addHeartrate(line_info.values[0]);
+			track.addHeartrate(parseInt(line_info.values[0]));
 			break;
 		case 4: // distance
-			distance = line_info.values[0];
+			distance = parseFloat(line_info.values[0]);
 			break;
 		case 5: // speed
-			position.coords.speed = line_info.values[0];
+			position.coords.speed = parseFloat(line_info.values[0]);
 			break;
 		case 6: // accuracy
-			position.coords.accuracy = line_info.values[0];
-			position.coords.altitudeAccuracy = line_info.values[1];
+			position.coords.accuracy = parseFloat(line_info.values[0]);
+			position.coords.altitudeAccuracy = parseFloat(line_info.values[1]);
 			break;
 		case 7: // pause
 			bPauseEnd = true;

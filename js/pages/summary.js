@@ -217,10 +217,21 @@ Summary.prototype._updateDisplay = function(p_bLoading) {
 	// Get reference to current coordinates
 	var coords = waypoint.m_position.coords;
 
+	// Calculate track duration
+	var duration = 0;
+	if (p_bLoading) {
+		duration = pages.summary.m_track.getDuration();
+	} else {
+		duration = Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime();
+	}
+	// Substract pause from total duration
+	duration -= pages.summary.m_track.getPauseTime();
+
 	// Calculate average speed
-	var avgSpeed = pages.summary.m_track.getTotalDistance() / pages.summary.m_track.getDuration() * 3.6;
+	var avgSpeed = pages.summary.m_track.getTotalDistance() / duration * 3.6;
 	var currSpeed = coords.speed * 3.6;
 	if (isNaN(avgSpeed)) avgSpeed = 0.00;
+
 	// Current & average elevation rate
 	var currElevation = waypoint.m_altitudeDiff / waypoint.m_distance * 100;
 	if (isNaN(currElevation)) currElevation = 0.00;
@@ -238,17 +249,6 @@ Summary.prototype._updateDisplay = function(p_bLoading) {
 	pages.summary.m_altitudeWidget.setSubInfo(1, avgElevation.toFixed(0) + '%');
 	pages.summary.m_heartrateWidget.setValue( waypoint.m_heartrate );
 	pages.summary.m_heartrateWidget.setSubInfo( 0, pages.summary.m_track.getMaximumHeartrate() );
-
-	// Calculate track duration
-	var duration = 0;
-	if (p_bLoading) {
-		duration = pages.summary.m_track.getDuration();
-	} else {
-		duration = Utilities.getUnixTimestamp() - pages.summary.m_track.getStartTime();
-	}
-	// Substract pause from total duration
-	duration -= pages.summary.m_track.getPauseTime();
-
 	pages.summary.m_timerWidget.setValue(getFormattedTimeDiff(duration, true));
 };
 

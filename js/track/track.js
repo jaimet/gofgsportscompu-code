@@ -53,6 +53,9 @@ Track.prototype.m_sporttype = '';	// default sporttype
 Track.prototype.addPosition = function(p_position, p_distance, p_bPauseEnd) {
 	// Make sure parameters are treated using the correct type
 	p_distance = parseFloat(p_distance);
+	
+	// increase waypoint count
+	this.m_waypointCount++;
 
 	// Assign last waypoint
 	this.m_lastWaypoint = this.m_currentWaypoint;
@@ -92,6 +95,7 @@ Track.prototype.addPosition = function(p_position, p_distance, p_bPauseEnd) {
 	// Check for maximum speed
 	if (this.m_maximumSpeed < this.m_currentWaypoint.m_position.coords.speed) {
 		this.m_maximumSpeed = this.m_currentWaypoint.m_position.coords.speed;
+		console.log( 'New maximum speed: ' + this.m_maximumSpeed );
 	}
 }
 
