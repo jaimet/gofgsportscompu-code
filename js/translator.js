@@ -71,7 +71,7 @@ var Translator = {
 				}
 				// .. continue searching if there are children left
 				else {
-					$(this).children().each(findTextOnly);
+					$(this).children(':not(.ui-icon)').each(findTextOnly);
 				}
 			}
 		});
