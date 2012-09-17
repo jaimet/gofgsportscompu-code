@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Wolfgang Koller
+ * Copyright (C) 2011-2012 Wolfgang Koller
  * 
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  * 
@@ -17,60 +17,84 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Continuous filewriter for track content
+ */
 function ContinuousFileWriter( p_fileEntry ) {
-	// Define the member variables
-	var m_writeStack = new Array();
-	var m_fileEntry = p_fileEntry;
-	var m_fileWriter = null;
+	console.log( '[CFW] Create' );
 	
-	// Define our member functions
-	this.writeLine = writeLine;
-	this.write = write;
-	this._checkWrite = _checkWrite;
-	this._write = _write;
-	this._fileWriter = _fileWriter;
-	this._fileError = _fileError;
+	this.m_fileEntry = p_fileEntry;
+	this.m_writeStack = [];
+	
+	// create writer for file object
+	this.m_fileEntry.createWriter( Utilities.getEvtHandler(this, this._fileWriter), Utilities.getEvtHandler(this, this._fileError) );
+}
 
-	// Create a writer for the file-entry
-	m_fileEntry.createWriter( _fileWriter );
-	
-	function writeLine( p_lineText ) {
-		write( p_lineText + "\n" );
-	}
-	
-	function write( p_text ) {
-		m_writeStack.push( p_text );
-		
-		_checkWrite();
-	}
+ContinuousFileWriter.prototype.m_fileEntry = null;	// fileEntry originally passed
+ContinuousFileWriter.prototype.m_fileWriter = null; // writer for file content
+ContinuousFileWriter.prototype.m_writeStack = null;	// stack of content waiting to be written to file
+ContinuousFileWriter.prototype.m_bWriting = false;	// is a write process currently running
 
-	function _checkWrite() {
-//		console.log( "Checking write: " + m_fileWriter + " / " + m_fileWriter.readyState );
-		
-		if( m_fileWriter != null && m_fileWriter.readyState != FileWriter.WRITING ) _write();
-	}
+/**
+ * called when the fileWriter object is ready
+ */
+ContinuousFileWriter.prototype._fileWriter = function( p_fileWriter ) {
+	console.log( '[CFW] fileWriter' );
+
+	this.m_fileWriter = p_fileWriter;
+	// setup event handlers
+	this.m_fileWriter.onwrite = Utilities.getEvtHandler(this, this._write);
+	this.m_fileWriter.onerror = Utilities.getEvtHandler(this, this._fileError);
 	
-	function _write() {
-		if( m_writeStack.length <= 0 ) return;
-//		console.log( "Writing..." );
-		
-		m_fileWriter.write( m_writeStack.shift() );
+	// check if stack is already populated
+	this._checkWrite();
+}
+
+/**
+ * called when an error occurs
+ */
+ContinuousFileWriter.prototype._fileError = function( p_fileError ) {
+	MsgBox.error( 'Error while writing to file: ' + p_fileError.code );
+}
+
+/**
+ * checks if writing should continue
+ */
+ContinuousFileWriter.prototype._checkWrite = function() {
+	console.log( '[CFW] checkWrite' );
+
+	if( this.m_fileWriter != null && !this.m_bWriting && this.m_writeStack.length > 0 ) {
+		this.m_bWriting = true;
+		this.m_fileWriter.write( this.m_writeStack.shift() );
 	}
-	
-	// Callback once the writer is ready
-	function _fileWriter( p_fileWriter ) {
-//		console.log( "CFW: FileWriter ready" );
-		
-		m_fileWriter = p_fileWriter;
-		m_fileWriter.onerror = _fileError;
-		m_fileWriter.onwriteend = _checkWrite;
-		
-		// Check for writing immediately
-		_checkWrite();
-	}
-	
-	// Called whenever an error occurs
-	function _fileError( p_fileError ) {
-		console.log( "Error while handling file-writing: " + p_fileError.code );
-	}
+}
+
+/**
+ * called when writing has finished
+ */
+ContinuousFileWriter.prototype._write = function() {
+	console.log( '[CFW] _write' );
+
+	this.m_bWriting = false;
+	this._checkWrite();
+}
+
+/**
+ * write content to file
+ */
+ContinuousFileWriter.prototype.write = function( p_text ) {
+	console.log( '[CFW] write' );
+
+	this.m_writeStack.push( p_text );
+	this._checkWrite();
+}
+
+/**
+ * write content to file (including a newline at the end)
+ */
+ContinuousFileWriter.prototype.writeLine = function( p_text ) {
+	console.log( '[CFW] writeLine' );
+
+	this.m_writeStack.push( p_text + "\n" );
+	this._checkWrite();
 }
