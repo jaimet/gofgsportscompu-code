@@ -311,7 +311,7 @@ Summary.prototype._gpsFixWait = function(p_position) {
 	$('#left-button').button('enable');
 	$('#right-button').button('enable');
 	// Setup click handlers
-	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_leftTapHandler = pages.summary._stopTap;
 	pages.summary.m_rightTapHandler = pages.summary._startGPS;
 
 	// Disable gpsfixwait callback
@@ -369,7 +369,7 @@ Summary.prototype.enableGPSTap = function() {
 	$('#left-button').button('enable');
 	$('#right-button').button('disable');
 	// Setup click handlers
-	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_leftTapHandler = pages.summary._stopTap;
 
 	// Switch button display
 	$('#settings-button').hide();
@@ -455,7 +455,7 @@ Summary.prototype._startGPS = function(p_position) {
 		// Update button icons
 		$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
 		// Setup click handlers
-		pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+		pages.summary.m_leftTapHandler = pages.summary._stopTap;
 		pages.summary.m_rightTapHandler = pages.summary._pause;
 
 		// Start updating our interface
@@ -479,57 +479,69 @@ Summary.prototype._startGPS = function(p_position) {
  * Button onClick-handler for stopping GPS tracking
  */
 Summary.prototype._stopGPS = function() {
-	MsgBox.confirm($.i18n.prop('stop_message'), function(p_button) {
-		if (p_button === MsgBox.BUTTON_YES) {
-			// Hide accuracy status image & update it
-			$('#summary-page_signal-strength').hide();
-			pages.summary._updateAccuracy(-1);
+	// Hide accuracy status image & update it
+	$('#summary-page_signal-strength').hide();
+	pages.summary._updateAccuracy(-1);
 
-			// Switch button display
-			$('#summary-page_control').fadeOut(250, function() {
-				$('#summary-page_enableGPS').fadeIn(250);
-			});
-			$('#settings-button').show();
-
-			// Reset loading message (because searching for satellites might still be active)
-			$.mobile.loadingMessage = $.i18n.prop("loading_message");
-			$.mobile.hidePageLoadingMsg();
-
-			// Update button icons
-			$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
-
-			// Stop GPS & release power lock
-			GPSHandler.stopGPS();
-			pages.summary.m_powerManagement.release(function() {
-			}, function(e) {
-			});
-
-			// Check if there is an active HRM
-			if( pages.summary.m_hrmImplementation !== null ) {
-				pages.summary.m_hrmImplementation.disconnect();
-				pages.summary.m_hrmImplementation = null;
-			}
-
-			// No more actions to take if track didn't start yet
-			if (pages.summary.m_track === null) return;
-
-			// Disable interface timer
-			if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
-			pages.summary.m_mainTimer = 0;
-
-			// Finalize track
-			pages.summary.m_trackwriter.writeWaypoint(true);
-
-			// Notify map- & altitude-screen of ending track
-			pages.map.endtrack(pages.summary.m_track);
-			pages.graph.endtrack(pages.summary.m_track);
-
-			// Remove references to closed tracks
-			pages.summary.m_track = null;
-			pages.summary.m_trackwriter = null;
-		}
+	// Switch button display
+	$('#summary-page_control').fadeOut(250, function() {
+		$('#summary-page_enableGPS').fadeIn(250);
 	});
+	$('#settings-button').show();
+
+	// Reset loading message (because searching for satellites might still be active)
+	$.mobile.loadingMessage = $.i18n.prop("loading_message");
+	$.mobile.hidePageLoadingMsg();
+
+	// Update button icons
+	$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
+
+	// Stop GPS & release power lock
+	GPSHandler.stopGPS();
+	pages.summary.m_powerManagement.release(function() {
+	}, function(e) {
+	});
+
+	// Check if there is an active HRM
+	if( pages.summary.m_hrmImplementation !== null ) {
+		pages.summary.m_hrmImplementation.disconnect();
+		pages.summary.m_hrmImplementation = null;
+	}
+
+	// No more actions to take if track didn't start yet
+	if (pages.summary.m_track === null) return;
+
+	// Disable interface timer
+	if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
+	pages.summary.m_mainTimer = 0;
+
+	// Finalize track
+	pages.summary.m_trackwriter.writeWaypoint(true);
+
+	// Notify map- & altitude-screen of ending track
+	pages.map.endtrack(pages.summary.m_track);
+	pages.graph.endtrack(pages.summary.m_track);
+
+	// Remove references to closed tracks
+	pages.summary.m_track = null;
+	pages.summary.m_trackwriter = null;
 };
+
+/**
+ * called when the user clicks on stop
+ */
+Summary.prototype._stopTap = function() {
+	if( SettingsHandler.getInt("confirmstop") > 0 ) {
+		MsgBox.confirm($.i18n.prop('stop_message'), function(p_button) {
+			if (p_button === MsgBox.BUTTON_YES) {
+				pages.summary._stopGPS();
+			}
+		});
+	}
+	else {
+		pages.summary._stopGPS();
+	}
+}
 
 /**
  * Called when the pause button is clicked
@@ -541,7 +553,7 @@ Summary.prototype._pause = function() {
 	// Update button icons
 	$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
 	// Setup click handler
-	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_leftTapHandler = pages.summary._stopTap;
 	pages.summary.m_rightTapHandler = pages.summary._resume;
 
 	// Stop GPS tracking
@@ -565,7 +577,7 @@ Summary.prototype._resume = function() {
 	// Update button icons
 	$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-play').addClass('ui-icon-gofgsc-pause');
 	// Setup click handler
-	pages.summary.m_leftTapHandler = pages.summary._stopGPS;
+	pages.summary.m_leftTapHandler = pages.summary._stopTap;
 	pages.summary.m_rightTapHandler = pages.summary._pause;
 
 	// Pause is ending
