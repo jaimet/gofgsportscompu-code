@@ -42,7 +42,7 @@ Settings.prototype.oninit = function() {
  */
 Settings.prototype.oncreate = function() {
 	// Append all available HRM implementation
-	var hrmTypeSelect = $('#hrmTypeSelect');
+	/*var hrmTypeSelect = $('#hrmTypeSelect');
 	var hrmSupportedCount = 0;
 	for ( var i = 0; i < HeartRateMonitor.m_implementations.length; i++) {
 		if (HeartRateMonitor.m_implementations[i].isSupported()) {
@@ -56,7 +56,7 @@ Settings.prototype.oncreate = function() {
 	// If no hrm-implementation is supported, hide it alltogether
 	if( hrmSupportedCount <= 0 ) {
 		$('#settings-page_hrmType').hide();
-	}
+	}*/
 }
 
 /**
@@ -74,6 +74,7 @@ Settings.prototype._save = function() {
 	SettingsHandler.set('autolock', $('#settings-page').find('#autolockSlider').val());
 	SettingsHandler.set('displayunits', $('#settings-page').find('#displayUnitSelect').val());
 	SettingsHandler.set('hrmtype', $('#settings-page').find('#hrmTypeSelect').val());
+	SettingsHandler.set('confirmstop', $('#settings-page').find('#confirmStopSlider').val());
 	SettingsHandler._save();
 
 	// Init re-translation
@@ -120,6 +121,7 @@ Settings.prototype._pagebeforeshow = function(p_event, p_ui) {
 	$('#settings-page').find('#autolockSlider').slider('refresh', SettingsHandler.get('autolock'));
 	$('#settings-page').find('#displayUnitSelect').val(SettingsHandler.get('displayunits')).selectmenu('refresh');
 	$('#settings-page').find('#hrmTypeSelect').val(SettingsHandler.get('hrmtype')).selectmenu('refresh');
+	$('#settings-page').find('#confirmStopSlider').slider('refresh', SettingsHandler.get('confirmstop'));
 	// Setup page layout
 	$('#settings-page').find('#settings-save-button').hide();
 	$('#settings-page').find('#settings-odoReset-button').show();
