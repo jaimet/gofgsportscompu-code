@@ -64,7 +64,7 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 	var track = null;
 
 	// Fetch first line (which should contain the UUID)
-	// Due to compatibility to old versions, we support non-uuid tracks aswell
+	// Due to compatibility to old versions, we support non-uuid tracks as well
 	var first_line = lines.shift();
 	var line_info = this.parseLine(first_line);
 	if (line_info !== false && line_info.type === 0) {
@@ -83,13 +83,18 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 	var position = null;
 	var distance = 0;
 	var bPauseEnd = false;
-	while (lines.length > 0) {
-		var line = lines.shift();
-		line_info = this.parseLine(line);
+	var me = this;
+
+	// use utility function for long running loops
+	Utilities.loop( function() {
+		if( lines.length <= 0 ) return false;
+		
+		// parse next line
+		line_info = me.parseLine(lines.shift());
 
 		// Check if we found a valid line
 		if (line_info === false) {
-			continue;
+			return true;
 		}
 
 		// Select type of line
@@ -98,7 +103,7 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 			if (position !== null) {
 				track.addPosition(position, distance, bPauseEnd)
 				// Run waypoint callback if necessary
-				if (typeof this.m_waypointCallback === "function") this.m_waypointCallback(track.getCurrentWaypoint(), track);
+				if (typeof me.m_waypointCallback === "function") me.m_waypointCallback(track.getCurrentWaypoint(), track);
 			}
 			// Create new position & coordinates object (faking through fixed objects)
 			position = new gofg_position();
@@ -130,17 +135,20 @@ TrackReader.prototype.onload = function(p_progressEvent) {
 		default: // invalid
 			break;
 		}
-	}
+		
+		return true;
+	},
+	function() {
+		// handle last position entry
+		if (position !== null) {
+			track.addPosition(position, distance, bPauseEnd)
+			// Run waypoint callback if necessary
+			if (typeof me.m_waypointCallback === "function") me.m_waypointCallback(track.getCurrentWaypoint(), track);
+		}
 	
-	// handle last position entry
-	if (position !== null) {
-		track.addPosition(position, distance, bPauseEnd)
-		// Run waypoint callback if necessary
-		if (typeof this.m_waypointCallback === "function") this.m_waypointCallback(track.getCurrentWaypoint(), track);
-	}
-
-	// Run track callback if necessary
-	if (typeof this.m_trackCallback === "function") this.m_trackCallback(track);
+		// Run track callback if necessary
+		if (typeof me.m_trackCallback === "function") me.m_trackCallback(track);
+	} );
 }
 
 /**

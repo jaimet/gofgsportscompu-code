@@ -95,7 +95,6 @@ Track.prototype.addPosition = function(p_position, p_distance, p_bPauseEnd) {
 	// Check for maximum speed
 	if (this.m_maximumSpeed < this.m_currentWaypoint.m_position.coords.speed) {
 		this.m_maximumSpeed = this.m_currentWaypoint.m_position.coords.speed;
-		console.log( 'New maximum speed: ' + this.m_maximumSpeed );
 	}
 }
 

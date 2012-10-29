@@ -67,3 +67,34 @@ Utilities.haversineDistance = function(p_startCoordinates, p_endCoordinates) {
 Utilities.getUnixTimestamp = function() {
 	return ((new Date()).getTime() / 1000).toFixed(0);
 }
+
+/**
+ * Helper function for implementing a structure similar to a loop but with time for
+ * the javascript engine to run other events (used for long running tasks)
+ */
+Utilities.loop = function( p_function, p_finishCallback, p_loopRunLimit ) {
+	p_loopRunLimit = parseInt(p_loopRunLimit);
+	if( isNaN(p_loopRunLimit) ) p_loopRunLimit = 10;
+	
+	// wrapper for running the actual loop code
+	var executeWrap = function() {
+		// during a single executing step we run the loop function
+		// up to p_loopRunLimit times
+		for( var i = 0; i < p_loopRunLimit; i++ ) {
+			if( !p_function() ) {
+				if( typeof p_finishCallback === "function" ) {
+					// trigger finish callback asynchronously
+					setTimeout( p_finishCallback, 1 );
+				}
+				
+				return;
+			}
+		}
+		
+		// short break to allow the JS-engine to execute other tasks
+		setTimeout(executeWrap, 1);
+	};
+	
+	// start executing the loop
+	executeWrap();
+}
