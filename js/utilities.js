@@ -74,7 +74,7 @@ Utilities.getUnixTimestamp = function() {
  */
 Utilities.loop = function( p_function, p_finishCallback, p_loopRunLimit ) {
 	p_loopRunLimit = parseInt(p_loopRunLimit);
-	if( isNaN(p_loopRunLimit) ) p_loopRunLimit = 10;
+	if( isNaN(p_loopRunLimit) ) p_loopRunLimit = 100;
 	
 	// wrapper for running the actual loop code
 	var executeWrap = function() {

@@ -24,56 +24,50 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 	this.m_authKey = p_authKey;
 	this.m_successCallback = p_successCallback;
 	this.m_errorCallback = p_errorCallback;
-	this.m_reader = new TrackReader(p_fileEntry, null, Utilities.getEvtHandler(this, this._loadComplete));
+	this.m_waypoints = [];
+
+	var options = new FileUploadOptions();
+	options.fileKey = "gsc_file";
+	options.fileName = p_fileEntry.name;
+	options.mimeType = "text/plain";
+	options.params = {
+			method : "track_upload",
+			id : (Math.random() * 10000).toFixed(0),
+			option : "com_gofgsportstracker",
+			task : "jsonrpc.request",
+			params : {
+				auth_key: this.m_authKey
+			}
+	};
+
+	this.m_fileTransfer = new FileTransfer();
+	this.m_fileTransfer.upload(
+			p_fileEntry.fullPath,
+			TrackUploader.URL,
+			Utilities.getEvtHandler(this,this._fileTransferSuccess),
+			Utilities.getEvtHandler(this,this._fileTransferError),
+			options
+	);
 }
 
-TrackUploader.prototype.m_reader = null; // Reference to internal TrackReader object
 TrackUploader.prototype.m_successCallback = null; // Callback which is called once the track loading has successfully finished
 TrackUploader.prototype.m_errorCallback = null; // Callback which is called if there was an error
 TrackUploader.prototype.m_authKey = null; // Authentication key to use when uploading the track
+TrackUploader.prototype.m_fileTransfer = null;	// reference to FileTransfer object
 
-TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
+//TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
+TrackUploader.URL = "http://192.168.56.101/joomla/index.php"; // Static value which references the upload URL of the gofg homepage
 
 /**
- * Called by the TrackReader object when the track has finished loading
+ * Error callback for FileTransfer object
  */
-TrackUploader.prototype._loadComplete = function(p_track) {
-	// Configure passed parameters to the webapp
-	var passdata = {
-		method : "add",
-		params : JSON.stringify({
-			auth_key : this.m_authKey,
-			start_time : p_track.getStartTime(),
-			end_time : p_track.getEndTime(),
-			pause_time : p_track.getPauseTime(),
-			total_distance : p_track.getTotalDistance(),
-			uuid : p_track.getUUID(),
-			elevation_gain : p_track.getElevationGain(),
-			elevation_loss : p_track.getElevationLoss(),
-			maximum_speed : p_track.getMaximumSpeed(),
-			sport_type : p_track.getSporttype()
-		}),
-		id : (Math.random() * 10000).toFixed(0),
-		option : "com_gofgsportstracker",
-		task : "jsonrpc.request"
-	};
+TrackUploader.prototype._fileTransferError = function(p_fileTransferError) {
+	if (typeof this.m_errorCallback === "function") this.m_errorCallback(p_fileTransferError.code);
+};
 
-	// Some new stuff
-
-	// Setup ajax-request parameters
-	$.ajaxSetup({
-		timeout : 5000
-	});
-
-	// Upload track to gofg community page
-	$.get(TrackUploader.URL, passdata, Utilities.getEvtHandler(this, function(data) {
-		// Check if there was an error
-		if (typeof data.error !== 'undefined' && data.error !== null) {
-			if (typeof this.m_errorCallback === "function") this.m_errorCallback(data.error);
-		} else {
-			if (typeof this.m_successCallback === "function") this.m_successCallback();
-		}
-	}), 'jsonp').error(Utilities.getEvtHandler(this, function(jqXHR, textStatus, errorThrown) {
-		if (typeof this.m_errorCallback === "function") this.m_errorCallback(textStatus);
-	}));
+/**
+ * Success callback for FileTransfer object
+ */
+TrackUploader.prototype._fileTransferSuccess = function(p_fileUploadResult) {
+	if (typeof this.m_successCallback === "function") this.m_successCallback();
 };
