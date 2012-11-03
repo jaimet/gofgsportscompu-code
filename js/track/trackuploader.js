@@ -25,7 +25,13 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 	this.m_successCallback = p_successCallback;
 	this.m_errorCallback = p_errorCallback;
 	this.m_waypoints = [];
+	
+	// setup timeout for ajax request
+	$.ajaxSetup( {
+		timeout: 5000
+	} );
 
+	// Setup options for file transfer
 	var options = new FileUploadOptions();
 	options.fileKey = "gsc_file";
 	options.fileName = p_fileEntry.name;
@@ -35,11 +41,12 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 			id : (Math.random() * 10000).toFixed(0),
 			option : "com_gofgsportstracker",
 			task : "jsonrpc.request",
-			params : {
+			params : JSON.stringify({
 				auth_key: this.m_authKey
-			}
+			})
 	};
 
+	// start transferring the file to the server
 	this.m_fileTransfer = new FileTransfer();
 	this.m_fileTransfer.upload(
 			p_fileEntry.fullPath,
@@ -69,5 +76,57 @@ TrackUploader.prototype._fileTransferError = function(p_fileTransferError) {
  * Success callback for FileTransfer object
  */
 TrackUploader.prototype._fileTransferSuccess = function(p_fileUploadResult) {
-	if (typeof this.m_successCallback === "function") this.m_successCallback();
+	//index.php?option=com_gofgsportstracker&task=jsonrpc.request&method=track_process&id=1000&params={%22auth_key%22:%22g59ssQk5sN%22,%22id_track%22:%22171%22}
+	try {
+		var response = $.parseJSON( p_fileUploadResult.response );
+		
+		// check for error
+		if( response.error ) {
+			throw response.error;
+		}
+
+		// get track id
+		var id_track = response.result;
+		console.log( 'id_track: ' + id_track );
+		
+		// check if we have a valid id for the track
+		if( id_track > 0 ) {
+			// processing function for tracks
+			var process_function = function(data) {
+				// prepare request params
+				var params = {
+						option : "com_gofgsportstracker",
+						task : "jsonrpc.request",
+						method : "track_process",
+						id : (Math.random() * 10000).toFixed(0),
+						params : JSON.stringify({
+							auth_key: this.m_authKey,
+							id_track: id_track
+						})
+				};
+				
+				// check for errors
+				if( data == null || data.error != null ) {
+					if (typeof this.m_errorCallback === "function") this.m_errorCallback( data.error );
+				}
+				// continue processing
+				else if( data.result < 100 ) {
+					console.log( 'track-process: ' + data.result );
+					
+					$.get(TrackUploader.URL, params )
+					.done( Utilities.getEvtHandler( this, process_function ) );
+				}
+				// we are done
+				else {
+					if (typeof this.m_successCallback === "function") this.m_successCallback();
+				}
+			};
+			
+			// start processing
+			process_function.call( this, { "result": 0 } );
+		}
+	}
+	catch(e) {
+		if (typeof this.m_errorCallback === "function") this.m_errorCallback( e );
+	}
 };
