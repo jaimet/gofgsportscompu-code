@@ -80,6 +80,10 @@ TrackUploader.prototype._fileTransferSuccess = function(p_fileUploadResult) {
 	try {
 		var response = $.parseJSON( p_fileUploadResult.response );
 		
+		if( response == null ) {
+			throw $.i18n.prop('upload_message_error_generic');
+		}
+		
 		// check for error
 		if( response.error ) {
 			throw response.error;
@@ -106,13 +110,16 @@ TrackUploader.prototype._fileTransferSuccess = function(p_fileUploadResult) {
 				};
 				
 				// check for errors
-				if( data == null || data.error != null ) {
+				if( data == null ) {
+					if (typeof this.m_errorCallback === "function") this.m_errorCallback( $.i18n.prop('upload_message_error_generic') );
+				}
+				else if( data.error != null ) {
 					if (typeof this.m_errorCallback === "function") this.m_errorCallback( data.error );
 				}
 				// continue processing
 				else if( data.result < 100 ) {
 					console.log( 'track-process: ' + data.result );
-					
+
 					$.get(TrackUploader.URL, params )
 					.done( Utilities.getEvtHandler( this, process_function ) );
 				}
