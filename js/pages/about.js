@@ -17,8 +17,13 @@
  * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function About() {	
+function About() {
 }
 About.prototype = new Page( "about" );
 About.prototype.m_bInHistory = false;
+
+About.prototype.oninit = function() {
+	$('#about-page').find('#about-page_close').bind('click', function() { $.mobile.changePage( 'settings.html' ); return false; } );
+}
+
 new About();

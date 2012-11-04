@@ -15,7 +15,6 @@
 
 	<!-- /content -->
 	<div data-role="content">
-		<form action='#' method='get'>
 			<div data-role="collapsible-set" data-content-theme="d">
 				<div data-role="collapsible" data-collapsed="false">
 				<h3 data-i18n="simple"></h3>
@@ -44,8 +43,8 @@
 				</div>
 
 				<!-- software information pages -->	
-				<a href="about.html" data-role="button" data-icon="info" data-i18n="about"></a>
-				<a href="privacystatement.html" data-role="button" data-icon="info" data-i18n="privacy_statement"></a>
+				<button id="settings-page_about" data-icon="info" data-i18n="about"></button>
+				<button id="settings-page_privacy-statement" data-icon="info" data-i18n="privacy_statement"></button>
 				</div>
 				
 				<div data-role="collapsible">
@@ -84,7 +83,7 @@
 				</div>
 
 				<!-- reset odo-meter -->			
-				<a id="settings-odoReset-button" href="#" data-role="button" data-icon="delete" data-i18n="odoReset" data-theme="g"></a>
+				<button id="settings-odoReset-button" data-icon="delete" data-i18n="odoReset" data-theme="g"></button>
 				</div>
 			</div>
 
@@ -94,7 +93,5 @@
 					<option value="0" data-i18n="none"></option>
 				</select>
 			</div>
-
-		</form>
 	</div>
 </div>

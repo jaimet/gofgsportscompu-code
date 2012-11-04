@@ -21,4 +21,9 @@ function PrivacyStatement() {
 }
 PrivacyStatement.prototype = new Page( "privacystatement" );
 PrivacyStatement.prototype.m_bInHistory = false;
+
+PrivacyStatement.prototype.oninit = function() {
+	$('#privacystatement-page').find('#privacystatement-page_close').bind('click', function() { $.mobile.changePage( 'settings.html' ); return false; } );
+}
+
 new PrivacyStatement();

@@ -56,36 +56,27 @@ var GOFGSportsComputer = {
 		$('#lock-overlay').bind('swipe', function() {
 			$(this).hide();
 		});
-		/**
-		 * Windows Phone 7 hack for supporting basic swipe gestures
-		 */
-		/*$('#lock-overlay').bind('wpmousedown', function(evt) {
-			var mouse_evt = $.Event('mousedown', {
-				originalEvent : evt,
-				pageX : evt.clientX,
-				pageY : evt.clientY
-			});
-			$('#lock-overlay').trigger(mouse_evt);
-		});
-		$('#lock-overlay').bind('wpmouseup', function(evt) {
-			var mouse_evt = $.Event('mouseup', {
-				originalEvent : evt,
-				pageX : evt.clientX,
-				pageY : evt.clientY
-			});
-			$('#lock-overlay').trigger(mouse_evt);
-		});
-		$('#lock-overlay').bind('wpmousemove', function(evt) {
-			var mouse_evt = $.Event('mousemove', {
-				originalEvent : evt,
-				pageX : evt.clientX,
-				pageY : evt.clientY
-			});
-			$('#lock-overlay').trigger(mouse_evt);
-		});*/
 
 		// Listen to back button events
 		$(document).bind('backbutton', Page.backInHistory);
+		
+		// Load the correct stylesheet for jquery-mobile
+		var link_style = $('<link rel="stylesheet" />');
+		switch( device.platform ) {
+		case 'Android':
+			link_style.attr('href', 'lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css');
+			break;
+		case 'iPhone':
+			link_style.attr('href', 'lib/jquery.mobile/themes/ios/styles.css');
+			break;
+		case 'WinCE':
+			link_style.attr('href', 'lib/jquery.mobile/themes/wp7/jquery.mobile.metro.theme.css');
+			break;
+		default:
+			link_style.attr('href', 'lib/jquery.mobile/jquery.mobile.css');
+			break;
+		}
+		$('#jqm-theme-css').before( link_style );
 
 		// Find our file storage
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError);
