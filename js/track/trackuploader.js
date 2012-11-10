@@ -61,6 +61,7 @@ TrackUploader.prototype.m_successCallback = null; // Callback which is called on
 TrackUploader.prototype.m_errorCallback = null; // Callback which is called if there was an error
 TrackUploader.prototype.m_authKey = null; // Authentication key to use when uploading the track
 TrackUploader.prototype.m_fileTransfer = null;	// reference to FileTransfer object
+TrackUploader.prototype.m_idTrack = null; // Authentication key to use when uploading the track
 
 //TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
 TrackUploader.URL = "http://192.168.56.101/joomla/index.php"; // Static value which references the upload URL of the gofg homepage
@@ -95,45 +96,51 @@ TrackUploader.prototype._fileTransferSuccess = function(p_fileUploadResult) {
 		
 		// check if we have a valid id for the track
 		if( id_track > 0 ) {
-			// processing function for tracks
-			var process_function = function(data) {
-				// prepare request params
-				var params = {
-						option : "com_gofgsportstracker",
-						task : "jsonrpc.request",
-						method : "track_process",
-						id : (Math.random() * 10000).toFixed(0),
-						params : JSON.stringify({
-							auth_key: this.m_authKey,
-							id_track: id_track
-						})
-				};
-				
-				// check for errors
-				if( data == null ) {
-					if (typeof this.m_errorCallback === "function") this.m_errorCallback( $.i18n.prop('upload_message_error_generic') );
-				}
-				else if( data.error != null ) {
-					if (typeof this.m_errorCallback === "function") this.m_errorCallback( data.error );
-				}
-				// continue processing
-				else if( data.result < 100 ) {
-					console.log( 'track-process: ' + data.result );
-
-					$.get(TrackUploader.URL, params )
-					.done( Utilities.getEvtHandler( this, process_function ) );
-				}
-				// we are done
-				else {
-					if (typeof this.m_successCallback === "function") this.m_successCallback();
-				}
-			};
+			this.m_idTrack = id_track;
 			
 			// start processing
-			process_function.call( this, { "result": 0 } );
+			this._processFunction({ "result": 0 });
 		}
 	}
 	catch(e) {
 		if (typeof this.m_errorCallback === "function") this.m_errorCallback( e );
+	}
+};
+
+/**
+ * handling function for processing the track online
+ */
+TrackUploader.prototype._processFunction = function(data) {
+	console.log('_processFunction');
+	
+	// prepare request params
+	var params = {
+			option : "com_gofgsportstracker",
+			task : "jsonrpc.request",
+			method : "track_process",
+			id : (Math.random() * 10000).toFixed(0),
+			params : JSON.stringify({
+				auth_key: this.m_authKey,
+				id_track: this.m_idTrack
+			})
+	};
+	
+	// check for errors
+	if( data == null ) {
+		if (typeof this.m_errorCallback === "function") this.m_errorCallback( $.i18n.prop('upload_message_error_generic') );
+	}
+	else if( data.error != null ) {
+		if (typeof this.m_errorCallback === "function") this.m_errorCallback( data.error );
+	}
+	// continue processing
+	else if( data.result < 100 ) {
+		console.log( 'track-process: ' + data.result );
+
+		$.get(TrackUploader.URL, params )
+		.done( Utilities.getEvtHandler( this, this._processFunction ) );
+	}
+	// we are done
+	else {
+		if (typeof this.m_successCallback === "function") this.m_successCallback();
 	}
 };
