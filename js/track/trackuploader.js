@@ -28,7 +28,7 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 	
 	// setup timeout for ajax request
 	$.ajaxSetup( {
-		timeout: 5000
+		timeout: 90000
 	} );
 
 	// Setup options for file transfer
