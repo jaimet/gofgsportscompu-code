@@ -69,10 +69,8 @@ var GOFGSportsComputer = {
 		case 'iPhone':
 			link_style.attr('href', 'lib/jquery.mobile/themes/ios/styles.css');
 			break;
-		case 'WinCE':
-			link_style.attr('href', 'lib/jquery.mobile/themes/wp7/jquery.mobile.metro.theme.css');
-			break;
-		default:
+        case 'WinCE':
+        default:
 			link_style.attr('href', 'lib/jquery.mobile/jquery.mobile.css');
 			break;
 		}
