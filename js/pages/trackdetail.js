@@ -69,7 +69,7 @@ Trackdetail.prototype._deleteTrack = function() {
  * Called when the user wants to load a track
  */
 Trackdetail.prototype._loadTrack = function() {
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading( 'show' );
 
 	pages.summary.loadTrack(pages.trackdetail.m_fileEntry);
 };
@@ -79,11 +79,9 @@ Trackdetail.prototype._loadTrack = function() {
  */
 Trackdetail.prototype._exportTrackFitlog = function() {
 	// Show loading & start exporting
-	$.mobile.loadingMessage = $.i18n.prop("export_message");
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading('show', {text: $.i18n.prop("export_message")});
 	exporter.fitlog.run(pages.trackdetail.m_fileEntry, function() {
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
-		$.mobile.hidePageLoadingMsg();
+		$.mobile.loading('hide');
 	});
 };
 
@@ -92,11 +90,9 @@ Trackdetail.prototype._exportTrackFitlog = function() {
  */
 Trackdetail.prototype._exportTrackGPX = function() {
 	// Show loading & start exporting
-	$.mobile.loadingMessage = $.i18n.prop("export_message");
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading('show', {text: $.i18n.prop("export_message")});
 	exporter.gpx.run(pages.trackdetail.m_fileEntry, function() {
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
-		$.mobile.hidePageLoadingMsg();
+		$.mobile.loading('hide');
 	});
 };
 
@@ -105,11 +101,9 @@ Trackdetail.prototype._exportTrackGPX = function() {
  */
 Trackdetail.prototype._exportTrackTCX = function() {
 	// Show loading & start exporting
-	$.mobile.loadingMessage = $.i18n.prop("export_message");
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading('show', {text: $.i18n.prop("export_message")});
 	exporter.tcx.run(pages.trackdetail.m_fileEntry, function() {
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
-		$.mobile.hidePageLoadingMsg();
+		$.mobile.loading('hide');
 	});
 };
 
@@ -146,17 +140,14 @@ Trackdetail.prototype._uploadTrack = function() {
  */
 Trackdetail.prototype._doUploadTrack = function() {
 	// Show loading & start uploading
-	$.mobile.loadingMessage = $.i18n.prop("upload_message");
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading('show', {text: $.i18n.prop("upload_message")});
 
 	var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
-		$.mobile.hidePageLoadingMsg();
+		$.mobile.loading('hide');
 
 		MsgBox.show($.i18n.prop("upload_message_success"));
 	}, function(textStatus) {
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
-		$.mobile.hidePageLoadingMsg();
+		$.mobile.loading('hide');
 
 		MsgBox.show($.i18n.prop("upload_message_error") + textStatus);
 	});

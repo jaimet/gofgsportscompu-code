@@ -40,7 +40,7 @@ var Translator = {
 				}
 
 				// Setup jQuery mobile values
-				$.mobile.loadingMessage = $.i18n.prop("loading_message");
+				$.mobile.loader.prototype.options.text = $.i18n.prop("loading_message");
 
 				if (typeof Translator.ontranslate === "function") Translator.ontranslate();
 			}

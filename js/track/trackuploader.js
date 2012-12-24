@@ -135,6 +135,8 @@ TrackUploader.prototype._processFunction = function(data) {
 	// continue processing
 	else if( data.result < 100 ) {
 		console.log( 'track-process: ' + data.result );
+		
+		$.mobile.loading( 'show', { text: data.result + '%' } );
 
 		$.get(TrackUploader.URL, params )
 		.done( Utilities.getEvtHandler( this, this._processFunction ) );

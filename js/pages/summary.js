@@ -301,8 +301,7 @@ Summary.prototype._updateOdo = function(p_distance) {
  */
 Summary.prototype._gpsFixWait = function(p_position) {
 	// Reset / hide sat-searching message
-	$.mobile.hidePageLoadingMsg();
-	$.mobile.loadingMessage = $.i18n.prop("loading_message");
+	$.mobile.loading('hide');
 
 	// Update accuracy display
 	pages.summary._updateAccuracy((p_position.coords.accuracy + p_position.coords.altitudeAccuracy) / 2.0);
@@ -330,8 +329,7 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
 	// Define internal success callback
 	var successCallback = function(p_position) {
 		// Reset / hide sat-searching message
-		$.mobile.hidePageLoadingMsg();
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
+		$.mobile.loading('hide');
 
 		if (typeof p_successCallback === "function") p_successCallback(p_position);
 	};
@@ -339,15 +337,13 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
 	// Define internal error callback
 	var errorCallback = function(p_error) {
 		// Reset / hide sat-searching message
-		$.mobile.hidePageLoadingMsg();
-		$.mobile.loadingMessage = $.i18n.prop("loading_message");
+		$.mobile.loading('hide');
 
 		if (typeof p_errorCallback === "function") p_errorCallback(p_error);
 	}
 
 	// Show sat-search message
-	$.mobile.loadingMessage = $.i18n.prop("searching_message");
-	$.mobile.showPageLoadingMsg();
+	$.mobile.loading( 'show', { text: $.i18n.prop("searching_message") } );
 
 	// Disable idle mode
 	pages.summary.m_powerManagement.acquire(function() {
@@ -490,8 +486,7 @@ Summary.prototype._stopGPS = function() {
 	$('#settings-button').show();
 
 	// Reset loading message (because searching for satellites might still be active)
-	$.mobile.loadingMessage = $.i18n.prop("loading_message");
-	$.mobile.hidePageLoadingMsg();
+	$.mobile.loading('hide');
 
 	// Update button icons
 	$('#right-button').parent().find('.ui-icon').removeClass('ui-icon-gofgsc-pause').addClass('ui-icon-gofgsc-play');
