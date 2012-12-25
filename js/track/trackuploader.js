@@ -63,8 +63,8 @@ TrackUploader.prototype.m_authKey = null; // Authentication key to use when uplo
 TrackUploader.prototype.m_fileTransfer = null;	// reference to FileTransfer object
 TrackUploader.prototype.m_idTrack = null; // Authentication key to use when uploading the track
 
-//TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
-TrackUploader.URL = "http://192.168.56.101/joomla/index.php"; // Static value which references the upload URL of the gofg homepage
+TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
+//TrackUploader.URL = "http://192.168.56.101/joomla/index.php"; // Static value which references the upload URL of the gofg homepage
 
 /**
  * Error callback for FileTransfer object
