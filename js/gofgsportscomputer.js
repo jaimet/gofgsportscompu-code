@@ -67,13 +67,11 @@ var GOFGSportsComputer = {
 		case 'Android':
 			link_style.attr('href', 'lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css');
 			break;
-		case 'iPhone':
-			link_style.attr('href', 'lib/jquery.mobile/themes/ios/styles.css');
-			break;
         case 'WinCE':
             link_style.attr('href', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css');
             script_style.attr('src', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js');
             break;
+        case 'iPhone':
         default:
 			link_style.attr('href', 'lib/jquery.mobile/jquery.mobile.css');
 			break;
