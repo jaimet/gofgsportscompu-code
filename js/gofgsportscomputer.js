@@ -62,7 +62,8 @@ var GOFGSportsComputer = {
 		
 		// Load the correct stylesheet for jquery-mobile
 		var link_style = $('<link rel="stylesheet" />');
-		switch( device.platform ) {
+		var script_style = $('<script type="text/javascript" src=""></script>');
+		switch (device.platform) {
 		case 'Android':
 			link_style.attr('href', 'lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css');
 			break;
@@ -70,11 +71,15 @@ var GOFGSportsComputer = {
 			link_style.attr('href', 'lib/jquery.mobile/themes/ios/styles.css');
 			break;
         case 'WinCE':
+            link_style.attr('href', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css');
+            script_style.attr('src', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js');
+            break;
         default:
 			link_style.attr('href', 'lib/jquery.mobile/jquery.mobile.css');
 			break;
 		}
 		$('#jqm-theme-css').before( link_style );
+		$('#jqm-js').after(script_style);
 
 		// Find our file storage
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError);
