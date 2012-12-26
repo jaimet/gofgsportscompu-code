@@ -30,7 +30,7 @@ var SettingsHandler = {
 		"authkey" : "", // Key for authentication against the GOFG system
 		"autolock" : 1, // Automatically lock screen once tracking has started
 		"displayunits" : 1, // Unit(s) to use for displaying values
-		"uploadagree_2" : 0, // Agreed to the upload agreement
+		"uploadagree_3" : 0, // Agreed to the upload agreement
 		"hrmtype" : 0,
 		"enablehrm": 0,	// Enable heart rate monitor
 		"sporttype": "cycling",	// Default sport type
