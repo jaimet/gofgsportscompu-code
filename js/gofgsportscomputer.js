@@ -70,6 +70,7 @@ var GOFGSportsComputer = {
         case 'WinCE':
             link_style.attr('href', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css');
             script_style.attr('src', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js');
+            $('#jqm-js').after(script_style);
             break;
         case 'iPhone':
         default:
@@ -77,7 +78,6 @@ var GOFGSportsComputer = {
 			break;
 		}
 		$('#jqm-theme-css').before( link_style );
-		$('#jqm-js').after(script_style);
 
 		// Find our file storage
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError);
