@@ -33,6 +33,7 @@ MsgBox.BUTTON_YES = 0x04;
 MsgBox.BUTTON_NO = 0x08;
 MsgBox.BUTTON_CONTINUE = 0x10;
 MsgBox.BUTTON_ALWAYS = 0x20;
+MsgBox.BUTTON_OPEN_TRACK = 0x40;
 
 /**
  * Called when the page is inited

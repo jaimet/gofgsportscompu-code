@@ -139,6 +139,6 @@ TrackUploader.prototype._processFunction = function(data) {
 	}
 	// we are done
 	else {
-		if (typeof this.m_successCallback === "function") this.m_successCallback();
+		if (typeof this.m_successCallback === "function") this.m_successCallback(this.m_idTrack);
 	}
 };

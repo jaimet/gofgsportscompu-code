@@ -142,10 +142,15 @@ Trackdetail.prototype._doUploadTrack = function() {
 	// Show loading & start uploading
 	$.mobile.loading('show', {text: $.i18n.prop("upload_message")});
 
-	var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
+	var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function(p_idTrack) {
 		$.mobile.loading('hide');
 
-		MsgBox.show($.i18n.prop("upload_message_success"));
+		MsgBox.show($.i18n.prop("upload_message_success"), '', MsgBox.BUTTON_OK | MsgBox.BUTTON_OPEN_TRACK, function(p_button) {
+			if( p_button == MsgBox.BUTTON_OPEN_TRACK ) {
+				window.open('http://www.gofg.at/');
+			}
+			
+		});
 	}, function(textStatus) {
 		$.mobile.loading('hide');
 
