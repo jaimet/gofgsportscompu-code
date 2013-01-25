@@ -37,11 +37,9 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 	options.fileName = p_fileEntry.name;
 	options.mimeType = "text/plain";
 	options.params = {
-			method : "track_upload",
+			method: 'upload',
 			id : (Math.random() * 10000).toFixed(0),
-			option : "com_gofgsportstracker",
-			task : "jsonrpc.request",
-			params : JSON.stringify({
+			params: JSON.stringify({
 				auth_key: this.m_authKey
 			})
 	};
@@ -63,8 +61,8 @@ TrackUploader.prototype.m_authKey = null; // Authentication key to use when uplo
 TrackUploader.prototype.m_fileTransfer = null;	// reference to FileTransfer object
 TrackUploader.prototype.m_idTrack = null; // Authentication key to use when uploading the track
 
-TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
-//TrackUploader.URL = "http://192.168.56.101/joomla/index.php"; // Static value which references the upload URL of the gofg homepage
+//TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
+TrackUploader.URL = "http://192.168.56.101/Programming/NetBeans/gofg/sportstracker/index.php?r=sportsComputer/jsonrpc"; // Static value which references the upload URL of the gofg homepage
 
 /**
  * Error callback for FileTransfer object
@@ -115,9 +113,7 @@ TrackUploader.prototype._processFunction = function(data) {
 	
 	// prepare request params
 	var params = {
-			option : "com_gofgsportstracker",
-			task : "jsonrpc.request",
-			method : "track_process",
+			method : "process",
 			id : (Math.random() * 10000).toFixed(0),
 			params : JSON.stringify({
 				auth_key: this.m_authKey,
@@ -143,6 +139,6 @@ TrackUploader.prototype._processFunction = function(data) {
 	}
 	// we are done
 	else {
-		if (typeof this.m_successCallback === "function") this.m_successCallback();
+		if (typeof this.m_successCallback === "function") this.m_successCallback(this.m_idTrack);
 	}
 };

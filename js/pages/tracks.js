@@ -50,7 +50,7 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
             var lastMonthHeading = '';
             var currMonthDivider = null;
             var currMonthTracksCount = 0;
-
+            
             // Cycle through entries and add them
             for( var i = 0; i < entries.length; i++ ) {
                 // Check if we have a valid file entry
@@ -73,12 +73,17 @@ Tracks.prototype._refreshTracksEntries = function( entries ) {
                     uList.append( currMonthDivider );
                     lastMonthHeading = monthHeading;
                 }
-
+                
                 // Create new listItem
                 var listItem = $( '<li></li>' );
                 listItem.jqmData( 'fileEntry', entries[i] );
                 listItem.jqmData( 'displayName', formatDate.format() );
-                listItem.append( $('<a href="trackdetail.html"><h3>' + formatDate.format() + '</h3></a>') );
+                if( window.localStorage.getItem("uploadedTracks_" + entries[i].name) ) {
+                    listItem.append( $('<a href="trackdetail.html"><img src="images/check.png" class="ui-li-icon">' + formatDate.format() + '</a>') );
+                }
+                else {
+                    listItem.append( $('<a href="trackdetail.html">' + formatDate.format() + '</a>') );
+                }
 
                 // Finally append new item to list
                 uList.append( listItem );
