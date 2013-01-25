@@ -142,10 +142,20 @@ Trackdetail.prototype._doUploadTrack = function() {
 	// Show loading & start uploading
 	$.mobile.loading('show', {text: $.i18n.prop("upload_message")});
 
-	var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function() {
+	var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.trackdetail.m_fileEntry, function(p_id_track) {
 		$.mobile.loading('hide');
-
-		MsgBox.show($.i18n.prop("upload_message_success"));
+		
+        // fetch localStorage entry for already uploaded tracks
+        window.localStorage.setItem("uploadedTracks_" + pages.trackdetail.m_fileEntry.name, true);
+		
+		// show success message
+		MsgBox.show($.i18n.prop("upload_message_success"), '', MsgBox.BUTTON_OK | MsgBox.BUTTON_OPEN_TRACK, function(p_button) {
+			if( p_button == MsgBox.BUTTON_OPEN_TRACK ) {
+				
+				// open link to track
+				navigator.app.loadUrl('http://www.gofg.at/tracks?id_track='+ p_id_track, { openExternal:true } );
+			}
+		});
 	}, function(textStatus) {
 		$.mobile.loading('hide');
 
