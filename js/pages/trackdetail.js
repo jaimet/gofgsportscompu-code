@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Wolfgang Koller
+ * Copyright (C) 2012-2013 Wolfgang Koller
  *
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  *
