@@ -18,31 +18,43 @@
  */
 
 function RateApp() {
-	this.m_counter = SettingsHandler.getInt("ratemecounter");
+	this.m_counter = SettingsHandler.getInt("appratecounter");
 	this.m_rated = SettingsHandler.getInt("apprated");
-	this.m_rated = 0;
-	
+	this.m_notRated = SettingsHandler.getInt("appnotrated");
 	this.m_counter += 1;
 	
-	console.log('RateApp: ' + this.m_counter + ' / ' + this.m_rated);
-	
-	if( this.m_rated <= 0 ) {
+	// check if user did not rate yet, or does not want to rate
+	if( this.m_rated <= 0 && this.m_notRated != 1 ) {
 		// update rate-me-counter
-		SettingsHandler.set("ratemecounter", this.m_counter);
+		SettingsHandler.set("appratecounter", this.m_counter);
 		SettingsHandler._save();
 		
 		// only ask user every X starts
-		if( (this.m_counter % 1) == 0 ) {
-			console.log('confirming');
+		if( (this.m_counter % 10) == 0 ) {
 			navigator.notification.confirm('Do you enjoy GOFG Sports Computer? If yes please take a minute and rate our app!', function(p_button) {
-				if( p_button == 1 || p_button == 3 ) {
-					if( p_button == 1 ) {
-						// open market for rating
+				if( p_button == 1 ) {
+					switch (device.platform) {
+					case 'Android':
+						// open play store for rating
 						window.open('market://details?id=at.gofg.sportscomputer');
+						break;
+			        case 'WinCE':
+						// open marketplace for rating
+			        	exec(null, null, 'RateApp', 'rate', []);
+			            break;
+			        case 'iPhone':
+						// open AppStore for rating
+			        	window.open('itms://itunes.apple.com/at/app/gofg-sc/id453824252?mt=8&uo=4');
+						break;
 					}
 					
 					// save that we've rated
 					SettingsHandler.set("apprated", 1);
+					SettingsHandler._save();
+				}
+				else if( p_button == 3 ) {
+					// save that user does not want to rate
+					SettingsHandler.set("appnotrated", 1);
 					SettingsHandler._save();
 				}
 			}, 'Rate GOFG Sports Computer', 'Rate GOFG SC,Later,No thanks');
@@ -52,3 +64,4 @@ function RateApp() {
 
 RateApp.prototype.m_counter = 0;
 RateApp.prototype.m_rated = 0;
+RateApp.prototype.m_notRated = 0;

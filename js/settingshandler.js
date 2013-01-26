@@ -35,8 +35,9 @@ var SettingsHandler = {
 		"enablehrm": 0,	// Enable heart rate monitor
 		"sporttype": "cycling",	// Default sport type
 		"confirmstop": 0,	// confirm stop of tracking
-		"ratemecounter": 0,	// counts the number of starts
-		"apprated": 0		// set to 1 if the app was rated
+		"appratecounter": 0,	// counts the number of starts
+		"apprated": 0,		// set to 1 if the app was rated
+		"appnotrated": 0	// set to 1 if the user does not want to rate the app	
 	},
 	m_settingsFileEntry : null,
 	onload : function() {
