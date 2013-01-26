@@ -21,8 +21,6 @@
  * Continuous filewriter for track content
  */
 function ContinuousFileWriter( p_fileEntry ) {
-	console.log( '[CFW] Create' );
-	
 	this.m_fileEntry = p_fileEntry;
 	this.m_writeStack = [];
 	
@@ -39,8 +37,6 @@ ContinuousFileWriter.prototype.m_bWriting = false;	// is a write process current
  * called when the fileWriter object is ready
  */
 ContinuousFileWriter.prototype._fileWriter = function( p_fileWriter ) {
-	console.log( '[CFW] fileWriter' );
-
 	this.m_fileWriter = p_fileWriter;
 	// setup event handlers
 	this.m_fileWriter.onwrite = Utilities.getEvtHandler(this, this._write);
@@ -61,8 +57,6 @@ ContinuousFileWriter.prototype._fileError = function( p_fileError ) {
  * checks if writing should continue
  */
 ContinuousFileWriter.prototype._checkWrite = function() {
-	console.log( '[CFW] checkWrite' );
-
 	if( this.m_fileWriter != null && !this.m_bWriting && this.m_writeStack.length > 0 ) {
 		this.m_bWriting = true;
 		this.m_fileWriter.write( this.m_writeStack.shift() );
@@ -73,8 +67,6 @@ ContinuousFileWriter.prototype._checkWrite = function() {
  * called when writing has finished
  */
 ContinuousFileWriter.prototype._write = function() {
-	console.log( '[CFW] _write' );
-
 	this.m_bWriting = false;
 	this._checkWrite();
 }
@@ -83,8 +75,6 @@ ContinuousFileWriter.prototype._write = function() {
  * write content to file
  */
 ContinuousFileWriter.prototype.write = function( p_text ) {
-	console.log( '[CFW] write' );
-
 	this.m_writeStack.push( p_text );
 	this._checkWrite();
 }
@@ -93,8 +83,6 @@ ContinuousFileWriter.prototype.write = function( p_text ) {
  * write content to file (including a newline at the end)
  */
 ContinuousFileWriter.prototype.writeLine = function( p_text ) {
-	console.log( '[CFW] writeLine' );
-
 	this.m_writeStack.push( p_text + "\n" );
 	this._checkWrite();
 }

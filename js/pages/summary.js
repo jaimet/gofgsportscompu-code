@@ -320,7 +320,7 @@ Summary.prototype._gpsFixWait = function(p_position) {
 
 	// Check if we automatically start tracking
 	if (SettingsHandler.get('autostarttracking') > 0) {
-		pages.summary._startGPS();
+		pages.summary._startGPS(p_position);
 	}
 };
 
@@ -330,6 +330,9 @@ Summary.prototype._gpsFixWait = function(p_position) {
 Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCallback) {
 	// Define internal success callback
 	var successCallback = function(p_position) {
+		// Check if position is accurate enough
+		if (p_position.coords.accuracy > SettingsHandler.getInt('minimumaccuracy')) return;
+
 		// Reset / hide sat-searching message
 		$.mobile.loading('hide');
 
@@ -370,12 +373,11 @@ Summary.prototype.enableGPSTap = function() {
 	pages.summary.m_leftTapHandler = pages.summary._stopTap;
 
 	// Switch button display
-	$('#settings-button').hide();
-	$('#summary-page_enableGPS').fadeOut(250, function() {
-		$('#summary-page_control').fadeIn(250);
-	});
+	$('#summary-page_enableGPS').hide();
+	$('#summary-page_control').show();
 
 	// Show accuracy status image
+	$('#settings-button').hide();
 	$('#summary-page_signal-strength').show();
 
 	// Start searching for satellites
@@ -444,9 +446,6 @@ Summary.prototype._startGPS = function(p_position) {
 		pages.summary.m_trackwriter = new TrackWriter(pages.summary.m_track, p_fileEntry);
 		pages.summary.m_trackwriter.writeInfo();
 
-		// Set position callback
-		GPSHandler.setPositionCallback(pages.summary._updatePosition);
-
 		// Enable / disable buttons
 		$('#left-button').button('enable');
 		$('#right-button').button('enable');
@@ -467,6 +466,11 @@ Summary.prototype._startGPS = function(p_position) {
 		// Notify map- & altitude-screen of new track
 		pages.map.newtrack();
 		pages.graph.newtrack();
+
+		// Set position callback & and do initial call
+		GPSHandler.setPositionCallback(pages.summary._updatePosition);
+		pages.summary._updatePosition(p_position);
+
 	}, function(p_fileError) {
 		MsgBox.show('Error while trying to open track for writing. The error returned is: ' + p_fileError.code);
 		pages.summary._stopGPS();

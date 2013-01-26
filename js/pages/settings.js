@@ -75,7 +75,7 @@ Settings.prototype._save = function() {
 	SettingsHandler.set('authkey', $('#settings-page').find('#authKeyInput').val());
 	SettingsHandler.set('autolock', $('#settings-page').find('#autolockSlider').val());
 	SettingsHandler.set('displayunits', $('#settings-page').find('#displayUnitSelect').val());
-	SettingsHandler.set('hrmtype', $('#settings-page').find('#hrmTypeSelect').val());
+//	SettingsHandler.set('hrmtype', $('#settings-page').find('#hrmTypeSelect').val());
 	SettingsHandler.set('confirmstop', $('#settings-page').find('#confirmStopSlider').val());
 	SettingsHandler._save();
 
@@ -122,7 +122,7 @@ Settings.prototype._pagebeforeshow = function(p_event, p_ui) {
 	$('#settings-page').find('#authKeyInput').val(SettingsHandler.get('authkey'));
 	$('#settings-page').find('#autolockSlider').slider('refresh', SettingsHandler.get('autolock'));
 	$('#settings-page').find('#displayUnitSelect').val(SettingsHandler.get('displayunits')).selectmenu('refresh');
-	$('#settings-page').find('#hrmTypeSelect').val(SettingsHandler.get('hrmtype')).selectmenu('refresh');
+//	$('#settings-page').find('#hrmTypeSelect').val(SettingsHandler.get('hrmtype')).selectmenu('refresh');
 	$('#settings-page').find('#confirmStopSlider').slider('refresh', SettingsHandler.get('confirmstop'));
 	// Setup page layout
 	$('#settings-page').find('#settings-save-button').hide();
