@@ -40,6 +40,11 @@ var SettingsHandler = {
 		"appnotrated": 0	// set to 1 if the user does not want to rate the app	
 	},
 	m_settingsFileEntry : null,
+	
+	// static URLs for communicating with the website
+	URL_jsonRPC: 'http://192.168.56.101/Programming/NetBeans/gofg/sportstracker/index.php?r=sportsComputer/jsonrpc',
+	URL_trackDisplay: 'http://192.168.56.101/Programming/NetBeans/gofg_joomla/tracks?id_track=',
+	
 	onload : function() {
 	}, // Called when the settings have been loaded
 

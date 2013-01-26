@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Wolfgang Koller
+ * Copyright (C) 2012-2013 Wolfgang Koller
  *
  * This file is part of GOFG Sports Computer - http://www.gofg.at/.
  *
@@ -48,7 +48,7 @@ function TrackUploader(p_authKey, p_fileEntry, p_successCallback, p_errorCallbac
 	this.m_fileTransfer = new FileTransfer();
 	this.m_fileTransfer.upload(
 			p_fileEntry.fullPath,
-			TrackUploader.URL,
+			SettingsHandler.URL_jsonRPC,
 			Utilities.getEvtHandler(this,this._fileTransferSuccess),
 			Utilities.getEvtHandler(this,this._fileTransferError),
 			options
@@ -60,9 +60,6 @@ TrackUploader.prototype.m_errorCallback = null; // Callback which is called if t
 TrackUploader.prototype.m_authKey = null; // Authentication key to use when uploading the track
 TrackUploader.prototype.m_fileTransfer = null;	// reference to FileTransfer object
 TrackUploader.prototype.m_idTrack = null; // Authentication key to use when uploading the track
-
-//TrackUploader.URL = "http://www.gofg.at/index.php"; // Static value which references the upload URL of the gofg homepage
-TrackUploader.URL = "http://192.168.56.101/Programming/NetBeans/gofg/sportstracker/index.php?r=sportsComputer/jsonrpc"; // Static value which references the upload URL of the gofg homepage
 
 /**
  * Error callback for FileTransfer object
@@ -134,7 +131,7 @@ TrackUploader.prototype._processFunction = function(data) {
 		
 		$.mobile.loading( 'show', { text: data.result + '%' } );
 
-		$.get(TrackUploader.URL, params )
+		$.get(SettingsHandler.URL_jsonRPC, params )
 		.done( Utilities.getEvtHandler( this, this._processFunction ) );
 	}
 	// we are done
