@@ -33,24 +33,7 @@ function RateApp() {
 		if( (this.m_counter % 10) == 0 ) {
 			navigator.notification.confirm('Do you enjoy GOFG Sports Computer? If yes please take a minute and rate our app!', function(p_button) {
 				if( p_button == 1 ) {
-					switch (device.platform) {
-					case 'Android':
-						// open play store for rating
-						window.open('market://details?id=at.gofg.sportscomputer');
-						break;
-			        case 'WinCE':
-						// open marketplace for rating
-			        	exec(null, null, 'RateApp', 'rate', []);
-			            break;
-			        case 'iPhone':
-						// open AppStore for rating
-			        	window.open('itms://itunes.apple.com/at/app/gofg-sc/id453824252?mt=8&uo=4');
-						break;
-					}
-					
-					// save that we've rated
-					SettingsHandler.set("apprated", 1);
-					SettingsHandler._save();
+					RateApp.show();
 				}
 				else if( p_button == 3 ) {
 					// save that user does not want to rate
@@ -60,8 +43,32 @@ function RateApp() {
 			}, 'Rate GOFG Sports Computer', 'Rate GOFG SC,Later,No thanks');
 		}
 	}
-}
+};
 
 RateApp.prototype.m_counter = 0;
 RateApp.prototype.m_rated = 0;
 RateApp.prototype.m_notRated = 0;
+
+/**
+ * Go to rating page for GOFG SC
+ */
+RateApp.show = function() {
+	switch (device.platform) {
+	case 'Android':
+		// open play store for rating
+		navigator.app.loadUrl('market://details?id=at.gofg.sportscomputer', { openExternal:true } );
+		break;
+    case 'WinCE':
+		// open marketplace for rating
+    	exec(null, null, 'RateApp', 'rate', []);
+        break;
+    case 'iPhone':
+		// open AppStore for rating
+    	window.open('itms://itunes.apple.com/at/app/gofg-sc/id453824252?mt=8&uo=4');
+		break;
+	}
+	
+	// save that we've rated
+	SettingsHandler.set("apprated", 1);
+	SettingsHandler._save();
+};

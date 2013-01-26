@@ -37,6 +37,7 @@ Settings.prototype.oninit = function() {
 	$('#settings-page').find('#settings-odoReset-button').bind('click', pages.settings._odoReset);
 	$('#settings-page').find('#settings-page_about').bind('click', function() { $.mobile.changePage( 'about.html' ); return false; } );
 	$('#settings-page').find('#settings-page_privacy-statement').bind('click', function() { $.mobile.changePage( 'privacystatement.html' ); return false; } );
+	$('#settings-page').find('#settings-page_rate-app').bind('click', function() { RateApp.show(); });
 };
 
 /**
