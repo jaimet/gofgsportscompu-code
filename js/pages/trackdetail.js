@@ -158,8 +158,7 @@ Trackdetail.prototype._doUploadTrack = function() {
 				case 'Android':
 					navigator.app.loadUrl(trackUrl, { openExternal:true } );
 					break;
-		        case 'WinCE':
-		        case 'iPhone':
+                default:
 		        	window.open(trackUrl);
 					break;
 				}
