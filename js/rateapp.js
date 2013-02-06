@@ -59,7 +59,8 @@ RateApp.show = function() {
 		navigator.app.loadUrl('market://details?id=at.gofg.sportscomputer', { openExternal:true } );
 		break;
     case 'WinCE':
-		// open marketplace for rating
+        // open marketplace for rating
+        var exec = cordova.require('cordova/exec');
     	exec(null, null, 'RateApp', 'rate', []);
         break;
     case 'iPhone':
