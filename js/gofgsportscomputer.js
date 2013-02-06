@@ -47,6 +47,42 @@ var GOFGSportsComputer = {
 
 		Translator.changeLanguage(SettingsHandler.get('language'));
 	},
+	
+	/**
+	 * Helper function for dynamically adding a new script tag
+	 */
+	_addScript : function(p_scriptPath, p_before) {
+		p_before = p_before || false;
+		
+		var script_tag = $('<script />');
+		$(script_tag).attr('type', 'text/javascript');
+		$(script_tag).attr('src', p_scriptPath);
+		
+		if( p_before ) {
+			$('#jqm-js').before(script_tag);
+		}
+		else {
+			$('#jqm-js').after(script_tag);
+		}
+	},
+	
+	/**
+	 * Helper function for dynamically adding a new link (stylesheet) tag
+	 */
+	_addStylesheet : function(p_stylePath, p_before) {
+		p_before = p_before || false;
+		
+		var style_tag = $('<link />');
+		$(style_tag).attr('rel', 'stylesheet');
+		$(style_tag).attr('href', p_stylePath);
+		
+		if( p_before ) {
+			$('#jqm-js').before(style_tag);
+		}
+		else {
+			$('#jqm-js').after(style_tag);
+		}
+	},
 
 	/**
 	 * Startup function which setups the sports computer software (init, interface, etc.)
@@ -61,24 +97,23 @@ var GOFGSportsComputer = {
 		$(document).bind('backbutton', Page.backInHistory);
 		
 		// Load the correct stylesheet for jquery-mobile
-		var link_style = $('<link rel="stylesheet" />');
-		var script_style = $('<script type="text/javascript" src=""></script>');
 		switch (device.platform) {
 		case 'Android':
-			link_style.attr('href', 'lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css');
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css', true);
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
 			break;
         case 'WinCE':
-            link_style.attr('href', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css');
-            script_style.attr('src', 'lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js');
-            $('#jqm-js').after(script_style);
+        case 'Win32NT':
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css', true);
+			GOFGSportsComputer._addScript('lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js', false);
             break;
         case 'iPhone':
         default:
-			link_style.attr('href', 'lib/jquery.mobile/jquery.mobile.css');
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.css', true);
 			break;
 		}
-		$('#jqm-theme-css').before( link_style );
-
+		
 		// Find our file storage
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError);
 	},
