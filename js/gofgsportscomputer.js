@@ -103,6 +103,7 @@ var GOFGSportsComputer = {
 			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
 			break;
         case 'WinCE':
+        case 'Win32NT':
 			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css', true);
 			GOFGSportsComputer._addScript('lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.init.js', false);
             break;
