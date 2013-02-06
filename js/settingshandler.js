@@ -42,9 +42,11 @@ var SettingsHandler = {
 	m_settingsFileEntry : null,
 	
 	// static URLs for communicating with the website
-	URL_jsonRPC: 'http://192.168.15.56/Programming/NetBeans/gofg/sportstracker/index.php?r=sportsComputer/jsonrpc',
-	URL_trackDisplay: 'http://192.168.15.56/Programming/NetBeans/gofg_joomla/tracks?id_track=',
-	
+	//URL_jsonRPC: 'http://192.168.15.56/Programming/NetBeans/gofg/sportstracker/index.php?r=sportsComputer/jsonrpc',
+	//URL_trackDisplay: 'http://192.168.15.56/Programming/NetBeans/gofg_joomla/tracks?id_track=',
+	URL_jsonRPC: 'http://sportstracker.gofg.at/index.php?r=sportsComputer/jsonrpc',
+	URL_trackDisplay: 'http://www.gofg.at/tracks?id_track=',
+
 	onload : function() {
 	}, // Called when the settings have been loaded
 
