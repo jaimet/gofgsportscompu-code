@@ -159,7 +159,7 @@ Trackdetail.prototype._doUploadTrack = function() {
 					navigator.app.loadUrl(trackUrl, { openExternal:true } );
 					break;
                 default:
-		        	window.open(trackUrl);
+		        	window.open(trackUrl, '_system');
 					break;
 				}
 			}
