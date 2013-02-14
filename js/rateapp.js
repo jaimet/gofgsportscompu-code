@@ -22,7 +22,7 @@ function RateApp() {
 	this.m_rated = SettingsHandler.getInt("apprated");
 	this.m_notRated = SettingsHandler.getInt("appnotrated");
 	this.m_counter += 1;
-	
+    
 	// check if user did not rate yet, or does not want to rate
 	if( this.m_rated <= 0 && this.m_notRated != 1 ) {
 		// update rate-me-counter
@@ -60,13 +60,14 @@ RateApp.show = function() {
 		break;
     case 'WinCE':
     case 'Win32NT':
-	        // open marketplace for rating
+        // open marketplace for rating
         var exec = cordova.require('cordova/exec');
     	exec(null, null, 'RateApp', 'rate', []);
         break;
     case 'iPhone':
+    case 'iOS':
 		// open AppStore for rating
-    	window.open('itms://itunes.apple.com/at/app/gofg-sc/id453824252?mt=8&uo=4');
+    	window.open('itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=453824252', '_system');
 		break;
 	}
 	
