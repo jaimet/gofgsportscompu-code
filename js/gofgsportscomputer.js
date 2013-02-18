@@ -99,6 +99,7 @@ var GOFGSportsComputer = {
 		// Load the correct stylesheet for jquery-mobile
 		switch (device.platform) {
 		case 'Android':
+			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.css', true);
 			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css', true);
 			GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
 			break;
