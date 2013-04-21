@@ -41,6 +41,21 @@
 	background-position: 1px;
 }
 
+.ui-icon-gofgsc-summary {
+	background-image: url(icons/image_text_icon&16.png) !important;
+	background-position: 1px;
+}
+
+.ui-icon-gofgsc-map {
+	background-image: url(icons/globe_2_icon&16.png) !important;
+	background-position: 1px;
+}
+
+.ui-icon-gofgsc-graph {
+	background-image: url(icons/chart_line_2_icon&16.png) !important;
+	background-position: 1px;
+}
+
 /* sport icons */
 .ui-icon-gofgsc-crosscountryskiing {
 	background-image: url("../images/sporttypes/crosscountryskiing.png") !important;
