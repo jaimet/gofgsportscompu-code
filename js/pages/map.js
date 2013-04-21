@@ -52,7 +52,7 @@ Map.prototype.initMap = function() {
 		var track_height = $(window).height();
 		track_height -= $('#map-page > [data-role="header"]').outerHeight(true);
 		track_height -= ($('#map-page > [data-role="content"]').outerHeight(true) - $('#map-page > [data-role="content"]').height());
-		track_height -= $('#map-page_pager').outerHeight(true);
+		track_height -= $('#map-page_footer').outerHeight(true);
 		$('#track_map').height(track_height);
 
 		pages.map.track_map = new OpenLayers.Map({

@@ -723,7 +723,7 @@ Summary.prototype._pageshow = function(p_event, p_ui) {
 	pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight(true);
 	pages.summary.m_contentHeight -= ($('#summary-page > [data-role="content"]').outerHeight(true) - $('#summary-page > [data-role="content"]').height());
 	pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight(true);
-	pages.summary.m_contentHeight -= $('#summary-pager-overlay').outerHeight(true);
+	pages.summary.m_contentHeight -= $('#summary-page_footer').outerHeight(true);
 
 	// Fit the GOFG logo into the header bar
 	var gofgEmblemRatio = 110.0 / 39.0;
