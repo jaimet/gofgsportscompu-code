@@ -94,12 +94,22 @@ Summary.prototype.oninit = function() {
 	/**
 	 * Create all widgets for our interface
 	 */
+	var targetClass = 'ui-bar-c';
+    // windows phone uses different coloring scheme
+	switch (device.platform) {
+	    case 'WinCE':
+	    case 'Win32NT':
+	        targetClass = 'ui-bar-d';
+	        break;
+	}
+
 	// Create speed widget
 	pages.summary.m_speedWidget = new InfoWidget('speed-infowidget', {
 		value : '0.0',
 		unit : 'km/h',
 		sizeValue : '000.0',
-		showIndicator : true
+		showIndicator: true,
+        targetClass: targetClass
 	});
 	pages.summary.m_speedWidget.addSubInfo('avg:', '0.0', '000.0');
 	pages.summary.m_speedWidget.addSubInfo('max:', '0.0', '000.0');
@@ -108,13 +118,15 @@ Summary.prototype.oninit = function() {
 	pages.summary.m_distanceWidget = new InfoWidget('distance-infowidget', {
 		value : '0.00',
 		unit : 'km',
-		sizeValue : '0000.00'
+		sizeValue: '0000.00',
+		targetClass: targetClass
 	});
 
 	// Create timer widget
 	pages.summary.m_timerWidget = new InfoWidget('timer-infowidget', {
 		value : '00:00:00',
-		unit : 'hh:mm:ss'
+		unit: 'hh:mm:ss',
+		targetClass: targetClass
 	});
 
 	// Create altitude widget
@@ -122,7 +134,8 @@ Summary.prototype.oninit = function() {
 		value : '0.0',
 		unit : 'm',
 		sizeValue : '0000.0',
-		showSubInfos : true
+		showSubInfos: true,
+		targetClass: targetClass
 	});
 	pages.summary.m_altitudeWidget.addSubInfo('curr:', '0%', '00%');
 	pages.summary.m_altitudeWidget.addSubInfo('avg:', '0%', '00%');
@@ -132,7 +145,8 @@ Summary.prototype.oninit = function() {
 		value : '0',
 		unit : 'bpm',
 		sizeValue : '000',
-		showSubInfos : true
+		showSubInfos: true,
+		targetClass: targetClass
 	});
 	pages.summary.m_heartrateWidget.addSubInfo('avg:', '0', '000');
 	pages.summary.m_heartrateWidget.addSubInfo('max:', '0', '000');
@@ -141,14 +155,16 @@ Summary.prototype.oninit = function() {
 	pages.summary.m_clockWidget = new InfoWidget('clock-infowidget', {
 		value : '00:00',
 		unit : 'hh:mm',
-		sizeValue : '00:00'
+		sizeValue: '00:00',
+		targetClass: targetClass
 	});
 
 	// Create widget for odo-meter display
 	pages.summary.m_odometerWidget = new InfoWidget('odometer-infowidget', {
 		value : '0.0',
 		unit : 'km (odo)',
-		sizeValue : '00000.0'
+		sizeValue: '00000.0',
+		targetClass: targetClass
 	});
 
 	// Add clock timer

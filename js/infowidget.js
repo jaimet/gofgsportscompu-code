@@ -36,7 +36,7 @@ function InfoWidget(p_targetDiv, p_options) {
 
 	// Fetch target div & apply standard CSS
 	this.m_targetDiv = $('#' + p_targetDiv);
-	this.m_targetDiv.css('position', 'relative').addClass('ui-bar-c');
+	this.m_targetDiv.css('position', 'relative').addClass(this.m_options.targetClass);
 
 	// Create all the internal display divs ..
 	this.m_unitDiv = $('<div>');
@@ -65,7 +65,8 @@ InfoWidget.defaultOptions = {
 	size : {
 		width : 'auto',
 		height : 'auto'
-	}
+	},
+    targetClass: 'ui-bar-c'
 };
 
 // Helper-Span used for auto-sizing the font
