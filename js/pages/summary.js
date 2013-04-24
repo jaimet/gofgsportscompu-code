@@ -55,12 +55,21 @@ Summary.prototype.oninit = function() {
 	$('#middle-button').live('click', pages.summary.middleTap);
 	$('#right-button').live('click', pages.summary.rightTap);
 	$('#enableGPS-button').live('click', pages.summary.enableGPSTap);
-	// Open the sporttype select menu when clicking the button
-	$('#summary-page_sporttype-button').bind('click', function(event,ui) {
-		$('#summary-page_sporttype-select').selectmenu('open');
-	} );
+	
+	// Listen to click event on listview in order to change icon + setting
+	$('#summary-page_sporttype-popup a').bind('click', function(event,ui) {
+		var sporttype = $(this).attr('href').replace('#', '');
+		$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + sporttype });
+		SettingsHandler.set('sporttype', sporttype);
+		SettingsHandler._save();
+		
+		return true;
+	});
+	// load last sporttype and assign it to button
+	$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + SettingsHandler.get('sporttype') });
+	
 	// Listen to change event in order to update the icon + setting
-	$('#summary-page_sporttype-select').bind('change', function(event,ui) {
+	/*$('#summary-page_sporttype-select').bind('change', function(event,ui) {
 		var value = $(event.target).val();
 		$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + value });
 		SettingsHandler.set('sporttype', value);
@@ -69,15 +78,8 @@ Summary.prototype.oninit = function() {
 		// Hack since native returning doesn't seem to work
 		$.mobile.changePage('summary.html');
 	} );
-	// Add icons to all select options
-	$('#summary-page_sporttype-select').find('option').each( function(index, element) {
-		var value = $(this).val();
-		$('#summary-page_sporttype-select-menu').children().eq(index).find('.ui-btn-inner').append('<span class="ui-icon ui-icon-gofgsc-' + value + ' ui-icon-shadow" />');
-	} );
-	// Hide generated select button, since we use our own
-	$('#summary-page_sporttype-select-button').hide();
 	// Load stored sporttype and trigger a change to update everything
-	$('#summary-page_sporttype-select').val(SettingsHandler.get('sporttype')).selectmenu('refresh').trigger('change');
+	$('#summary-page_sporttype-select').val(SettingsHandler.get('sporttype')).selectmenu('refresh').trigger('change');*/
 
 	// Setup default click handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;

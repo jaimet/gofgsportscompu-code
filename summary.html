@@ -2,27 +2,29 @@
 <div data-role="page" id="summary-page">
 	<!-- /header -->
 	<div data-role="header" id="summary-page_header">
-		<a id="summary-page_sporttype-button" href="#" data-icon="gofgsc-cycling" data-iconpos="notext"></a>
+		<a id="summary-page_sporttype-button" href="#summary-page_sporttype-popup" data-rel="popup" data-role="button" data-inline="true" data-icon="gofgsc-cycling" data-iconpos="notext"></a>
 		<h1 data-i18n="summary"></h1>
 		<img id="summary-page_signal-strength" src="images/wirelessSignalOff48.png" style="position: absolute; right: 10px; top: 2px; height: 30px; width: 30px; display: none;" /> <a id="settings-button" href="tracks.html" data-icon="grid" class="ui-btn-right" data-i18n="menu"></a>
 	</div>
 
+	<div data-role="popup" id="summary-page_sporttype-popup">
+        <ul data-role="listview" data-inset="true">
+			<li data-icon='gofgsc-crosscountryskiing'><a href='#crosscountryskiing' data-i18n="crosscountryskiing"></a></li>
+			<li data-icon='gofgsc-cycling'><a href='#cycling' data-i18n="cycling"></a></li>
+			<li data-icon='gofgsc-hiking'><a href='#hiking' data-i18n="hiking"></a></li>
+			<li data-icon='gofgsc-horseriding'><a href='#horseriding' data-i18n="horseriding"></a></li>
+			<li data-icon='gofgsc-iceskating'><a href='#iceskating' data-i18n="iceskating"></a></li>
+			<li data-icon='gofgsc-rollerblading'><a href='#rollerblading' data-i18n="rollerblading"></a></li>
+			<li data-icon='gofgsc-rowing'><a href='#rowing' data-i18n="rowing"></a></li>
+			<li data-icon='gofgsc-running'><a href='#running' data-i18n="running"></a></li>
+			<li data-icon='gofgsc-skateboarding'><a href='#skateboarding' data-i18n="skateboarding"></a></li>
+			<li data-icon='gofgsc-snowshoeing'><a href='#snowshoeing' data-i18n="snowshoeing"></a></li>
+			<li data-icon='gofgsc-swimming'><a href='#swimming' data-i18n="swimming"></a></li>
+        </ul>
+	</div>
+
 	<!-- /content -->
 	<div data-role="content" style="padding: 5px;">
-		<select data-native-menu="false" name="summary-page_sporttype-select" id="summary-page_sporttype-select">
-			<option value="crosscountryskiing" data-i18n="crosscountryskiing"></option>
-			<option value="cycling" data-i18n="cycling"></option>
-			<option value="hiking" data-i18n="hiking"></option>
-			<option value="horseriding" data-i18n="horseriding"></option>
-			<option value="iceskating" data-i18n="iceskating"></option>
-			<option value="rollerblading" data-i18n="rollerblading"></option>
-			<option value="rowing" data-i18n="rowing"></option>
-			<option value="running" data-i18n="running"></option>
-			<option value="skateboarding" data-i18n="skateboarding"></option>
-			<option value="snowshoeing" data-i18n="snowshoeing"></option>
-			<option value="swimming" data-i18n="swimming"></option>
-		</select>
-
 		<div class="ui-block">
 			<div id="speed-infowidget" class="ui-corner-tl ui-corner-tr"></div>
 		</div>
