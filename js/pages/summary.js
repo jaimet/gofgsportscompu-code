@@ -68,19 +68,6 @@ Summary.prototype.oninit = function() {
 	// load last sporttype and assign it to button
 	$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + SettingsHandler.get('sporttype') });
 	
-	// Listen to change event in order to update the icon + setting
-	/*$('#summary-page_sporttype-select').bind('change', function(event,ui) {
-		var value = $(event.target).val();
-		$('#summary-page_sporttype-button').buttonMarkup({ icon: "gofgsc-" + value });
-		SettingsHandler.set('sporttype', value);
-		SettingsHandler._save();
-		
-		// Hack since native returning doesn't seem to work
-		$.mobile.changePage('summary.html');
-	} );
-	// Load stored sporttype and trigger a change to update everything
-	$('#summary-page_sporttype-select').val(SettingsHandler.get('sporttype')).selectmenu('refresh').trigger('change');*/
-
 	// Setup default click handler
 	pages.summary.m_middleTapHandler = pages.summary._lock;
 
@@ -733,15 +720,21 @@ Summary.prototype._pageshow = function(p_event, p_ui) {
 	// Check if we need to rescale
 	if (!pages.summary.m_bWidgetDirty) return;
 
+	// check if content height was not calculated previously (which means this is the first display)
+	if( pages.summary.m_contentHeight <= 0 ) {
+		// Calculate available height for content
+		pages.summary.m_contentHeight = $(window).height();
+		pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight(true);
+		pages.summary.m_contentHeight -= ($('#summary-page > [data-role="content"]').outerHeight(true) - $('#summary-page > [data-role="content"]').height());
+		pages.summary.m_contentHeight -= $('#summary-page_control').outerHeight(true);
+		pages.summary.m_contentHeight -= $('#summary-page_footer').outerHeight(true);
+		
+		// hide the control buttons (used only for initial height calculations)
+		$('#summary-page_control').hide();
+	}
+	
 	// Set fixed page height
-	$('#summary-page').height($(window).height());
-
-	// Calculate available height for content
-	pages.summary.m_contentHeight = $(window).height();
-	pages.summary.m_contentHeight -= $('#summary-page > [data-role="header"]').outerHeight(true);
-	pages.summary.m_contentHeight -= ($('#summary-page > [data-role="content"]').outerHeight(true) - $('#summary-page > [data-role="content"]').height());
-	pages.summary.m_contentHeight -= $('#summary-page_enableGPS').outerHeight(true);
-	pages.summary.m_contentHeight -= $('#summary-page_footer').outerHeight(true);
+	$('#summary-page').height($(window).height() - $('#summary-page_footer').outerHeight(true));
 
 	// Calculate available height for each row
 	var rowDivider = 4;
