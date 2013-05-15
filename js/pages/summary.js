@@ -181,9 +181,6 @@ Summary.prototype.rightTap = function() {
 Summary.prototype._mainTimer = function() {
 	// Update display
 	pages.summary._updateDisplay();
-
-	// Start our timers
-	pages.summary.m_mainTimer = setTimeout("pages.summary._mainTimer()", 1000);
 };
 
 /**
@@ -461,7 +458,7 @@ Summary.prototype._startGPS = function(p_position) {
 		pages.summary.m_rightTapHandler = pages.summary._pause;
 
 		// Start updating our interface
-		pages.summary._mainTimer();
+		pages.summary.m_mainTimer = setInterval("pages.summary._mainTimer()", 1000);
 
 		// Check if auto-locking is on
 		if (SettingsHandler.get('autolock') > 0) {
@@ -518,7 +515,7 @@ Summary.prototype._stopGPS = function() {
 	if (pages.summary.m_track === null) return;
 
 	// Disable interface timer
-	if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
+	if (pages.summary.m_mainTimer !== 0) clearInterval(pages.summary.m_mainTimer);
 	pages.summary.m_mainTimer = 0;
 
 	// Finalize track
@@ -565,12 +562,10 @@ Summary.prototype._pause = function() {
 	// Stop GPS tracking
 	GPSHandler.stopGPS();
 	// Disable interface timer
-	if (pages.summary.m_mainTimer !== 0) clearTimeout(pages.summary.m_mainTimer);
+	if (pages.summary.m_mainTimer !== 0) clearInterval(pages.summary.m_mainTimer);
 	pages.summary.m_mainTimer = 0;
 	// Enable suspend
-	pages.summary.m_powerManagement.release(function() {
-	}, function(e) {
-	});
+	pages.summary.m_powerManagement.release(function() {}, function(e) {});
 };
 
 /**
@@ -598,7 +593,7 @@ Summary.prototype._resume = function() {
 		pages.summary._updatePosition(p_position);
 
 		// Start updating our interface
-		pages.summary._mainTimer();
+		pages.summary.m_mainTimer = setInterval("pages.summary._mainTimer()", 1000);
 	}, function(p_error) {
 		MsgBox.show($.i18n.prop('suspend_message_error') + e);
 		pages.summary._stopGPS();
