@@ -23,7 +23,6 @@ Summary.prototype = new Page("summary");
 
 Summary.prototype.m_mainTimer = 0;
 Summary.prototype.m_contentHeight = 0;
-Summary.prototype.m_speedTimer = 0;
 Summary.prototype.m_bPauseEnding = false;
 Summary.prototype.m_leftTapHandler = null;
 Summary.prototype.m_middleTapHandler = null;
@@ -184,13 +183,6 @@ Summary.prototype._mainTimer = function() {
 };
 
 /**
- * Called when the speed timeout is reached (resets speed display)
- */
-Summary.prototype._speedTimer = function() {
-	pages.summary.m_speedWidget.setValue('0.0');
-}
-
-/**
  * Reset the display of the summary page to the values used during startup
  */
 Summary.prototype._resetDisplay = function() {
@@ -235,6 +227,10 @@ Summary.prototype._updateDisplay = function(p_bLoading) {
 	var avgSpeed = pages.summary.m_track.getTotalDistance() / duration * 3.6;
 	var currSpeed = coords.speed * 3.6;
 	if (isNaN(avgSpeed)) avgSpeed = 0.00;
+	// Check for speed timeout (means no new waypoint for a certain time)
+	if( !p_bLoading && (Utilities.getUnixTimestamp() - waypoint.m_timestamp) >= 3 ) {
+		currSpeed = 0.0;
+	}
 
 	// Current & average elevation rate
 	var currElevation = waypoint.m_altitudeDiff / waypoint.m_distance * 100;
@@ -645,12 +641,6 @@ Summary.prototype._updatePosition = function(p_position) {
 	pages.summary.m_track.addPosition(p_position, distance, pages.summary.m_bPauseEnding);
 	pages.summary.m_trackwriter.writeWaypoint();
 	pages.summary.m_bPauseEnding = false;
-
-	// Handle speed timeout
-	if (pages.summary.m_speedTimer != 0) {
-		clearTimeout(pages.summary.m_speedTimer);
-	}
-	pages.summary.m_speedTimer = setTimeout("pages.summary._speedTimer()", SettingsHandler.get('gpsinterval') * 3 * 1000);
 
 	// Pass waypoint on to map- & altitude-screen
 	pages.map.waypoint(pages.summary.m_track.getCurrentWaypoint(), pages.summary.m_track);
