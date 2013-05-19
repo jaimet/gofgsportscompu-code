@@ -51,8 +51,8 @@ var GPSHandler = {
 
 		GPSHandler.m_watchId = navigator.geolocation.watchPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
 			enableHighAccuracy : true,
-			timeout : GPSHandler.m_interval * 1000,
-			maximumAge : 1000
+			timeout : 5000,
+			maximumAge : 5000
 		});
 	},
 
