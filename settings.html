@@ -66,8 +66,13 @@
 
 				<!-- gps & accuracy related settings -->
 				<div data-role="fieldcontain">
-					<label for="gpsIntervalSlider" data-i18n="gps_interval"></label>
-					<input type="range" name="gpsIntervalSlider" id="gpsIntervalSlider" value="3" min="1" max="30" />
+					<label for="positionIntervalSelect" data-i18n="position_interval"></label>
+					<select name="positionIntervalSelect" id="positionIntervalSelect">
+						<option value="0" data-i18n="continuous"></option>
+						<option value="15">15</option>
+						<option value="30">30</option>
+						<option value="60">60</option>
+					</select>
 					<label for="minAccuracySlider" data-i18n="min_loc_accuracy"></label>
 					<input type="range" name="minAccuracySlider" id="minAccuracySlider" value="20" min="5" max="50" />
 					<label for="minAltitudeChangeSlider" data-i18n="min_alt_change"></label>

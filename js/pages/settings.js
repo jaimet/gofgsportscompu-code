@@ -68,10 +68,10 @@ Settings.prototype.oncreate = function() {
  */
 Settings.prototype._save = function() {
 	// Store all settings in settingshandler & save them
+	SettingsHandler.set('positioninterval', $('#settings-page').find('#positionIntervalSelect').val());
 	SettingsHandler.set('minimumaccuracy', $('#settings-page').find('#minAccuracySlider').val());
 	SettingsHandler.set('minimumaltitudechange', $('#settings-page').find('#minAltitudeChangeSlider').val());
 	SettingsHandler.set('language', $('#settings-page').find('#languageSelect').val());
-	SettingsHandler.set('gpsinterval', $('#settings-page').find('#gpsIntervalSlider').val());
 	SettingsHandler.set('autostarttracking', $('#settings-page').find('#autostartTrackingSlider').val());
 	SettingsHandler.set('authkey', $('#settings-page').find('#authKeyInput').val());
 	SettingsHandler.set('autolock', $('#settings-page').find('#autolockSlider').val());
@@ -115,10 +115,10 @@ Settings.prototype._odoReset = function() {
  */
 Settings.prototype._pagebeforeshow = function(p_event, p_ui) {
 	// Read values from settings handler
+	$('#settings-page').find('#positionIntervalSelect').val(SettingsHandler.get('positioninterval')).selectmenu('refresh');
 	$('#settings-page').find('#minAccuracySlider').val(SettingsHandler.get('minimumaccuracy')).slider('refresh');
 	$('#settings-page').find('#minAltitudeChangeSlider').val(SettingsHandler.get('minimumaltitudechange')).slider('refresh');
 	$('#settings-page').find('#languageSelect').val(SettingsHandler.get('language')).selectmenu('refresh');
-	$('#settings-page').find('#gpsIntervalSlider').val(SettingsHandler.get('gpsinterval')).slider('refresh');
 	$('#settings-page').find('#autostartTrackingSlider').slider('refresh', SettingsHandler.get('autostarttracking'));
 	$('#settings-page').find('#authKeyInput').val(SettingsHandler.get('authkey'));
 	$('#settings-page').find('#autolockSlider').slider('refresh', SettingsHandler.get('autolock'));

@@ -24,8 +24,8 @@ var SettingsHandler = {
 		"minimumaltitudechange" : 10,
 		"licenseagreed" : 0,
 		"language" : ((navigator.language) ? navigator.language : navigator.browserLanguage).substr(0, 2).toLowerCase(),
-		"gpsinterval" : 3, // Interval (in seconds) which is used to receive new GPS position updates
-		"autostarttracking" : 1, // Automatically start tracking once the GPS signal is active
+		"positioninterval" : 0, // Interval (in seconds) which is used to receive new position updates
+		"autostarttracking" : 1, // Automatically start tracking once the position signal is active
 		"trackuploadurl" : "", // Hardcoded path to track upload-URL
 		"authkey" : "", // Key for authentication against the GOFG system
 		"autolock" : 1, // Automatically lock screen once tracking has started

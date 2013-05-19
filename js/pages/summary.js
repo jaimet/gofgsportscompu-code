@@ -354,7 +354,7 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
 
 	// Start GPS
 	GPSHandler.setPositionCallback(successCallback);
-	GPSHandler.startGPS(SettingsHandler.get('gpsinterval'));
+	GPSHandler.startGPS(SettingsHandler.get('positioninterval'));
 }
 
 /**
