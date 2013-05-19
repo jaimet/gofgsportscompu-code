@@ -22,21 +22,14 @@
  * Note: uses the geolocation API defined in HTML5
  */
 var GPSHandler = {
-	m_settings : {
-		'minAccuracy' : 20,
-		'positionUpdated' : function() {
-		},
-		'interval' : 10,
-		'maximumAge' : 1
-	},
-
 	m_lastPosition : 0,
 	m_distance : 0,
 
-	m_watchId : null,
+	m_watchId : null,	// GPS watch handle
 	m_errorCallback : null, // Invoked if there was an error
 	m_positionCallback : null, // Invoked if there is a new position available
-	m_interval : 10, // Interval for GPS watching (in seconds)
+	m_intervalTimer: null,	// interval mode timer handle
+	m_fetchRunning: false,	// true while a position fetch is running (used for preventing double calls)
 
 	/**
 	 * Start watching the GPS position
@@ -45,26 +38,45 @@ var GPSHandler = {
 		// Check if GPSHandler is already active
 		if (GPSHandler.m_watchId !== null) return;
 
-		GPSHandler.m_interval = p_interval;
 		if (typeof p_positionCallback === "function") GPSHandler.m_positionCallback = p_positionCallback;
 		if (typeof p_errorCallback === "function") GPSHandler.m_errorCallback = p_errorCallback;
 
-		GPSHandler.m_watchId = navigator.geolocation.watchPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
-			enableHighAccuracy : true,
-			timeout : 5000,
-			maximumAge : 5000
-		});
+		// continuous mode
+		if( p_interval == 0 ) {
+			GPSHandler.m_watchId = navigator.geolocation.watchPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
+				enableHighAccuracy : true,
+				timeout : 5000,
+				maximumAge : 5000
+			});
+		}
+		// interval mode
+		else {
+			// setup interval timer mode
+			GPSHandler.m_intervalTimer = window.setInterval("GPSHandler._positionInterval()", p_interval * 1000);
+			
+			// initiate position fetching
+			GPSHandler._positionInterval();
+		}
 	},
 
 	/**
 	 * Stop watching the GPS position
 	 */
 	stopGPS : function() {
-		navigator.geolocation.clearWatch(GPSHandler.m_watchId);
-		GPSHandler.m_watchId = null;
+		// check for active position watch
+		if( GPSHandler.m_watchId != null ) {
+			navigator.geolocation.clearWatch(GPSHandler.m_watchId);
+			GPSHandler.m_watchId = null;
+		}
+		// check for active interval timer
+		if( GPSHandler.m_intervalTimer != null ) {
+			window.clearInterval( GPSHandler.m_intervalTimer );
+			GPSHandler.m_intervalTimer = null;
+		}
+
+		GPSHandler.m_fetchRunning = false;
 		GPSHandler.m_errorCallback = null;
 		GPSHandler.m_positionCallback = null;
-		GPSHandler.m_interval = 10;
 	},
 
 	/**
@@ -80,11 +92,32 @@ var GPSHandler = {
 	setErrorCallback : function(p_errorCallback) {
 		GPSHandler.m_errorCallback = p_errorCallback;
 	},
+	
+	/**
+	 * Called when the interval for a position fetching is over
+	 */
+	_positionInterval : function() {
+		console.log('_positionInterval');
+		
+		// check for active fetching
+		if( GPSHandler.m_fetchRunning ) return;
+		GPSHandler.m_fetchRunning = true;
+		
+		// fetch single position
+		navigator.geolocation.getCurrentPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
+			enableHighAccuracy : true,
+			timeout : 5000,
+			maximumAge : 5000
+		});
+	},
 
 	/**
 	 * Called by the native side whenever a new position is available
 	 */
 	_positionUpdate : function(p_position) {
+		// acknowledge position receipt
+		GPSHandler.m_fetchRunning = false;
+		
 		// iPhone hack
 		if (p_position.coords.speed < 0) return;
 		
