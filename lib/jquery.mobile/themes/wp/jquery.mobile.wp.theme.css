@@ -25,7 +25,7 @@ html, body
 body
 {
     font-size: 11pt;
-    font-family: "Segoe WP, Segoe UI Light, Helvetica, san-serif";
+    font-family: "Segoe WP, Segoe UI Light, Helvetica, sans-serif";
     letter-spacing: 0.02em;
 }
 
@@ -184,19 +184,13 @@ Checkbox and radio button
 
 .ui-checkbox .ui-btn-up-a .ui-icon-checkbox-on,
 .ui-checkbox .ui-btn-down-a .ui-icon-checkbox-on,
-.ui-checkbox .ui-btn-hover-a .ui-icon-checkbox-on,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-a.ui-checkbox-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-down-a.ui-checkbox-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-a.ui-checkbox-on .ui-btn-inner{
+.ui-checkbox .ui-btn-hover-a .ui-icon-checkbox-on{
     background-image: url('images/check-white.png');
 }
 
 .ui-radio .ui-btn-up-a .ui-icon-radio-on,
 .ui-radio .ui-btn-down-a .ui-icon-radio-on,
-.ui-radio .ui-btn-hover-a .ui-icon-radio-on,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-up-a.ui-radio-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-down-a.ui-radio-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-hover-a.ui-radio-on .ui-btn-inner{
+.ui-radio .ui-btn-hover-a .ui-icon-radio-on{
     background-image: url('images/radiobtn-white.png');
 }
 
@@ -204,9 +198,15 @@ Checkbox and radio button
 .ui-checkbox .ui-btn-down-a .ui-icon,
 .ui-radion .ui-btn-up-a .ui-icon,
 .ui-radio .ui-btn-down-a .ui-icon
-.ui-radio .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-a .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-up-a .ui-btn-inner{
+.ui-radio .ui-icon{
+    border-color: white;
+}
+
+.ui-checkbox-on.ui-btn-up-a.ui-btn-active,
+.ui-radio-on.ui-btn-up-a.ui-btn-active,
+.ui-checkbox-on.ui-btn-hover-a.ui-btn-active,
+.ui-radio-on.ui-btn-hover-a.ui-btn-active{
+    color: white;
     border-color: white;
 }
 
@@ -215,18 +215,6 @@ Checkbox and radio button
     background-color: #808080;
 }
 
-/*
-Horizontal checkbox group
-*/
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-a.ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn-up-a.ui-btn,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-a.ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-a.ui-btn{
-    border: 0;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-a.ui-btn-active, .ui-controlgroup-horizontal .ui-radio .ui-btn-up-a.ui-btn-active,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-a.ui-btn-active, .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-a.ui-btn-active{
-    color: white;
-}
 /*
 Dropbox
 */
@@ -277,17 +265,10 @@ div.ui-slider-switch.ui-btn-down-a.div.ui-slider-switch-a.ui-disabled span.ui-sl
 }
 
 div.ui-slider a.ui-slider-handle.ui-btn-up-a .ui-btn-inner,
-div.ui-slider a.ui-slider-handle.ui-btn-hover-a .ui-btn-inner{
+div.ui-slider a.ui-slider-handle.ui-btn-hover-a .ui-btn-inner,
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track.ui-btn-down-a,
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track.ui-btn-hover-a {
     background-color: #373737;
-}
-
-div.ui-slider.ui-btn-down-a.ui-disabled{
-    background-color: #5f5f5f;
-}
-
-div.ui-slider.ui-disabled a.ui-slider-handle.ui-btn-up-a .ui-btn-inner,
-div.ui-slider.ui-disabled a.ui-slider-handle.ui-btn-hover-a .ui-btn-inner{
-    background-color: #101010;
 }
 
 /*
@@ -317,6 +298,14 @@ Footer
 .ui-body-a.ui-selectmenu,
 .ui-body-a.ui-selectmenu div {
     background-color: #202020;
+}
+
+.ui-table-columntoggle-popup.ui-body-a {
+	background-color: #202020;
+}
+
+.ui-panel.ui-body-a {
+	background-color: #202020;
 }
 
 /* B
@@ -421,20 +410,14 @@ Checkbox and radio button
 
 .ui-checkbox .ui-btn-up-b .ui-icon-checkbox-on,
 .ui-checkbox .ui-btn-down-b .ui-icon-checkbox-on,
-.ui-checkbox .ui-btn-hover-b .ui-icon-checkbox-on,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-b.ui-checkbox-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-down-b.ui-checkbox-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-b.ui-checkbox-on .ui-btn-inner{
+.ui-checkbox .ui-btn-hover-b .ui-icon-checkbox-on{
     background-image: url('images/check-black.png');
 }
 
 
 .ui-radio .ui-btn-up-b .ui-icon-radio-on,
 .ui-radio .ui-btn-down-b .ui-icon-radio-on,
-.ui-radio .ui-btn-hover-b .ui-icon-radio-on,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-up-b.ui-radio-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-down-b.ui-radio-on .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-hover-b.ui-radio-on .ui-btn-inner{
+.ui-radio .ui-btn-hover-b .ui-icon-radio-on{
     background-image: url('images/radiobtn-black.png');
 }
 
@@ -443,9 +426,15 @@ Checkbox and radio button
 .ui-checkbox .ui-btn-down-b .ui-icon,
 .ui-radion .ui-btn-up-b .ui-icon,
 .ui-radio .ui-btn-down-b .ui-icon
-.ui-radio .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-b .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn-up-b .ui-btn-inner{
+.ui-radio .ui-icon{
+    border-color: black;
+}
+
+.ui-checkbox-on.ui-btn-up-b.ui-btn-active,
+.ui-radio-on.ui-btn-up-b.ui-btn-active,
+.ui-checkbox-on.ui-btn-hover-b.ui-btn-active,
+.ui-radio-on.ui-btn-hover-b.ui-btn-active{
+    color: black;
     border-color: black;
 }
 
@@ -455,19 +444,6 @@ Checkbox and radio button
     border: 2px solid #808080;
     height: 20px;
     width: 20px;
-}
-
-/*
-Horizontal checkbox group
-*/
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-b.ui-btn-active,.ui-body-b .ui-controlgroup-horizontal .ui-radio .ui-btn-up-b.ui-btn-active,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-b.ui-btn-active,.ui-body-b .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-b.ui-btn-active{
-    color: black;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-b.ui-btn,.ui-controlgroup-horizontal .ui-radio .ui-btn-up-b.ui-btn,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-b.ui-btn,.ui-controlgroup-horizontal .ui-radio .ui-btn-hover-b.ui-btn{
-    border: 0px;
 }
 
 /*
@@ -521,17 +497,10 @@ div.ui-slider-switch.ui-btn-down-b.div.ui-slider-switch-a.ui-disabled div.ui-sli
 
 
 div.ui-slider a.ui-slider-handle.ui-btn-up-b .ui-btn-inner,
-div.ui-slider a.ui-slider-handle.ui-btn-hover-b .ui-btn-inner{
+div.ui-slider a.ui-slider-handle.ui-btn-hover-b .ui-btn-inner,
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track.ui-btn-down-b,
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track.ui-btn-hover-b {
     background-color: #bfbfbf;
-}
-
-div.ui-slider.ui-btn-down-b.ui-disabled{
-    background-color: #bfbfbf;
-}
-
-div.ui-slider.ui-disabled a.ui-slider-handle.ui-btn-up-b .ui-btn-inner,
-div.ui-slider.ui-disabled a.ui-slider-handle.ui-btn-hover-b .ui-btn-inner{
-    background-color: #f0f0f0;
 }
 
 /*
@@ -561,6 +530,14 @@ Footer
 .ui-body-b.ui-selectmenu,
 .ui-body-b.ui-selectmenu div {
     background-color: #bfbfbf;
+}
+
+.ui-table-columntoggle-popup.ui-body-b {
+	background-color: #cccccc;
+}
+
+.ui-panel.ui-body-b {
+	background-color: #cccccc;
 }
 
 /* C
@@ -668,18 +645,6 @@ Checkbox and radio button
     background-color: #808080;
 }
 
-/*
-Horizontal checkbox group
-*/
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-c.ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn-up-c.ui-btn,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-c.ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-c.ui-btn{
-    border: 0;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-c.ui-btn-active, .ui-controlgroup-horizontal .ui-radio .ui-btn-up-c.ui-btn-active,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-c.ui-btn-active, .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-c.ui-btn-active{
-    color: white;
-}
 /*
 Dropbox
 */
@@ -873,19 +838,6 @@ Checkbox and radio button
     border: 2px solid #808080;
     height: 20px;
     width: 20px;
-}
-
-/*
-Horizontal checkbox group
-*/
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-d.ui-btn-active,.ui-body-d .ui-controlgroup-horizontal .ui-radio .ui-btn-up-d.ui-btn-active,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-d.ui-btn-active,.ui-body-d .ui-controlgroup-horizontal .ui-radio .ui-btn-hover-d.ui-btn-active{
-    color: black;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-up-d.ui-btn,.ui-controlgroup-horizontal .ui-radio .ui-btn-up-d.ui-btn,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-hover-d.ui-btn,.ui-controlgroup-horizontal .ui-radio .ui-btn-hover-d.ui-btn{
-    border: 0px;
 }
 
 /*
@@ -1099,10 +1051,15 @@ input, select, textarea, button {
     text-decoration: none;
 }
 
-.ui-btn-down-a:not(.ui-disabled)[data-role='button'],
-.ui-btn-down-b:not(.ui-disabled)[data-role='button'],
-.ui-btn-down-a:not(.ui-disabled) input[data-role='button'],
-.ui-btn-down-b:not(.ui-disabled) input[data-role='button']{
+.ui-btn-down-a:not(.ui-disabled):not([disabled])[data-role='button'],
+.ui-btn-down-b:not(.ui-disabled):not([disabled])[data-role='button'],
+.ui-btn-down-a:not(.ui-disabled):not([disabled]) input[data-role='button'],
+.ui-btn-down-b:not(.ui-disabled):not([disabled]) input[data-role='button'],
+.ui-btn-down-a.ui-submit:not(.ui-disabled):not([disabled]),
+.ui-btn-down-b.ui-submit:not(.ui-disabled):not([disabled]),
+.jqm-themeswitcher .ui-btn-down-a .ui-btn-inner,
+.jqm-themeswitcher .ui-btn-down-b .ui-btn-inner,
+.ui-footer .ui-btn .ui-icon:active{
     background-color: #1BA1E2;
     background-color: Highlight;
 }
@@ -1116,6 +1073,10 @@ input, select, textarea, button {
 .ui-btn[disabled="disabled"] {
     border: 2px solid #808080;
     color: #808080;
+}
+
+a {
+	-ms-touch-action: none;
 }
 
 /* links within "buttons" 
@@ -1420,9 +1381,7 @@ a.ui-link-inherit {
 }
 
 .ui-checkbox .ui-icon,
-.ui-radio .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn .ui-btn-inner{
+.ui-radio .ui-icon{
     border: 2px solid;
     background-color: transparent;
 }
@@ -1436,43 +1395,34 @@ a.ui-link-inherit {
 .ui-checkbox:not(.ui-disabled) .ui-btn:active .ui-icon,
 .ui-radio:not(.ui-disabled) .ui-btn:active .ui-icon,
 .ui-checkbox:not(.ui-disabled) .ui-btn-inner:active .ui-icon,
-.ui-radio:not(.ui-disabled) .ui-btn-inner:active .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox:not(.ui-disabled) .ui-btn .ui-btn-inner:active,
-.ui-controlgroup-horizontal .ui-radio:not(.ui-disabled) .ui-btn .ui-btn-inner:active{
+.ui-radio:not(.ui-disabled) .ui-btn-inner:active .ui-icon{
     background-color: #1BA1E2;
     background-color: Highlight;
 }
 
-.ui-icon-checkbox-off,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn.ui-checkbox-off .ui-btn-inner
+.ui-icon-checkbox-off
 {
     background-position: 	-684px 50%;
     background-image: none;
 }
-.ui-icon-checkbox-on,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn.ui-checkbox-on .ui-btn-inner{
+.ui-icon-checkbox-on{
     background-size: 30px 30px;
     background-position: 	50% 50%;
-
 }
-.ui-icon-radio-off,
-.ui-controlgroup-horizontal .ui-radio .ui-btn.ui-icon-radio-off .ui-btn-inner{
+.ui-icon-radio-off{
     background-position: 	-756px 50%;
     background-image: none;
 }
-.ui-icon-radio-on,
-.ui-controlgroup-horizontal .ui-radio .ui-btn.ui-radio-on .ui-btn-inner{
+.ui-icon-radio-on{
     background-size: 10px 10px;
     background-position: 	50% 50%;
 }
 
-.ui-checkbox.ui-disabled .ui-icon-checkbox-on,
-.ui-controlgroup-horizontal .ui-checkbox.ui-disabled .ui-checkbox-on .ui-btn-inner{
+.ui-checkbox.ui-disabled .ui-icon-checkbox-on{
     background-image: url(images/checkbox-disabled.png) !important;
 }
 
-.ui-radio.ui-disabled .ui-icon-radio-on,
-.ui-controlgroup-horizontal .ui-radio.ui-disabled .ui-radio-on .ui-btn-inner{
+.ui-radio.ui-disabled .ui-icon-radio-on{
     background-image: url(images/radiobtn-disabled.png) !important;
 }
 
@@ -1482,9 +1432,7 @@ a.ui-link-inherit {
 }
 
 /* checks,radios */
-.ui-checkbox .ui-icon, .ui-radio .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn .ui-btn-inner{
+.ui-checkbox .ui-icon, .ui-radio .ui-icon{
     border-radius: 0px;
     height: 20px;
     width: 20px;
@@ -1493,21 +1441,12 @@ a.ui-link-inherit {
     background-repeat: no-repeat;
 }
 
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn .ui-btn-inner{
-    width: 2px;
-    height: 16px;
-}
-
-.ui-radio .ui-icon,
-.ui-controlgroup-horizontal .ui-radio .ui-btn .ui-btn-inner{
+.ui-radio .ui-icon{
     border-radius: 2em !important;
 }
 
 .ui-icon-checkbox-off,.ui-icon-radio-off,
-.ui-checkbox-on .ui-icon,.ui-radio-on .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio .ui-btn .ui-btn-inner
+.ui-checkbox-on .ui-icon,.ui-radio-on .ui-icon
 {
     background-color: transparent;
 }
@@ -1616,8 +1555,8 @@ a.ui-link-inherit {
     /*background-color: white !important;*/
 }
 
-.ui-input-text.ui-focus,
-.ui-input-search.ui-focus {
+input[type="text"]:focus,
+textarea:focus{
     background-color: white !important;
 }
 
@@ -2337,48 +2276,24 @@ Loading screen
     vertical-align: middle;
 }
 
-@media screen and (device-height: 800px) and (orientation: portrait){
-    .ui-loader.ui-loader-verbose {
-        margin: -240px 0px 0px 0px;
-        padding: 0px 0px 0px 15px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        background-color: #202020;
-        z-index: 1200;
-    }
-
-    .ui-loader.ui-loader-verbose h1 {
-        text-align: left !important;
-    }
-
-    .ui-loader.ui-loader-verbose span.ui-icon-loading {
-        visibility: hidden;
-    }
+.ui-loader.ui-loader-verbose {
+	z-index: 1200;
+	position: fixed;
+	background-color: #202020;
+	top: 0px !important;
+	padding: 0px 12px 0px 15px;
 }
 
-@media screen and (device-width: 480px) and (orientation: landscape){
+.ui-loader.ui-loader-verbose h1 {
+	text-align: left !important;
+}
 
-    .ui-loader.ui-loader-verbose {
-        margin: -160px 0px 0px 0px;
-        padding: 0px 0px 0px 15px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        background-color: #202020;
-        z-index: 1200;
-    }
-
-    .ui-loader.ui-loader-verbose h1 {
-        text-align: left !important;
-    }
-
-    .ui-loader.ui-loader-verbose span.ui-icon-loading {
-        visibility: hidden;
-    }
+.ui-loader.ui-loader-verbose span.ui-icon-loading {
+	visibility: hidden;
 }
 
 .ui-loader h1 {
+	top: 35%;
     font-size: 15px;
     color: white;
     position: static;
@@ -2386,10 +2301,9 @@ Loading screen
 }
 
 .ui-loader.ui-loader-verbose h1 {
-    top: 45%;
     left: 0;
     position: relative;
-    text-align: center;
+    text-align: left;
 }
 
 .ui-loader .ui-icon {
@@ -2880,11 +2794,6 @@ Footer
 .ui-controlgroup-horizontal .ui-btn, .ui-controlgroup-horizontal .ui-select { display: inline-block; margin: 0 -5px 0 0; }
 .ui-controlgroup-horizontal .ui-checkbox, .ui-controlgroup-horizontal .ui-radio { float: left; margin: 0 -1px 0 0; }
 
-.ui-controlgroup-controls > .ui-checkbox,
-.ui-controlgroup-controls > .ui-radio {
-    padding-right: 25px;
-}
-
 /*
 Horizontal checkbox group
 */
@@ -2894,33 +2803,11 @@ Horizontal checkbox group
     overflow: hidden;
 }
 
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn {
-    margin: 0px;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-inner, .ui-controlgroup-horizontal .ui-radio .ui-btn-inner {
-    overflow:visible;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-text, .ui-controlgroup-horizontal .ui-radio .ui-btn-text {
-    margin-left: 20px;
-    max-width: 50px;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox.ui-disabled .ui-btn, .ui-controlgroup-horizontal .ui-radio.ui-disabled .ui-btn {
-    border: 0px;
-}
-
 .ui-controlgroup-horizontal .ui-checkbox.ui-disabled .ui-btn.ui-checkbox-on, .ui-controlgroup-horizontal .ui-radio.ui-disabled .ui-btn.ui-radio-on {
     background-color: transparent;
     color: white;
 }
 
-.ui-controlgroup-horizontal .ui-checkbox.ui-disabled .ui-btn.ui-checkbox-on .ui-btn-text, .ui-controlgroup-horizontal .ui-radio.ui-disabled .ui-btn.ui-radio-on .ui-btn-text{
-    color: #808080;
-}
-
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn, .ui-controlgroup-horizontal .ui-radio .ui-btn,
 .ui-controlgroup-horizontal .ui-checkbox:last-child, .ui-controlgroup-horizontal .ui-radio:last-child { margin-right: 0; }
 .ui-controlgroup-horizontal .ui-controlgroup-last { margin-right: 0; }
 .ui-controlgroup .ui-checkbox label, .ui-controlgroup .ui-radio label { font-size: 16px;  }
@@ -3046,10 +2933,6 @@ Checkbox and radio button
     line-height: 1.7em;
 }
 
-.ui-controlgroup-horizontal .ui-checkbox .ui-btn-text, .ui-controlgroup-horizontal .ui-radio .ui-btn-text{
-    line-height: normal;
-}
-
 .ui-checkbox .ui-btn-icon-left .ui-icon, .ui-radio .ui-btn-icon-left .ui-icon {left: 15px; }
 .ui-checkbox .ui-btn-icon-right .ui-icon, .ui-radio .ui-btn-icon-right .ui-icon {right: 15px; }
 /* input, label positioning */
@@ -3060,9 +2943,7 @@ Checkbox and radio button
 }
 
 .ui-checkbox.ui-disabled .ui-icon,
-.ui-radio.ui-disabled .ui-icon,
-.ui-controlgroup-horizontal .ui-checkbox.ui-disabled .ui-btn .ui-btn-inner,
-.ui-controlgroup-horizontal .ui-radio.ui-disabled .ui-btn .ui-btn-inner{
+.ui-radio.ui-disabled .ui-icon{
     background-color: transparent !important;
     border-color: #808080;
 }
@@ -3140,7 +3021,8 @@ Dropbox (custom selectmenu)
     padding: 6px;
     z-index: 1100 !important;
     width: 100%;
-    height: 100%;
+    height: auto;
+    overflow: auto;
     border-radius: 0 !important;
 }
 .ui-selectmenu .ui-listview { margin: 0; }
@@ -3152,12 +3034,12 @@ Dropbox (custom selectmenu)
 
 @media screen and (orientation: portrait){
     .ui-selectmenu-list {
-        min-height: 420px;
+        min-height: 480px;
     }
 }
 @media screen and (orientation: landscape){
     .ui-selectmenu-list {
-        min-height: 300px;
+        min-height: 320px;
     }
 }
 
@@ -3216,8 +3098,7 @@ textarea.ui-input-text { height: 50px; transition: height 200ms linear; }
 input[type="text"]:focus,
 input[type="text"]:active,
 textarea:focus,
-textarea:active,
-.ui-input-search.ui-focus{
+textarea:active{
     border: 2px solid #1BA1E2;
     border-color: Highlight;
 }
@@ -3233,22 +3114,16 @@ textarea.ui-input-text[disabled="disabled"]{
     position: relative;
     width: 100%;
     height:32px;
-    border: 2px solid #bfbfbf;
+    border: none;
     box-shadow: none;
 }
 
 .ui-icon-searchfield:after { position: absolute; left: 7px; top: 50%; margin-top: -9px; content: ""; width: 18px; height: 23px; opacity: .5; }
-.ui-input-search input.ui-input-text { border: none; width: 95%; padding: .2em .3em .3em .3em; margin: 0; display: block; background: transparent none; outline: 0 !important;}
-.ui-input-search .ui-input-clear { position: absolute; right: 0; top: 50%; margin-top: -13px; display: none;}
 .ui-input-search .ui-input-clear-hidden { display: none; }
 
 .ui-input-search{
     border-radius: 0px;
     background-color: #bfbfbf;
-}
-
-.ui-input-search.ui-focus input.ui-input-text{
-    border: none;
 }
 
 .ui-listview {
@@ -3279,6 +3154,11 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 
 }
 
+.ui-listview li.ui-btn a:active {
+	background-color: transparent;
+	color: highlight;
+}
+
 .ui-listview li.ui-li-divider {
     padding-left: 4px;
 }
@@ -3303,6 +3183,10 @@ ol.ui-listview .ui-li-jsnumbering:before { content: "" !important; } /* to avoid
 
 .ui-listview .ui-li-divider {
     border-radius: 0px;
+}
+
+.ui-listview a {
+    -ms-touch-action: pan-y;
 }
 
 .ui-li:last-child, .ui-li.ui-field-contain:last-child { border-bottom-width: 1px; }
@@ -3399,9 +3283,10 @@ div.ui-slider {
     border: 0px;
 }
 div.ui-slider-switch { width: 99.8%; }
-a.ui-slider-handle { position: absolute; z-index: 10;  top: 50%; width: 28px; height: 28px; margin-top: -15px; margin-left: -15px; border: 0px;}
+a.ui-slider-handle { position: absolute; z-index: 10;  top: 50%; width: 28px; height: 28px; margin-top: -15px; margin-left: -15px; border: 0px; -ms-touch-action: none;}
 
-div.ui-slider a.ui-slider-handle {
+div.ui-slider a.ui-slider-handle,
+.ui-rangeslider-sliders a.ui-slider-handle {
     position: absolute;
     z-index: 10;
     top: 0px;
@@ -3412,7 +3297,7 @@ div.ui-slider a.ui-slider-handle {
     border: 0px;
 }
 
-div.ui-slider:not(.ui-slider-switch):not(.ui-disabled):before {
+div.ui-slider:not(.ui-slider-switch) .ui-slider-track:not(.ui-disabled):before {
     content: '';
     position: absolute;
     width: 100%;
@@ -3442,7 +3327,7 @@ div.ui-slider-switch a.ui-slider-handle .ui-btn-inner{
 a.ui-slider-handle .ui-btn-inner { padding-left: 0; padding-right: 0; }
 
 @media all and (min-width: 480px){
-    .ui-field-contain label.ui-slider { vertical-align: top;  display: inline-block;  width: 20%;  margin: 0 2% 0 0; }
+    .ui-field-contain label.ui-slider { vertical-align: top;  display: inline-block;  width: 50%;  margin: 0 2% 0 0; }
     .ui-field-contain div.ui-slider { width: 100%; }
 }
 
@@ -3498,7 +3383,8 @@ div.ui-slider-switch a.ui-slider-handle {
 
 /* Disabled state */
 
-div.ui-slider-switch-b.ui-disabled div.ui-slider-labelbg-a {
+div.ui-slider-switch-b.ui-disabled div.ui-slider-labelbg-a,
+.ui-rangeslider .ui-slider-track.ui-disabled .ui-slider-bg {
     background-color: #808080;
 }
 
@@ -3510,18 +3396,24 @@ div.ui-slider-switch.ui-disabled a.ui-slider-handle{
     background-color: #808080 !important;
 }
 
-div.ui-slider:not(.ui-slider-switch).ui-disabled:before{
+div.ui-slider:not(.ui-slider-switch) .ui-slider-track.ui-disabled:before{
     content: '';
     position: absolute;
     width: 100%;
     height: 8px;
     top: 6px;
     left: 0px;
-    background-color: #808080 !important;
+    background-color: #5f5f5f;
 }
 
 div.ui-slider.ui-disabled:not(.ui-slider-switch){
     background-color: transparent;
+}
+
+div.ui-slider .ui-disabled ~ .ui-slider-track a.ui-slider-handle .ui-btn-inner,
+div.ui-slider.ui-disabled ~ .ui-slider-track a.ui-slider-handle .ui-btn-inner,
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track.ui-disabled {
+    background-color: #101010;
 }
 
 /* Not used */
@@ -3664,12 +3556,513 @@ span.ui-slider-label-b {
 	width: 100%;
 	height: 100%;
 	border: 0;
-	position: absolute;
+	position: fixed;
 	filter: Alpha(Opacity=50);
 	opacity: 0;
 	z-index: 1099;
 }
+
+.ui-popup-screen.in + .ui-popup-active {
+	min-height: 0px;
+}
+
 .ui-popup-screen-background-hack {
 	background-color: black;
 	filter: Alpha(Opacity=0);
+}
+
+.ui-popup-hidden {
+	top: -99999px;
+	left: -9999px;
+}
+
+
+/* jQM 1.3 new controls */
+
+.ui-rangeslider .ui-rangeslider-sliders {
+	position: relative;
+	height: 28px;
+}
+
+.ui-rangeslider .ui-slider-bg {
+	background-color: highlight;
+	z-index: 100;
+	height: 8px;
+	border: none;
+}
+
+.ui-rangeslider .ui-slider-handle {
+	top: -6px !important;
+}
+
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track {
+	position: absolute;
+	top: 10px;
+	right: 0;
+	left: 0;
+}
+
+.ui-rangeslider .ui-rangeslider-sliders .ui-slider-track {
+	height: 8px;
+	border-radius: 0px !important;
+}
+
+/* table layout */
+
+.ui-table {
+	border: 0;
+	border-collapse: collapse;
+	padding: 0;
+	width: 100%;
+}
+.ui-table th,
+.ui-table td {
+	line-height: 1.5em;
+	text-align: left;
+	padding: .4em .5em .4em 0;
+	vertical-align:top;
+}
+.ui-table th .ui-btn,
+.ui-table td .ui-btn {
+	line-height: normal;
+}
+.ui-table th {
+	font-weight: normal;
+	font-size: 15pt;
+}
+.ui-table caption {
+	text-align:left;
+	margin-bottom:1.4em;
+	opacity: .5;
+}
+/* Add strokes between each row */
+.table-stroke thead th {
+	border-bottom: 1px solid #d6d6d6; /* non-RGBA fallback */
+	border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+.table-stroke tbody th,
+.table-stroke tbody td {
+	border-bottom: 1px solid #e6e6e6; /* non-RGBA fallback  */
+	border-bottom: 1px solid rgba(0, 0, 0, .05);
+}
+/* Add alternating row stripes */
+.table-stripe tbody tr:nth-child(odd) td,
+.table-stripe tbody tr:nth-child(odd) th {
+	background-color: #eeeeee; /* non-RGBA fallback  */
+	background-color: rgba(0,0,0,0.04);
+}
+/* Add stroke to the header and last item */
+.table-stripe thead th,
+.table-stripe tbody tr:last-child {
+	border-bottom: 1px solid #d6d6d6; /* non-RGBA fallback  */
+	border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+/*
+ Styles for the table columntoggle mode
+*/
+.ui-table-columntoggle-btn {
+	float: right;
+	margin-bottom:.8em;
+}
+/* Remove top/bottom margins around the fieldcontain on check list */
+.ui-table-columntoggle-popup fieldset {
+	margin:0;
+}
+
+.ui-table-columntoggle-popup {
+	padding-left: 15px;
+	border-radius: 0;
+}
+
+.ui-table-columntoggle-popup .ui-btn {
+	background-color: transparent;
+}
+
+/* Hide all prioritized columns by default */
+@media only all {
+	th.ui-table-priority-6,
+	td.ui-table-priority-6,
+	th.ui-table-priority-5,
+	td.ui-table-priority-5,
+	th.ui-table-priority-4,
+	td.ui-table-priority-4,
+	th.ui-table-priority-3,
+	td.ui-table-priority-3,
+	th.ui-table-priority-2,
+	td.ui-table-priority-2,
+	th.ui-table-priority-1,
+	td.ui-table-priority-1 {
+		display: none;
+	}
+}
+/* Preset breakpoints if ".ui-responsive" class added to table */
+/* Show priority 1 at 320px (20em x 16px) */
+@media screen and (min-width: 20em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-1,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-1 {
+		display: table-cell;
+	}
+}
+/* Show priority 2 at 480px (30em x 16px) */
+@media screen and (min-width: 30em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-2,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-2 {
+		display: table-cell;
+	}
+}
+/* Show priority 3 at 640px (40em x 16px) */
+@media screen and (min-width: 40em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-3,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-3 {
+		display: table-cell;
+	}
+}
+/* Show priority 4 at 800px (50em x 16px) */
+@media screen and (min-width: 50em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-4,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-4 {
+		display: table-cell;
+	}
+}
+/* Show priority 5 at 960px (60em x 16px) */
+@media screen and (min-width: 60em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-5,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-5 {
+		display: table-cell;
+	}
+}
+/* Show priority 6 at 1,120px (70em x 16px) */
+@media screen and (min-width: 70em) {
+	.ui-table-columntoggle.ui-responsive th.ui-table-priority-6,
+	.ui-table-columntoggle.ui-responsive td.ui-table-priority-6 {
+		display: table-cell;
+	}
+}
+/* Unchecked manually: Always hide */
+.ui-table-columntoggle th.ui-table-cell-hidden,
+.ui-table-columntoggle td.ui-table-cell-hidden,
+.ui-table-columntoggle.ui-responsive th.ui-table-cell-hidden,
+.ui-table-columntoggle.ui-responsive td.ui-table-cell-hidden {
+	display: none;
+}
+/* Checked manually: Always show */
+.ui-table-columntoggle th.ui-table-cell-visible,
+.ui-table-columntoggle td.ui-table-cell-visible,
+.ui-table-columntoggle.ui-responsive th.ui-table-cell-visible,
+.ui-table-columntoggle.ui-responsive td.ui-table-cell-visible {
+	display: table-cell;
+}
+/*
+ Styles for the table columntoggle mode
+*/
+.ui-table-reflow td .ui-table-cell-label,
+.ui-table-reflow th .ui-table-cell-label {
+	display: none;
+	font-weight: 300;
+}
+/* Mobile first styles: Begin with the stacked presentation at narrow widths */
+@media only all {
+	/* Hide the table headers */
+	.ui-table-reflow thead td,
+	.ui-table-reflow thead th {
+		display: none;
+	}
+	/* Show the table cells as a block level element */
+	.ui-table-reflow td,
+	.ui-table-reflow th {
+		text-align: left;
+		display: block;
+	}
+	/* Add a fair amount of top margin to visually separate each row when stacked */
+	.ui-table-reflow tbody th {
+		margin-top: 1em;
+	}
+
+	.ui-table-reflow tbody tr:first-child th {
+		margin-top: 0;
+	}
+	/* Make the label elements a percentage width */
+	.ui-table-reflow td .ui-table-cell-label,
+	.ui-table-reflow th .ui-table-cell-label {
+		display: block;
+		padding: .4em;
+		min-width: 30%;
+		display: inline-block;
+		margin: -.4em 1em -.4em -.4em;
+	}
+	/* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */
+	.ui-table-reflow th .ui-table-cell-label-top,
+	.ui-table-reflow td .ui-table-cell-label-top {
+		display: block;
+		padding: .4em 0;
+		margin: .4em 0;
+		text-transform: uppercase;
+		font-size: .9em;
+		font-weight: normal;
+	}
+}
+/* Breakpoint to show as a standard table at 560px (35em x 16px) or wider */
+@media ( min-width: 35em ) {
+	/* Fixes table rendering when switching between breakpoints in Safari <= 5. See https://github.com/jquery/jquery-mobile/issues/5380 */
+	.ui-table-reflow.ui-responsive {
+		display: table-row-group;
+	}
+	/* Show the table header rows */
+	.ui-table-reflow.ui-responsive td,
+	.ui-table-reflow.ui-responsive th,
+	.ui-table-reflow.ui-responsive tbody th,
+	.ui-table-reflow.ui-responsive tbody td,
+	.ui-table-reflow.ui-responsive thead td,
+	.ui-table-reflow.ui-responsive thead th {
+		display: table-cell;
+		margin: 0;
+	}
+	/* Hide the labels in each cell */
+	.ui-table-reflow.ui-responsive td .ui-table-cell-label,
+	.ui-table-reflow.ui-responsive th .ui-table-cell-label {
+		display: none;
+	}
+}
+/* Hack to make IE9 and WP7.5 treat cells like block level elements, scoped to ui-responsive class */
+/* Applied in a max-width media query up to the table layout breakpoint so we don't need to negate this*/
+@media ( max-width: 35em ) {
+	.ui-table-reflow.ui-responsive td,
+	.ui-table-reflow.ui-responsive th {
+		width: 100%;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		float: left;
+		clear: left;
+	}
+}
+
+/* panel */
+.ui-panel {
+	width: 17em;
+	min-height: 100%;
+	border-width: 0;
+	position: absolute;
+	top: 0;
+	display: block;
+	background-color: #202020;
+}
+
+.ui-panel .ui-btn {
+	background-color: transparent;
+}
+.ui-panel-closed {
+	width: 0;
+	overflow: hidden;
+}
+.ui-panel-fixed {
+	position: fixed;
+	bottom: -1px; /* fixes gap on Chrome for Android */
+	padding-bottom: 1px;
+}
+.ui-panel-display-overlay {
+	z-index: 1001; /* fixed toolbars have z-index 1000 */
+}
+.ui-panel-display-reveal {
+	z-index: 0;
+}
+.ui-panel-display-push {
+	z-index: 999;
+}
+.ui-panel-inner {
+	padding: 15px;
+}
+/* content-wrap */
+.ui-panel-content-wrap {
+	position: relative;
+	left: 0;
+	min-height: inherit;
+	border: none;
+	z-index: 999;
+}
+.ui-panel-content-wrap-display-overlay,
+.ui-panel-animate.ui-panel-content-wrap > .ui-header, /* ios4 fix */
+.ui-panel-content-wrap-closed {
+	position: static;
+}
+/* dismiss */
+.ui-panel-dismiss {
+	position: absolute;
+	top: 0;
+	left:0;
+	height: 100%;
+	width: 100%;
+	z-index: 1002;
+	display: none;
+}
+.ui-panel-dismiss-open {
+	display: block;
+	background-color: white;
+	opacity: 0.001;
+}
+/* animate class is added to panel, wrapper and fixed toolbars */
+.ui-panel-animate {
+	-webkit-transition: -webkit-transform 350ms ease;
+	-moz-transition: -moz-transform 350ms ease;
+	transition: transform 350ms ease;
+}
+/* hardware acceleration for smoother transitions */
+.ui-panel-animate.ui-panel:not(.ui-panel-display-reveal),
+.ui-panel-animate.ui-panel:not(.ui-panel-display-reveal) > div,
+.ui-panel-animate.ui-panel-content-wrap,
+.ui-panel-animate.ui-panel-content-fixed-toolbar {
+	-webkit-backface-visibility: hidden;
+	-webkit-transform: translate3d(0,0,0);
+}
+/* positioning: panel */
+/* panel left  */
+.ui-panel-position-left {
+	left: -17em;
+}
+/* animated: panel left (for overlay and push) */
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+	left: 0;
+	-webkit-transform: translate3d(-17em,0,0);
+	-moz-transform: translate3d(-17em,0,0);
+	transform: translate3d(-17em,0,0);
+}
+/* panel left open */
+.ui-panel-position-left.ui-panel-display-reveal, /* negate "panel left" for reveal */
+.ui-panel-position-left.ui-panel-open {
+	left: 0;
+}
+/* animated: panel left open (for overlay and push) */
+.ui-panel-animate.ui-panel-position-left.ui-panel-open.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-left.ui-panel-open.ui-panel-display-push {
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+}
+/* panel right */
+.ui-panel-position-right {
+	right: -17em;
+}
+/* animated: panel right (for overlay and push) */
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
+	right: 0;
+	-webkit-transform: translate3d(17em,0,0);
+	-moz-transform: translate3d(17em,0,0);
+	transform: translate3d(17em,0,0);
+}
+/* panel right open */
+.ui-panel-position-right.ui-panel-display-reveal,  /* negate "panel right" for reveal */
+.ui-panel-position-right.ui-panel-open {
+	right: 0;
+}
+/* animated: panel right open (for overlay and push) */
+.ui-panel-animate.ui-panel-position-right.ui-panel-open.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-right.ui-panel-open.ui-panel-display-push {
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+}
+/* positioning: content wrap, fixed toolbars and dismiss */
+/* panel left open */
+.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open,
+.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open,
+.ui-panel-dismiss-position-left.ui-panel-dismiss-open {
+	left: 17em;
+	right: -17em;
+}
+/* animated: panel left open (for reveal and push) */
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
+.ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal,
+.ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
+	left: 0;
+	right: 0;
+	-webkit-transform: translate3d(17em,0,0);
+	-moz-transform: translate3d(17em,0,0);
+	transform: translate3d(17em,0,0);
+}
+/* panel right open */
+.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open,
+.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open,
+.ui-panel-dismiss-position-right.ui-panel-dismiss-open {
+	left: -17em;
+	right: 17em;
+}
+/* animated: panel right open (for reveal and push) */
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
+.ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal,
+.ui-panel-animate.ui-panel-content-wrap-position-right.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
+	left: 0;
+	right: 0;
+	-webkit-transform: translate3d(-17em,0,0);
+	-moz-transform: translate3d(-17em,0,0);
+	transform: translate3d(-17em,0,0);
+}
+/* negate "panel left/right open" for overlay */
+.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-overlay,
+.ui-panel-content-wrap-open.ui-panel-content-wrap-display-overlay {
+	left: 0;
+}
+/* always disable overflow-x to prevent zoom issue on Android */
+.ui-page-active.ui-page-panel {
+	overflow-x: hidden;
+}
+/* shadows and borders */
+.ui-panel-display-reveal {
+	-webkit-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+	-moz-box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+	box-shadow: inset -5px 0 5px rgba(0,0,0,.15);
+}
+.ui-panel-position-right.ui-panel-display-reveal {
+	-webkit-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+	-moz-box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+	box-shadow: inset 5px 0 5px rgba(0,0,0,.15);
+}
+.ui-panel-position-right.ui-panel-display-overlay {
+	-webkit-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+	-moz-box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+	box-shadow: -5px 0px 5px rgba(0,0,0,.15);
+}
+.ui-panel-position-left.ui-panel-display-overlay {
+	-webkit-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+	-moz-box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+	box-shadow: 5px 0px 5px rgba(0,0,0,.15);
+}
+.ui-panel-display-push.ui-panel-open.ui-panel-position-left {
+	border-right-width: 1px;
+	margin-right: -1px;
+}
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push {
+	margin-left: 1px;
+}
+.ui-panel-display-push.ui-panel-open.ui-panel-position-right {
+	border-left-width: 1px;
+	margin-left: -1px;
+}
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-right.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push {
+	margin-right: 1px;
+}
+/* wrap on wide viewports once open */
+@media (min-width:55em){
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+		margin-right: 17em;
+	}
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+		margin-left: 17em;
+	}
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
+	.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal {
+		width: auto;
+	}
+	.ui-responsive-panel .ui-panel-dismiss-display-push {
+		display: none;
+	}
 }
