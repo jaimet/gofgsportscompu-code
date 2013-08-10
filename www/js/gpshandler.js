@@ -120,12 +120,16 @@ var GPSHandler = {
 		
 		// iPhone hack
 		if (p_position.coords.speed < 0) return;
+                
+                console.log('Alt orig: ' + p_position.coords.altitude);
 		
 		// Create separate in-js object for position data since on Android this seems to be read only
 		var position = gofg_position.clone(p_position);
 		// Force JavaScript timestamp (since on Android this sometimes seems to differ)
 		position.timestamp = Utilities.getUnixTimestamp() * 1000;
 		
+                console.log('Alt neu: ' + position.coords.altitude);
+                
 		// Execute callback (if set)
 		if (typeof GPSHandler.m_positionCallback === "function") GPSHandler.m_positionCallback(position);
 	},
