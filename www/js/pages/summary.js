@@ -245,7 +245,6 @@ Summary.prototype._updateDisplay = function(p_bLoading) {
 	pages.summary.m_speedWidget.setIndicator(currSpeed > avgSpeed, currSpeed < avgSpeed);
 	pages.summary.m_distanceWidget.setValue(l10n.largeUnitValue(pages.summary.m_track.getTotalDistance() / 1000.0).toFixed(2));
 	pages.summary.m_altitudeWidget.setValue(l10n.smallUnitValue(pages.summary.m_track.getElevationGain()).toFixed(1));
-	pages.summary.m_altitudeWidget.setValue(coords.altitude);
 	pages.summary.m_altitudeWidget.setSubInfo(0, currElevation.toFixed(0) + '%');
 	pages.summary.m_altitudeWidget.setSubInfo(1, avgElevation.toFixed(0) + '%');
 	pages.summary.m_heartrateWidget.setValue( waypoint.m_heartrate );
@@ -625,14 +624,14 @@ Summary.prototype._updatePosition = function(p_position) {
 		if (distance <= waypoint.m_position.coords.accuracy) return;
 		
 		// Check if altitude accuracy is outside the minimum accuracy
-		/*if( p_position.coords.altitudeAccuracy > SettingsHandler.getInt('minimumaccuracy') ) {
+		if( p_position.coords.altitudeAccuracy > SettingsHandler.getInt('minimumaccuracy') ) {
 			p_position.coords.altitude = waypoint.m_position.coords.altitude;
 		}
 
 		// Check if altitude difference is within tolerance
 		if (Math.abs(waypoint.m_position.coords.altitude - p_position.coords.altitude) < SettingsHandler.getInt('minimumaltitudechange')) {
 			p_position.coords.altitude = waypoint.m_position.coords.altitude;
-		}*/
+		}
 
 		// Update odo (total distance - see odometer)
 		pages.summary._updateOdo(distance);
