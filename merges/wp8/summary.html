@@ -1,0 +1,75 @@
+<!-- Summary page -->
+<div data-role="page" id="summary-page">
+	<!-- /header -->
+	<div data-role="header" id="summary-page_header">
+		<h1 data-i18n="summary"></h1>
+		<!--<img id="summary-page_signal-strength" src="images/wirelessSignalOff48.png" style="position: absolute; right: 10px; top: 2px; height: 30px; width: 30px; display: none;" />-->
+	</div>
+
+	<div data-role="popup" id="summary-page_sporttype-popup">
+        <ul data-role="listview" data-inset="true">
+			<li data-icon='gofgsc-crosscountryskiing'><a href='#crosscountryskiing' data-i18n="crosscountryskiing"></a></li>
+			<li data-icon='gofgsc-cycling'><a href='#cycling' data-i18n="cycling"></a></li>
+			<li data-icon='gofgsc-hiking'><a href='#hiking' data-i18n="hiking"></a></li>
+			<li data-icon='gofgsc-horseriding'><a href='#horseriding' data-i18n="horseriding"></a></li>
+			<li data-icon='gofgsc-iceskating'><a href='#iceskating' data-i18n="iceskating"></a></li>
+			<li data-icon='gofgsc-rollerblading'><a href='#rollerblading' data-i18n="rollerblading"></a></li>
+			<li data-icon='gofgsc-rowing'><a href='#rowing' data-i18n="rowing"></a></li>
+			<li data-icon='gofgsc-running'><a href='#running' data-i18n="running"></a></li>
+			<li data-icon='gofgsc-skateboarding'><a href='#skateboarding' data-i18n="skateboarding"></a></li>
+			<li data-icon='gofgsc-snowshoeing'><a href='#snowshoeing' data-i18n="snowshoeing"></a></li>
+			<li data-icon='gofgsc-swimming'><a href='#swimming' data-i18n="swimming"></a></li>
+        </ul>
+	</div>
+
+	<!-- /content -->
+	<div data-role="content" style="padding: 5px;">
+		<div class="ui-block">
+			<div id="speed-infowidget" class="ui-corner-tl ui-corner-tr"></div>
+		</div>
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<div id="distance-infowidget"></div>
+			</div>
+			<div class="ui-block-b">
+				<div id="timer-infowidget"></div>
+			</div>
+		</div>
+		<div class="ui-block">
+			<div id="altitude-infowidget"></div>
+		</div>
+		<div class="ui-block">
+			<div id="heartrate-infowidget"></div>
+		</div>
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<div id="clock-infowidget" class="ui-corner-bl"></div>
+			</div>
+			<div class="ui-block-b">
+				<div id="odometer-infowidget" class="ui-corner-br"></div>
+			</div>
+		</div>
+
+		<div data-role="controlgroup" id="summary-page_enableGPS" style="margin-bottom: 0.25em; margin-top: 0.25em;">
+			<button id="enableGPS-button" data-i18n="start" data-theme="f"></button>
+		</div>
+		<div data-role="controlgroup" data-type="horizontal" id="summary-page_control" style="margin-bottom: 0.25em; margin-top: 0.25em;">
+			<button id="left-button" value="&nbsp;" data-icon="gofgsc-stop" data-iconpos="top"></button>
+			<button id="middle-button" value="&nbsp;" data-icon="gofgsc-lock" data-iconpos="top"></button>
+			<button id="right-button" value="&nbsp;" data-icon="gofgsc-play" data-iconpos="top"></button>
+		</div>
+	</div>
+
+	<!-- app-bar -->
+	<div data-role="app-bar">
+            <a id="summary-page_sporttype-button" href="#summary-page_sporttype-popup" data-rel="popup" data-role="button" data-inline="true" data-icon="gofgsc-cycling" data-iconpos="notext">sporttype</a>
+            <a href="#" data-icon='gofgsc-summary'>summary</a>
+            <a href="map.html" data-icon='gofgsc-map'>map</a>
+            <a href="graph.html" data-icon='gofgsc-graph'>graph</a>
+            <ul>
+                <li><a href='tracks.html'>Tracks</a></li>
+                <li><a href='settings.html'>Settings</a></li>
+            </ul>
+        </div>
+</div>
+
