@@ -713,6 +713,7 @@ Summary.prototype._pageshow = function(p_event, p_ui) {
 		pages.summary.m_contentHeight -= ($('#summary-page > [data-role="content"]').outerHeight(true) - $('#summary-page > [data-role="content"]').height());
 		pages.summary.m_contentHeight -= $('#summary-page_control').outerHeight(true);
 		pages.summary.m_contentHeight -= $('#summary-page_footer').outerHeight(true);
+                pages.summary.m_contentHeight -= $('#summary-page_app-bar').outerHeight(true);
 		
 		// hide the control buttons (used only for initial height calculations)
 		$('#summary-page_control').hide();
