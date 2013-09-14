@@ -53,6 +53,7 @@ Graph.prototype.onshow = function() {
                 chart_height -= $('#graph-page > [data-role="header"]').outerHeight( true );
                 chart_height -= ($( '#graph-page > [data-role="content"]' ).outerHeight( true ) - $( '#graph-page > [data-role="content"]' ).height());
                 chart_height -= $('#graph-page_footer').outerHeight( true );
+                chart_height -= $('#graph-page_app-bar').outerHeight( true );
                 chart_height -= $('#graph-page_display').outerHeight( true );
                 $( '#graph-page_plot' ).height( chart_height );
 
