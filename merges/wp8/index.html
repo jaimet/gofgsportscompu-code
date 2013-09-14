@@ -1,139 +1,115 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>GOFG Sports Computer</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-<meta name="msapplication-tap-highlight" content="no" />
+    <head>
+        <title>GOFG Sports Computer</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <meta name="msapplication-tap-highlight" content="no" />
 
-<!-- Cordova 3.0.0 -->
-<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+        <!-- Cordova 3.0.0 -->
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
-<!-- jQuery 1.8.3  -->
-<script type="text/javascript" src="lib/jquery/jquery.js"></script>
-<!-- jquery.i18n.properties 1.0.9  -->
-<script type="text/javascript" src="lib/jquery/plugins/jquery.i18n.properties.js"></script>
-<!-- jquery.uuid 2.0.0  -->
-<script type="text/javascript" src="lib/jquery/plugins/jquery.uuid.js"></script>
-<!-- jquery.flot 0.7 -->
-<script type="text/javascript" src="lib/jquery/plugins/flot/jquery.flot.min.js" charset="utf-8"></script>
-<!-- jquery.flot.axislabels plugin by Rui Pereira -->
-<script type="text/javascript" src="lib/jquery/plugins/flot/jquery.flot.axislabels.js" charset="utf-8"></script>
+        <!-- jQuery 1.8.3  -->
+        <script type="text/javascript" src="lib/jquery/jquery.js"></script>
+        <!-- jquery.i18n.properties 1.0.9  -->
+        <script type="text/javascript" src="lib/jquery/plugins/jquery.i18n.properties.js"></script>
+        <!-- jquery.uuid 2.0.0  -->
+        <script type="text/javascript" src="lib/jquery/plugins/jquery.uuid.js"></script>
+        <!-- jquery.flot 0.7 -->
+        <script type="text/javascript" src="lib/jquery/plugins/flot/jquery.flot.min.js" charset="utf-8"></script>
+        <!-- jquery.flot.axislabels plugin by Rui Pereira -->
+        <script type="text/javascript" src="lib/jquery/plugins/flot/jquery.flot.axislabels.js" charset="utf-8"></script>
 
-<!-- Pre-Configure jQueryMobile -->
-<script type="text/javascript">
-	$(document).bind("mobileinit", function() {
-		$.mobile.page.prototype.options.domCache = true;
-		$.mobile.defaultPageTransition = 'none';
-		$.mobile.defaultDialogTransition = 'none';
-		$.mobile.hashListeningEnabled = false; // Disable history tracking as we don't need it in our app
-		$.mobile.loadingMessageTextVisible = true;
-		$.mobile.allowCrossDomainPages = true;
-		$.support.cors = true;
-	});
-</script>
-<!-- jQueryMobile 1.3.1 -->
-<link rel="stylesheet" href="lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css"/>
-<script type="text/javascript" src="lib/jquery.mobile/jquery.mobile.js"></script>
-<script src="lib/jquery.mobile/wp/jquery.mobile.wp.theme.init.js" type="text/javascript"></script>
-<link rel="stylesheet" href="lib/jquery.mobile/themes/jqm.gofgsc.css" />
-<!-- app-bar plugin -->
-<link href="lib/jquery.mobile/plugins/app-bar/css/app-bar.css" rel="Stylesheet" type="text/css" />
-<script src="lib/jquery.mobile/plugins/app-bar/js/jquery.easing.1.3.js" type="text/javascript"></script>
-<script src="lib/jquery.mobile/plugins/app-bar/js/app-bar.js" type="text/javascript"></script>
+        <!-- Pre-Configure jQueryMobile -->
+        <script type="text/javascript">
+            $(document).bind("mobileinit", function() {
+                $.mobile.page.prototype.options.domCache = true;
+                $.mobile.defaultPageTransition = 'none';
+                $.mobile.defaultDialogTransition = 'none';
+                $.mobile.hashListeningEnabled = false; // Disable history tracking as we don't need it in our app
+                $.mobile.loadingMessageTextVisible = true;
+                $.mobile.allowCrossDomainPages = true;
+                $.support.cors = true;
+            });
+        </script>
+        <!-- jQueryMobile 1.3.1 -->
+        <link rel="stylesheet" href="lib/jquery.mobile/themes/wp/jquery.mobile.wp.theme.css"/>
+        <script type="text/javascript" src="lib/jquery.mobile/jquery.mobile.js"></script>
+        <script src="lib/jquery.mobile/wp/jquery.mobile.wp.theme.init.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="lib/jquery.mobile/themes/jqm.gofgsc.css" />
+        <!-- app-bar plugin -->
+        <link href="lib/jquery.mobile/plugins/app-bar/css/app-bar.css" rel="Stylesheet" type="text/css" />
+        <script src="lib/jquery.mobile/plugins/app-bar/js/jquery.easing.1.3.js" type="text/javascript"></script>
+        <script src="lib/jquery.mobile/plugins/app-bar/js/app-bar.js" type="text/javascript"></script>
 
-<!-- http://blog.stevenlevithan.com/archives/date-time-format -->
-<script type="text/javascript" src="lib/date.format.js"></script>
+        <!-- http://blog.stevenlevithan.com/archives/date-time-format -->
+        <script type="text/javascript" src="lib/date.format.js"></script>
 
-<!-- OpenLayers 2.12 -->
-<link rel="stylesheet" href="lib/openlayers/theme/default/style.mobile.css" />
-<script type="text/javascript" src="lib/openlayers/OpenLayers.mobile.js" charset="utf-8"></script>
+        <!-- OpenLayers 2.12 -->
+        <link rel="stylesheet" href="lib/openlayers/theme/default/style.mobile.css" />
+        <script type="text/javascript" src="lib/openlayers/OpenLayers.mobile.js" charset="utf-8"></script>
 
-<!-- GOFG Sports Computer JS -->
-<link rel="stylesheet" href="css/gofgsc.jQueryMobile.css" />
-<link rel="stylesheet" href="css/gofgsc.css" />
-<script type="text/javascript" src="js/geolocation.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/continuousfilewriter.js"></script>
-<script type="text/javascript" src="js/infowidget.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/gpshandler.js"></script>
-<script type="text/javascript" src="js/settingshandler.js"></script>
-<script type="text/javascript" src="js/translator.js"></script>
-<script type="text/javascript" src="js/gofgsportscomputer.js"></script>
-<script type="text/javascript" src="js/utilities.js"></script>
-<script type="text/javascript" src="js/l10n.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/rateapp.js" charset="utf-8"></script>
+        <!-- GOFG Sports Computer JS -->
+        <link rel="stylesheet" href="css/gofgsc.jQueryMobile.css" />
+        <link rel="stylesheet" href="css/gofgsc.css" />
+        <script type="text/javascript" src="js/geolocation.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/continuousfilewriter.js"></script>
+        <script type="text/javascript" src="js/infowidget.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/gpshandler.js"></script>
+        <script type="text/javascript" src="js/settingshandler.js"></script>
+        <script type="text/javascript" src="js/translator.js"></script>
+        <script type="text/javascript" src="js/gofgsportscomputer.js"></script>
+        <script type="text/javascript" src="js/utilities.js"></script>
+        <script type="text/javascript" src="js/l10n.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/rateapp.js" charset="utf-8"></script>
 
-<!-- Track related code -->
-<script type="text/javascript" src="js/track/waypoint.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/track/track.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/track/trackwriter.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/track/trackreader.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/track/trackuploader.js" charset="utf-8"></script>
+        <!-- Track related code -->
+        <script type="text/javascript" src="js/track/waypoint.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/track/track.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/track/trackwriter.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/track/trackreader.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/track/trackuploader.js" charset="utf-8"></script>
 
-<!-- Page(s) logic -->
-<script type="text/javascript" src="js/pages/page.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/settings.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/summary.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/tracks.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/license.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/about.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/map.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/trackdetail.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/msgbox.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/graph.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/pages/privacystatement.js" charset="utf-8"></script>
+        <!-- Page(s) logic -->
+        <script type="text/javascript" src="js/pages/page.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/settings.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/summary.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/tracks.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/license.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/about.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/map.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/trackdetail.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/msgbox.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/graph.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/pages/privacystatement.js" charset="utf-8"></script>
 
-<!-- Track exporters -->
-<script type="text/javascript" src="js/exporter/fitlog.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/exporter/gpx.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/exporter/tcx.js" charset="utf-8"></script>
+        <!-- Track exporters -->
+        <script type="text/javascript" src="js/exporter/fitlog.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/exporter/gpx.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/exporter/tcx.js" charset="utf-8"></script>
 
-<!-- Heartrate devices -->
-<!-- <script type="text/javascript" src="js/hrm/heartratemonitor.js" charset="utf-8"></script> -->
-<!-- <script type="text/javascript" src="js/hrm/zephyrhxm.js" charset="utf-8"></script> -->
+        <!-- Heartrate devices -->
+        <!-- <script type="text/javascript" src="js/hrm/heartratemonitor.js" charset="utf-8"></script> -->
+        <!-- <script type="text/javascript" src="js/hrm/zephyrhxm.js" charset="utf-8"></script> -->
+    </head>
+    <body>
+        <!-- Screen lock div -->
+        <div id='lock-overlay'>
+            <div id='lock-overlay-background'></div>
+            <div id='lock-overlay-message'>
+                <h3 data-i18n="unlock_message"></h3>
+            </div>
+        </div>
 
-<style type="text/css">
-#summary-page_control>div {
-	width: 100%;
-}
+        <!-- Loading page -->
+        <div data-role="page" id="empty-page">
+            <!-- /header -->
+            <div data-role="header">
+                <h1 data-i18n="loading"></h1>
+            </div>
 
-#summary-page_control>div>div {
-	width: 32.5%;
-}
-
-#summary-page_control>div>div>span {
-	padding-top: 9.6px;
-	padding-bottom: 9.6px;
-}
-
-#trackdetail-page_exportcontrol>div {
-	width: 100%;
-}
-
-#trackdetail-page_exportcontrol>div>div {
-	width: 32.5%;
-}
-
-</style>
-</head>
-<body>
-	<!-- Screen lock div -->
-	<div id='lock-overlay' style='display: none;'>
-		<div id='lock-overlay-background' style="z-index: 10000; position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; opacity: 0.25; background-color: #000000; color: #FFFFFF;"></div>
-		<div id='lock-overlay-message' style="z-index: 10000; position: absolute; bottom: 0; left: 0; width: 100%; background-color: #000000; color: #FFFFFF; text-align: center;">
-			<h3 data-i18n="unlock_message"></h3>
-		</div>
-	</div>
-
-	<!-- Loading page -->
-	<div data-role="page" id="empty-page">
-		<!-- /header -->
-		<div data-role="header">
-			<h1 data-i18n="loading"></h1>
-		</div>
-
-		<!-- /content -->
-		<div data-role="content"></div>
-	</div>
-</body>
+            <!-- /content -->
+            <div data-role="content"></div>
+        </div>
+    </body>
 </html>
