@@ -81,3 +81,9 @@
     width: 30px;
     display: none;
 }
+
+/* lock overlay */
+#lock-overlay_unlock-message {
+    text-align: center;
+    font-weight: bold;
+}
