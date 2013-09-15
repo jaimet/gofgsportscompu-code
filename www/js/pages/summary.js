@@ -388,6 +388,7 @@ Summary.prototype.enableGPSTap = function() {
 
     // Show accuracy status image
     $('#settings-button').hide();
+    $('#summary-page_sporttype-button').hide();
     $('#summary-page_signal-strength').show();
 
     // Start searching for satellites
@@ -500,6 +501,7 @@ Summary.prototype._stopGPS = function() {
         $('#summary-page_enableGPS').fadeIn(250);
     });
     $('#settings-button').show();
+    $('#summary-page_sporttype-button').show();
 
     // Reset loading message (because searching for satellites might still be active)
     $.mobile.loading('hide');
