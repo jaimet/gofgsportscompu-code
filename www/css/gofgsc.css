@@ -71,3 +71,13 @@
     border-top: 1px solid black;
     border-left: 1px solid black;
 }
+
+/* summary page */
+#summary-page_signal-strength {
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    height: 30px;
+    width: 30px;
+    display: none;
+}
