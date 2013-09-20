@@ -362,7 +362,7 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
 
     // Disable idle mode
     pages.summary.m_powerManagement.acquire(function() {
-    }, errorCallback);
+    }, errorCallback, true);
 
     // Start GPS
     GPSHandler.setPositionCallback(successCallback);
