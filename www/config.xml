@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="at.gofg.sportscomputer" version="1.5.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>GOFG Dev</name>
+    <name>GOFG SC</name>
     <description>
         GOFG Sports Computer.
     </description>
@@ -10,5 +10,8 @@
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
+    <preference name="orientation" value="portrait" />
     <content src="index.html" />
+    <icon src="icons/WindowsPhone/ApplicationIcon.png" cdv:platform="winphone" />
+    <icon src="icons/WindowsPhone/AppTileIcon.png" cdv:platform="winphone" cdv:role="background" />
 </widget>
