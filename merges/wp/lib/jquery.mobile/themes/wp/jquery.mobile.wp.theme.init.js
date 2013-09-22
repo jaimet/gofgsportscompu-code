@@ -59,8 +59,8 @@ $(document).ready(function(){
     if(version < 10){
         bodyMinHeightFix();    
     } else {
-        $.mobile.defaultDialogTransition = 'turn';
-        $.mobile.defaultPageTransition = 'turn';
+        $.mobile.defaultDialogTransition = 'none';
+        $.mobile.defaultPageTransition = 'none';
     }     
 
     // If updatePagePadding is called before the page has been loaded the following code line returns NaN instead of '0':
