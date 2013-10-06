@@ -25,7 +25,7 @@
 
             var btnPanel = $appBar.find(".ui-app-bar-btn-panel"),
                 expandablePanel = $appBar.find(".ui-app-bar-inside"),
-                btnTitles = $("<div class='ui-app-bar-titles' />").insertBefore('.ui-app-bar-menu');
+                btnTitles = $("<div class='ui-app-bar-titles' />").insertBefore($appBar.find('.ui-app-bar-menu'));
 
             // add button captions
             btnPanel.find(".ui-btn-text").each(function(index, el){
