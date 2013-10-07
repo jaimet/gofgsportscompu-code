@@ -1,0 +1,36 @@
+<!-- Tracks page -->
+<div data-role="page" id="trackdetail-page">
+        <!-- /header -->
+        <div data-role="header">
+                <h1>Details</h1>
+        </div>
+
+        <div data-role="footer" data-theme="d">
+            <h1 id="trackdetail-title"></h1>
+        </div>
+
+        <!-- /content -->
+        <div data-role="content" id="track-detail">
+            <div data-role="fieldcontain">
+                <!-- Upload track to gofg.at homepage -->
+                <label for="trackdetail-upload-button" data-i18n="upload_gofg"></label>
+                <button id="trackdetail-upload-button" data-i18n="upload" data-icon="arrow-u"></button>
+
+                <!-- Load control -->
+                <label for="trackdetail-load-button" data-i18n="load"></label>
+                <button id="trackdetail-load-button" data-i18n="load" data-icon="reload"></button>
+
+                <!-- Export control -->
+                <label for="trackdetail-page_exportcontrol" data-i18n="export" style="display: none;"></label>
+                <div data-role="controlgroup" data-type="horizontal" id="trackdetail-page_exportcontrol" style="display: none;">
+                        <input id="trackdetail-export-gpx-button" type="button" value="GPX" />
+                        <input id="trackdetail-export-tcx-button" type="button" value="TCX" />
+                        <input id="trackdetail-export-fitlog-button" type="button" value="Fitlog" />
+                </div>
+            </div>
+
+            <!-- Delete control -->
+            <label for="trackdetail-delete-button" data-i18n="delete"></label>
+            <button id="trackdetail-delete-button" data-i18n="delete" data-icon="delete" data-theme="g"></button>
+        </div>
+</div>
