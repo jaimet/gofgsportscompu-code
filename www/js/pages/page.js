@@ -57,12 +57,16 @@ Page.historyChangePage = false;
 
 /**
  * Add a page to the history stack
+ * @param p_page Page to add to the history stack
  */
 Page.addHistory = function(p_page) {
     if (!Page.historyChangePage && p_page.m_bInHistory) {
-        Page.historyStack.push(p_page);
+        // do not add a page twice to the stack
+        if( Page.historyStack[Page.historyStack.length - 1] !== p_page ) {
+            Page.historyStack.push(p_page);
+        }
     }
-}
+};
 
 /**
  * Go back one item in history stack
@@ -89,7 +93,7 @@ Page.backInHistory = function() {
             throw "Last history item";
         }
     }
-}
+};
 
 /**
  * Automatically called when the page is created
@@ -100,7 +104,7 @@ Page.prototype.create = function() {
 
     if (typeof this.oncreate === "function")
         this.oncreate();
-}
+};
 
 /**
  * Automatically called when the page is inited
@@ -111,7 +115,7 @@ Page.prototype.init = function() {
 
     if (typeof this.oninit === "function")
         this.oninit();
-}
+};
 
 /**
  * WP7 event for supporting swipe gestures
@@ -122,7 +126,7 @@ Page.prototype.wpmousedown = function(evt) {
         var mouse_evt = $.Event('mousedown', {originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY});
         $('#' + this.name + '-page').trigger(mouse_evt);
     }
-}
+};
 
 /**
  * WP7 event for supporting swipe gestures
@@ -133,7 +137,7 @@ Page.prototype.wpmouseup = function(evt) {
         var mouse_evt = $.Event('mouseup', {originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY});
         $('#' + this.name + '-page').trigger(mouse_evt);
     }
-}
+};
 
 /**
  * WP7 event for supporting swipe gestures
@@ -144,7 +148,7 @@ Page.prototype.wpmousemove = function(evt) {
         var mouse_evt = $.Event('mousemove', {originalEvent: evt, pageX: evt.clientX, pageY: evt.clientY});
         $('#' + this.name + '-page').trigger(mouse_evt);
     }
-}
+};
 
 /**
  * Called when the user swipes to the left
@@ -154,7 +158,7 @@ Page.prototype.swipeleft = function() {
     if (this.rightPage != null) {
         $.mobile.changePage(this.rightPage);
     }
-}
+};
 
 /**
  * Called when the user swipes to the right
@@ -164,11 +168,11 @@ Page.prototype.swiperight = function() {
     if (this.leftPage != null) {
         $.mobile.changePage(this.leftPage);
     }
-}
+};
 
 Page.prototype.getEvtHandler = function(p_callback) {
     var me = this;
     return (function() {
         p_callback.call(me)
     });
-}
+};
