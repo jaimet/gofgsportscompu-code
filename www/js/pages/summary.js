@@ -29,7 +29,6 @@ Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.m_track = null; // Currently active track
 Summary.prototype.m_trackwriter = null; // Write for active track
-Summary.prototype.m_powerManagement = null;		// Reference to powermanagement plugin
 Summary.prototype.m_hrmImplementation = null;	// Reference to hrmImplementation
 
 // Widgets references
@@ -72,9 +71,6 @@ Summary.prototype.oninit = function() {
 
     // Register event handler for pageshow event
     $('#summary-page').live('pageshow', pages.summary._pageshow);
-
-    // Fetch reference to powermanagement object
-    pages.summary.m_powerManagement = window.powerManagement;
 
     // Register error callback for GPSHandler
     GPSHandler.setErrorCallback(pages.summary._positionError);
@@ -361,7 +357,7 @@ Summary.prototype._searchForSatellites = function(p_successCallback, p_errorCall
     $.mobile.loading('show', {text: $.i18n.prop("searching_message")});
 
     // Disable idle mode
-    pages.summary.m_powerManagement.acquire(function() {
+    window.powerManagement.acquire(function() {
     }, errorCallback, true);
 
     // Start GPS
@@ -511,7 +507,7 @@ Summary.prototype._stopGPS = function() {
 
     // Stop GPS & release power lock
     GPSHandler.stopGPS();
-    pages.summary.m_powerManagement.release(function() {
+    window.powerManagement.release(function() {
     }, function(e) {
     });
 
@@ -578,7 +574,7 @@ Summary.prototype._pause = function() {
         clearInterval(pages.summary.m_mainTimer);
     pages.summary.m_mainTimer = 0;
     // Enable suspend
-    pages.summary.m_powerManagement.release(function() {
+    window.powerManagement.release(function() {
     }, function(e) {
     });
 };
