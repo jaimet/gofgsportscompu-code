@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) 2013 Wolfgang Koller
+ *
+ * This file is part of GOFG Sports Computer - http://www.gofg.at/.
+ *
+ * GOFG Sports Computer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GOFG Sports Computer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GOFG Sports Computer.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* screen lock */
+#lock-overlay {
+    display: none;
+}
+
+#lock-overlay-background {
+    z-index: 10000;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    opacity: 0.25;
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+#lock-overlay-message {
+    z-index: 10000;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000000;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+/* page styles */
+#summary-page_control>div {
+	width: 100%;
+}
+
+#summary-page_control>div>div {
+	width: 32.5%;
+}
+
+#summary-page_control>div>div>span {
+	padding-top: 9.6px;
+	padding-bottom: 9.6px;
+}
+
+#trackdetail-page_exportcontrol>div {
+	width: 100%;
+}
+
+#trackdetail-page_exportcontrol>div>div {
+	width: 32.5%;
+}
+
+.summary-page_infoWidget {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+}
+
+/* summary page */
+#summary-page_signal-strength {
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    height: 30px;
+    width: 30px;
+    display: none;
+}
+
+/* lock overlay */
+#lock-overlay_unlock-message {
+    text-align: center;
+    font-weight: bold;
+}
