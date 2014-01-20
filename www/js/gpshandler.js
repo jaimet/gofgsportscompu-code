@@ -30,6 +30,8 @@ var GPSHandler = {
     m_intervalTimer: null, // interval mode timer handle
     m_fetchRunning: false, // true while a position fetch is running (used for preventing double calls)
 
+    TIMEOUT: 60000, // timeout constant
+
     /**
      * Start watching the GPS position
      */
@@ -47,7 +49,7 @@ var GPSHandler = {
         if (p_interval == 0) {
             GPSHandler.m_watchId = navigator.geolocation.watchPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
                 enableHighAccuracy: true,
-                timeout: 5000,
+                timeout: GPSHandler.TIMEOUT,
                 maximumAge: 5000
             });
         }
@@ -105,7 +107,7 @@ var GPSHandler = {
         // fetch single position
         navigator.geolocation.getCurrentPosition(GPSHandler._positionUpdate, GPSHandler._positionError, {
             enableHighAccuracy: true,
-            timeout: 5000,
+            timeout: GPSHandler.TIMEOUT,
             maximumAge: 5000
         });
     },
@@ -133,12 +135,7 @@ var GPSHandler = {
      * Called by the native side whenever a GPS-Error occurs
      */
     _positionError: function(p_error) {
-        console.log('Error occured: ' + p_error.code + ' / ' + p_error.message);
-
-        // Only report error to caller if it isn't a timeout
-        if (p_error.code !== PositionError.TIMEOUT) {
-            if (typeof GPSHandler.m_errorCallback === "function")
-                GPSHandler.m_errorCallback(p_error);
-        }
+        if (typeof GPSHandler.m_errorCallback === "function")
+            GPSHandler.m_errorCallback(p_error);
     }
 };
