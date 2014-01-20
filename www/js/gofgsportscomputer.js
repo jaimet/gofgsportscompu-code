@@ -48,40 +48,6 @@ var GOFGSportsComputer = {
         Translator.changeLanguage(SettingsHandler.get('language'));
     },
     /**
-     * Helper function for dynamically adding a new script tag
-     */
-    _addScript: function(p_scriptPath, p_before) {
-        p_before = p_before || false;
-
-        var script_tag = $('<script />');
-        $(script_tag).attr('type', 'text/javascript');
-        $(script_tag).attr('src', p_scriptPath);
-
-        if (p_before) {
-            $('#jqm-js').before(script_tag);
-        }
-        else {
-            $('#jqm-js').after(script_tag);
-        }
-    },
-    /**
-     * Helper function for dynamically adding a new link (stylesheet) tag
-     */
-    _addStylesheet: function(p_stylePath, p_before) {
-        p_before = p_before || false;
-
-        var style_tag = $('<link />');
-        $(style_tag).attr('rel', 'stylesheet');
-        $(style_tag).attr('href', p_stylePath);
-
-        if (p_before) {
-            $('#jqm-js').before(style_tag);
-        }
-        else {
-            $('#jqm-js').after(style_tag);
-        }
-    },
-    /**
      * Startup function which setups the sports computer software (init, interface, etc.)
      */
     _deviceReady: function() {
@@ -92,20 +58,6 @@ var GOFGSportsComputer = {
 
         // Listen to back button events
         $(document).bind('backbutton', Page.backInHistory);
-
-        // Load the correct stylesheet for jquery-mobile
-        switch (device.platform) {
-            case 'Android':
-                GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.css', true);
-                GOFGSportsComputer._addStylesheet('lib/jquery.mobile/themes/android/AndroidHoloDarkLight.css', true);
-                GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
-                break;
-            case 'iPhone':
-            default:
-                GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.structure.css', true);
-                GOFGSportsComputer._addStylesheet('lib/jquery.mobile/jquery.mobile.css', true);
-                break;
-        }
 
         // Find our file storage
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, GOFGSportsComputer._fileSystem, GOFGSportsComputer._fileSystemError);
