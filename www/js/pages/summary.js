@@ -321,9 +321,9 @@ Summary.prototype._gpsFixWait = function(p_position) {
     // Disable gpsfixwait callback
     GPSHandler.setPositionCallback(null);
 
-    // Check if we automatically start tracking
+    // Check if we automatically start tracking, but ignore first waypoint
     if (SettingsHandler.get('autostarttracking') > 0) {
-        pages.summary._startGPS(p_position);
+        pages.summary._startGPS();
     }
 };
 
@@ -440,9 +440,9 @@ Summary.prototype.enableGPSTap = function() {
 }
 
 /**
- * Button onClick-handler for starting GPS tracking
+ * Called when GPS tracking is ready & should be started
  */
-Summary.prototype._startGPS = function(p_position) {
+Summary.prototype._startGPS = function() {
     // Start the new track
     pages.summary.m_track = new Track(SettingsHandler.get('sporttype'));
     GOFGSportsComputer.m_trackDirectoryEntry.getFile(Utilities.getUnixTimestamp() + ".gsc", {
@@ -474,10 +474,8 @@ Summary.prototype._startGPS = function(p_position) {
         pages.map.newtrack();
         pages.graph.newtrack();
 
-        // Set position callback & and do initial call
+        // Set position callback
         GPSHandler.setPositionCallback(pages.summary._updatePosition);
-        pages.summary._updatePosition(p_position);
-
     }, function(p_fileError) {
         MsgBox.show('Error while trying to open track for writing. The error returned is: ' + p_fileError.code);
         pages.summary._stopGPS();
