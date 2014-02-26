@@ -189,6 +189,7 @@ function getFormattedTimeDiff(p_timeDiff) {
  */
 $(document).ready(function() {
     document.addEventListener("deviceready", GOFGSportsComputer._deviceReady, true);
-
-    //$.mobile.changePage('summary.html');
 });
+
+// disable text selection on Windows Phone
+document.onselectstart = function() { return false; };
