@@ -178,8 +178,11 @@ Trackdetail.prototype._doUploadTrack = function() {
 
             MsgBox.show($.i18n.prop("upload_message_error") + " " + textStatus);
         });
-    }, function() {
-    	// TODO handle powermanagement issue
+    }, function(p_error) {
+        // hide loading message
+        $.mobile.loading('hide');
+        // show power management error
+        MsgBox.show($.i18n.prop('suspend_message_error') + p_error);
     }, true);
 };
 

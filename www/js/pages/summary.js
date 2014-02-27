@@ -29,6 +29,7 @@ Summary.prototype.m_middleTapHandler = null;
 Summary.prototype.m_rightTapHandler = null;
 Summary.prototype.m_track = null; // Currently active track
 Summary.prototype.m_trackwriter = null; // Write for active track
+Summary.prototype.m_trackFileEntry = null;	// File entry for active track
 Summary.prototype.m_hrmImplementation = null;	// Reference to hrmImplementation
 
 // Widgets references
@@ -389,7 +390,7 @@ Summary.prototype.enableGPSTap = function() {
 
     // Start searching for satellites
     pages.summary._searchForSatellites(pages.summary._gpsFixWait, function(p_error) {
-        MsgBox.show($.i18n.prop('suspend_message_error') + e);
+        MsgBox.show($.i18n.prop('suspend_message_error') + p_error);
         pages.summary._stopGPS();
     });
 
@@ -449,8 +450,11 @@ Summary.prototype._startGPS = function() {
         create: true,
         exclusive: true
     }, function(p_fileEntry) {
+    	// remember track-fileEntry
+    	pages.summary.m_trackFileEntry = p_fileEntry;
+    	
         // Create track-writer object & write initial information
-        pages.summary.m_trackwriter = new TrackWriter(pages.summary.m_track, p_fileEntry);
+        pages.summary.m_trackwriter = new TrackWriter(pages.summary.m_track, pages.summary.m_trackFileEntry);
         pages.summary.m_trackwriter.writeInfo();
 
         // Enable / disable buttons
@@ -531,9 +535,15 @@ Summary.prototype._stopGPS = function() {
     pages.map.endtrack(pages.summary.m_track);
     pages.graph.endtrack(pages.summary.m_track);
 
+    // automatically upload the track (if enabled in settings)
+    if (SettingsHandler.getInt("automaticupload") > 0) {
+    	pages.summary._autoUploadTrack();
+    }
+
     // Remove references to closed tracks
     pages.summary.m_track = null;
     pages.summary.m_trackwriter = null;
+    pages.summary.m_trackFileEntry = null;
 };
 
 /**
@@ -604,7 +614,7 @@ Summary.prototype._resume = function() {
         // Start updating our interface
         pages.summary.m_mainTimer = setInterval("pages.summary._mainTimer()", 1000);
     }, function(p_error) {
-        MsgBox.show($.i18n.prop('suspend_message_error') + e);
+        MsgBox.show($.i18n.prop('suspend_message_error') + p_error);
         pages.summary._stopGPS();
     });
 };
@@ -678,6 +688,57 @@ Summary.prototype._positionError = function(p_positionError) {
  */
 Summary.prototype._updateClock = function() {
     pages.summary.m_clockWidget.setValue(formatDate(new Date()));
+};
+
+/**
+ * Called on track end to automatically upload it
+ */
+Summary.prototype._autoUploadTrack = function() {
+    // Show loading & start uploading
+    $.mobile.loading('show', {text: $.i18n.prop("upload_message")});
+
+    // Disable idle mode
+    window.powerManagement.acquire(function() {
+        // start uploading the track
+        var tu = new TrackUploader(SettingsHandler.get('authkey'), pages.summary.m_trackFileEntry, function(p_id_track) {
+            // hide loading message
+            $.mobile.loading('hide');
+            // enable idle mode again
+            window.powerManagement.release(function() {}, function() {});
+            
+            // fetch localStorage entry for already uploaded tracks
+            window.localStorage.setItem("uploadedTracks_" + pages.summary.m_trackFileEntry.name, true);
+
+            // show success message
+            MsgBox.show($.i18n.prop("upload_message_success"), '', MsgBox.BUTTON_OK | MsgBox.BUTTON_OPEN_TRACK, function(p_button) {
+                if (p_button == MsgBox.BUTTON_OPEN_TRACK) {
+                    var trackUrl = SettingsHandler.URL_trackDisplay + p_id_track;
+
+                    // open link to track
+                    switch (device.platform) {
+                        case 'Android':
+                            navigator.app.loadUrl(trackUrl, {openExternal: true});
+                            break;
+                        default:
+                            window.open(trackUrl, '_system');
+                            break;
+                    }
+                }
+            });
+        }, function(textStatus) {
+            // hide loading message
+            $.mobile.loading('hide');
+            // enable idle mode again
+            window.powerManagement.release(function() {}, function() {});
+
+            MsgBox.show($.i18n.prop("upload_message_error") + " " + textStatus);
+        });
+    }, function(p_error) {
+        // hide loading message
+        $.mobile.loading('hide');
+        // show power management error
+        MsgBox.show($.i18n.prop('suspend_message_error') + p_error);
+    }, true);
 };
 
 /**
