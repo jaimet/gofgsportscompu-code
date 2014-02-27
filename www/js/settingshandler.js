@@ -37,7 +37,8 @@ var SettingsHandler = {
 		"confirmstop": 0,	// confirm stop of tracking
 		"appratecounter": 0,	// counts the number of starts
 		"apprated": 0,		// set to 1 if the app was rated
-		"appnotrated": 0	// set to 1 if the user does not want to rate the app	
+		"appnotrated": 0,	// set to 1 if the user does not want to rate the app
+		"automaticupload": 0,	// automatically upload a track upon finishing it
 	},
 	m_settingsFileEntry : null,
 	

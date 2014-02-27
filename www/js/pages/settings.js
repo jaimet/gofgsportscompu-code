@@ -78,6 +78,7 @@ Settings.prototype._save = function() {
 	SettingsHandler.set('displayunits', $('#settings-page').find('#displayUnitSelect').val());
 //	SettingsHandler.set('hrmtype', $('#settings-page').find('#hrmTypeSelect').val());
 	SettingsHandler.set('confirmstop', $('#settings-page').find('#confirmStopSlider').val());
+	SettingsHandler.set('automaticupload', $('#settings-page').find('#automaticUploadSlider').val());
 	SettingsHandler._save();
 
 	// Init re-translation
@@ -125,6 +126,7 @@ Settings.prototype._pagebeforeshow = function(p_event, p_ui) {
 	$('#settings-page').find('#displayUnitSelect').val(SettingsHandler.get('displayunits')).selectmenu('refresh');
 //	$('#settings-page').find('#hrmTypeSelect').val(SettingsHandler.get('hrmtype')).selectmenu('refresh');
 	$('#settings-page').find('#confirmStopSlider').slider('refresh', SettingsHandler.get('confirmstop'));
+	$('#settings-page').find('#automaticUploadSlider').slider('refresh', SettingsHandler.get('automaticupload'));
 	// Setup page layout
 	$('#settings-page').find('#settings-save-button').hide();
 	$('#settings-page').find('#settings-odoReset-button').show();

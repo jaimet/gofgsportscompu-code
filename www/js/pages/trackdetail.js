@@ -179,7 +179,7 @@ Trackdetail.prototype._doUploadTrack = function() {
             MsgBox.show($.i18n.prop("upload_message_error") + " " + textStatus);
         });
     }, function() {
-
+    	// TODO handle powermanagement issue
     }, true);
 };
 
