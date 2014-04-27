@@ -39,7 +39,7 @@ function bodyMinHeightFix() {
 if (document.URL.indexOf("http://") == -1) {
     $.mobile.pushStateEnabled = false;
     $.when($.mobile.navreadyDeferred).done(function() {
-        history.replaceState(null, document.title, $.mobile.path.getLocation());
+        if( typeof history.replaceState !== "undefined" ) history.replaceState(null, document.title, $.mobile.path.getLocation());
     });
 }
 
